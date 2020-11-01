@@ -1,0 +1,1 @@
+{"type":"Image","props":{"y":0,"x":0,"width":230,"skin":"Game/UI/Common/lan.png","presetID":1,"pivotY":53,"pivotX":115,"name":"BtnCompelet","isPresetRoot":true,"height":105},"compId":90,"child":[{"type":"Image","props":{"y":24,"x":73,"skin":"Game/UI/GameScene/wc.png","presetID":2},"compId":91}],"loadList":["Game/UI/Common/lan.png","Game/UI/GameScene/wc.png"],"loadList3D":[]}

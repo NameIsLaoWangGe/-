@@ -1,0 +1,10 @@
+{
+  "code": "import RecordManager from \"../TJ/RecordManager\";\r\nimport { Admin, Click, _SceneName, EventAdmin } from \"./Lwg\";\r\nimport { _Game } from \"./_Game\";\r\nexport var _Settle;\r\n(function (_Settle) {\r\n    class _data {\r\n    }\r\n    _Settle._data = _data;\r\n    let _Event;\r\n    (function (_Event) {\r\n    })(_Event = _Settle._Event || (_Settle._Event = {}));\r\n    function _init() {\r\n    }\r\n    _Settle._init = _init;\r\n    class SettleBase extends Admin._SceneBase {\r\n    }\r\n    _Settle.SettleBase = SettleBase;\r\n    class Settle extends _Settle.SettleBase {\r\n        lwgBtnClick() {\r\n            Click._on(Click._Type.largen, this.btnVar('BtnPlayAni'), this, null, null, () => {\r\n                EventAdmin._notify(_Game._Event.playAni1);\r\n            });\r\n            Click._on(Click._Type.largen, this.btnVar('BtnContinue'), this, null, null, () => {\r\n                EventAdmin._notify(_Game._Event.victory);\r\n                this.lwgOpenScene(_SceneName.Victory);\r\n            });\r\n            Click._on(Click._Type.largen, this.btnVar('BtnShare'), this, null, null, () => {\r\n                RecordManager._share('award', () => {\r\n                });\r\n            });\r\n        }\r\n    }\r\n    _Settle.Settle = Settle;\r\n})(_Settle || (_Settle = {}));\r\nexport default _Settle.Settle;\r\n",
+  "references": [
+    "D:/Game/project/Drawing/Project_2.5.0/Drawing_2.5.0/src/script/TJ/Admanager.ts",
+    "D:/Game/project/Drawing/Project_2.5.0/Drawing_2.5.0/src/script/TJ/RecordManager.ts",
+    "D:/Game/project/Drawing/Project_2.5.0/Drawing_2.5.0/src/script/Frame/Lwg.ts",
+    "D:/Game/project/Drawing/Project_2.5.0/Drawing_2.5.0/src/script/Frame/_Game.ts",
+    "D:/Game/project/Drawing/Project_2.5.0/Drawing_2.5.0/src/script/Frame/_PreLoad.ts"
+  ]
+}

@@ -1,2 +1,0 @@
-import lwg from "./Lwg";
-

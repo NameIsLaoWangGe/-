@@ -1,0 +1,25 @@
+{
+    "x":0,
+    "type":"Image",
+    "selectedBox":100,
+    "searchKey":"Image,Weapon",
+    "props":{"y":0,"x":0,"width":45,"skin":"Game/UI/Game/Hero/Hero_01_weapon_blue.png","presetID":1,"preset":"laya/pages/Prefab/Weapon.prefab","pivotY":44,"pivotX":23,"name":"Weapon","isPresetRoot":true,"height":88},
+    "nodeParent":-1,
+    "maxID":101,
+    "label":"Weapon",
+    "isDirectory":false,
+    "isAniNode":true,
+    "hasChild":false,
+    "compId":100,
+    "child":[
+        ],
+    "animations":[
+        {
+            "nodes":[
+                ],
+            "name":"ani1",
+            "id":1,
+            "frameRate":24,
+            "action":0
+        }]
+}

@@ -1,7 +1,0 @@
-{
-  "code": "import { Admin, Click, _SceneName } from \"./Lwg\";\r\nimport { _Game } from \"./_Game\";\r\nexport var _Start;\r\n(function (_Start) {\r\n    function _init() {\r\n    }\r\n    _Start._init = _init;\r\n    class _StartScene extends Admin._Scene {\r\n        moduleOnAwake() {\r\n        }\r\n        moduleOnEnable() {\r\n        }\r\n        moduleEventRegister() {\r\n        }\r\n        moduleOnStart() {\r\n        }\r\n    }\r\n    _Start._StartScene = _StartScene;\r\n    class Start extends _StartScene {\r\n        lwgOnAwake() {\r\n        }\r\n        lwgBtnClick() {\r\n            Click._on(Click._Type.largen, this.btnVar('BtnStart'), this, null, null, () => {\r\n                this.lwgOpenScene(_SceneName.Game + Admin._game.level, _SceneName.Start, () => {\r\n                    if (!Admin._sceneControl[_SceneName.Game + Admin._game.level].getComponent(_Game.Game)) {\r\n                        Admin._sceneControl[_SceneName.Game + Admin._game.level].addComponent(_Game.Game);\r\n                    }\r\n                });\r\n            });\r\n        }\r\n    }\r\n    _Start.Start = Start;\r\n    class StartItem extends Admin._Object {\r\n    }\r\n    _Start.StartItem = StartItem;\r\n})(_Start || (_Start = {}));\r\nexport default _Start.Start;\r\n",
-  "references": [
-    "D:/Game/project/Drawing/Project_2.5.0/Drawing_2.5.0/src/script/Frame/Lwg.ts",
-    "D:/Game/project/Drawing/Project_2.5.0/Drawing_2.5.0/src/script/Frame/_Game.ts"
-  ]
-}

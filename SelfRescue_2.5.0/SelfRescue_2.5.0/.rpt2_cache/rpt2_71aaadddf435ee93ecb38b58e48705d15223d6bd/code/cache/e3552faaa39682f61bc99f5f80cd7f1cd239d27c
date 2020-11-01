@@ -1,0 +1,8 @@
+{
+  "code": "import { Admin } from \"./Lwg\";\r\nexport var _Game;\r\n(function (_Game) {\r\n    function _init() {\r\n    }\r\n    _Game._init = _init;\r\n    class Game extends Admin._SceneBase {\r\n        lwgBtnClick() {\r\n        }\r\n    }\r\n    _Game.Game = Game;\r\n})(_Game || (_Game = {}));\r\nexport default _Game.Game;\r\n",
+  "references": [
+    "F:/Work/Game/07_SelfRescue_2.5.0/Project/SelfRescue_2.5.0/SelfRescue_2.5.0/src/script/Frame/Lwg.ts",
+    "F:/Work/Game/07_SelfRescue_2.5.0/Project/SelfRescue_2.5.0/SelfRescue_2.5.0/src/script/Frame/_PreLoad.ts",
+    "F:/Work/Game/07_SelfRescue_2.5.0/Project/SelfRescue_2.5.0/SelfRescue_2.5.0/src/script/Frame/_PropTry.ts"
+  ]
+}

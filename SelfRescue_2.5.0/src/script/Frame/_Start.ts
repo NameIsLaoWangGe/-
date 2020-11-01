@@ -9,7 +9,7 @@ export module _Start {
     /**通用类，进行通用初始化，可在每个游戏中重复使用重复*/
     export class _StartScene extends Admin._SceneBase {
         moduleOnAwake(): void {
-            _Gold.createGoldNode(38, 68);
+            // _Gold.createGoldNode(38, 68);
         }
     }
     export class Start extends _StartScene {
@@ -17,7 +17,12 @@ export module _Start {
         }
         lwgBtnClick(): void {
             Click._on(Click._Type.largen, this.btnVar('BtnStart'), this, null, null, () => {
-                this.lwgOpenScene(_SceneName.Game + Admin._game.level);
+                let levelName = _SceneName.Game + Admin._game.level;
+                this.lwgOpenScene(_SceneName.Game + Admin._game.level, true, () => {
+                    if (!Admin._sceneControl[levelName].getComponent(_Game.Game)) {
+                        Admin._sceneControl[levelName].addComponent(_Game.Game);
+                    }
+                });
             })
         }
     }

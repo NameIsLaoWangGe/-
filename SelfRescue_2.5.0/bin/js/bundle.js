@@ -5482,10 +5482,38 @@
 
     var _Game;
     (function (_Game) {
+        class _Data {
+        }
+        _Game._Data = _Data;
         function _init() {
         }
         _Game._init = _init;
+        class Enemy extends Admin._Person {
+        }
+        _Game.Enemy = Enemy;
         class Game extends Admin._SceneBase {
+            lwgOnStart() {
+                TimerAdmin._frameLoop(1, this, () => {
+                    this.ImgVar('LandContent').rotation += 0.1;
+                });
+                for (let index = 0; index < this.ImgVar('WeaponParent').numChildren; index++) {
+                    const element = this.ImgVar('WeaponParent').getChildAt(index);
+                    TimerAdmin._frameLoop(1, this, () => {
+                        let point = Tools.point_GetRoundPos(element.rotation += 0.1, this.ImgVar('WeaponParent').width / 2 - 50, new Laya.Point(this.ImgVar('WeaponParent').width / 2, this.ImgVar('WeaponParent').height / 2));
+                        element.x = point.x;
+                        element.y = point.y;
+                    });
+                }
+                for (let index = 0; index < this.ImgVar('EnemyParent').numChildren; index++) {
+                    const element = this.ImgVar('EnemyParent').getChildAt(index);
+                    let rotate = Tools.randomOneHalf() == 1 ? -0.5 : 0.5;
+                    TimerAdmin._frameLoop(1, this, () => {
+                        let point = Tools.point_GetRoundPos(element.rotation += rotate, this.ImgVar('MobileFrame').width / 2, new Laya.Point(this.ImgVar('LandContent').width / 2, this.ImgVar('LandContent').height / 2));
+                        element.x = point.x;
+                        element.y = point.y;
+                    });
+                }
+            }
             lwgBtnClick() {
             }
         }
@@ -5755,7 +5783,6 @@
         _Start._init = _init;
         class _StartScene extends Admin._SceneBase {
             moduleOnAwake() {
-                _Gold.createGoldNode(38, 68);
             }
         }
         _Start._StartScene = _StartScene;
@@ -5764,7 +5791,12 @@
             }
             lwgBtnClick() {
                 Click._on(Click._Type.largen, this.btnVar('BtnStart'), this, null, null, () => {
-                    this.lwgOpenScene(_SceneName.Game + Admin._game.level);
+                    let levelName = _SceneName.Game + Admin._game.level;
+                    this.lwgOpenScene(_SceneName.Game + Admin._game.level, true, () => {
+                        if (!Admin._sceneControl[levelName].getComponent(_Game.Game)) {
+                            Admin._sceneControl[levelName].addComponent(_Game.Game);
+                        }
+                    });
                 });
             }
         }
@@ -5817,10 +5849,10 @@
             reg("script/Frame/LwgInit.ts", LwgInit);
         }
     }
-    GameConfig.width = 640;
-    GameConfig.height = 1136;
+    GameConfig.width = 720;
+    GameConfig.height = 1280;
     GameConfig.scaleMode = "fixedwidth";
-    GameConfig.screenMode = "none";
+    GameConfig.screenMode = "vertical";
     GameConfig.alignV = "top";
     GameConfig.alignH = "left";
     GameConfig.startScene = "Scene/Lwginit.scene";

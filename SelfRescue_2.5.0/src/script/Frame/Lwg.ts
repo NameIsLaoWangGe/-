@@ -1747,23 +1747,23 @@ export module Lwg {
 
         /**2D角色通用父类*/
         export class _Person extends Laya.Script {
-            /**物理组件*/
             constructor() {
                 super();
             }
             /**挂载当前脚本的节点*/
-            get Owner(): Laya.Sprite {
-                return this.owner as Laya.Sprite;
+            get Owner(): Laya.Image | Laya.Sprite {
+                return this.owner as Laya.Image | Laya.Sprite;
             }
             get OwnerScene(): Laya.Sprite {
                 return this.owner.scene as Laya.Scene;
             }
             /**物理组件*/
             get OwnerRig(): Laya.RigidBody {
-                if (!this.Owner['_OwnerRig']) {
-                    this.Owner['_OwnerRig'] = this.Owner.getComponent(Laya.RigidBody)
+                if (this.Owner.getComponent(Laya.RigidBody)) {
+                    return this.Owner.getComponent(Laya.RigidBody);
+                } else {
+                    return null;
                 }
-                return this.Owner['_OwnerRig'];
             }
             onAwake(): void {
                 this.lwgOnAwake();
@@ -1771,16 +1771,21 @@ export module Lwg {
             lwgOnAwake(): void {
             }
             onEnable(): void {
-                // 类名
-                let calssName = this['__proto__']['constructor'].name;
-                // 组件变为的self属性
-                this.Owner[calssName] = this;
                 this.lwgOnEnable();
+                this.lwgEventRegister();
+                this.lwgOnEnable();
+            }
+            lwgEventRegister(): void {
             }
             /**初始化，在onEnable中执行，重写即可覆盖*/
             lwgOnEnable(): void {
-                console.log('父类的初始化！');
             }
+            onStart(): void {
+                this.lwgOnStart();
+            }
+            lwgOnStart(): void {
+
+            };
             /**
               * 打开场景
               * @param openSceneName 需要打开的场景名称
@@ -1819,10 +1824,11 @@ export module Lwg {
             }
             /**物理组件*/
             get OwnerRig(): Laya.RigidBody {
-                if (!this.Owner['_OwnerRig']) {
-                    this.Owner['_OwnerRig'] = this.Owner.getComponent(Laya.RigidBody)
+                if (this.Owner.getComponent(Laya.RigidBody)) {
+                    return this.Owner.getComponent(Laya.RigidBody);
+                } else {
+                    return null;
                 }
-                return this.Owner['_OwnerRig'];
             }
             onAwake(): void {
                 // 类名

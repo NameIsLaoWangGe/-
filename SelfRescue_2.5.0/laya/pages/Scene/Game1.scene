@@ -6,7 +6,7 @@
     "searchKey":"View",
     "props":{"width":720,"sceneColor":"#000000","height":1280},
     "nodeParent":-1,
-    "maxID":62,
+    "maxID":65,
     "label":"View",
     "isOpen":true,
     "isDirectory":true,
@@ -332,6 +332,52 @@
                 {
                     "x":30,
                     "type":"Image",
+                    "searchKey":"Image",
+                    "props":{"y":48,"x":170,"width":45,"height":25},
+                    "nodeParent":32,
+                    "label":"Image",
+                    "isOpen":true,
+                    "isDirectory":true,
+                    "isAniNode":true,
+                    "hasChild":true,
+                    "compId":62,
+                    "child":[
+                        {
+                            "x":45,
+                            "type":"BoxCollider",
+                            "switchAble":true,
+                            "searchKey":"BoxCollider",
+                            "removeAble":true,
+                            "props":{"y":0,"x":0,"width":46,"label":"trigger","isSensor":true,"height":24},
+                            "nodeParent":62,
+                            "label":"BoxCollider",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":63,
+                            "child":[
+                                ]
+                        },
+                        {
+                            "x":45,
+                            "type":"RigidBody",
+                            "switchAble":true,
+                            "searchKey":"RigidBody",
+                            "removeAble":true,
+                            "props":{"gravityScale":0,"allowSleep":false},
+                            "nodeParent":62,
+                            "label":"RigidBody",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":64,
+                            "child":[
+                                ]
+                        }]
+                },
+                {
+                    "x":30,
+                    "type":"Image",
                     "searchKey":"Image,Hero,Hero",
                     "props":{"y":173,"x":192.5,"width":118,"var":"Hero","skin":"Game/UI/Game/Hero/Hero_01.png","pivotY":62,"pivotX":59,"name":"Hero","height":123},
                     "nodeParent":32,
@@ -351,25 +397,12 @@
                     "nodeParent":32,
                     "label":"WeaponParent",
                     "isOpen":true,
-                    "isDirectory":true,
+                    "isDirectory":false,
                     "isAniNode":true,
-                    "hasChild":true,
+                    "hasChild":false,
                     "compId":49,
                     "child":[
-                        {
-                            "x":45,
-                            "type":"Image",
-                            "searchKey":"Image",
-                            "props":{"y":58,"x":197,"presetID":1,"preset":"laya/pages/prefab/Weapon.prefab"},
-                            "nodeParent":49,
-                            "label":"Weapon",
-                            "isDirectory":false,
-                            "isAniNode":true,
-                            "hasChild":false,
-                            "compId":50,
-                            "child":[
-                                ]
-                        }]
+                        ]
                 }]
         }],
     "animations":[

@@ -1358,10 +1358,12 @@
                     return this.owner.scene;
                 }
                 get OwnerRig() {
-                    if (!this.Owner['_OwnerRig']) {
-                        this.Owner['_OwnerRig'] = this.Owner.getComponent(Laya.RigidBody);
+                    if (this.Owner.getComponent(Laya.RigidBody)) {
+                        return this.Owner.getComponent(Laya.RigidBody);
                     }
-                    return this.Owner['_OwnerRig'];
+                    else {
+                        return null;
+                    }
                 }
                 onAwake() {
                     this.lwgOnAwake();
@@ -1369,13 +1371,20 @@
                 lwgOnAwake() {
                 }
                 onEnable() {
-                    let calssName = this['__proto__']['constructor'].name;
-                    this.Owner[calssName] = this;
+                    this.lwgOnEnable();
+                    this.lwgEventRegister();
                     this.lwgOnEnable();
                 }
-                lwgOnEnable() {
-                    console.log('父类的初始化！');
+                lwgEventRegister() {
                 }
+                lwgOnEnable() {
+                }
+                onStart() {
+                    this.lwgOnStart();
+                }
+                lwgOnStart() {
+                }
+                ;
                 lwgOpenScene(openSceneName, closeSelf, func, zOrder) {
                     let closeName;
                     if (closeSelf == undefined || closeSelf == true) {
@@ -1399,10 +1408,12 @@
                     return this.owner.scene;
                 }
                 get OwnerRig() {
-                    if (!this.Owner['_OwnerRig']) {
-                        this.Owner['_OwnerRig'] = this.Owner.getComponent(Laya.RigidBody);
+                    if (this.Owner.getComponent(Laya.RigidBody)) {
+                        return this.Owner.getComponent(Laya.RigidBody);
                     }
-                    return this.Owner['_OwnerRig'];
+                    else {
+                        return null;
+                    }
                 }
                 onAwake() {
                     let calssName = this['__proto__']['constructor'].name;
@@ -5480,30 +5491,181 @@
     let Backpack = Lwg.Backpack;
     let BackpackScene = Lwg.Backpack.BackpackScene;
 
+    var _PreloadUrl;
+    (function (_PreloadUrl) {
+        _PreloadUrl._list = {
+            prefab2D: {
+                LwgGold: {
+                    url: 'Prefab/LwgGold.json',
+                    prefab: new Laya.Prefab,
+                },
+                Weapon: {
+                    url: 'Prefab/Weapon.json',
+                    prefab: new Laya.Prefab,
+                },
+                Enemy: {
+                    url: 'Prefab/Enemy.json',
+                    prefab: new Laya.Prefab,
+                },
+            },
+            scene2D: {
+                UIStart: "Scene/" + _SceneName.Start + '.json',
+                GameScene: "Scene/" + _SceneName.Game + '.json',
+            },
+            json: {},
+        };
+    })(_PreloadUrl || (_PreloadUrl = {}));
+    var _PreLoad;
+    (function (_PreLoad) {
+        class PreLoad extends _LwgPreLoad._PreLoadScene {
+            lwgOnStart() {
+                EventAdmin._notify(_LwgPreLoad._Event.importList, (_PreloadUrl._list));
+            }
+            lwgOpenAni() { return 1; }
+            lwgStepComplete() {
+            }
+            lwgAllComplete() {
+                return 1000;
+            }
+        }
+        _PreLoad.PreLoad = PreLoad;
+    })(_PreLoad || (_PreLoad = {}));
+
     var _Game;
     (function (_Game) {
         class _Data {
         }
+        _Data._property = {
+            color: 'color',
+            index: 'index',
+        };
+        _Data._arr = [
+            {
+                index: 1,
+                color: 'blue',
+            },
+            {
+                index: 2,
+                color: 'red',
+            }, {
+                index: 3,
+                color: 'yellow',
+            }, {
+                index: 4,
+                color: 'red',
+            }, {
+                index: 5,
+                color: 'yellow',
+            }, {
+                index: 6,
+                color: 'red',
+            }, {
+                index: 7,
+                color: 'blue',
+            }, {
+                index: 8,
+                color: 'yellow',
+            },
+        ];
         _Game._Data = _Data;
+        let _Label;
+        (function (_Label) {
+            _Label["trigger"] = "trigger";
+            _Label["weapon"] = "weapon";
+        })(_Label = _Game._Label || (_Game._Label = {}));
+        _Game._fireControl = {
+            rotateSwitch: true,
+            mouseDownY: 0,
+            get rotateSpeed() {
+                return this['_rotateSpeed'] ? this['_rotateSpeed'] : 0;
+            },
+            set rotateSpeed(speed) {
+                if (!_Game._fireControl.rotateSwitch) {
+                    this['_rotateSpeed'] = speed;
+                    EventAdmin._notify(_Event._Game_move, _Game._fireControl.rotateSpeed);
+                }
+            }
+        };
+        let _Event;
+        (function (_Event) {
+            _Event["_Game_move"] = "_Game_move";
+        })(_Event = _Game._Event || (_Game._Event = {}));
         function _init() {
         }
         _Game._init = _init;
-        class Enemy extends Admin._Person {
+        class _Enemy extends Admin._Person {
         }
-        _Game.Enemy = Enemy;
+        _Game._Enemy = _Enemy;
+        class _Weapon extends Admin._Person {
+            lwgOnAwake() {
+                this.parent = this.Owner.parent;
+            }
+            lwgOnStart() {
+                TimerAdmin._frameLoop(1, this, () => {
+                    if (this.Owner.parent) {
+                        if (_Game._fireControl.rotateSwitch) {
+                            let speed;
+                            if (_Game._fireControl.rotateSpeed > 0) {
+                                speed = 0.1;
+                            }
+                            else {
+                                speed = -0.1;
+                            }
+                            let point = Tools.point_GetRoundPos(this.Owner.rotation += speed, this.parent.width / 2 - 50, new Laya.Point(this.parent.width / 2, this.parent.height / 2));
+                            this.Owner.x = point.x;
+                            this.Owner.y = point.y;
+                        }
+                    }
+                });
+            }
+            lwgEventRegister() {
+                EventAdmin._register(_Event._Game_move, this, () => {
+                    if (this.Owner.parent) {
+                        let point = Tools.point_GetRoundPos(this.Owner.rotation += _Game._fireControl.rotateSpeed, this.parent.width / 2 - 50, new Laya.Point(this.parent.width / 2, this.parent.height / 2));
+                        this.Owner.x = point.x;
+                        this.Owner.y = point.y;
+                    }
+                });
+            }
+            onTriggerEnter(other, self, contact) {
+                let otherLabel = other.label;
+                switch (otherLabel) {
+                    case _Label.trigger:
+                        this.Owner.scale(1.2, 1.2);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            onTriggerExit(other, self, contact) {
+                let otherLabel = other.label;
+                switch (otherLabel) {
+                    case _Label.trigger:
+                        this.Owner.scale(1, 1);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        _Game._Weapon = _Weapon;
         class Game extends Admin._SceneBase {
+            lwgOnEnable() {
+                for (let index = 0; index < _Data._arr.length; index++) {
+                    let Weapon = Tools.Node.prefabCreate(_PreloadUrl._list.prefab2D.Weapon.prefab);
+                    this.ImgVar('WeaponParent').addChild(Weapon);
+                    let point = Tools.point_GetRoundPos(index / _Data._arr.length * 360, this.ImgVar('WeaponParent').width / 2 - 50, new Laya.Point(this.ImgVar('WeaponParent').width / 2, this.ImgVar('WeaponParent').height / 2));
+                    Weapon.x = point.x;
+                    Weapon.y = point.y;
+                    Weapon.rotation = index / _Data._arr.length * 360;
+                    Weapon.skin = `Game/UI/Game/Hero/Hero_01_weapon_${_Data._arr[index]['color']}.png`;
+                    Weapon.addComponent(_Weapon);
+                }
+            }
             lwgOnStart() {
                 TimerAdmin._frameLoop(1, this, () => {
                     this.ImgVar('LandContent').rotation += 0.1;
                 });
-                for (let index = 0; index < this.ImgVar('WeaponParent').numChildren; index++) {
-                    const element = this.ImgVar('WeaponParent').getChildAt(index);
-                    TimerAdmin._frameLoop(1, this, () => {
-                        let point = Tools.point_GetRoundPos(element.rotation += 0.1, this.ImgVar('WeaponParent').width / 2 - 50, new Laya.Point(this.ImgVar('WeaponParent').width / 2, this.ImgVar('WeaponParent').height / 2));
-                        element.x = point.x;
-                        element.y = point.y;
-                    });
-                }
                 for (let index = 0; index < this.ImgVar('EnemyParent').numChildren; index++) {
                     const element = this.ImgVar('EnemyParent').getChildAt(index);
                     let rotate = Tools.randomOneHalf() == 1 ? -0.5 : 0.5;
@@ -5513,6 +5675,23 @@
                         element.y = point.y;
                     });
                 }
+            }
+            onStageMouseDown(e) {
+                _Game._fireControl.rotateSwitch = false;
+                _Game._fireControl.mouseDownY = e.stageY;
+            }
+            onStageMouseMove(e) {
+                if (_Game._fireControl.mouseDownY - e.stageY > 0) {
+                    _Game._fireControl.rotateSpeed = -5;
+                }
+                else {
+                    _Game._fireControl.rotateSpeed = 5;
+                }
+                _Game._fireControl.mouseDownY = e.stageY;
+            }
+            onStageMouseUp(e) {
+                _Game._fireControl.rotateSwitch = true;
+                _Game._fireControl.mouseDownY = 0;
             }
             lwgBtnClick() {
             }
@@ -5714,46 +5893,6 @@
     })(_Guide || (_Guide = {}));
     var _Guide$1 = _Guide.Guide;
 
-    var _PreloadUrl;
-    (function (_PreloadUrl) {
-        _PreloadUrl._list = {
-            prefab2D: {
-                LwgGold: {
-                    url: 'Prefab/LwgGold.json',
-                    prefab: new Laya.Prefab,
-                },
-                Weapon: {
-                    url: 'Prefab/Weapon.json',
-                    prefab: new Laya.Prefab,
-                },
-                Enemy: {
-                    url: 'Prefab/Enemy.json',
-                    prefab: new Laya.Prefab,
-                },
-            },
-            scene2D: {
-                UIStart: "Scene/" + _SceneName.Start + '.json',
-                GameScene: "Scene/" + _SceneName.Game + '.json',
-            },
-            json: {},
-        };
-    })(_PreloadUrl || (_PreloadUrl = {}));
-    var _PreLoad;
-    (function (_PreLoad) {
-        class PreLoad extends _LwgPreLoad._PreLoadScene {
-            lwgOnStart() {
-                EventAdmin._notify(_LwgPreLoad._Event.importList, (_PreloadUrl._list));
-            }
-            lwgOpenAni() { return 1; }
-            lwgStepComplete() {
-            }
-            lwgAllComplete() {
-                return 1000;
-            }
-        }
-        _PreLoad.PreLoad = PreLoad;
-    })(_PreLoad || (_PreLoad = {}));
-
     var _PreLoadStepUrl;
     (function (_PreLoadStepUrl) {
         _PreLoadStepUrl._game = {};
@@ -5859,7 +5998,7 @@
     GameConfig.sceneRoot = "";
     GameConfig.debug = false;
     GameConfig.stat = false;
-    GameConfig.physicsDebug = false;
+    GameConfig.physicsDebug = true;
     GameConfig.exportSceneToJson = true;
     GameConfig.init();
 

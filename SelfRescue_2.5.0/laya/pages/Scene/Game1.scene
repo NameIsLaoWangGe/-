@@ -1,12 +1,12 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":2,
-    "selecteID":32,
+    "selectedBox":62,
+    "selecteID":74,
     "searchKey":"View",
     "props":{"width":720,"sceneColor":"#000000","height":1280},
     "nodeParent":-1,
-    "maxID":68,
+    "maxID":75,
     "label":"View",
     "isOpen":true,
     "isDirectory":true,
@@ -63,13 +63,14 @@
             "props":{"y":370,"x":360,"width":450,"var":"LandContent","rotation":0,"pivotY":225,"pivotX":225,"name":"LandContent","height":450},
             "nodeParent":2,
             "label":"LandContent",
-            "isOpen":false,
+            "isOpen":true,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":30,
             "child":[
                 {
+                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,BehindScenery,BehindScenery",
                     "props":{"y":0,"x":0,"width":427,"var":"BehindScenery","name":"BehindScenery","height":449},
@@ -82,6 +83,7 @@
                     "compId":33,
                     "child":[
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image",
                             "props":{"y":67,"x":220,"width":101,"skin":"Game/UI/Game/SceneStyle_01/botany_01.png","scaleY":0.7,"scaleX":0.7,"rotation":-4,"pivotY":117,"pivotX":51,"height":117},
@@ -95,6 +97,7 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image",
                             "props":{"y":352,"x":119,"width":101,"skin":"Game/UI/Game/SceneStyle_01/botany_01.png","scaleY":0.9,"scaleX":0.9,"rotation":216,"pivotY":117,"pivotX":51,"height":117},
@@ -108,6 +111,7 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image",
                             "props":{"y":210,"x":387,"width":101,"skin":"Game/UI/Game/SceneStyle_01/botany_01.png","scaleY":0.7,"scaleX":0.7,"rotation":94,"pivotY":117,"pivotX":51,"height":117},
@@ -122,23 +126,26 @@
                         }]
                 },
                 {
+                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,EnemyParent,EnemyParent",
                     "props":{"y":0,"x":0,"width":415,"var":"EnemyParent","name":"EnemyParent","height":428},
                     "nodeParent":30,
                     "label":"EnemyParent",
-                    "isOpen":false,
+                    "isOpen":true,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
                     "compId":41,
                     "child":[
                         {
+                            "x":45,
                             "type":"Image",
-                            "searchKey":"Image",
-                            "props":{"y":55,"x":241,"presetID":1,"preset":"laya/pages/prefab/Enemy.prefab"},
+                            "searchKey":"Image,Enemyblue",
+                            "props":{"y":18,"x":241,"width":74,"presetID":1,"preset":"laya/pages/prefab/Enemy.prefab","pivotY":37,"pivotX":37,"name":"Enemyblue","height":74},
                             "nodeParent":41,
-                            "label":"Enemy",
+                            "label":"Enemyblue",
+                            "isOpen":true,
                             "isDirectory":false,
                             "isAniNode":true,
                             "hasChild":false,
@@ -147,11 +154,13 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Image",
-                            "searchKey":"Image",
-                            "props":{"y":185,"x":396,"width":74,"skin":"Game/UI/Game/Enemy/enemy_01_yellow.png","rotation":80,"pivotY":74,"pivotX":37,"height":74},
+                            "searchKey":"Image,Enemyyellow",
+                            "props":{"y":194,"x":432,"width":74,"skin":"Game/UI/Game/Enemy/enemy_01_yellow.png","rotation":80,"pivotY":37,"pivotX":37,"name":"Enemyyellow","height":74},
                             "nodeParent":41,
-                            "label":"Image",
+                            "label":"Enemyyellow",
+                            "isOpen":true,
                             "isDirectory":false,
                             "isAniNode":true,
                             "hasChild":false,
@@ -160,11 +169,13 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Image",
-                            "searchKey":"Image",
-                            "props":{"y":393,"x":219,"width":74,"skin":"Game/UI/Game/Enemy/enemy_01_red.png","rotation":-177,"pivotY":74,"pivotX":37,"height":74},
+                            "searchKey":"Image,Enemyred",
+                            "props":{"y":436,"x":207.5,"width":74,"skin":"Game/UI/Game/Enemy/enemy_01_red.png","rotation":-177,"pivotY":37,"pivotX":37,"name":"Enemyred","height":74},
                             "nodeParent":41,
-                            "label":"Image",
+                            "label":"Enemyred",
+                            "isOpen":true,
                             "isDirectory":false,
                             "isAniNode":true,
                             "hasChild":false,
@@ -174,18 +185,20 @@
                         }]
                 },
                 {
+                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,MiddleScenery,MiddleScenery",
                     "props":{"y":0,"x":0,"width":427,"var":"MiddleScenery","name":"MiddleScenery","height":449},
                     "nodeParent":30,
                     "label":"MiddleScenery",
-                    "isOpen":false,
+                    "isOpen":true,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
                     "compId":53,
                     "child":[
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image",
                             "props":{"y":114,"x":112,"width":101,"skin":"Game/UI/Game/SceneStyle_01/botany_02.png","scaleY":0.8,"scaleX":0.8,"rotation":-45,"pivotY":140,"pivotX":51,"height":140},
@@ -199,6 +212,7 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image",
                             "props":{"y":306,"x":92,"width":105,"skin":"Game/UI/Game/SceneStyle_01/botany_03.png","scaleY":0.9,"scaleX":0.9,"rotation":-122,"pivotY":163,"pivotX":53,"height":163},
@@ -212,6 +226,7 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image",
                             "props":{"y":163.5,"x":375.5,"width":101,"skin":"Game/UI/Game/SceneStyle_01/botany_02.png","scaleY":0.8,"scaleX":0.8,"rotation":71,"pivotY":140,"pivotX":51,"height":140},
@@ -225,6 +240,7 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image",
                             "props":{"y":352,"x":322,"width":105,"skin":"Game/UI/Game/SceneStyle_01/botany_03.png","scaleY":0.8,"scaleX":0.8,"rotation":141,"pivotY":163,"pivotX":53,"height":163},
@@ -239,6 +255,7 @@
                         }]
                 },
                 {
+                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,Land",
                     "props":{"y":225,"x":225,"width":403,"skin":"Game/UI/Game/SceneStyle_01/land.png","pivotY":202,"pivotX":202,"name":"Land","height":404},
@@ -253,6 +270,7 @@
                         ]
                 },
                 {
+                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,FrontScenery",
                     "props":{"y":23,"x":23,"width":427,"name":"FrontScenery","height":449},
@@ -265,6 +283,7 @@
                     "compId":46,
                     "child":[
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image",
                             "props":{"y":154,"x":53,"width":61,"skin":"Game/UI/Game/SceneStyle_01/stone_01.png","rotation":-77,"pivotY":42,"pivotX":31,"height":42},
@@ -279,6 +298,7 @@
                         }]
                 },
                 {
+                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,MobileFrame,MobileFrame",
                     "props":{"y":50,"x":49,"width":351,"var":"MobileFrame","name":"MobileFrame","height":351},
@@ -334,33 +354,15 @@
                     "child":[
                         {
                             "x":45,
-                            "type":"BoxCollider",
-                            "switchAble":true,
-                            "searchKey":"BoxCollider",
-                            "removeAble":true,
-                            "props":{"y":18,"x":64,"width":32,"label":"trigger","isSensor":true,"height":47},
+                            "type":"Image",
+                            "searchKey":"Image,Fulcrum,Fulcrum",
+                            "props":{"y":30,"x":79,"width":89,"var":"Fulcrum","pivotY":29,"pivotX":45,"name":"Fulcrum","height":70},
                             "nodeParent":62,
-                            "label":"BoxCollider",
+                            "label":"Fulcrum",
                             "isDirectory":false,
                             "isAniNode":true,
                             "hasChild":false,
-                            "compId":63,
-                            "child":[
-                                ]
-                        },
-                        {
-                            "x":45,
-                            "type":"RigidBody",
-                            "switchAble":true,
-                            "searchKey":"RigidBody",
-                            "removeAble":true,
-                            "props":{"gravityScale":0,"allowSleep":false},
-                            "nodeParent":62,
-                            "label":"RigidBody",
-                            "isDirectory":false,
-                            "isAniNode":true,
-                            "hasChild":false,
-                            "compId":64,
+                            "compId":74,
                             "child":[
                                 ]
                         }]

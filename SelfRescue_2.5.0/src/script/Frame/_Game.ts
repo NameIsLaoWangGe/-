@@ -54,10 +54,16 @@ export module _Game {
                 this['_rotateSpeed'] = speed;
                 EventAdmin._notify(_Event._Game_move, _fireControl.rotateSpeed);
             }
-        }
+        },
+        get launchSpeed(): number {
+            return 10 + _fireControl.launchAccelerated;
+        },
+        launchAccelerated: 0.1,
     }
     export enum _Event {
+        _Game_Rotate = '_Game_Rotate',
         _Game_move = '_Game_move',
+        _Game_launch = '_Game_launch',
     }
     export function _init(): void {
     }
@@ -65,34 +71,61 @@ export module _Game {
 
     }
     export class _Weapon extends Admin._Person {
+        weaponState = {
+            type: {
+                rotate: 'rotate',
+                mouseMove: 'mouseMove',
+                launch: 'launch',
+            },
+            get value(): string {
+                return this['Statevalue'];
+            },
+            set value(val: string) {
+                this['Statevalue'] = val;
+            }
+        }
         parent: Laya.Image;
         lwgOnAwake(): void {
             this.parent = this.Owner.parent as Laya.Image;
         }
         lwgOnStart(): void {
+            var move = (rSpeed: number, radius: number) => {
+                let point = Tools.point_GetRoundPos(this.Owner.rotation += rSpeed, radius, new Laya.Point(this.parent.width / 2, this.parent.height / 2))
+                this.Owner.x = point.x;
+                this.Owner.y = point.y;
+            }
+            let _accelerated = 0;
             TimerAdmin._frameLoop(1, this, () => {
                 if (this.Owner.parent) {
-                    if (_fireControl.rotateSwitch) {
-                        let speed: number;
-                        if (_fireControl.rotateSpeed > 0) {
-                            speed = 0.1;
-                        } else {
-                            speed = -0.1;
-                        }
-                        let point = Tools.point_GetRoundPos(this.Owner.rotation += speed, this.parent.width / 2 - 50, new Laya.Point(this.parent.width / 2, this.parent.height / 2))
-                        this.Owner.x = point.x;
-                        this.Owner.y = point.y;
+                    switch (this.weaponState.value) {
+                        case this.weaponState.type.rotate:
+                            if (_fireControl.rotateSwitch) {
+                                let speed: number = _fireControl.rotateSpeed > 0 ? 0.1 : -0.1;
+                                move(speed, this.parent.width / 2 - 50);
+                            }
+                            _accelerated = 0;
+                            break;
+                        case this.weaponState.type.mouseMove:
+                            _accelerated = 0;
+                            move(_fireControl.rotateSpeed, this.parent.width / 2 - 50);
+                            break;
+                        case this.weaponState.type.launch:
+                            _accelerated += _fireControl.launchSpeed;
+                            let radius = _fireControl.launchAccelerated + _accelerated;
+                            move(_fireControl.rotateSpeed, radius);
+                            break;
+                        default:
+                            break;
                     }
                 }
             })
         }
         lwgEventRegister(): void {
+            EventAdmin._register(_Event._Game_Rotate, this, () => {
+            })
             EventAdmin._register(_Event._Game_move, this, () => {
-                if (this.Owner.parent) {
-                    let point = Tools.point_GetRoundPos(this.Owner.rotation += _fireControl.rotateSpeed, this.parent.width / 2 - 50, new Laya.Point(this.parent.width / 2, this.parent.height / 2))
-                    this.Owner.x = point.x;
-                    this.Owner.y = point.y;
-                }
+            })
+            EventAdmin._register(_Event._Game_launch, this, () => {
             })
         }
         onTriggerEnter(other: Laya.BoxCollider, self: Laya.BoxCollider, contact: any): void {

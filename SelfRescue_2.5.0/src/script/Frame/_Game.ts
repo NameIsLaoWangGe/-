@@ -188,8 +188,7 @@ export module _Game {
         }
 
         aimControl = {
-            firstP: null as number,
-            firstP: null as number,
+            moveDownY: 0 as number,
         }
 
         lwgBtnClick(): void {
@@ -223,28 +222,29 @@ export module _Game {
 
             Click._on(Click._Type.noEffect, this.ImgVar('AimOperation'), this,
                 (e: Laya.Event) => {
-                    _fireControl.rotateSwitch = false;
-                    _fireControl.moveDownY = e.stageY;
+                    this.aimControl.moveDownY = e.stageY;
                 },
                 (e: Laya.Event) => {
-                    if (!_fireControl.rotateSwitch && Math.abs(_fireControl.moveDownY - e.stageY) > 10) {
-                        if (_fireControl.moveDownY - e.stageY > 10) {
-                            _fireControl.moveRotateSpeed = -2;
+                    if (this.aimControl.moveDownY && Math.abs(this.aimControl.moveDownY - e.stageY) > 10) {
+                        if (this.aimControl.moveDownY - e.stageY > 0) {
+                            this.ImgVar('Aim').rotation += 5;
                         } else {
-                            _fireControl.moveRotateSpeed = 2;
+                            this.ImgVar('Aim').rotation -= 5;
                         }
-                        _fireControl.moveDownY = e.stageY;
-                        EventAdmin._notify(_Event._Game_WeaponSate, [_WeaponSateType.mouseMove]);
+                        if (this.ImgVar('Aim').rotation < -45) {
+                            this.ImgVar('Aim').rotation = -45;
+                        }
+                        if (45 < this.ImgVar('Aim').rotation) {
+                            this.ImgVar('Aim').rotation = 45;
+                        }
+                        this.aimControl.moveDownY = e.stageY;
                     }
                 },
                 (e: Laya.Event) => {
-                    _fireControl.rotateSwitch = true;
-                    _fireControl.moveDownY = 0;
-                    EventAdmin._notify(_Event._Game_WeaponSate, [_WeaponSateType.launch]);
+                    this.aimControl.moveDownY = null;
                 },
                 (e: Laya.Event) => {
-                    _fireControl.rotateSwitch = true;
-                    _fireControl.moveDownY = 0;
+                    this.aimControl.moveDownY = null;
                 },
             );
         }

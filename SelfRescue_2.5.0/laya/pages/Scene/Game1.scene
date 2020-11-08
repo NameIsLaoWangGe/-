@@ -2,7 +2,7 @@
     "x":0,
     "type":"View",
     "selectedBox":2,
-    "selecteID":65,
+    "selecteID":32,
     "searchKey":"View",
     "props":{"width":720,"sceneColor":"#000000","height":1280},
     "nodeParent":-1,
@@ -313,18 +313,19 @@
             "props":{"y":1031,"x":360,"width":385,"var":"HeroContent","pivotY":182,"pivotX":193,"name":"HeroContent","height":385},
             "nodeParent":2,
             "label":"HeroContent",
-            "isOpen":false,
+            "isOpen":true,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":32,
             "child":[
                 {
+                    "x":30,
                     "type":"Image",
-                    "searchKey":"Image",
-                    "props":{"y":178,"x":192.5,"width":158,"skin":"Game/UI/Game/aim.png","pivotY":164,"pivotX":79,"height":130},
+                    "searchKey":"Image,Aim,Aim",
+                    "props":{"y":178,"x":192.5,"width":158,"var":"Aim","skin":"Game/UI/Game/aim.png","pivotY":164,"pivotX":79,"name":"Aim","height":130},
                     "nodeParent":32,
-                    "label":"Image",
+                    "label":"Aim",
                     "isOpen":true,
                     "isDirectory":true,
                     "isAniNode":true,
@@ -332,6 +333,7 @@
                     "compId":62,
                     "child":[
                         {
+                            "x":45,
                             "type":"BoxCollider",
                             "switchAble":true,
                             "searchKey":"BoxCollider",
@@ -347,6 +349,7 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"RigidBody",
                             "switchAble":true,
                             "searchKey":"RigidBody",
@@ -363,6 +366,7 @@
                         }]
                 },
                 {
+                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,Hero,Hero",
                     "props":{"y":173,"x":192.5,"width":118,"var":"Hero","skin":"Game/UI/Game/Hero/Hero_01.png","pivotY":62,"pivotX":59,"name":"Hero","height":123},
@@ -376,6 +380,7 @@
                         ]
                 },
                 {
+                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,WeaponParent,WeaponParent",
                     "props":{"y":0,"x":12.5,"width":360,"var":"WeaponParent","name":"WeaponParent","height":369},

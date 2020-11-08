@@ -5704,6 +5704,12 @@
         }
         _Game._Weapon = _Weapon;
         class Game extends Admin._SceneBase {
+            constructor() {
+                super(...arguments);
+                this.aimControl = {
+                    moveDownY: 0,
+                };
+            }
             lwgOnEnable() {
                 for (let index = 0; index < _Data._arr.length; index++) {
                     let Weapon = Tools.Node.prefabCreate(_PreloadUrl._list.prefab2D.Weapon.prefab);
@@ -5732,9 +5738,8 @@
                 }
             }
             lwgBtnClick() {
-                console.log(this.ImgVar('WeaponOperation'));
+                this.ImgVar('AimOperation').height = this.ImgVar('WeaponOperation').height = Laya.stage.height;
                 Click._on(Click._Type.noEffect, this.ImgVar('WeaponOperation'), this, (e) => {
-                    console.log(222);
                     _Game._fireControl.rotateSwitch = false;
                     _Game._fireControl.moveDownY = e.stageY;
                 }, (e) => {
@@ -5755,6 +5760,29 @@
                 }, (e) => {
                     _Game._fireControl.rotateSwitch = true;
                     _Game._fireControl.moveDownY = 0;
+                });
+                Click._on(Click._Type.noEffect, this.ImgVar('AimOperation'), this, (e) => {
+                    this.aimControl.moveDownY = e.stageY;
+                }, (e) => {
+                    if (this.aimControl.moveDownY && Math.abs(this.aimControl.moveDownY - e.stageY) > 10) {
+                        if (this.aimControl.moveDownY - e.stageY > 0) {
+                            this.ImgVar('Aim').rotation += 5;
+                        }
+                        else {
+                            this.ImgVar('Aim').rotation -= 5;
+                        }
+                        if (this.ImgVar('Aim').rotation < -45) {
+                            this.ImgVar('Aim').rotation = -45;
+                        }
+                        if (45 < this.ImgVar('Aim').rotation) {
+                            this.ImgVar('Aim').rotation = 45;
+                        }
+                        this.aimControl.moveDownY = e.stageY;
+                    }
+                }, (e) => {
+                    this.aimControl.moveDownY = null;
+                }, (e) => {
+                    this.aimControl.moveDownY = null;
                 });
             }
         }

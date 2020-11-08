@@ -1,8 +1,8 @@
 (function () {
     'use strict';
 
-    var Lwg;
-    (function (Lwg) {
+    var lwg;
+    (function (lwg) {
         let Pause;
         (function (Pause) {
             function _createBtnPause(parent) {
@@ -23,10 +23,10 @@
             function btnPauseUp(event) {
                 event.stopPropagation();
                 event.currentTarget.scale(1, 1);
-                Lwg.Admin._openScene('UIPause', null, null, null);
+                lwg.Admin._openScene('UIPause', null, null, null);
             }
             Pause.btnPauseUp = btnPauseUp;
-        })(Pause = Lwg.Pause || (Lwg.Pause = {}));
+        })(Pause = lwg.Pause || (lwg.Pause = {}));
         let Elect;
         (function (Elect) {
             function _createP201_01(parent) {
@@ -41,7 +41,7 @@
                 }));
             }
             Elect._createP201_01 = _createP201_01;
-        })(Elect = Lwg.Elect || (Lwg.Elect = {}));
+        })(Elect = lwg.Elect || (lwg.Elect = {}));
         let Dialogue;
         (function (Dialogue) {
             let HintContent;
@@ -266,7 +266,7 @@
                 }));
             }
             Dialogue.createCommonDialog = createCommonDialog;
-        })(Dialogue = Lwg.Dialogue || (Lwg.Dialogue = {}));
+        })(Dialogue = lwg.Dialogue || (lwg.Dialogue = {}));
         let Execution;
         (function (Execution) {
             Execution._execution = {
@@ -305,7 +305,7 @@
                     if (Execution.ExecutionNumNode) {
                         Animation2D.move_Simple(sp, sp.x, sp.y, Execution.ExecutionNumNode.x, Execution.ExecutionNumNode.y, 800, 100, f => {
                             Animation2D.fadeOut(sp, 1, 0, 200, 0, f => {
-                                Lwg.Animation2D.upDwon_Shake(Execution.ExecutionNumNode, 10, 80, 0, null);
+                                lwg.Animation2D.upDwon_Shake(Execution.ExecutionNumNode, 10, 80, 0, null);
                                 if (func) {
                                     func();
                                 }
@@ -326,14 +326,14 @@
                 label.x = Execution.ExecutionNumNode.x + 100;
                 label.y = Execution.ExecutionNumNode.y - label.height / 2 + 4;
                 label.zOrder = 100;
-                Lwg.Animation2D.fadeOut(label, 0, 1, 200, 150, f => {
-                    Lwg.Animation2D.leftRight_Shake(Execution.ExecutionNumNode, 15, 60, 0, null);
-                    Lwg.Animation2D.fadeOut(label, 1, 0, 600, 400, f => {
+                lwg.Animation2D.fadeOut(label, 0, 1, 200, 150, f => {
+                    lwg.Animation2D.leftRight_Shake(Execution.ExecutionNumNode, 15, 60, 0, null);
+                    lwg.Animation2D.fadeOut(label, 1, 0, 600, 400, f => {
                     });
                 });
             }
             Execution.createConsumeEx = createConsumeEx;
-        })(Execution = Lwg.Execution || (Lwg.Execution = {}));
+        })(Execution = lwg.Execution || (lwg.Execution = {}));
         let Gold;
         (function (Gold_1) {
             Gold_1._num = {
@@ -434,6 +434,9 @@
                 else {
                     Gold.skin = url;
                 }
+                if (Gold_1.GoldNode) {
+                    Gold.zOrder = Gold_1.GoldNode.zOrder + 10;
+                }
                 return Gold;
             }
             Gold_1.createOneGold = createOneGold;
@@ -521,8 +524,8 @@
                     }
                 }
                 commonSpeedXYByAngle(angle, speed) {
-                    this.Owner.x += Tools.point_SpeedXYByAngle(angle, speed + this.accelerated).x;
-                    this.Owner.y += Tools.point_SpeedXYByAngle(angle, speed + this.accelerated).y;
+                    this.Owner.x += Tools.Point.SpeedXYByAngle(angle, speed + this.accelerated).x;
+                    this.Owner.y += Tools.Point.SpeedXYByAngle(angle, speed + this.accelerated).y;
                 }
                 moveRules() {
                 }
@@ -550,7 +553,7 @@
                     if (this.moveSwitch) {
                         this.timer++;
                         if (this.timer > 0) {
-                            Lwg.Animation2D.move_Scale(this.Owner, 1, this.Owner.x, this.Owner.y, this.targetX, this.targetY, 0.35, 250, 0, f => {
+                            lwg.Animation2D.move_Scale(this.Owner, 1, this.Owner.x, this.Owner.y, this.targetX, this.targetY, 0.35, 250, 0, f => {
                                 this.Owner.removeSelf();
                                 if (this.func !== null) {
                                     this.func();
@@ -562,7 +565,7 @@
                 }
             }
             Gold_1.AddGold = AddGold;
-        })(Gold = Lwg.Gold || (Lwg.Gold = {}));
+        })(Gold = lwg.Gold || (lwg.Gold = {}));
         let EventAdmin;
         (function (EventAdmin) {
             EventAdmin.dispatcher = new Laya.EventDispatcher();
@@ -596,7 +599,7 @@
                 EventAdmin.dispatcher.offAllCaller(caller);
             }
             EventAdmin._offCaller = _offCaller;
-        })(EventAdmin = Lwg.EventAdmin || (Lwg.EventAdmin = {}));
+        })(EventAdmin = lwg.EventAdmin || (lwg.EventAdmin = {}));
         let DateAdmin;
         (function (DateAdmin) {
             DateAdmin._date = {
@@ -676,7 +679,7 @@
                     Laya.LocalStorage.setItem('DateAdmin_last', DateAdmin._date.date.toString());
                 }
             };
-        })(DateAdmin = Lwg.DateAdmin || (Lwg.DateAdmin = {}));
+        })(DateAdmin = lwg.DateAdmin || (lwg.DateAdmin = {}));
         let TimerAdmin;
         (function (TimerAdmin) {
             function _frameLoop(delay, caller, method, immediately, args, coverBefore) {
@@ -778,7 +781,7 @@
                 }, args, coverBefore);
             }
             TimerAdmin._once = _once;
-        })(TimerAdmin = Lwg.TimerAdmin || (Lwg.TimerAdmin = {}));
+        })(TimerAdmin = lwg.TimerAdmin || (lwg.TimerAdmin = {}));
         let Admin;
         (function (Admin) {
             Admin._platform = {
@@ -791,15 +794,24 @@
                     General: 'General',
                     Web: 'Web',
                     WebTest: 'WebTest',
+                    Research: 'Research',
                 },
                 get name() {
                     return this['_platform_name'] ? this['_platform_name'] : null;
                 },
                 set name(val) {
                     this['_platform_name'] = val;
-                    if (val == Admin._platform.tpye.WebTest) {
-                        Laya.LocalStorage.clear();
-                        _Gold._num.value = 5000;
+                    switch (val) {
+                        case Admin._platform.tpye.WebTest:
+                            Laya.LocalStorage.clear();
+                            _Gold._num.value = 5000;
+                            break;
+                        case Admin._platform.tpye.Research:
+                            Laya.Stat.show();
+                            _Gold._num.value = 50000000000000;
+                            break;
+                        default:
+                            break;
                     }
                 }
             };
@@ -945,7 +957,7 @@
                 _SceneName["VictoryBox"] = "VictoryBox";
                 _SceneName["CheckIn"] = "CheckIn";
                 _SceneName["Resurgence"] = "Resurgence";
-                _SceneName["Ads"] = "Ads";
+                _SceneName["AdsHint"] = "AdsHint";
                 _SceneName["LwgInit"] = "LwgInit";
                 _SceneName["Game"] = "Game";
                 _SceneName["SmallHint"] = "SmallHint";
@@ -1058,10 +1070,8 @@
                 type: {
                     fadeOut: 'fadeOut',
                     stickIn: {
-                        left: 'left',
-                        right: 'right',
+                        random: 'random',
                         upLeftDownLeft: 'upLeftDownRight',
-                        upLeftDownRight: 'upLeftDownRight',
                         upRightDownLeft: 'upRightDownLeft',
                     },
                     leftMove: 'leftMove',
@@ -1088,7 +1098,7 @@
                             closeFunc();
                         });
                         break;
-                    case Admin._sceneAnimation.type.stickIn.left:
+                    case Admin._sceneAnimation.type.stickIn.random:
                         closeFunc();
                         break;
                     default:
@@ -1121,6 +1131,8 @@
                         break;
                     case Admin._sceneAnimation.type.stickIn.upRightDownLeft:
                         _sceneAnimationTypeStickIn(Scene, Admin._sceneAnimation.type.stickIn.upRightDownLeft);
+                    case Admin._sceneAnimation.type.stickIn.random:
+                        _sceneAnimationTypeStickIn(Scene, Admin._sceneAnimation.type.stickIn.random);
                     default:
                         break;
                 }
@@ -1139,25 +1151,27 @@
                 let stickInLeftArr = Tools.Node.zOrderByY(Scene, false);
                 for (let index = 0; index < stickInLeftArr.length; index++) {
                     const element = stickInLeftArr[index];
-                    if (element.name !== 'Background') {
+                    if (element.name !== 'Background' && element.name.substr(0, 5) !== 'NoAni') {
                         let originalPovitX = element.pivotX;
                         let originalPovitY = element.pivotY;
                         switch (type) {
                             case Admin._sceneAnimation.type.stickIn.upLeftDownLeft:
-                                element.rotation = element.y > Laya.stage.height / 2 ? 180 : -180;
+                                element.rotation = element.y > Laya.stage.height / 2 ? -180 : 180;
                                 Tools.Node.changePovit(element, 0, 0);
                                 break;
                             case Admin._sceneAnimation.type.stickIn.upRightDownLeft:
                                 element.rotation = element.y > Laya.stage.height / 2 ? -180 : 180;
                                 Tools.Node.changePovit(element, element.rotation == 180 ? element.width : 0, 0);
                                 break;
+                            case Admin._sceneAnimation.type.stickIn.random:
+                                element.rotation = Tools.randomOneHalf() == 1 ? 180 : -180;
+                                Tools.Node.changePovit(element, Tools.randomOneHalf() == 1 ? 0 : element.width, Tools.randomOneHalf() == 1 ? 0 : element.height);
+                                break;
                             default:
                                 break;
                         }
                         let originalX = element.x;
                         let originalY = element.y;
-                        element.rotation = element.y > Laya.stage.height / 2 ? -180 : 180;
-                        Tools.Node.changePovit(element, element.rotation == 180 ? element.width : 0, 0);
                         element.x = element.pivotX > element.width / 2 ? 800 + element.width : -800 - element.width;
                         element.y = element.rotation > 0 ? element.y + 200 : element.y - 200;
                         Animation2D.simple_Rotate(element, element.rotation, 0, time, delay * index);
@@ -1201,8 +1215,6 @@
                 constructor() {
                     super();
                     this.calssName = _SceneName.PreLoad;
-                    this.aniTime = 100;
-                    this.aniDelayde = 100;
                 }
                 get Owner() {
                     return this.owner;
@@ -1327,6 +1339,13 @@
                 ;
                 lwgBtnClick() { }
                 ;
+                lwgAdaptiveProportion(arr) {
+                    for (let index = 0; index < arr.length; index++) {
+                        const element = arr[index];
+                        element.y / GameConfig.height * Laya.stage.height;
+                    }
+                }
+                ;
                 lwgAdaptive() { }
                 ;
                 onUpdate() { this.lwgOnUpdate(); }
@@ -1347,56 +1366,6 @@
                 ;
             }
             Admin._SceneBase = _SceneBase;
-            class _Person extends Laya.Script {
-                constructor() {
-                    super();
-                }
-                get Owner() {
-                    return this.owner;
-                }
-                get OwnerScene() {
-                    return this.owner.scene;
-                }
-                get OwnerRig() {
-                    if (this.Owner.getComponent(Laya.RigidBody)) {
-                        return this.Owner.getComponent(Laya.RigidBody);
-                    }
-                    else {
-                        return null;
-                    }
-                }
-                onAwake() {
-                    this.lwgOnAwake();
-                }
-                lwgOnAwake() {
-                }
-                onEnable() {
-                    this.lwgOnEnable();
-                    this.lwgEventRegister();
-                    this.lwgOnEnable();
-                }
-                lwgEventRegister() {
-                }
-                lwgOnEnable() {
-                }
-                onStart() {
-                    this.lwgOnStart();
-                }
-                lwgOnStart() {
-                }
-                ;
-                lwgOpenScene(openSceneName, closeSelf, func, zOrder) {
-                    let closeName;
-                    if (closeSelf == undefined || closeSelf == true) {
-                        closeName = this.OwnerScene.name;
-                    }
-                    Admin._openScene(openSceneName, closeName, func, zOrder);
-                }
-                lwgCloseScene(sceneName, func) {
-                    Admin._closeScene(sceneName ? sceneName : this.Owner.name, func);
-                }
-            }
-            Admin._Person = _Person;
             class _Object extends Laya.Script {
                 constructor() {
                     super();
@@ -1416,9 +1385,16 @@
                     }
                 }
                 onAwake() {
-                    let calssName = this['__proto__']['constructor'].name;
-                    this.Owner[calssName] = this;
                     this.lwgOnAwake();
+                }
+                ImgChild(str) {
+                    if (this.Owner.getChildByName(str)) {
+                        return this.Owner.getChildByName(str);
+                    }
+                    else {
+                        console.log('场景内不存在子节点：', str);
+                        return undefined;
+                    }
                 }
                 lwgOpenScene(openSceneName, closeSelf, func, zOrder) {
                     let closeName;
@@ -1455,13 +1431,18 @@
                 lwgOnDisable() { }
             }
             Admin._Object = _Object;
-        })(Admin = Lwg.Admin || (Lwg.Admin = {}));
+        })(Admin = lwg.Admin || (lwg.Admin = {}));
         let Color;
         (function (Color) {
-            function RGBtoHexString(r, g, b) {
+            function RGBToHexString(r, g, b) {
                 return '#' + ("00000" + (r << 16 | g << 8 | b).toString(16)).slice(-6);
             }
-            Color.RGBtoHexString = RGBtoHexString;
+            Color.RGBToHexString = RGBToHexString;
+            function HexStringToRGB(str) {
+                let arr = [];
+                return arr;
+            }
+            Color.HexStringToRGB = HexStringToRGB;
             function _colour(node, RGBA, vanishtime) {
                 let cf = new Laya.ColorFilter();
                 node.blendMode = 'null';
@@ -1573,7 +1554,7 @@
                 });
             }
             Color._changeConstant = _changeConstant;
-        })(Color = Lwg.Color || (Lwg.Color = {}));
+        })(Color = lwg.Color || (lwg.Color = {}));
         let Effects;
         (function (Effects) {
             let _SkinUrl;
@@ -1870,7 +1851,7 @@
                             }
                             acc += accelerated0;
                             radius += speed0 + acc;
-                            let point = Tools.point_GetRoundPos(angle0, radius, centerPoint0);
+                            let point = Tools.Point.getRoundPos(angle0, radius, centerPoint0);
                             Img.pos(point.x, point.y);
                         }
                     });
@@ -2011,7 +1992,7 @@
                                 Laya.timer.clearAll(moveCaller);
                             }
                         }
-                        let point = Tools.point_GetRoundPos(angle0, radius, centerPoint0);
+                        let point = Tools.Point.getRoundPos(angle0, radius, centerPoint0);
                         Img.pos(point.x, point.y);
                     });
                     return Img;
@@ -2043,7 +2024,7 @@
                             acc += accelerated;
                             radius0 -= (speed0 + acc);
                         }
-                        let point = Tools.point_GetRoundPos(angle, radius0, centerPoint);
+                        let point = Tools.Point.getRoundPos(angle, radius0, centerPoint);
                         Img.pos(point.x, point.y);
                         if (point.distance(centerPoint.x, centerPoint.y) <= 20 || point.distance(centerPoint.x, centerPoint.y) >= 1000) {
                             Img.removeSelf();
@@ -2068,7 +2049,7 @@
                         this.height = height ? Tools.randomOneNumber(height[0], height[1]) : this.width;
                         this.pivotX = this.width / 2;
                         this.pivotY = this.height / 2;
-                        let p = radiusXY ? Tools.point_RandomPointByCenter(centerPos, radiusXY[0], radiusXY[1], 1) : Tools.point_RandomPointByCenter(centerPos, 100, 100, 1);
+                        let p = radiusXY ? Tools.Point.randomPointByCenter(centerPos, radiusXY[0], radiusXY[1], 1) : Tools.Point.randomPointByCenter(centerPos, 100, 100, 1);
                         this.pos(p[0].x, p[0].y);
                         let RGBA = [];
                         RGBA[0] = colorRGBA ? Tools.randomOneNumber(colorRGBA[0][0], colorRGBA[1][0]) : Tools.randomOneNumber(0, 255);
@@ -2255,7 +2236,7 @@
                 }
                 _circulation._corner = _corner;
             })(_circulation = Effects._circulation || (Effects._circulation = {}));
-        })(Effects = Lwg.Effects || (Lwg.Effects = {}));
+        })(Effects = lwg.Effects || (lwg.Effects = {}));
         let Click;
         (function (Click) {
             function _createButton() {
@@ -2329,7 +2310,7 @@
                 target._off(Laya.Event.MOUSE_OUT, caller, btnEffect.out);
             }
             Click._off = _off;
-        })(Click = Lwg.Click || (Lwg.Click = {}));
+        })(Click = lwg.Click || (lwg.Click = {}));
         class Btn_NoEffect {
             constructor() {
             }
@@ -2342,7 +2323,7 @@
             out(event) {
             }
         }
-        Lwg.Btn_NoEffect = Btn_NoEffect;
+        lwg.Btn_NoEffect = Btn_NoEffect;
         class Btn_LargenEffect {
             constructor() {
             }
@@ -2359,7 +2340,7 @@
                 event.currentTarget.scale(1, 1);
             }
         }
-        Lwg.Btn_LargenEffect = Btn_LargenEffect;
+        lwg.Btn_LargenEffect = Btn_LargenEffect;
         class Btn_Balloon {
             constructor() {
             }
@@ -2377,7 +2358,7 @@
                 event.currentTarget.scale(Click._balloonScale, Click._balloonScale);
             }
         }
-        Lwg.Btn_Balloon = Btn_Balloon;
+        lwg.Btn_Balloon = Btn_Balloon;
         class Btn_Beetle {
             constructor() {
             }
@@ -2395,7 +2376,7 @@
                 event.currentTarget.scale(Click._beetleScale, Click._beetleScale);
             }
         }
-        Lwg.Btn_Beetle = Btn_Beetle;
+        lwg.Btn_Beetle = Btn_Beetle;
         let Animation3D;
         (function (Animation3D) {
             Animation3D.tweenMap = {};
@@ -2529,9 +2510,21 @@
                 rotateTo(Sp3d, Target.transform.localRotationEuler, duration, caller, ease, complete, delay, coverBefore, null, frame);
             }
             Animation3D.moveRotateTo = moveRotateTo;
-        })(Animation3D = Lwg.Animation3D || (Lwg.Animation3D = {}));
+        })(Animation3D = lwg.Animation3D || (lwg.Animation3D = {}));
         let Animation2D;
         (function (Animation2D) {
+            function circulation_scale(node, range, time, delayed, func) {
+                Laya.Tween.to(node, { scaleX: 1 + range, scaleY: 1 + range }, time, null, Laya.Handler.create(this, function () {
+                    Laya.Tween.to(node, { scaleX: 1 - range, scaleY: 1 - range }, time / 2, null, Laya.Handler.create(this, function () {
+                        Laya.Tween.to(node, { scaleX: 1, scaleY: 1 }, time / 2, null, Laya.Handler.create(this, function () {
+                            if (func) {
+                                func();
+                            }
+                        }), 0);
+                    }), 0);
+                }), delayed ? delayed : 0);
+            }
+            Animation2D.circulation_scale = circulation_scale;
             function leftRight_Shake(node, range, time, delayed, func, click) {
                 if (!delayed) {
                     delayed = 0;
@@ -2825,12 +2818,12 @@
                 }), delayed);
             }
             Animation2D.bomb_LeftRight = bomb_LeftRight;
-            function bombs_Appear(node, firstAlpha, endScale, scale1, rotation1, time1, time2, delayed, func) {
+            function bombs_Appear(node, firstAlpha, endScale, maxScale, rotation1, time1, time2, delayed, func) {
                 node.scale(0, 0);
                 node.alpha = firstAlpha;
-                Laya.Tween.to(node, { scaleX: scale1, scaleY: scale1, alpha: 1, rotation: rotation1 }, time1, Laya.Ease.cubicInOut, Laya.Handler.create(this, function () {
+                Laya.Tween.to(node, { scaleX: maxScale, scaleY: maxScale, alpha: 1, rotation: rotation1 }, time1, Laya.Ease.cubicInOut, Laya.Handler.create(this, function () {
                     Laya.Tween.to(node, { scaleX: endScale, scaleY: endScale, rotation: 0 }, time2, null, Laya.Handler.create(this, function () {
-                        Laya.Tween.to(node, { scaleX: endScale + (scale1 - endScale) * 0.2, scaleY: endScale + (scale1 - endScale) * 0.2, rotation: 0 }, time2, null, Laya.Handler.create(this, function () {
+                        Laya.Tween.to(node, { scaleX: endScale + (maxScale - endScale) * 0.2, scaleY: endScale + (maxScale - endScale) * 0.2, rotation: 0 }, time2, null, Laya.Handler.create(this, function () {
                             Laya.Tween.to(node, { scaleX: endScale, scaleY: endScale, rotation: 0 }, time2, null, Laya.Handler.create(this, function () {
                                 if (func) {
                                     func();
@@ -3028,7 +3021,7 @@
                 }), delayed1);
             }
             Animation2D.rotate_Magnify_KickBack = rotate_Magnify_KickBack;
-        })(Animation2D = Lwg.Animation2D || (Lwg.Animation2D = {}));
+        })(Animation2D = lwg.Animation2D || (lwg.Animation2D = {}));
         let Setting;
         (function (Setting) {
             Setting._sound = {
@@ -3139,7 +3132,7 @@
                 }
             }
             Setting.setBtnVinish = setBtnVinish;
-        })(Setting = Lwg.Setting || (Lwg.Setting = {}));
+        })(Setting = lwg.Setting || (lwg.Setting = {}));
         let PalyAudio;
         (function (PalyAudio) {
             let voiceUrl;
@@ -3217,7 +3210,7 @@
                 Laya.SoundManager.stopMusic();
             }
             PalyAudio.stopMusic = stopMusic;
-        })(PalyAudio = Lwg.PalyAudio || (Lwg.PalyAudio = {}));
+        })(PalyAudio = lwg.PalyAudio || (lwg.PalyAudio = {}));
         let Tools;
         (function (Tools) {
             function color_RGBtoHexString(r, g, b) {
@@ -3301,9 +3294,13 @@
                     }
                 }
                 Node.zOrderByY = zOrderByY;
-                function changePovit(sp, _pivotX, _pivotY) {
+                function changePovit(sp, _pivotX, _pivotY, int) {
                     let originalPovitX = sp.pivotX;
                     let originalPovitY = sp.pivotY;
+                    if (int) {
+                        _pivotX = Math.round(_pivotX);
+                        _pivotY = Math.round(_pivotY);
+                    }
                     if (sp.width) {
                         sp.pivot(_pivotX, _pivotY);
                         sp.x += (sp.pivotX - originalPovitX);
@@ -3976,46 +3973,65 @@
                 }
             }
             Tools.array_ExcludeArrays = array_ExcludeArrays;
-            function point_DotRotatePoint(x0, y0, x1, y1, angle) {
-                let x2 = x0 + (x1 - x0) * Math.cos(angle * Math.PI / 180) - (y1 - y0) * Math.sin(angle * Math.PI / 180);
-                let y2 = y0 + (x1 - x0) * Math.sin(angle * Math.PI / 180) + (y1 - y0) * Math.cos(angle * Math.PI / 180);
-                return new Laya.Point(x2, y2);
-            }
-            Tools.point_DotRotatePoint = point_DotRotatePoint;
-            function point_SpeedXYByAngle(angle, speed) {
-                if (angle % 90 === 0 || !angle) {
+            let Point;
+            (function (Point) {
+                function dotRotatePoint(x0, y0, x1, y1, angle) {
+                    let x2 = x0 + (x1 - x0) * Math.cos(angle * Math.PI / 180) - (y1 - y0) * Math.sin(angle * Math.PI / 180);
+                    let y2 = y0 + (x1 - x0) * Math.sin(angle * Math.PI / 180) + (y1 - y0) * Math.cos(angle * Math.PI / 180);
+                    return new Laya.Point(x2, y2);
                 }
-                const speedXY = { x: 0, y: 0 };
-                speedXY.x = speed * Math.cos(angle * Math.PI / 180);
-                speedXY.y = speed * Math.sin(angle * Math.PI / 180);
-                return new Laya.Point(speedXY.x, speedXY.y);
-            }
-            Tools.point_SpeedXYByAngle = point_SpeedXYByAngle;
-            function point_GetRoundPos(angle, radius, centerPos) {
-                var center = centerPos;
-                var radius = radius;
-                var hudu = (2 * Math.PI / 360) * angle;
-                var X = center.x + Math.sin(hudu) * radius;
-                var Y = center.y - Math.cos(hudu) * radius;
-                return new Laya.Point(X, Y);
-            }
-            Tools.point_GetRoundPos = point_GetRoundPos;
-            function point_RandomPointByCenter(centerPos, radiusX, radiusY, count) {
-                if (!count) {
-                    count = 1;
+                Point.dotRotatePoint = dotRotatePoint;
+                function SpeedXYByAngle(angle, speed) {
+                    if (angle % 90 === 0 || !angle) {
+                    }
+                    const speedXY = { x: 0, y: 0 };
+                    speedXY.x = speed * Math.cos(angle * Math.PI / 180);
+                    speedXY.y = speed * Math.sin(angle * Math.PI / 180);
+                    return new Laya.Point(speedXY.x, speedXY.y);
                 }
-                let arr = [];
-                for (let index = 0; index < count; index++) {
-                    let x0 = Tools.randomCountNumer(0, radiusX, 1, false);
-                    let y0 = Tools.randomCountNumer(0, radiusY, 1, false);
-                    let diffX = Tools.randomOneHalf() == 0 ? x0[0] : -x0[0];
-                    let diffY = Tools.randomOneHalf() == 0 ? y0[0] : -y0[0];
-                    let p = new Laya.Point(centerPos.x + diffX, centerPos.y + diffY);
-                    arr.push(p);
+                Point.SpeedXYByAngle = SpeedXYByAngle;
+                function getRoundPos(angle, radius, centerPos) {
+                    var center = centerPos;
+                    var radius = radius;
+                    var hudu = (2 * Math.PI / 360) * angle;
+                    var X = center.x + Math.sin(hudu) * radius;
+                    var Y = center.y - Math.cos(hudu) * radius;
+                    return new Laya.Point(X, Y);
                 }
-                return arr;
-            }
-            Tools.point_RandomPointByCenter = point_RandomPointByCenter;
+                Point.getRoundPos = getRoundPos;
+                function randomPointByCenter(centerPos, radiusX, radiusY, count) {
+                    if (!count) {
+                        count = 1;
+                    }
+                    let arr = [];
+                    for (let index = 0; index < count; index++) {
+                        let x0 = Tools.randomCountNumer(0, radiusX, 1, false);
+                        let y0 = Tools.randomCountNumer(0, radiusY, 1, false);
+                        let diffX = Tools.randomOneHalf() == 0 ? x0[0] : -x0[0];
+                        let diffY = Tools.randomOneHalf() == 0 ? y0[0] : -y0[0];
+                        let p = new Laya.Point(centerPos.x + diffX, centerPos.y + diffY);
+                        arr.push(p);
+                    }
+                    return arr;
+                }
+                Point.randomPointByCenter = randomPointByCenter;
+                function getPArrBetweenTwoP(p1, p2, num) {
+                    let arr = [];
+                    let x0 = p2.x - p1.x;
+                    let y0 = p2.y - p1.y;
+                    for (let index = 0; index < num; index++) {
+                        arr.push(new Laya.Point(p1.x + (x0 / num) * index, p1.y + (y0 / num) * index));
+                    }
+                    if (arr.length >= 1) {
+                        arr.unshift();
+                    }
+                    if (arr.length >= 1) {
+                        arr.pop();
+                    }
+                    return arr;
+                }
+                Point.getPArrBetweenTwoP = getPArrBetweenTwoP;
+            })(Point = Tools.Point || (Tools.Point = {}));
             function angle_GetRad(angle) {
                 return angle / 180 * Math.PI;
             }
@@ -4027,13 +4043,11 @@
                 }
                 catch (error) {
                     dataArr = Laya.loader.getRes(url)['RECORDS'];
-                    let data = {};
-                    data[storageName] = dataArr;
-                    Laya.LocalStorage.setJSON(storageName, JSON.stringify(data));
+                    Laya.LocalStorage.setJSON(storageName, JSON.stringify(dataArr));
                     return dataArr;
                 }
                 if (Laya.LocalStorage.getJSON(storageName)) {
-                    dataArr = JSON.parse(Laya.LocalStorage.getJSON(storageName))[storageName];
+                    dataArr = JSON.parse(Laya.LocalStorage.getJSON(storageName));
                     console.log(storageName + '从本地缓存中获取到数据,将和文件夹的json文件进行对比');
                     try {
                         let dataArr_0 = Laya.loader.getRes(url)['RECORDS'];
@@ -4058,13 +4072,11 @@
                         console.log(storageName + '数据赋值失败！请检查数据表或者手动赋值！');
                     }
                 }
-                let data = {};
-                data[storageName] = dataArr;
-                Laya.LocalStorage.setJSON(storageName, JSON.stringify(data));
+                Laya.LocalStorage.setJSON(storageName, JSON.stringify(dataArr));
                 return dataArr;
             }
             Tools.jsonCompare = jsonCompare;
-        })(Tools = Lwg.Tools || (Lwg.Tools = {}));
+        })(Tools = lwg.Tools || (lwg.Tools = {}));
         let Shop;
         (function (Shop) {
             Shop.goodsClassArr = [];
@@ -4364,7 +4376,7 @@
                 }
             }
             Shop.ShopScene = ShopScene;
-        })(Shop = Lwg.Shop || (Lwg.Shop = {}));
+        })(Shop = lwg.Shop || (lwg.Shop = {}));
         let VictoryBox;
         (function (VictoryBox) {
             VictoryBox._BoxArray = [];
@@ -4445,7 +4457,7 @@
                 }
             }
             VictoryBox.VictoryBoxScene = VictoryBoxScene;
-        })(VictoryBox = Lwg.VictoryBox || (Lwg.VictoryBox = {}));
+        })(VictoryBox = lwg.VictoryBox || (lwg.VictoryBox = {}));
         let CheckIn;
         (function (CheckIn) {
             CheckIn._fromWhich = Admin._SceneName.PreLoad;
@@ -4576,7 +4588,7 @@
                 }
             }
             CheckIn.CheckInScene = CheckInScene;
-        })(CheckIn = Lwg.CheckIn || (Lwg.CheckIn = {}));
+        })(CheckIn = lwg.CheckIn || (lwg.CheckIn = {}));
         let SkinQualified;
         (function (SkinQualified) {
             SkinQualified._adsNum = {
@@ -4607,7 +4619,7 @@
                 }
             }
             SkinQualified.SkinQualifiedScene = SkinQualifiedScene;
-        })(SkinQualified = Lwg.SkinQualified || (Lwg.SkinQualified = {}));
+        })(SkinQualified = lwg.SkinQualified || (lwg.SkinQualified = {}));
         let Skin;
         (function (Skin) {
             Skin._skinClassArr = [];
@@ -4683,7 +4695,7 @@
                 }
             }
             Skin.SkinScene = SkinScene;
-        })(Skin = Lwg.Skin || (Lwg.Skin = {}));
+        })(Skin = lwg.Skin || (lwg.Skin = {}));
         let Easte_registerg;
         (function (Easte_registerg) {
             Easte_registerg._easte_registerg_1Arr = [];
@@ -4835,7 +4847,7 @@
                 }
             }
             Easte_registerg.Easte_registergScene = Easte_registergScene;
-        })(Easte_registerg = Lwg.Easte_registerg || (Lwg.Easte_registerg = {}));
+        })(Easte_registerg = lwg.Easte_registerg || (lwg.Easte_registerg = {}));
         let Victory;
         (function (Victory) {
             class VictoryScene extends Admin._SceneBase {
@@ -4850,7 +4862,7 @@
                 ;
             }
             Victory.VictoryScene = VictoryScene;
-        })(Victory = Lwg.Victory || (Lwg.Victory = {}));
+        })(Victory = lwg.Victory || (lwg.Victory = {}));
         let Defeated;
         (function (Defeated) {
             class DefeatedScene extends Admin._SceneBase {
@@ -4865,7 +4877,7 @@
                 ;
             }
             Defeated.DefeatedScene = DefeatedScene;
-        })(Defeated = Lwg.Defeated || (Lwg.Defeated = {}));
+        })(Defeated = lwg.Defeated || (lwg.Defeated = {}));
         let DrawCard;
         (function (DrawCard) {
             DrawCard._freeAds = {
@@ -4904,7 +4916,7 @@
                 ;
             }
             DrawCard.DrawCardScene = DrawCardScene;
-        })(DrawCard = Lwg.DrawCard || (Lwg.DrawCard = {}));
+        })(DrawCard = lwg.DrawCard || (lwg.DrawCard = {}));
         let Share;
         (function (Share) {
             Share._fromWhich = Admin._SceneName.Victory;
@@ -4920,7 +4932,7 @@
                 ;
             }
             Share.ShareScene = ShareScene;
-        })(Share = Lwg.Share || (Lwg.Share = {}));
+        })(Share = lwg.Share || (lwg.Share = {}));
         let PropTry;
         (function (PropTry) {
             class PropTryScene extends Admin._SceneBase {
@@ -4935,7 +4947,7 @@
                 ;
             }
             PropTry.PropTryScene = PropTryScene;
-        })(PropTry = Lwg.PropTry || (Lwg.PropTry = {}));
+        })(PropTry = lwg.PropTry || (lwg.PropTry = {}));
         let Backpack;
         (function (Backpack) {
             Backpack._prop1 = {
@@ -5017,7 +5029,7 @@
                 ;
             }
             Backpack.BackpackScene = BackpackScene;
-        })(Backpack = Lwg.Backpack || (Lwg.Backpack = {}));
+        })(Backpack = lwg.Backpack || (lwg.Backpack = {}));
         let LwgPreLoad;
         (function (LwgPreLoad) {
             let _scene3D = [];
@@ -5155,7 +5167,7 @@
                                 }
                             }
                         }
-                        LwgPreLoad._loadOrder = [_pic2D, _scene2D, _prefab2D, _scene3D, _prefab3D, _json, _texture2D, _mesh3D, _material, _skeleton];
+                        LwgPreLoad._loadOrder = [_pic2D, _scene2D, _prefab2D, _scene3D, _prefab3D, _json, _texture, _texture2D, _mesh3D, _material, _skeleton];
                         for (let index = 0; index < LwgPreLoad._loadOrder.length; index++) {
                             LwgPreLoad._sumProgress += LwgPreLoad._loadOrder[index].length;
                             if (LwgPreLoad._loadOrder[index].length <= 0) {
@@ -5285,13 +5297,13 @@
                             }));
                             break;
                         case _texture:
-                            Laya.Texture2D.load(_texture[index]['url'], Laya.Handler.create(this, (tex) => {
+                            Laya.loader.load(_texture[index]['url'], Laya.Handler.create(this, (tex) => {
                                 if (tex == null) {
                                     console.log('XXXXXXXXXXX2D纹理' + _texture[index]['url'] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
                                 }
                                 else {
-                                    _texture[index]['texture2D'] = tex;
-                                    console.log('2D纹理' + _texture[index]['url'] + '加载完成！', '数组下标为：', index);
+                                    _texture[index]['texture'] = tex;
+                                    console.log('纹理' + _texture[index]['url'] + '加载完成！', '数组下标为：', index);
                                 }
                                 EventAdmin._notify(_Event.progress);
                             }));
@@ -5365,7 +5377,7 @@
                 ;
             }
             LwgPreLoad._PreLoadScene = _PreLoadScene;
-        })(LwgPreLoad = Lwg.LwgPreLoad || (Lwg.LwgPreLoad = {}));
+        })(LwgPreLoad = lwg.LwgPreLoad || (lwg.LwgPreLoad = {}));
         let _LwgInit;
         (function (_LwgInit) {
             _LwgInit._pkgStep = 0;
@@ -5441,55 +5453,55 @@
                 ;
             }
             _LwgInit._LwgInitScene = _LwgInitScene;
-        })(_LwgInit = Lwg._LwgInit || (Lwg._LwgInit = {}));
-    })(Lwg || (Lwg = {}));
-    var Lwg$1 = Lwg;
-    let Admin = Lwg.Admin;
+        })(_LwgInit = lwg._LwgInit || (lwg._LwgInit = {}));
+    })(lwg || (lwg = {}));
+    var lwg$1 = lwg;
+    let Admin = lwg.Admin;
     let _SceneBase = Admin._SceneBase;
     let _SceneName = Admin._SceneName;
-    let EventAdmin = Lwg.EventAdmin;
-    let DateAdmin = Lwg.DateAdmin;
-    let TimerAdmin = Lwg.TimerAdmin;
-    let Pause = Lwg.Pause;
-    let Execution = Lwg.Execution;
-    let _Gold = Lwg.Gold;
-    let Setting = Lwg.Setting;
-    let PalyAudio = Lwg.PalyAudio;
-    let Click = Lwg.Click;
-    let Color = Lwg.Color;
-    let Effects = Lwg.Effects;
-    let Dialogue = Lwg.Dialogue;
-    let Animation2D = Lwg.Animation2D;
-    let Animation3D = Lwg.Animation3D;
-    let Tools = Lwg.Tools;
-    let Elect = Lwg.Elect;
-    let _LwgPreLoad = Lwg.LwgPreLoad;
-    let _PreLoadScene = Lwg.LwgPreLoad._PreLoadScene;
-    let _LwgInit = Lwg._LwgInit;
-    let _LwgInitScene = Lwg._LwgInit._LwgInitScene;
-    let Shop = Lwg.Shop;
-    let ShopScene = Lwg.Shop.ShopScene;
-    let VictoryBox = Lwg.VictoryBox;
-    let VictoryBoxScene = Lwg.VictoryBox.VictoryBoxScene;
-    let CheckIn = Lwg.CheckIn;
-    let CheckInScene = Lwg.CheckIn.CheckInScene;
-    let SkinQualified = Lwg.SkinQualified;
-    let SkinXDScene = Lwg.SkinQualified.SkinQualifiedScene;
-    let Skin = Lwg.Skin;
-    let SkinScene = Lwg.Skin.SkinScene;
-    let Easte_registerg = Lwg.Easte_registerg;
-    let Victory = Lwg.Victory;
-    let VictoryScene = Lwg.Victory.VictoryScene;
-    let Defeated = Lwg.Defeated;
-    let DefeatedScene = Lwg.Defeated.DefeatedScene;
-    let DrawCard = Lwg.DrawCard;
-    let DrawCardScene = Lwg.DrawCard.DrawCardScene;
-    let Share = Lwg.Share;
-    let ShareScene = Lwg.Share.ShareScene;
-    let PropTry = Lwg.PropTry;
-    let PropTryScene = Lwg.PropTry.PropTryScene;
-    let Backpack = Lwg.Backpack;
-    let BackpackScene = Lwg.Backpack.BackpackScene;
+    let EventAdmin = lwg.EventAdmin;
+    let DateAdmin = lwg.DateAdmin;
+    let TimerAdmin = lwg.TimerAdmin;
+    let Pause = lwg.Pause;
+    let Execution = lwg.Execution;
+    let _Gold = lwg.Gold;
+    let Setting = lwg.Setting;
+    let PalyAudio = lwg.PalyAudio;
+    let Click = lwg.Click;
+    let Color = lwg.Color;
+    let Effects = lwg.Effects;
+    let Dialogue = lwg.Dialogue;
+    let Animation2D = lwg.Animation2D;
+    let Animation3D = lwg.Animation3D;
+    let Tools = lwg.Tools;
+    let Elect = lwg.Elect;
+    let _LwgPreLoad = lwg.LwgPreLoad;
+    let _PreLoadScene = lwg.LwgPreLoad._PreLoadScene;
+    let _LwgInit = lwg._LwgInit;
+    let _LwgInitScene = lwg._LwgInit._LwgInitScene;
+    let Shop = lwg.Shop;
+    let ShopScene = lwg.Shop.ShopScene;
+    let VictoryBox = lwg.VictoryBox;
+    let VictoryBoxScene = lwg.VictoryBox.VictoryBoxScene;
+    let CheckIn = lwg.CheckIn;
+    let CheckInScene = lwg.CheckIn.CheckInScene;
+    let SkinQualified = lwg.SkinQualified;
+    let SkinXDScene = lwg.SkinQualified.SkinQualifiedScene;
+    let Skin = lwg.Skin;
+    let SkinScene = lwg.Skin.SkinScene;
+    let Easte_registerg = lwg.Easte_registerg;
+    let Victory = lwg.Victory;
+    let VictoryScene = lwg.Victory.VictoryScene;
+    let Defeated = lwg.Defeated;
+    let DefeatedScene = lwg.Defeated.DefeatedScene;
+    let DrawCard = lwg.DrawCard;
+    let DrawCardScene = lwg.DrawCard.DrawCardScene;
+    let Share = lwg.Share;
+    let ShareScene = lwg.Share.ShareScene;
+    let PropTry = lwg.PropTry;
+    let PropTryScene = lwg.PropTry.PropTryScene;
+    let Backpack = lwg.Backpack;
+    let BackpackScene = lwg.Backpack.BackpackScene;
 
     var _PreloadUrl;
     (function (_PreloadUrl) {
@@ -5547,7 +5559,8 @@
             {
                 index: 2,
                 color: 'red',
-            }, {
+            },
+            {
                 index: 3,
                 color: 'yellow',
             }, {
@@ -5575,55 +5588,96 @@
         })(_Label = _Game._Label || (_Game._Label = {}));
         _Game._fireControl = {
             rotateSwitch: true,
-            mouseDownY: 0,
-            get rotateSpeed() {
+            moveDownY: 0,
+            get moveRotateSpeed() {
                 return this['_rotateSpeed'] ? this['_rotateSpeed'] : 0;
             },
-            set rotateSpeed(speed) {
+            set moveRotateSpeed(speed) {
                 if (!_Game._fireControl.rotateSwitch) {
                     this['_rotateSpeed'] = speed;
-                    EventAdmin._notify(_Event._Game_move, _Game._fireControl.rotateSpeed);
+                    EventAdmin._notify(_Event._Game_WeaponSate, [_WeaponSateType.mouseMove]);
                 }
-            }
+            },
         };
         let _Event;
         (function (_Event) {
-            _Event["_Game_move"] = "_Game_move";
+            _Event["_Game_WeaponSate"] = "_Game_WeaponSate";
         })(_Event = _Game._Event || (_Game._Event = {}));
+        let _WeaponSateType;
+        (function (_WeaponSateType) {
+            _WeaponSateType["rotate"] = "rotate";
+            _WeaponSateType["mouseMove"] = "mouseMove";
+            _WeaponSateType["launch"] = "launch";
+            _WeaponSateType["free"] = "free";
+        })(_WeaponSateType = _Game._WeaponSateType || (_Game._WeaponSateType = {}));
         function _init() {
         }
         _Game._init = _init;
-        class _Enemy extends Admin._Person {
+        class _Enemy extends Admin._Object {
         }
         _Game._Enemy = _Enemy;
-        class _Weapon extends Admin._Person {
+        class _Weapon extends Admin._Object {
+            constructor() {
+                super(...arguments);
+                this.weapon = {
+                    distance: 0,
+                    baseSpeed: 60,
+                    accelerated: 1,
+                    get state() {
+                        return this['Statevalue'];
+                    },
+                    set state(val) {
+                        this['Statevalue'] = val;
+                    },
+                    speed: () => {
+                        if (!this['weaponGetTime']) {
+                            this['weaponGetTime'] = 0;
+                        }
+                        this['weaponGetTime']++;
+                        this.weapon.baseSpeed += this.weapon.accelerated;
+                        let speed = this.weapon.baseSpeed * this['weaponGetTime'];
+                        return this.weapon.distance + speed;
+                    }
+                };
+            }
             lwgOnAwake() {
                 this.parent = this.Owner.parent;
+                this.weapon.distance = this.parent.width / 2;
             }
             lwgOnStart() {
-                TimerAdmin._frameLoop(1, this, () => {
-                    if (this.Owner.parent) {
-                        if (_Game._fireControl.rotateSwitch) {
-                            let speed;
-                            if (_Game._fireControl.rotateSpeed > 0) {
-                                speed = 0.1;
-                            }
-                            else {
-                                speed = -0.1;
-                            }
-                            let point = Tools.point_GetRoundPos(this.Owner.rotation += speed, this.parent.width / 2 - 50, new Laya.Point(this.parent.width / 2, this.parent.height / 2));
-                            this.Owner.x = point.x;
-                            this.Owner.y = point.y;
-                        }
-                    }
-                });
             }
             lwgEventRegister() {
-                EventAdmin._register(_Event._Game_move, this, () => {
-                    if (this.Owner.parent) {
-                        let point = Tools.point_GetRoundPos(this.Owner.rotation += _Game._fireControl.rotateSpeed, this.parent.width / 2 - 50, new Laya.Point(this.parent.width / 2, this.parent.height / 2));
-                        this.Owner.x = point.x;
-                        this.Owner.y = point.y;
+                var move = (rSpeed, radius) => {
+                    let point = Tools.Point.getRoundPos(rSpeed ? this.Owner.rotation += rSpeed : this.Owner.rotation, radius, new Laya.Point(this.parent.width / 2, this.parent.height / 2));
+                    this.Owner.x = point.x;
+                    this.Owner.y = point.y;
+                };
+                EventAdmin._register(_Event._Game_WeaponSate, this, (type) => {
+                    if (this.weapon.state == _WeaponSateType.launch) {
+                        return;
+                    }
+                    Laya.timer.clearAll(this);
+                    if (type == _WeaponSateType.rotate) {
+                        TimerAdmin._frameLoop(1, this, () => {
+                            move(_Game._fireControl.moveRotateSpeed > 0 ? 0.1 : -0.1, this.parent.width / 2 - 50);
+                        });
+                    }
+                    else if (type == _WeaponSateType.mouseMove) {
+                        move(_Game._fireControl.moveRotateSpeed, this.parent.width / 2 - 50);
+                    }
+                    else if (type == _WeaponSateType.launch) {
+                        if (this.Owner.scaleX == 1.2) {
+                            this.weapon.state = _WeaponSateType.free;
+                            TimerAdmin._frameLoop(1, this, () => {
+                                this.weapon.state = _WeaponSateType.launch;
+                                move(null, this.weapon.speed());
+                            });
+                        }
+                        else {
+                            TimerAdmin._frameLoop(1, this, () => {
+                                move(_Game._fireControl.moveRotateSpeed > 0 ? 0.1 : -0.1, this.parent.width / 2 - 50);
+                            });
+                        }
                     }
                 });
             }
@@ -5654,13 +5708,14 @@
                 for (let index = 0; index < _Data._arr.length; index++) {
                     let Weapon = Tools.Node.prefabCreate(_PreloadUrl._list.prefab2D.Weapon.prefab);
                     this.ImgVar('WeaponParent').addChild(Weapon);
-                    let point = Tools.point_GetRoundPos(index / _Data._arr.length * 360, this.ImgVar('WeaponParent').width / 2 - 50, new Laya.Point(this.ImgVar('WeaponParent').width / 2, this.ImgVar('WeaponParent').height / 2));
+                    let point = Tools.Point.getRoundPos(index / _Data._arr.length * 360, this.ImgVar('WeaponParent').width / 2 - 50, new Laya.Point(this.ImgVar('WeaponParent').width / 2, this.ImgVar('WeaponParent').height / 2));
                     Weapon.x = point.x;
                     Weapon.y = point.y;
                     Weapon.rotation = index / _Data._arr.length * 360;
                     Weapon.skin = `Game/UI/Game/Hero/Hero_01_weapon_${_Data._arr[index]['color']}.png`;
                     Weapon.addComponent(_Weapon);
                 }
+                EventAdmin._notify(_Event._Game_WeaponSate, [_WeaponSateType.rotate]);
             }
             lwgOnStart() {
                 TimerAdmin._frameLoop(1, this, () => {
@@ -5670,30 +5725,37 @@
                     const element = this.ImgVar('EnemyParent').getChildAt(index);
                     let rotate = Tools.randomOneHalf() == 1 ? -0.5 : 0.5;
                     TimerAdmin._frameLoop(1, this, () => {
-                        let point = Tools.point_GetRoundPos(element.rotation += rotate, this.ImgVar('MobileFrame').width / 2, new Laya.Point(this.ImgVar('LandContent').width / 2, this.ImgVar('LandContent').height / 2));
+                        let point = Tools.Point.getRoundPos(element.rotation += rotate, this.ImgVar('MobileFrame').width / 2, new Laya.Point(this.ImgVar('LandContent').width / 2, this.ImgVar('LandContent').height / 2));
                         element.x = point.x;
                         element.y = point.y;
                     });
                 }
             }
-            onStageMouseDown(e) {
-                _Game._fireControl.rotateSwitch = false;
-                _Game._fireControl.mouseDownY = e.stageY;
-            }
-            onStageMouseMove(e) {
-                if (_Game._fireControl.mouseDownY - e.stageY > 0) {
-                    _Game._fireControl.rotateSpeed = -5;
-                }
-                else {
-                    _Game._fireControl.rotateSpeed = 5;
-                }
-                _Game._fireControl.mouseDownY = e.stageY;
-            }
-            onStageMouseUp(e) {
-                _Game._fireControl.rotateSwitch = true;
-                _Game._fireControl.mouseDownY = 0;
-            }
             lwgBtnClick() {
+                console.log(this.ImgVar('WeaponOperation'));
+                Click._on(Click._Type.noEffect, this.ImgVar('WeaponOperation'), this, (e) => {
+                    console.log(222);
+                    _Game._fireControl.rotateSwitch = false;
+                    _Game._fireControl.moveDownY = e.stageY;
+                }, (e) => {
+                    if (!_Game._fireControl.rotateSwitch && Math.abs(_Game._fireControl.moveDownY - e.stageY) > 10) {
+                        if (_Game._fireControl.moveDownY - e.stageY > 10) {
+                            _Game._fireControl.moveRotateSpeed = -2;
+                        }
+                        else {
+                            _Game._fireControl.moveRotateSpeed = 2;
+                        }
+                        _Game._fireControl.moveDownY = e.stageY;
+                        EventAdmin._notify(_Event._Game_WeaponSate, [_WeaponSateType.mouseMove]);
+                    }
+                }, (e) => {
+                    _Game._fireControl.rotateSwitch = true;
+                    _Game._fireControl.moveDownY = 0;
+                    EventAdmin._notify(_Event._Game_WeaponSate, [_WeaponSateType.launch]);
+                }, (e) => {
+                    _Game._fireControl.rotateSwitch = true;
+                    _Game._fireControl.moveDownY = 0;
+                });
             }
         }
         _Game.Game = Game;
@@ -5893,28 +5955,6 @@
     })(_Guide || (_Guide = {}));
     var _Guide$1 = _Guide.Guide;
 
-    var _PreLoadStepUrl;
-    (function (_PreLoadStepUrl) {
-        _PreLoadStepUrl._game = {};
-    })(_PreLoadStepUrl || (_PreLoadStepUrl = {}));
-    var _PreLoadStep;
-    (function (_PreLoadStep) {
-        class PreLoadStep extends _LwgPreLoad._PreLoadScene {
-            lwgOnStart() {
-                switch (Admin._preLoadOpenSceneLater.openSceneName) {
-                    case _SceneName.Game:
-                        EventAdmin._notify(_LwgPreLoad._Event.importList, ([_PreLoadStepUrl._game]));
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-        _PreLoadStep.PreLoadStep = PreLoadStep;
-    })(_PreLoadStep || (_PreLoadStep = {}));
-    ;
-    var _PreLoadStep$1 = _PreLoadStep.PreLoadStep;
-
     var _Start;
     (function (_Start) {
         function _init() {
@@ -5946,36 +5986,19 @@
     })(_Start || (_Start = {}));
     var _Start$1 = _Start.Start;
 
-    var _Victory;
-    (function (_Victory) {
-        class _data {
-        }
-        _Victory._data = _data;
-        function _init() {
-        }
-        _Victory._init = _init;
-        class VictoryBase extends Admin._SceneBase {
-        }
-        _Victory.VictoryBase = VictoryBase;
-        class Victory extends _Victory.VictoryBase {
-        }
-        _Victory.Victory = Victory;
-    })(_Victory || (_Victory = {}));
-    var _Victory$1 = _Victory.Victory;
-
+    var SceneName;
+    (function (SceneName) {
+    })(SceneName || (SceneName = {}));
     class LwgInit extends _LwgInitScene {
         lwgOnAwake() {
             _LwgInit._pkgInfo = [];
-            Admin._platform.name = Admin._platform.tpye.General;
-            Admin._sceneAnimation.presentAni = Admin._sceneAnimation.type.stickIn.upRightDownLeft;
-            Setting._bgMusic.switch = false;
+            Admin._platform.name = Admin._platform.tpye.Research;
+            Admin._sceneAnimation.presentAni = Admin._sceneAnimation.type.stickIn.random;
             Admin._moudel = {
                 _PreLoad: _PreLoad,
-                _PreLoadStep: _PreLoadStep,
                 _Guide: _Guide,
                 _Start: _Start,
                 _Game: _Game,
-                _Victory: _Victory,
             };
         }
     }

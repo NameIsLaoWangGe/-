@@ -1,7 +1,7 @@
-import LwgInit from "./LwgInit";
 
+import GameConfig from "../../GameConfig";
 /**综合模板*/
-export module Lwg {
+export module lwg {
     /**暂停模块，控制游戏的暂停和开启*/
     export module Pause {
         /**指代当前暂停游戏节点*/
@@ -27,7 +27,7 @@ export module Lwg {
         export function btnPauseUp(event) {
             event.stopPropagation();
             event.currentTarget.scale(1, 1);
-            Lwg.Admin._openScene('UIPause', null, null, null);
+            lwg.Admin._openScene('UIPause', null, null, null);
         }
     }
 
@@ -384,7 +384,7 @@ export module Lwg {
                 if (ExecutionNumNode) {
                     Animation2D.move_Simple(sp, sp.x, sp.y, ExecutionNumNode.x, ExecutionNumNode.y, 800, 100, f => {
                         Animation2D.fadeOut(sp, 1, 0, 200, 0, f => {
-                            Lwg.Animation2D.upDwon_Shake(ExecutionNumNode, 10, 80, 0, null);
+                            lwg.Animation2D.upDwon_Shake(ExecutionNumNode, 10, 80, 0, null);
                             if (func) {
                                 func();
                             }
@@ -409,9 +409,9 @@ export module Lwg {
             label.x = ExecutionNumNode.x + 100;
             label.y = ExecutionNumNode.y - label.height / 2 + 4;
             label.zOrder = 100;
-            Lwg.Animation2D.fadeOut(label, 0, 1, 200, 150, f => {
-                Lwg.Animation2D.leftRight_Shake(ExecutionNumNode, 15, 60, 0, null);
-                Lwg.Animation2D.fadeOut(label, 1, 0, 600, 400, f => {
+            lwg.Animation2D.fadeOut(label, 0, 1, 200, 150, f => {
+                lwg.Animation2D.leftRight_Shake(ExecutionNumNode, 15, 60, 0, null);
+                lwg.Animation2D.fadeOut(label, 1, 0, 600, 400, f => {
                 });
             });
         }
@@ -537,6 +537,9 @@ export module Lwg {
             } else {
                 Gold.skin = url;
             }
+            if (GoldNode) {
+                Gold.zOrder = GoldNode.zOrder + 10;
+            }
             return Gold;
         }
 
@@ -558,6 +561,7 @@ export module Lwg {
                 Laya.timer.once(index * 30, this, () => {
 
                     let Gold = createOneGold(width, height, url);
+
                     parent.addChild(Gold);
 
                     Animation2D.move_Scale(Gold, 1, firstPoint.x, firstPoint.y, targetPoint.x, targetPoint.y, 1, 350, 0, null, () => {
@@ -700,8 +704,8 @@ export module Lwg {
               * @param basedSpeed 基础速度
               */
             commonSpeedXYByAngle(angle, speed) {
-                this.Owner.x += Tools.point_SpeedXYByAngle(angle, speed + this.accelerated).x;
-                this.Owner.y += Tools.point_SpeedXYByAngle(angle, speed + this.accelerated).y;
+                this.Owner.x += Tools.Point.SpeedXYByAngle(angle, speed + this.accelerated).x;
+                this.Owner.y += Tools.Point.SpeedXYByAngle(angle, speed + this.accelerated).y;
             }
             /**移动规则*/
             moveRules(): void {
@@ -739,7 +743,7 @@ export module Lwg {
                 if (this.moveSwitch) {
                     this.timer++;
                     if (this.timer > 0) {
-                        Lwg.Animation2D.move_Scale(this.Owner, 1, this.Owner.x, this.Owner.y, this.targetX, this.targetY, 0.35, 250, 0, f => {
+                        lwg.Animation2D.move_Scale(this.Owner, 1, this.Owner.x, this.Owner.y, this.targetX, this.targetY, 0.35, 250, 0, f => {
                             this.Owner.removeSelf();
                             if (this.func !== null) {
                                 this.func();
@@ -1102,15 +1106,26 @@ export module Lwg {
                 Web: 'Web',
                 /**web测试包,会清除本地数据*/
                 WebTest: 'WebTest',
+                /**研发中*/
+                Research: 'Research',
             },
             get name(): string {
                 return this['_platform_name'] ? this['_platform_name'] : null;
             },
             set name(val: string) {
                 this['_platform_name'] = val;
-                if (val == _platform.tpye.WebTest) {
-                    Laya.LocalStorage.clear();
-                    _Gold._num.value = 5000;
+                switch (val) {
+                    case _platform.tpye.WebTest:
+                        Laya.LocalStorage.clear();
+                        _Gold._num.value = 5000;
+                        break;
+                    case _platform.tpye.Research:
+                        Laya.Stat.show();
+                        _Gold._num.value = 50000000000000;
+                        break;
+
+                    default:
+                        break;
                 }
             }
         };
@@ -1273,7 +1288,7 @@ export module Lwg {
             VictoryBox = 'VictoryBox',
             CheckIn = 'CheckIn',
             Resurgence = 'Resurgence',
-            Ads = 'Ads',
+            AdsHint = 'AdsHint',
             LwgInit = 'LwgInit',
             Game = 'Game',
             SmallHint = 'SmallHint',
@@ -1409,10 +1424,11 @@ export module Lwg {
                 fadeOut: 'fadeOut',
                 /**类似于用手拿着一角放入，对节点摆放有需求，需要整理节点，通过大块父节点将琐碎的scene中的直接子节点减少，并且锚点要在最左或者最右，否则达不到最佳效果*/
                 stickIn: {
-                    left: 'left',
-                    right: 'right',
+                    random: 'random',
+                    // left: 'left',
+                    // right: 'right',
                     upLeftDownLeft: 'upLeftDownRight',
-                    upLeftDownRight: 'upLeftDownRight',
+                    // upLeftDownRight: 'upLeftDownRight',
                     upRightDownLeft: 'upRightDownLeft',
                 },
                 leftMove: 'leftMove',
@@ -1441,7 +1457,7 @@ export module Lwg {
                         closeFunc();
                     })
                     break;
-                case _sceneAnimation.type.stickIn.left:
+                case _sceneAnimation.type.stickIn.random:
                     closeFunc();
                     break;
 
@@ -1476,7 +1492,9 @@ export module Lwg {
                     _sceneAnimationTypeStickIn(Scene, _sceneAnimation.type.stickIn.upLeftDownLeft)
                     break;
                 case _sceneAnimation.type.stickIn.upRightDownLeft:
-                    _sceneAnimationTypeStickIn(Scene, _sceneAnimation.type.stickIn.upRightDownLeft)
+                    _sceneAnimationTypeStickIn(Scene, _sceneAnimation.type.stickIn.upRightDownLeft);
+                case _sceneAnimation.type.stickIn.random:
+                    _sceneAnimationTypeStickIn(Scene, _sceneAnimation.type.stickIn.random);
                 default:
                     break;
             }
@@ -1496,25 +1514,29 @@ export module Lwg {
             let stickInLeftArr = Tools.Node.zOrderByY(Scene, false);
             for (let index = 0; index < stickInLeftArr.length; index++) {
                 const element = stickInLeftArr[index] as Laya.Image;
-                if (element.name !== 'Background') {
+                if (element.name !== 'Background' && element.name.substr(0, 5) !== 'NoAni') {
                     let originalPovitX = element.pivotX;
                     let originalPovitY = element.pivotY;
                     switch (type) {
                         case _sceneAnimation.type.stickIn.upLeftDownLeft:
-                            element.rotation = element.y > Laya.stage.height / 2 ? 180 : - 180;
+                            element.rotation = element.y > Laya.stage.height / 2 ? -180 : 180;
                             Tools.Node.changePovit(element, 0, 0);
+
                             break;
                         case _sceneAnimation.type.stickIn.upRightDownLeft:
                             element.rotation = element.y > Laya.stage.height / 2 ? -180 : 180;
                             Tools.Node.changePovit(element, element.rotation == 180 ? element.width : 0, 0);
+
+                            break;
+                        case _sceneAnimation.type.stickIn.random:
+                            element.rotation = Tools.randomOneHalf() == 1 ? 180 : -180;
+                            Tools.Node.changePovit(element, Tools.randomOneHalf() == 1 ? 0 : element.width, Tools.randomOneHalf() == 1 ? 0 : element.height);
                             break;
                         default:
                             break;
                     }
                     let originalX = element.x;
                     let originalY = element.y;
-                    element.rotation = element.y > Laya.stage.height / 2 ? -180 : 180;
-                    Tools.Node.changePovit(element, element.rotation == 180 ? element.width : 0, 0);
                     element.x = element.pivotX > element.width / 2 ? 800 + element.width : -800 - element.width;
                     element.y = element.rotation > 0 ? element.y + 200 : element.y - 200;
                     Animation2D.simple_Rotate(element, element.rotation, 0, time, delay * index);
@@ -1714,16 +1736,19 @@ export module Lwg {
                     time = _commonOpenAni(this.Owner);
                 }
             }
-            /**开场或者离场动画单位时间,默认为100*/
-            aniTime: number = 100;
-            /**开场或者离场动画单位延迟时间,默认为100*/
-            aniDelayde: number = 100;
             /**开场动画,返回的数字为时间倒计时，倒计时结束后开启点击事件,也可以用来屏蔽通用动画，只需返回一个数字即可,如果场景内节点是以prefab添加进去的，那么必须卸载lwgOpenAni之前*/
             lwgOpenAni(): number { return null };
             /**开场动画之后执行*/
             lwgOpenAniAfter(): void { };
             /**按钮点击事件注册*/
             lwgBtnClick(): void { };
+            /**按照y坐标的比例适配*/
+            lwgAdaptiveProportion(arr: Array<Laya.Sprite>): void {
+                for (let index = 0; index < arr.length; index++) {
+                    const element = arr[index] as Laya.Sprite;
+                    element.y / GameConfig.height * Laya.stage.height;
+                }
+            };
             /**一些节点的自适应*/
             lwgAdaptive(): void { };
             onUpdate(): void { this.lwgOnUpdate() };
@@ -1745,8 +1770,72 @@ export module Lwg {
             lwgOnDisable(): void { };
         }
 
-        /**2D角色通用父类*/
-        export class _Person extends Laya.Script {
+        // /**2D角色通用父类*/
+        // export class _Person extends Laya.Script {
+        //     /**物理组件*/
+        //     constructor() {
+        //         super();
+        //     }
+        //     /**挂载当前脚本的节点*/
+        //     get Owner(): Laya.Sprite {
+        //         return this.owner as Laya.Sprite;
+        //     }
+        //     get OwnerScene(): Laya.Sprite {
+        //         return this.owner.scene as Laya.Scene;
+        //     }
+        //     /**物理组件*/
+        //     get OwnerRig(): Laya.RigidBody {
+        //         if (this.Owner.getComponent(Laya.RigidBody)) {
+        //             return this.Owner.getComponent(Laya.RigidBody);
+        //         } else {
+        //             return null;
+        //         }
+        //     }
+        //     onAwake(): void {
+        //         this.lwgOnAwake();
+        //     }
+        //     lwgOnAwake(): void {
+        //     }
+        //     onEnable(): void {
+        //         this.lwgEventRegister();
+        //         this.lwgOnEnable();
+        //     }
+        //     lwgEventRegister(): void {
+
+        //     }
+        //     /**初始化，在onEnable中执行，重写即可覆盖*/
+        //     lwgOnEnable(): void {
+        //     }
+        //     onStart(): void {
+        //         this.lwgOnStart();
+        //     }
+        //     lwgOnStart(): void { }
+        //     /**
+        //       * 打开场景
+        //       * @param openSceneName 需要打开的场景名称
+        //       * @param closeSelf 是否关闭当前场景,默认为关闭当前场景
+        //       * @param func 完成回调，默认为null
+        //       * @param zOrder 指定层级
+        //      */
+        //     lwgOpenScene(openSceneName: string, closeSelf?: boolean, func?: Function, zOrder?: number): void {
+        //         let closeName;
+        //         if (closeSelf == undefined || closeSelf == true) {
+        //             closeName = this.OwnerScene.name;
+        //         }
+        //         Admin._openScene(openSceneName, closeName, func, zOrder);
+        //     }
+        //     /**
+        //     * 关闭场景，
+        //     * @param sceneName 默认为当前场景
+        //     * @param func 关闭后的回调函数
+        //     * */
+        //     lwgCloseScene(sceneName?: string, func?: Function): void {
+        //         Admin._closeScene(sceneName ? sceneName : this.Owner.name, func);
+        //     }
+        // }
+
+        /**2D物件通用父类*/
+        export class _Object extends Laya.Script {
             constructor() {
                 super();
             }
@@ -1768,74 +1857,13 @@ export module Lwg {
             onAwake(): void {
                 this.lwgOnAwake();
             }
-            lwgOnAwake(): void {
-            }
-            onEnable(): void {
-                this.lwgOnEnable();
-                this.lwgEventRegister();
-                this.lwgOnEnable();
-            }
-            lwgEventRegister(): void {
-            }
-            /**初始化，在onEnable中执行，重写即可覆盖*/
-            lwgOnEnable(): void {
-            }
-            onStart(): void {
-                this.lwgOnStart();
-            }
-            lwgOnStart(): void {
-
-            };
-            /**
-              * 打开场景
-              * @param openSceneName 需要打开的场景名称
-              * @param closeSelf 是否关闭当前场景,默认为关闭当前场景
-              * @param func 完成回调，默认为null
-              * @param zOrder 指定层级
-             */
-            lwgOpenScene(openSceneName: string, closeSelf?: boolean, func?: Function, zOrder?: number): void {
-                let closeName;
-                if (closeSelf == undefined || closeSelf == true) {
-                    closeName = this.OwnerScene.name;
-                }
-                Admin._openScene(openSceneName, closeName, func, zOrder);
-            }
-            /**
-            * 关闭场景，
-            * @param sceneName 默认为当前场景
-            * @param func 关闭后的回调函数
-            * */
-            lwgCloseScene(sceneName?: string, func?: Function): void {
-                Admin._closeScene(sceneName ? sceneName : this.Owner.name, func);
-            }
-        }
-
-        /**2D物件通用父类*/
-        export class _Object extends Laya.Script {
-            constructor() {
-                super();
-            }
-            /**挂载当前脚本的节点*/
-            get Owner(): Laya.Sprite {
-                return this.owner as Laya.Sprite;
-            }
-            get OwnerScene(): Laya.Sprite {
-                return this.owner.scene as Laya.Scene;
-            }
-            /**物理组件*/
-            get OwnerRig(): Laya.RigidBody {
-                if (this.Owner.getComponent(Laya.RigidBody)) {
-                    return this.Owner.getComponent(Laya.RigidBody);
+            ImgChild(str: string): Laya.Image {
+                if (this.Owner.getChildByName(str)) {
+                    return this.Owner.getChildByName(str) as Laya.Image;
                 } else {
-                    return null;
+                    console.log('场景内不存在子节点：', str);
+                    return undefined;
                 }
-            }
-            onAwake(): void {
-                // 类名
-                let calssName = this['__proto__']['constructor'].name;
-                // 组件变为的self属性
-                this.Owner[calssName] = this;
-                this.lwgOnAwake();
             }
             /**
               * 打开场景
@@ -1893,14 +1921,31 @@ export module Lwg {
     /**滤镜模块,主要是为节点和场景等进行颜色变化设置*/
     export module Color {
         /**
-         * RGB三个颜色值转换成16进制的字符串‘#000000’；
+         * RGB三个颜色值转换成16进制的字符串‘#xxxxxx’；
          * @param r 
          * @param g
          * @param b
           */
-        export function RGBtoHexString(r, g, b) {
+        export function RGBToHexString(r, g, b) {
             return '#' + ("00000" + (r << 16 | g << 8 | b).toString(16)).slice(-6);
         }
+
+        /**
+        * RGB三个颜色值转换成16进制的字符串‘#xxxxxx’；
+        * @param r 
+        * @param g
+        * @param b
+         */
+        export function HexStringToRGB(str: string): Array<number> {
+            let arr = [];
+            // let r, g, b;
+            // r = (0xff << 16 & str) >> 16
+            // g = (0xff << 8 & str) >> 8
+            // b = 0xff & str
+            return arr
+        }
+
+
         /**
          * 给一张图片染色,包括其子节点,也可以设置一个消失时间
          * @param node 节点
@@ -2418,7 +2463,7 @@ export module Lwg {
                         }
                         acc += accelerated0;
                         radius += speed0 + acc;
-                        let point = Tools.point_GetRoundPos(angle0, radius, centerPoint0);
+                        let point = Tools.Point.getRoundPos(angle0, radius, centerPoint0);
                         Img.pos(point.x, point.y);
                     }
                 })
@@ -2586,7 +2631,7 @@ export module Lwg {
                             Laya.timer.clearAll(moveCaller);
                         }
                     }
-                    let point = Tools.point_GetRoundPos(angle0, radius, centerPoint0);
+                    let point = Tools.Point.getRoundPos(angle0, radius, centerPoint0);
                     Img.pos(point.x, point.y);
                 })
                 return Img;
@@ -2631,7 +2676,7 @@ export module Lwg {
                         acc += accelerated;
                         radius0 -= (speed0 + acc);
                     }
-                    let point = Tools.point_GetRoundPos(angle, radius0, centerPoint);
+                    let point = Tools.Point.getRoundPos(angle, radius0, centerPoint);
                     Img.pos(point.x, point.y);
                     if (point.distance(centerPoint.x, centerPoint.y) <= 20 || point.distance(centerPoint.x, centerPoint.y) >= 1000) {
                         Img.removeSelf();
@@ -2656,7 +2701,7 @@ export module Lwg {
                     this.height = height ? Tools.randomOneNumber(height[0], height[1]) : this.width;
                     this.pivotX = this.width / 2;
                     this.pivotY = this.height / 2;
-                    let p = radiusXY ? Tools.point_RandomPointByCenter(centerPos, radiusXY[0], radiusXY[1], 1) : Tools.point_RandomPointByCenter(centerPos, 100, 100, 1);
+                    let p = radiusXY ? Tools.Point.randomPointByCenter(centerPos, radiusXY[0], radiusXY[1], 1) : Tools.Point.randomPointByCenter(centerPos, 100, 100, 1);
                     this.pos(p[0].x, p[0].y);
                     let RGBA = [];
                     RGBA[0] = colorRGBA ? Tools.randomOneNumber(colorRGBA[0][0], colorRGBA[1][0]) : Tools.randomOneNumber(0, 255);
@@ -3316,6 +3361,26 @@ export module Lwg {
     /**动画模块*/
     export module Animation2D {
         /**
+         * @export 类似于呼吸
+         * @param {(Laya.Sprite | Laya.Image)} node
+         * @param {number} range 幅度0.1~1 
+         * @param {number} time 时间
+         * @param {number} [delayed] 延时
+         * @param {Function} [func] 回调
+         */
+        export function circulation_scale(node: Laya.Sprite | Laya.Image, range: number, time: number, delayed?: number, func?: Function): void {
+            Laya.Tween.to(node, { scaleX: 1 + range, scaleY: 1 + range }, time, null, Laya.Handler.create(this, function () {
+                Laya.Tween.to(node, { scaleX: 1 - range, scaleY: 1 - range }, time / 2, null, Laya.Handler.create(this, function () {
+                    Laya.Tween.to(node, { scaleX: 1, scaleY: 1 }, time / 2, null, Laya.Handler.create(this, function () {
+                        if (func) {
+                            func();
+                        }
+                    }), 0);
+                }), 0);
+            }), delayed ? delayed : 0);
+        }
+
+        /**
          * 左右抖动
          * @param node 节点
          * @param range 幅度
@@ -3836,20 +3901,20 @@ export module Lwg {
          * 类似气球弹出并且回弹，第一个阶段弹到空中，这个阶段可以给个角度，第二阶段落下变为原始状态，第三阶段再次放大一次，这次放大小一点，第四阶段回到原始状态，三、四个阶段是回弹一次，根据第一个阶段参数进行调整
          * @param node 节点
          * @param firstAlpha 初始透明度
-         * @param  firstScale 最终大小，因为有些节点可能初始Scale并不是1
-         * @param scale1 第一阶段放大比例
+         * @param firstScale 最终大小，因为有些节点可能初始Scale并不是1
+         * @param maxScale 最大放大比例
          * @param rotation 第一阶段角度 
          * @param time1 第一阶段花费时间
          * @param time2 第二阶段花费时间
          * @param delayed 延时时间
          * @param func 完成后的回调
          */
-        export function bombs_Appear(node, firstAlpha, endScale, scale1, rotation1, time1, time2, delayed?: number, func?: Function): void {
+        export function bombs_Appear(node, firstAlpha, endScale, maxScale, rotation1, time1, time2, delayed?: number, func?: Function): void {
             node.scale(0, 0);
             node.alpha = firstAlpha;
-            Laya.Tween.to(node, { scaleX: scale1, scaleY: scale1, alpha: 1, rotation: rotation1 }, time1, Laya.Ease.cubicInOut, Laya.Handler.create(this, function () {
+            Laya.Tween.to(node, { scaleX: maxScale, scaleY: maxScale, alpha: 1, rotation: rotation1 }, time1, Laya.Ease.cubicInOut, Laya.Handler.create(this, function () {
                 Laya.Tween.to(node, { scaleX: endScale, scaleY: endScale, rotation: 0 }, time2, null, Laya.Handler.create(this, function () {
-                    Laya.Tween.to(node, { scaleX: endScale + (scale1 - endScale) * 0.2, scaleY: endScale + (scale1 - endScale) * 0.2, rotation: 0 }, time2, null, Laya.Handler.create(this, function () {
+                    Laya.Tween.to(node, { scaleX: endScale + (maxScale - endScale) * 0.2, scaleY: endScale + (maxScale - endScale) * 0.2, rotation: 0 }, time2, null, Laya.Handler.create(this, function () {
 
                         Laya.Tween.to(node, { scaleX: endScale, scaleY: endScale, rotation: 0 }, time2, null, Laya.Handler.create(this, function () {
                             if (func) {
@@ -4533,10 +4598,15 @@ export module Lwg {
              * @param {Laya.Sprite} sp 节点
              * @param {number} _pivotX 
              * @param {number} _pivotY 
+             * @param {number} int 是转换为整数，如果内部有遮罩必须要整数,默认为false
              */
-            export function changePovit(sp: Laya.Sprite, _pivotX: number, _pivotY: number): void {
+            export function changePovit(sp: Laya.Sprite, _pivotX: number, _pivotY: number, int?: boolean): void {
                 let originalPovitX = sp.pivotX;
                 let originalPovitY = sp.pivotY;
+                if (int) {
+                    _pivotX = Math.round(_pivotX);
+                    _pivotY = Math.round(_pivotY);
+                }
                 if (sp.width) {
                     sp.pivot(_pivotX, _pivotY);
                     sp.x += (sp.pivotX - originalPovitX);
@@ -5469,71 +5539,100 @@ export module Lwg {
             }
         }
 
-        /**
-         * 二维坐标中一个点按照另一个点旋转一定的角度后，得到的点
-         * @param x0 原点X
-         * @param y0 原点Y
-         * @param x1 旋转点X
-         * @param y1 旋转点Y
-         * @param angle 角度
-         */
-        export function point_DotRotatePoint(x0, y0, x1, y1, angle): Laya.Point {
-            let x2 = x0 + (x1 - x0) * Math.cos(angle * Math.PI / 180) - (y1 - y0) * Math.sin(angle * Math.PI / 180);
-            let y2 = y0 + (x1 - x0) * Math.sin(angle * Math.PI / 180) + (y1 - y0) * Math.cos(angle * Math.PI / 180);
-            return new Laya.Point(x2, y2);
-        }
 
-        /**
-         * 根据不同的角度和速度计算坐标,从而产生位移
-         * @param angle 角度
-         * @param speed 移动速度
-         * */
-        export function point_SpeedXYByAngle(angle: number, speed: number): Laya.Point {
-            if (angle % 90 === 0 || !angle) {
-                //debugger
+        export module Point {
+            /**
+              * 二维坐标中一个点按照另一个点旋转一定的角度后，得到的点
+              * @param x0 原点X
+              * @param y0 原点Y
+              * @param x1 旋转点X
+              * @param y1 旋转点Y
+              * @param angle 角度
+              */
+            export function dotRotatePoint(x0, y0, x1, y1, angle): Laya.Point {
+                let x2 = x0 + (x1 - x0) * Math.cos(angle * Math.PI / 180) - (y1 - y0) * Math.sin(angle * Math.PI / 180);
+                let y2 = y0 + (x1 - x0) * Math.sin(angle * Math.PI / 180) + (y1 - y0) * Math.cos(angle * Math.PI / 180);
+                return new Laya.Point(x2, y2);
             }
-            const speedXY = { x: 0, y: 0 };
-            speedXY.x = speed * Math.cos(angle * Math.PI / 180);
-            speedXY.y = speed * Math.sin(angle * Math.PI / 180);
-            return new Laya.Point(speedXY.x, speedXY.y);
-        }
-        /**
-        * 求圆上的点的坐标，可以根据角度和半径作出圆形位移
-        * @param angle 角度
-        * @param radius 半径
-        * @param centerPos 原点
-        */
-        export function point_GetRoundPos(angle: number, radius: number, centerPos: Laya.Point): Laya.Point {
-            var center = centerPos; //圆心坐标
-            var radius = radius; //半径
-            var hudu = (2 * Math.PI / 360) * angle; //90度角的弧度
 
-            var X = center.x + Math.sin(hudu) * radius; //求出90度角的x坐标
-            var Y = center.y - Math.cos(hudu) * radius; //求出90度角的y坐标
-            return new Laya.Point(X, Y);
-        }
+            /**
+             * 根据不同的角度和速度计算坐标,从而产生位移
+             * @param angle 角度
+             * @param speed 移动速度
+             * */
+            export function SpeedXYByAngle(angle: number, speed: number): Laya.Point {
+                if (angle % 90 === 0 || !angle) {
+                    //debugger
+                }
+                const speedXY = { x: 0, y: 0 };
+                speedXY.x = speed * Math.cos(angle * Math.PI / 180);
+                speedXY.y = speed * Math.sin(angle * Math.PI / 180);
+                return new Laya.Point(speedXY.x, speedXY.y);
+            }
 
-        /**
-         * 返回在一个中心点周围的随机产生数个点的数组
-         * @param centerPos 中心点坐标
-         * @param radiusX X轴半径
-         * @param radiusY Y轴半径
-         * @param count 产生多少个随机点
-         */
-        export function point_RandomPointByCenter(centerPos: Laya.Point, radiusX: number, radiusY: number, count?: number): Array<Laya.Point> {
-            if (!count) {
-                count = 1;
+            /**
+            * 求圆上的点的坐标，可以根据角度和半径作出圆形位移
+            * @param angle 角度
+            * @param radius 半径
+            * @param centerPos 原点
+            */
+            export function getRoundPos(angle: number, radius: number, centerPos: Laya.Point): Laya.Point {
+                var center = centerPos; //圆心坐标
+                var radius = radius; //半径
+                var hudu = (2 * Math.PI / 360) * angle; //90度角的弧度
+
+                var X = center.x + Math.sin(hudu) * radius; //求出90度角的x坐标
+                var Y = center.y - Math.cos(hudu) * radius; //求出90度角的y坐标
+                return new Laya.Point(X, Y);
             }
-            let arr: Array<Laya.Point> = [];
-            for (let index = 0; index < count; index++) {
-                let x0 = Tools.randomCountNumer(0, radiusX, 1, false);
-                let y0 = Tools.randomCountNumer(0, radiusY, 1, false);
-                let diffX = Tools.randomOneHalf() == 0 ? x0[0] : -x0[0];
-                let diffY = Tools.randomOneHalf() == 0 ? y0[0] : -y0[0];
-                let p = new Laya.Point(centerPos.x + diffX, centerPos.y + diffY);
-                arr.push(p);
+
+            /**
+             * 返回在一个中心点周围的随机产生数个点的数组
+             * @param centerPos 中心点坐标
+             * @param radiusX X轴半径
+             * @param radiusY Y轴半径
+             * @param count 产生多少个随机点
+             */
+            export function randomPointByCenter(centerPos: Laya.Point, radiusX: number, radiusY: number, count?: number): Array<Laya.Point> {
+                if (!count) {
+                    count = 1;
+                }
+                let arr: Array<Laya.Point> = [];
+                for (let index = 0; index < count; index++) {
+                    let x0 = Tools.randomCountNumer(0, radiusX, 1, false);
+                    let y0 = Tools.randomCountNumer(0, radiusY, 1, false);
+                    let diffX = Tools.randomOneHalf() == 0 ? x0[0] : -x0[0];
+                    let diffY = Tools.randomOneHalf() == 0 ? y0[0] : -y0[0];
+                    let p = new Laya.Point(centerPos.x + diffX, centerPos.y + diffY);
+                    arr.push(p);
+                }
+                return arr;
             }
-            return arr;
+
+            /**
+             * @export 返回两个点之间连线上均匀排布的点
+             * @param {Laya.Point} p1 点1
+             * @param {Laya.Point} p2 点2
+             * @param {number} num 个数
+             * @return {*}  {Array<Laya.Point>}
+             */
+            export function getPArrBetweenTwoP(p1: Laya.Point, p2: Laya.Point, num: number): Array<Laya.Point> {
+                let arr: Array<Laya.Point> = [];
+                let x0 = p2.x - p1.x;
+                let y0 = p2.y - p1.y;
+                for (let index = 0; index < num; index++) {
+                    arr.push(new Laya.Point(p1.x + (x0 / num) * index, p1.y + (y0 / num) * index));
+                }
+                if (arr.length >= 1) {
+                    arr.unshift();
+                }
+                if (arr.length >= 1) {
+                    arr.pop();
+                }
+                return arr;
+            }
+
+
         }
 
         /**
@@ -5556,17 +5655,15 @@ export module Lwg {
             // 第三步，如果本地缓存没有，那么直接从数据表获取
             let dataArr;
             try {
-                Laya.LocalStorage.getJSON(storageName)
+                Laya.LocalStorage.getJSON(storageName);
                 // console.log(Laya.LocalStorage.getJSON(storageName));
             } catch (error) {
                 dataArr = Laya.loader.getRes(url)['RECORDS'];
-                let data = {};
-                data[storageName] = dataArr;
-                Laya.LocalStorage.setJSON(storageName, JSON.stringify(data));
+                Laya.LocalStorage.setJSON(storageName, JSON.stringify(dataArr));
                 return dataArr;
             }
             if (Laya.LocalStorage.getJSON(storageName)) {
-                dataArr = JSON.parse(Laya.LocalStorage.getJSON(storageName))[storageName];
+                dataArr = JSON.parse(Laya.LocalStorage.getJSON(storageName));
                 console.log(storageName + '从本地缓存中获取到数据,将和文件夹的json文件进行对比');
                 try {
                     let dataArr_0: Array<any> = Laya.loader.getRes(url)['RECORDS'];
@@ -5588,9 +5685,7 @@ export module Lwg {
                     console.log(storageName + '数据赋值失败！请检查数据表或者手动赋值！')
                 }
             }
-            let data = {};
-            data[storageName] = dataArr;
-            Laya.LocalStorage.setJSON(storageName, JSON.stringify(data));
+            Laya.LocalStorage.setJSON(storageName, JSON.stringify(dataArr));
             return dataArr;
         }
     }
@@ -7028,7 +7123,7 @@ export module Lwg {
                             }
                         }
                     }
-                    _loadOrder = [_pic2D, _scene2D, _prefab2D, _scene3D, _prefab3D, _json, _texture2D, _mesh3D, _material, _skeleton];
+                    _loadOrder = [_pic2D, _scene2D, _prefab2D, _scene3D, _prefab3D, _json, _texture, _texture2D, _mesh3D, _material, _skeleton];
                     for (let index = 0; index < _loadOrder.length; index++) {
                         _sumProgress += _loadOrder[index].length;
                         if (_loadOrder[index].length <= 0) {
@@ -7167,12 +7262,12 @@ export module Lwg {
                         break;
 
                     case _texture:
-                        Laya.Texture2D.load(_texture[index]['url'], Laya.Handler.create(this, (tex: Laya.Texture2D) => {
+                        Laya.loader.load(_texture[index]['url'], Laya.Handler.create(this, (tex: Laya.Texture) => {
                             if (tex == null) {
                                 console.log('XXXXXXXXXXX2D纹理' + _texture[index]['url'] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
                             } else {
-                                _texture[index]['texture2D'] = tex;
-                                console.log('2D纹理' + _texture[index]['url'] + '加载完成！', '数组下标为：', index);
+                                _texture[index]['texture'] = tex;
+                                console.log('纹理' + _texture[index]['url'] + '加载完成！', '数组下标为：', index);
                             }
                             EventAdmin._notify(_Event.progress);
                         }));
@@ -7329,56 +7424,56 @@ export module Lwg {
         }
     }
 }
-export default Lwg;
+export default lwg;
 // 全局控制
-export let Admin = Lwg.Admin;
+export let Admin = lwg.Admin;
 export let _SceneBase = Admin._SceneBase;
 export let _SceneName = Admin._SceneName;
-export let EventAdmin = Lwg.EventAdmin;
-export let DateAdmin = Lwg.DateAdmin;
-export let TimerAdmin = Lwg.TimerAdmin;
-export let Pause = Lwg.Pause;
-export let Execution = Lwg.Execution;
-export let _Gold = Lwg.Gold;
-export let Setting = Lwg.Setting;
-export let PalyAudio = Lwg.PalyAudio;
-export let Click = Lwg.Click;
-export let Color = Lwg.Color;
-export let Effects = Lwg.Effects;
-export let Dialogue = Lwg.Dialogue;
-export let Animation2D = Lwg.Animation2D;
-export let Animation3D = Lwg.Animation3D;
-export let Tools = Lwg.Tools;
-export let Elect = Lwg.Elect;
+export let EventAdmin = lwg.EventAdmin;
+export let DateAdmin = lwg.DateAdmin;
+export let TimerAdmin = lwg.TimerAdmin;
+export let Pause = lwg.Pause;
+export let Execution = lwg.Execution;
+export let _Gold = lwg.Gold;
+export let Setting = lwg.Setting;
+export let PalyAudio = lwg.PalyAudio;
+export let Click = lwg.Click;
+export let Color = lwg.Color;
+export let Effects = lwg.Effects;
+export let Dialogue = lwg.Dialogue;
+export let Animation2D = lwg.Animation2D;
+export let Animation3D = lwg.Animation3D;
+export let Tools = lwg.Tools;
+export let Elect = lwg.Elect;
 //场景相关 
-export let _LwgPreLoad = Lwg.LwgPreLoad;
-export let _PreLoadScene = Lwg.LwgPreLoad._PreLoadScene;
-export let _LwgInit = Lwg._LwgInit;
-export let _LwgInitScene = Lwg._LwgInit._LwgInitScene;
+export let _LwgPreLoad = lwg.LwgPreLoad;
+export let _PreLoadScene = lwg.LwgPreLoad._PreLoadScene;
+export let _LwgInit = lwg._LwgInit;
+export let _LwgInitScene = lwg._LwgInit._LwgInitScene;
 
-export let Shop = Lwg.Shop;
-export let ShopScene = Lwg.Shop.ShopScene;
-export let VictoryBox = Lwg.VictoryBox;
-export let VictoryBoxScene = Lwg.VictoryBox.VictoryBoxScene;
-export let CheckIn = Lwg.CheckIn;
-export let CheckInScene = Lwg.CheckIn.CheckInScene;
-export let SkinQualified = Lwg.SkinQualified;
-export let SkinXDScene = Lwg.SkinQualified.SkinQualifiedScene;
-export let Skin = Lwg.Skin;
-export let SkinScene = Lwg.Skin.SkinScene;
-export let Easte_registerg = Lwg.Easte_registerg;
-export let Victory = Lwg.Victory;
-export let VictoryScene = Lwg.Victory.VictoryScene;
-export let Defeated = Lwg.Defeated;
-export let DefeatedScene = Lwg.Defeated.DefeatedScene;
-export let DrawCard = Lwg.DrawCard;
-export let DrawCardScene = Lwg.DrawCard.DrawCardScene;
-export let Share = Lwg.Share;
-export let ShareScene = Lwg.Share.ShareScene;
-export let PropTry = Lwg.PropTry;
-export let PropTryScene = Lwg.PropTry.PropTryScene;
-export let Backpack = Lwg.Backpack;
-export let BackpackScene = Lwg.Backpack.BackpackScene;
+export let Shop = lwg.Shop;
+export let ShopScene = lwg.Shop.ShopScene;
+export let VictoryBox = lwg.VictoryBox;
+export let VictoryBoxScene = lwg.VictoryBox.VictoryBoxScene;
+export let CheckIn = lwg.CheckIn;
+export let CheckInScene = lwg.CheckIn.CheckInScene;
+export let SkinQualified = lwg.SkinQualified;
+export let SkinXDScene = lwg.SkinQualified.SkinQualifiedScene;
+export let Skin = lwg.Skin;
+export let SkinScene = lwg.Skin.SkinScene;
+export let Easte_registerg = lwg.Easte_registerg;
+export let Victory = lwg.Victory;
+export let VictoryScene = lwg.Victory.VictoryScene;
+export let Defeated = lwg.Defeated;
+export let DefeatedScene = lwg.Defeated.DefeatedScene;
+export let DrawCard = lwg.DrawCard;
+export let DrawCardScene = lwg.DrawCard.DrawCardScene;
+export let Share = lwg.Share;
+export let ShareScene = lwg.Share.ShareScene;
+export let PropTry = lwg.PropTry;
+export let PropTryScene = lwg.PropTry.PropTryScene;
+export let Backpack = lwg.Backpack;
+export let BackpackScene = lwg.Backpack.BackpackScene;
 // 其他
 
 

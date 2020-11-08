@@ -1,5 +1,6 @@
+
 import ZJADMgr from "../TJ/ZJADMgr";
-import { Admin, DateAdmin, EventAdmin, Setting, _LwgInit, _LwgInitScene, _SceneName } from "./Lwg";
+import { Admin, DateAdmin, EventAdmin, _LwgInit, _LwgInitScene, _SceneName } from "./Lwg";
 import { _Game } from "./_Game";
 import { _Guide } from "./_Guide";
 import { _PreLoad } from "./_PreLoad";
@@ -13,6 +14,8 @@ import { _Start } from "./_Start";
 import { _Task } from "./_Task";
 import { _Victory } from "./_Victory";
 
+export enum SceneName {
+}
 export default class LwgInit extends _LwgInitScene {
     lwgOnAwake(): void {
         _LwgInit._pkgInfo = [
@@ -20,19 +23,18 @@ export default class LwgInit extends _LwgInitScene {
             // { name: "sp2", root: "3DScene" },
             // { name: "sp3", root: "3DPrefab" },
         ];
-        Admin._platform.name = Admin._platform.tpye.General;
-        Admin._sceneAnimation.presentAni = Admin._sceneAnimation.type.stickIn.upRightDownLeft;
-        Setting._bgMusic.switch = false;
+        Admin._platform.name = Admin._platform.tpye.Research;
+        Admin._sceneAnimation.presentAni = Admin._sceneAnimation.type.stickIn.random;
         Admin._moudel = {
             _PreLoad: _PreLoad,
-            _PreLoadStep: _PreLoadStep,
             _Guide: _Guide,
             _Start: _Start,
             _Game: _Game,
-            _Victory: _Victory,
             // _Task: _Task,
+            // _PreLoadStep: _PreLoadStep,
             // _SelectLevel: _SelectLevel,
             // _Settle: _Settle,
+            // _Victory: _Victory,
             // _Share: _Share,
             // _Special: _Special,
             // _PropTry: _PropTry,

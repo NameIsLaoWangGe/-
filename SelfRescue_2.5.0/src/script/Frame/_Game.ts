@@ -17,7 +17,8 @@ export module _Game {
             {
                 index: 2,
                 color: 'red',
-            }, {
+            },
+            {
                 index: 3,
                 color: 'yellow',
             }, {
@@ -45,88 +46,91 @@ export module _Game {
     }
     export let _fireControl = {
         rotateSwitch: true,
-        mouseDownY: 0 as number,
-        get rotateSpeed(): number {
+        moveDownY: 0 as number,
+        get moveRotateSpeed(): number {
             return this['_rotateSpeed'] ? this['_rotateSpeed'] : 0;
         },
-        set rotateSpeed(speed: number) {
+        set moveRotateSpeed(speed: number) {
             if (!_fireControl.rotateSwitch) {
                 this['_rotateSpeed'] = speed;
-                EventAdmin._notify(_Event._Game_move, _fireControl.rotateSpeed);
+                EventAdmin._notify(_Event._Game_WeaponSate, [_WeaponSateType.mouseMove]);
             }
         },
-        get launchSpeed(): number {
-            return 10 + _fireControl.launchAccelerated;
-        },
-        launchAccelerated: 0.1,
     }
     export enum _Event {
-        _Game_Rotate = '_Game_Rotate',
-        _Game_move = '_Game_move',
-        _Game_launch = '_Game_launch',
+        _Game_WeaponSate = '_Game_WeaponSate',
+    }
+    export enum _WeaponSateType {
+        rotate = 'rotate',
+        mouseMove = 'mouseMove',
+        launch = 'launch',
+        free = 'free',
     }
     export function _init(): void {
     }
-    export class _Enemy extends Admin._Person {
+    export class _Enemy extends Admin._Object {
 
     }
-    export class _Weapon extends Admin._Person {
-        weaponState = {
-            type: {
-                rotate: 'rotate',
-                mouseMove: 'mouseMove',
-                launch: 'launch',
-            },
-            get value(): string {
+    export class _Weapon extends Admin._Object {
+        parent: Laya.Image;
+        weapon = {
+            distance: 0,
+            baseSpeed: 60,
+            accelerated: 1,
+            get state(): string {
                 return this['Statevalue'];
             },
-            set value(val: string) {
+            set state(val: string) {
                 this['Statevalue'] = val;
+            },
+            speed: (): number => {
+                if (!this['weaponGetTime']) {
+                    this['weaponGetTime'] = 0;
+                }
+                this['weaponGetTime']++;
+                this.weapon.baseSpeed += this.weapon.accelerated;
+                let speed = this.weapon.baseSpeed * this['weaponGetTime'];
+                return this.weapon.distance + speed;
             }
         }
-        parent: Laya.Image;
         lwgOnAwake(): void {
             this.parent = this.Owner.parent as Laya.Image;
+            this.weapon.distance = this.parent.width / 2;
         }
         lwgOnStart(): void {
+        }
+        lwgEventRegister(): void {
             var move = (rSpeed: number, radius: number) => {
-                let point = Tools.point_GetRoundPos(this.Owner.rotation += rSpeed, radius, new Laya.Point(this.parent.width / 2, this.parent.height / 2))
+                let point = Tools.Point.getRoundPos(rSpeed ? this.Owner.rotation += rSpeed : this.Owner.rotation, radius, new Laya.Point(this.parent.width / 2, this.parent.height / 2))
                 this.Owner.x = point.x;
                 this.Owner.y = point.y;
             }
-            let _accelerated = 0;
-            TimerAdmin._frameLoop(1, this, () => {
-                if (this.Owner.parent) {
-                    switch (this.weaponState.value) {
-                        case this.weaponState.type.rotate:
-                            if (_fireControl.rotateSwitch) {
-                                let speed: number = _fireControl.rotateSpeed > 0 ? 0.1 : -0.1;
-                                move(speed, this.parent.width / 2 - 50);
-                            }
-                            _accelerated = 0;
-                            break;
-                        case this.weaponState.type.mouseMove:
-                            _accelerated = 0;
-                            move(_fireControl.rotateSpeed, this.parent.width / 2 - 50);
-                            break;
-                        case this.weaponState.type.launch:
-                            _accelerated += _fireControl.launchSpeed;
-                            let radius = _fireControl.launchAccelerated + _accelerated;
-                            move(_fireControl.rotateSpeed, radius);
-                            break;
-                        default:
-                            break;
+            EventAdmin._register(_Event._Game_WeaponSate, this, (type: string) => {
+                if (this.weapon.state == _WeaponSateType.launch) {
+                    return;
+                }
+                Laya.timer.clearAll(this);
+                if (type == _WeaponSateType.rotate) {
+                    TimerAdmin._frameLoop(1, this, () => {
+                        move(_fireControl.moveRotateSpeed > 0 ? 0.1 : -0.1, this.parent.width / 2 - 50);
+                    })
+                } else if (type == _WeaponSateType.mouseMove) {
+                    move(_fireControl.moveRotateSpeed, this.parent.width / 2 - 50);
+                } else if (type == _WeaponSateType.launch) {
+                    if (this.Owner.scaleX == 1.2) {
+                        this.weapon.state = _WeaponSateType.free;
+                        TimerAdmin._frameLoop(1, this, () => {
+                            this.weapon.state = _WeaponSateType.launch;
+                            move(null, this.weapon.speed());
+                        })
+                    } else {
+                        TimerAdmin._frameLoop(1, this, () => {
+                            move(_fireControl.moveRotateSpeed > 0 ? 0.1 : -0.1, this.parent.width / 2 - 50);
+                        })
                     }
                 }
             })
-        }
-        lwgEventRegister(): void {
-            EventAdmin._register(_Event._Game_Rotate, this, () => {
-            })
-            EventAdmin._register(_Event._Game_move, this, () => {
-            })
-            EventAdmin._register(_Event._Game_launch, this, () => {
-            })
+
         }
         onTriggerEnter(other: Laya.BoxCollider, self: Laya.BoxCollider, contact: any): void {
             let otherLabel = other.label;
@@ -152,17 +156,20 @@ export module _Game {
     }
     export class Game extends Admin._SceneBase {
 
+
         lwgOnEnable(): void {
             for (let index = 0; index < _Data._arr.length; index++) {
                 let Weapon = Tools.Node.prefabCreate(_PreloadUrl._list.prefab2D.Weapon.prefab) as Laya.Image;
                 this.ImgVar('WeaponParent').addChild(Weapon);
-                let point = Tools.point_GetRoundPos(index / _Data._arr.length * 360, this.ImgVar('WeaponParent').width / 2 - 50, new Laya.Point(this.ImgVar('WeaponParent').width / 2, this.ImgVar('WeaponParent').height / 2))
+                let point = Tools.Point.getRoundPos(index / _Data._arr.length * 360, this.ImgVar('WeaponParent').width / 2 - 50, new Laya.Point(this.ImgVar('WeaponParent').width / 2, this.ImgVar('WeaponParent').height / 2))
                 Weapon.x = point.x;
                 Weapon.y = point.y;
                 Weapon.rotation = index / _Data._arr.length * 360;
                 Weapon.skin = `Game/UI/Game/Hero/Hero_01_weapon_${_Data._arr[index]['color']}.png`;
                 Weapon.addComponent(_Weapon);
             }
+
+            EventAdmin._notify(_Event._Game_WeaponSate, [_WeaponSateType.rotate]);
         }
 
         lwgOnStart(): void {
@@ -173,31 +180,75 @@ export module _Game {
                 const element = this.ImgVar('EnemyParent').getChildAt(index) as Laya.Image;
                 let rotate = Tools.randomOneHalf() == 1 ? -0.5 : 0.5;
                 TimerAdmin._frameLoop(1, this, () => {
-                    let point = Tools.point_GetRoundPos(element.rotation += rotate, this.ImgVar('MobileFrame').width / 2, new Laya.Point(this.ImgVar('LandContent').width / 2, this.ImgVar('LandContent').height / 2))
+                    let point = Tools.Point.getRoundPos(element.rotation += rotate, this.ImgVar('MobileFrame').width / 2, new Laya.Point(this.ImgVar('LandContent').width / 2, this.ImgVar('LandContent').height / 2))
                     element.x = point.x;
                     element.y = point.y;
                 })
             }
         }
 
-        onStageMouseDown(e: Laya.Event): void {
-            _fireControl.rotateSwitch = false;
-            _fireControl.mouseDownY = e.stageY;
+        aimControl = {
+            firstP: null as number,
+            firstP: null as number,
         }
-        onStageMouseMove(e: Laya.Event): void {
-            if (_fireControl.mouseDownY - e.stageY > 0) {
-                _fireControl.rotateSpeed = -5;
-            } else {
-                _fireControl.rotateSpeed = 5;
-            }
-            _fireControl.mouseDownY = e.stageY;
-        }
-        onStageMouseUp(e: Laya.Event): void {
-            _fireControl.rotateSwitch = true;
-            _fireControl.mouseDownY = 0;
-        }
+
         lwgBtnClick(): void {
+            this.ImgVar('AimOperation').height = this.ImgVar('WeaponOperation').height = Laya.stage.height;
+            Click._on(Click._Type.noEffect, this.ImgVar('WeaponOperation'), this,
+                (e: Laya.Event) => {
+                    _fireControl.rotateSwitch = false;
+                    _fireControl.moveDownY = e.stageY;
+                },
+                (e: Laya.Event) => {
+                    if (!_fireControl.rotateSwitch && Math.abs(_fireControl.moveDownY - e.stageY) > 10) {
+                        if (_fireControl.moveDownY - e.stageY > 10) {
+                            _fireControl.moveRotateSpeed = -2;
+                        } else {
+                            _fireControl.moveRotateSpeed = 2;
+                        }
+                        _fireControl.moveDownY = e.stageY;
+                        EventAdmin._notify(_Event._Game_WeaponSate, [_WeaponSateType.mouseMove]);
+                    }
+                },
+                (e: Laya.Event) => {
+                    _fireControl.rotateSwitch = true;
+                    _fireControl.moveDownY = 0;
+                    EventAdmin._notify(_Event._Game_WeaponSate, [_WeaponSateType.launch]);
+                },
+                (e: Laya.Event) => {
+                    _fireControl.rotateSwitch = true;
+                    _fireControl.moveDownY = 0;
+                },
+            );
+
+            Click._on(Click._Type.noEffect, this.ImgVar('AimOperation'), this,
+                (e: Laya.Event) => {
+                    _fireControl.rotateSwitch = false;
+                    _fireControl.moveDownY = e.stageY;
+                },
+                (e: Laya.Event) => {
+                    if (!_fireControl.rotateSwitch && Math.abs(_fireControl.moveDownY - e.stageY) > 10) {
+                        if (_fireControl.moveDownY - e.stageY > 10) {
+                            _fireControl.moveRotateSpeed = -2;
+                        } else {
+                            _fireControl.moveRotateSpeed = 2;
+                        }
+                        _fireControl.moveDownY = e.stageY;
+                        EventAdmin._notify(_Event._Game_WeaponSate, [_WeaponSateType.mouseMove]);
+                    }
+                },
+                (e: Laya.Event) => {
+                    _fireControl.rotateSwitch = true;
+                    _fireControl.moveDownY = 0;
+                    EventAdmin._notify(_Event._Game_WeaponSate, [_WeaponSateType.launch]);
+                },
+                (e: Laya.Event) => {
+                    _fireControl.rotateSwitch = true;
+                    _fireControl.moveDownY = 0;
+                },
+            );
         }
+
     }
 }
 export default _Game.Game;

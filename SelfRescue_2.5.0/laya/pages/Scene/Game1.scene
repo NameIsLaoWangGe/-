@@ -2,11 +2,11 @@
     "x":0,
     "type":"View",
     "selectedBox":2,
-    "selecteID":32,
+    "selecteID":65,
     "searchKey":"View",
     "props":{"width":720,"sceneColor":"#000000","height":1280},
     "nodeParent":-1,
-    "maxID":65,
+    "maxID":68,
     "label":"View",
     "isOpen":true,
     "isDirectory":true,
@@ -63,14 +63,13 @@
             "props":{"y":370,"x":360,"width":450,"var":"LandContent","rotation":0,"pivotY":225,"pivotX":225,"name":"LandContent","height":450},
             "nodeParent":2,
             "label":"LandContent",
-            "isOpen":true,
+            "isOpen":false,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":30,
             "child":[
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,BehindScenery,BehindScenery",
                     "props":{"y":0,"x":0,"width":427,"var":"BehindScenery","name":"BehindScenery","height":449},
@@ -83,7 +82,6 @@
                     "compId":33,
                     "child":[
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image",
                             "props":{"y":67,"x":220,"width":101,"skin":"Game/UI/Game/SceneStyle_01/botany_01.png","scaleY":0.7,"scaleX":0.7,"rotation":-4,"pivotY":117,"pivotX":51,"height":117},
@@ -97,7 +95,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image",
                             "props":{"y":352,"x":119,"width":101,"skin":"Game/UI/Game/SceneStyle_01/botany_01.png","scaleY":0.9,"scaleX":0.9,"rotation":216,"pivotY":117,"pivotX":51,"height":117},
@@ -111,7 +108,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image",
                             "props":{"y":210,"x":387,"width":101,"skin":"Game/UI/Game/SceneStyle_01/botany_01.png","scaleY":0.7,"scaleX":0.7,"rotation":94,"pivotY":117,"pivotX":51,"height":117},
@@ -126,7 +122,6 @@
                         }]
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,EnemyParent,EnemyParent",
                     "props":{"y":0,"x":0,"width":415,"var":"EnemyParent","name":"EnemyParent","height":428},
@@ -179,7 +174,6 @@
                         }]
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,MiddleScenery,MiddleScenery",
                     "props":{"y":0,"x":0,"width":427,"var":"MiddleScenery","name":"MiddleScenery","height":449},
@@ -245,7 +239,6 @@
                         }]
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,Land",
                     "props":{"y":225,"x":225,"width":403,"skin":"Game/UI/Game/SceneStyle_01/land.png","pivotY":202,"pivotX":202,"name":"Land","height":404},
@@ -260,7 +253,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,FrontScenery",
                     "props":{"y":23,"x":23,"width":427,"name":"FrontScenery","height":449},
@@ -273,7 +265,6 @@
                     "compId":46,
                     "child":[
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image",
                             "props":{"y":154,"x":53,"width":61,"skin":"Game/UI/Game/SceneStyle_01/stone_01.png","rotation":-77,"pivotY":42,"pivotX":31,"height":42},
@@ -288,7 +279,6 @@
                         }]
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,MobileFrame,MobileFrame",
                     "props":{"y":50,"x":49,"width":351,"var":"MobileFrame","name":"MobileFrame","height":351},
@@ -323,17 +313,16 @@
             "props":{"y":1031,"x":360,"width":385,"var":"HeroContent","pivotY":182,"pivotX":193,"name":"HeroContent","height":385},
             "nodeParent":2,
             "label":"HeroContent",
-            "isOpen":true,
+            "isOpen":false,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":32,
             "child":[
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image",
-                    "props":{"y":48,"x":170,"width":45,"height":25},
+                    "props":{"y":178,"x":192.5,"width":158,"skin":"Game/UI/Game/aim.png","pivotY":164,"pivotX":79,"height":130},
                     "nodeParent":32,
                     "label":"Image",
                     "isOpen":true,
@@ -343,12 +332,11 @@
                     "compId":62,
                     "child":[
                         {
-                            "x":45,
                             "type":"BoxCollider",
                             "switchAble":true,
                             "searchKey":"BoxCollider",
                             "removeAble":true,
-                            "props":{"y":0,"x":0,"width":46,"label":"trigger","isSensor":true,"height":24},
+                            "props":{"y":18,"x":64,"width":32,"label":"trigger","isSensor":true,"height":47},
                             "nodeParent":62,
                             "label":"BoxCollider",
                             "isDirectory":false,
@@ -359,7 +347,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"RigidBody",
                             "switchAble":true,
                             "searchKey":"RigidBody",
@@ -376,7 +363,6 @@
                         }]
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,Hero,Hero",
                     "props":{"y":173,"x":192.5,"width":118,"var":"Hero","skin":"Game/UI/Game/Hero/Hero_01.png","pivotY":62,"pivotX":59,"name":"Hero","height":123},
@@ -390,7 +376,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,WeaponParent,WeaponParent",
                     "props":{"y":0,"x":12.5,"width":360,"var":"WeaponParent","name":"WeaponParent","height":369},
@@ -404,6 +389,34 @@
                     "child":[
                         ]
                 }]
+        },
+        {
+            "x":15,
+            "type":"Image",
+            "searchKey":"Image,WeaponOperation,WeaponOperation",
+            "props":{"y":0,"x":360,"width":360,"var":"WeaponOperation","name":"WeaponOperation","height":1280},
+            "nodeParent":2,
+            "label":"WeaponOperation",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":65,
+            "child":[
+                ]
+        },
+        {
+            "x":15,
+            "type":"Image",
+            "searchKey":"Image,AimOperation,AimOperation",
+            "props":{"y":0,"x":0,"width":360,"var":"AimOperation","name":"AimOperation","height":1280},
+            "nodeParent":2,
+            "label":"AimOperation",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":67,
+            "child":[
+                ]
         }],
     "animations":[
         {

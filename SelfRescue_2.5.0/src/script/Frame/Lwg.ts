@@ -1341,7 +1341,7 @@ export module lwg {
                         }
                     }
                 } else {
-                    console.log('当前场景没有同名脚本！');
+                    console.log(openSceneName,'场景没有同名脚本！');
                 }
                 scene.width = Laya.stage.width;
                 scene.height = Laya.stage.height;
@@ -1840,16 +1840,30 @@ export module lwg {
                 super();
             }
             /**挂载当前脚本的节点*/
-            get Owner(): Laya.Image | Laya.Sprite {
+            get _Owner(): Laya.Image | Laya.Sprite {
                 return this.owner as Laya.Image | Laya.Sprite;
             }
-            get OwnerScene(): Laya.Sprite {
+            /**所属场景*/
+            get _Scene(): Laya.Sprite {
                 return this.owner.scene as Laya.Scene;
+            }
+            /**父节点*/
+            get _Parent(): Laya.Image | Laya.Sprite {
+                if (this._Owner.parent) {
+                    return this.owner.parent as Laya.Image | Laya.Sprite;
+                }
+            }
+            _SceneImg(name: string): Laya.Image {
+                if (this._Scene[name]) {
+                    return this._Scene[name];
+                } else {
+                    console.log(`场景内不存在节点${name}`);
+                }
             }
             /**物理组件*/
             get OwnerRig(): Laya.RigidBody {
-                if (this.Owner.getComponent(Laya.RigidBody)) {
-                    return this.Owner.getComponent(Laya.RigidBody);
+                if (this._Owner.getComponent(Laya.RigidBody)) {
+                    return this._Owner.getComponent(Laya.RigidBody);
                 } else {
                     return null;
                 }
@@ -1858,8 +1872,8 @@ export module lwg {
                 this.lwgOnAwake();
             }
             ImgChild(str: string): Laya.Image {
-                if (this.Owner.getChildByName(str)) {
-                    return this.Owner.getChildByName(str) as Laya.Image;
+                if (this._Owner.getChildByName(str)) {
+                    return this._Owner.getChildByName(str) as Laya.Image;
                 } else {
                     console.log('场景内不存在子节点：', str);
                     return undefined;
@@ -1875,7 +1889,7 @@ export module lwg {
             lwgOpenScene(openSceneName: string, closeSelf?: boolean, func?: Function, zOrder?: number): void {
                 let closeName;
                 if (closeSelf == undefined || closeSelf == true) {
-                    closeName = this.OwnerScene.name;
+                    closeName = this._Scene.name;
                 }
                 Admin._openScene(openSceneName, closeName, func, zOrder);
             }
@@ -1885,7 +1899,7 @@ export module lwg {
             * @param func 关闭后的回调函数
             * */
             lwgCloseScene(sceneName?: string, func?: Function): void {
-                Admin._closeScene(sceneName ? sceneName : this.Owner.name, func);
+                Admin._closeScene(sceneName ? sceneName : this._Owner.name, func);
             }
             /**声明一些节点*/
             lwgOnAwake(): void { }
@@ -2970,7 +2984,7 @@ export module lwg {
          * @param out 出屏幕函数
          * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
          */
-        export function _on(effect, target: Laya.Node, caller, down?: Function, move?: Function, up?: Function, out?: Function): void {
+        export function _on(effect:string, target: Laya.Node, caller: any, down?: Function, move?: Function, up?: Function, out?: Function): void {
             let btnEffect;
             switch (effect) {
                 case _Type.noEffect:
@@ -4557,6 +4571,47 @@ export module lwg {
             return Number(str) + num;
         }
         export module Node {
+
+            /**
+             * 检测节点是否超出舞台
+             * @param _Sprite 节点
+             * @param func 回调函数
+             * */
+            export function leaveStage(_Sprite: Laya.Sprite, func: Function): Laya.Point {
+                let Parent = _Sprite.parent as Laya.Sprite;
+                let gPoint = Parent.localToGlobal(new Laya.Point(_Sprite.x, _Sprite.y));
+                if (gPoint.x > Laya.stage.width + 10 || gPoint.x < -10) {
+                    if (func) {
+                        func();
+                    }
+                }
+                if (gPoint.y > Laya.stage.height + 10 || gPoint.y < -10) {
+                    if (func) {
+                        func();
+                    }
+                }
+                return new Laya.Point(gPoint.x, gPoint.y);
+            }
+
+            /**
+             * 检测两个节点的距离,基于舞台
+             * @param _Sprite1 节点1
+             * @param _Sprite2 节点2
+             * @param distance 距离
+             * @param func 回调函数
+             */
+            export function checkTwoDistance(_Sprite1: Laya.Sprite, _Sprite2: Laya.Sprite, distance: number, func: Function): number {
+                let Parent1 = _Sprite1.parent as Laya.Sprite;
+                let gPoint1 = Parent1.localToGlobal(new Laya.Point(_Sprite1.x, _Sprite1.y));
+                let Parent2 = _Sprite2.parent as Laya.Sprite;
+                let gPoint2 = Parent2.localToGlobal(new Laya.Point(_Sprite2.x, _Sprite2.y));
+                if (gPoint1.distance(gPoint2.x, gPoint2.y) < distance) {
+                    if (func) {
+                        func();
+                    }
+                }
+                return gPoint1.distance(gPoint2.x, gPoint2.y);
+            }
 
             /**
              * @export 返回子节点随着Y轴进行排序数组

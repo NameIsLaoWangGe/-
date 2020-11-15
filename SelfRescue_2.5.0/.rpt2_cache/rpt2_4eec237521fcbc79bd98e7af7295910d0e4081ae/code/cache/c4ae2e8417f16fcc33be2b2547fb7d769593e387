@@ -1,0 +1,11 @@
+{
+  "code": "import { Admin, Click, _SceneName, EventAdmin } from \"./Lwg\";\r\nimport { _Game } from \"./_Game\";\r\nexport var _Victory;\r\n(function (_Victory) {\r\n    class _data {\r\n    }\r\n    _Victory._data = _data;\r\n    function _init() {\r\n    }\r\n    _Victory._init = _init;\r\n    class Victory extends Admin._SceneBase {\r\n        lwgBtnClick() {\r\n            Click._on(Click._Type.largen, this.ImgVar('BtnGet'), this, null, null, () => {\r\n                this.lwgOpenScene(_SceneName.Start);\r\n                EventAdmin._notify(_Game._Event.closeScene);\r\n            });\r\n        }\r\n    }\r\n    _Victory.Victory = Victory;\r\n})(_Victory || (_Victory = {}));\r\nexport default _Victory.Victory;\r\n",
+  "references": [
+    "F:/Work/Game/07_SelfRescue_2.5.0/Project/SelfRescue_2.5.0/src/script/TJ/Admanager.ts",
+    "F:/Work/Game/07_SelfRescue_2.5.0/Project/SelfRescue_2.5.0/src/script/Frame/Lwg.ts",
+    "F:/Work/Game/07_SelfRescue_2.5.0/Project/SelfRescue_2.5.0/src/script/Frame/_Game.ts",
+    "F:/Work/Game/07_SelfRescue_2.5.0/Project/SelfRescue_2.5.0/src/script/Frame/_PreLoad.ts",
+    "F:/Work/Game/07_SelfRescue_2.5.0/Project/SelfRescue_2.5.0/src/script/Frame/_Share.ts",
+    "F:/Work/Game/07_SelfRescue_2.5.0/Project/SelfRescue_2.5.0/src/script/Frame/_Special.ts"
+  ]
+}

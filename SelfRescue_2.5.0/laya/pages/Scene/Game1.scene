@@ -1,12 +1,12 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":62,
-    "selecteID":74,
+    "selectedBox":2,
+    "selecteID":32,
     "searchKey":"View",
     "props":{"width":720,"sceneColor":"#000000","height":1280},
     "nodeParent":-1,
-    "maxID":75,
+    "maxID":78,
     "label":"View",
     "isOpen":true,
     "isDirectory":true,
@@ -329,77 +329,6 @@
         {
             "x":15,
             "type":"Image",
-            "searchKey":"Image,HeroContent,HeroContent",
-            "props":{"y":1031,"x":360,"width":385,"var":"HeroContent","pivotY":182,"pivotX":193,"name":"HeroContent","height":385},
-            "nodeParent":2,
-            "label":"HeroContent",
-            "isOpen":true,
-            "isDirectory":true,
-            "isAniNode":true,
-            "hasChild":true,
-            "compId":32,
-            "child":[
-                {
-                    "x":30,
-                    "type":"Image",
-                    "searchKey":"Image,Aim,Aim",
-                    "props":{"y":178,"x":192.5,"width":158,"var":"Aim","skin":"Game/UI/Game/aim.png","pivotY":164,"pivotX":79,"name":"Aim","height":130},
-                    "nodeParent":32,
-                    "label":"Aim",
-                    "isOpen":true,
-                    "isDirectory":true,
-                    "isAniNode":true,
-                    "hasChild":true,
-                    "compId":62,
-                    "child":[
-                        {
-                            "x":45,
-                            "type":"Image",
-                            "searchKey":"Image,Fulcrum,Fulcrum",
-                            "props":{"y":30,"x":79,"width":89,"var":"Fulcrum","pivotY":29,"pivotX":45,"name":"Fulcrum","height":70},
-                            "nodeParent":62,
-                            "label":"Fulcrum",
-                            "isDirectory":false,
-                            "isAniNode":true,
-                            "hasChild":false,
-                            "compId":74,
-                            "child":[
-                                ]
-                        }]
-                },
-                {
-                    "x":30,
-                    "type":"Image",
-                    "searchKey":"Image,Hero,Hero",
-                    "props":{"y":173,"x":192.5,"width":118,"var":"Hero","skin":"Game/UI/Game/Hero/Hero_01.png","pivotY":62,"pivotX":59,"name":"Hero","height":123},
-                    "nodeParent":32,
-                    "label":"Hero",
-                    "isDirectory":false,
-                    "isAniNode":true,
-                    "hasChild":false,
-                    "compId":48,
-                    "child":[
-                        ]
-                },
-                {
-                    "x":30,
-                    "type":"Image",
-                    "searchKey":"Image,WeaponParent,WeaponParent",
-                    "props":{"y":0,"x":12.5,"width":360,"var":"WeaponParent","name":"WeaponParent","height":369},
-                    "nodeParent":32,
-                    "label":"WeaponParent",
-                    "isOpen":true,
-                    "isDirectory":false,
-                    "isAniNode":true,
-                    "hasChild":false,
-                    "compId":49,
-                    "child":[
-                        ]
-                }]
-        },
-        {
-            "x":15,
-            "type":"Image",
             "searchKey":"Image,WeaponOperation,WeaponOperation",
             "props":{"y":0,"x":360,"width":360,"var":"WeaponOperation","name":"WeaponOperation","height":1280},
             "nodeParent":2,
@@ -424,6 +353,103 @@
             "compId":67,
             "child":[
                 ]
+        },
+        {
+            "x":15,
+            "type":"Image",
+            "searchKey":"Image,HeroContent,HeroContent",
+            "props":{"y":1053,"x":360,"width":129,"var":"HeroContent","pivotY":62,"pivotX":65,"name":"HeroContent","height":124},
+            "nodeParent":2,
+            "label":"HeroContent",
+            "isOpen":true,
+            "isDirectory":true,
+            "isAniNode":true,
+            "hasChild":true,
+            "compId":32,
+            "child":[
+                {
+                    "x":30,
+                    "type":"Image",
+                    "searchKey":"Image,Aim,Aim",
+                    "props":{"y":68,"x":65,"width":158,"var":"Aim","skin":"Game/UI/Game/aim.png","pivotY":164,"pivotX":79,"name":"Aim","height":130},
+                    "nodeParent":32,
+                    "label":"Aim",
+                    "isOpen":false,
+                    "isDirectory":true,
+                    "isAniNode":true,
+                    "hasChild":true,
+                    "compId":62,
+                    "child":[
+                        {
+                            "type":"Image",
+                            "searchKey":"Image,Fulcrum,Fulcrum",
+                            "props":{"y":30,"x":79,"width":89,"var":"Fulcrum","pivotY":29,"pivotX":45,"name":"Fulcrum","height":70},
+                            "nodeParent":62,
+                            "label":"Fulcrum",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":74,
+                            "child":[
+                                ]
+                        }]
+                },
+                {
+                    "x":30,
+                    "type":"Image",
+                    "searchKey":"Image,Hero,Hero",
+                    "props":{"y":62,"x":64.5,"width":118,"var":"Hero","skin":"Game/UI/Game/Hero/Hero_01.png","pivotY":62,"pivotX":59,"name":"Hero","height":123},
+                    "nodeParent":32,
+                    "label":"Hero",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":48,
+                    "child":[
+                        ]
+                },
+                {
+                    "x":30,
+                    "type":"Image",
+                    "searchKey":"Image,WeaponParent,WeaponParent",
+                    "props":{"y":-110,"x":-115,"width":360,"var":"WeaponParent","name":"WeaponParent","height":369},
+                    "nodeParent":32,
+                    "label":"WeaponParent",
+                    "isOpen":true,
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":49,
+                    "child":[
+                        ]
+                },
+                {
+                    "x":30,
+                    "type":"Image",
+                    "searchKey":"Image,Blood,Blood",
+                    "props":{"y":-8,"x":13,"width":104,"var":"Blood","skin":"Frame/UI/ui_l_orthogon_white.png","sizeGrid":"10,20,12,16","name":"Blood","height":16},
+                    "nodeParent":32,
+                    "label":"Blood",
+                    "isOpen":false,
+                    "isDirectory":true,
+                    "isAniNode":true,
+                    "hasChild":true,
+                    "compId":76,
+                    "child":[
+                        {
+                            "type":"Image",
+                            "searchKey":"Image",
+                            "props":{"y":2,"x":2,"width":100,"skin":"Frame/UI/ui_orthogon_green.png","sizeGrid":"1,1,1,1","height":12},
+                            "nodeParent":76,
+                            "label":"Image",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":77,
+                            "child":[
+                                ]
+                        }]
+                }]
         }],
     "animations":[
         {

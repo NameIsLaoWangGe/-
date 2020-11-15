@@ -9,9 +9,14 @@ export module _Victory {
     }
     export function _init(): void {
     }
-    export class VictoryBase extends Admin._SceneBase {
-    }
-    export class Victory extends _Victory.VictoryBase {
+    export class Victory extends Admin._SceneBase {
+
+        lwgBtnClick(): void {
+            Click._on(Click._Type.largen, this.ImgVar('BtnGet'), this, null, null, () => {
+                this.lwgOpenScene(_SceneName.Start);
+                EventAdmin._notify(_Game._Event.closeScene);
+            })
+        }
     }
 }
 export default _Victory.Victory;

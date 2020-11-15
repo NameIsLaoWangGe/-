@@ -151,15 +151,6 @@ P 3F3A6FD8 jb.png
 P 954962E8 lan.png
 P 2F4BEF3D zan.png
 D Game/UI/DesignPic
-R 3D70B944 game.png
-R 22791D75 loding.png
-R 81F38B33 Proptry.png
-R 361B735A SelectLevel.png
-R 8DAFDA6B settle.png
-R 442BC8D2 Share.png
-R 73EEC04A Special.png
-R 6762E2C4 start.png
-R 7EA3E409 Victory.png
 D Game/UI/Game
 P B42D56D9 aim.png
 D Game/UI/PreLoad

@@ -17,8 +17,8 @@ export module _Start {
         }
         lwgBtnClick(): void {
             Click._on(Click._Type.largen, this.btnVar('BtnStart'), this, null, null, () => {
-                let levelName = _SceneName.Game + Admin._game.level;
-                this.lwgOpenScene(_SceneName.Game + Admin._game.level, true, () => {
+                let levelName = _SceneName.Game + 1;
+                this.lwgOpenScene(levelName, true, () => {
                     if (!Admin._sceneControl[levelName].getComponent(_Game.Game)) {
                         Admin._sceneControl[levelName].addComponent(_Game.Game);
                     }

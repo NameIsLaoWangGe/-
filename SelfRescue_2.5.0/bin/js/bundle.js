@@ -996,7 +996,7 @@
                         }
                     }
                     else {
-                        console.log('当前场景没有同名脚本！');
+                        console.log(openSceneName, '场景没有同名脚本！');
                     }
                     scene.width = Laya.stage.width;
                     scene.height = Laya.stage.height;
@@ -1370,15 +1370,28 @@
                 constructor() {
                     super();
                 }
-                get Owner() {
+                get _Owner() {
                     return this.owner;
                 }
-                get OwnerScene() {
+                get _Scene() {
                     return this.owner.scene;
                 }
+                get _Parent() {
+                    if (this._Owner.parent) {
+                        return this.owner.parent;
+                    }
+                }
+                _SceneImg(name) {
+                    if (this._Scene[name]) {
+                        return this._Scene[name];
+                    }
+                    else {
+                        console.log(`场景内不存在节点${name}`);
+                    }
+                }
                 get OwnerRig() {
-                    if (this.Owner.getComponent(Laya.RigidBody)) {
-                        return this.Owner.getComponent(Laya.RigidBody);
+                    if (this._Owner.getComponent(Laya.RigidBody)) {
+                        return this._Owner.getComponent(Laya.RigidBody);
                     }
                     else {
                         return null;
@@ -1388,8 +1401,8 @@
                     this.lwgOnAwake();
                 }
                 ImgChild(str) {
-                    if (this.Owner.getChildByName(str)) {
-                        return this.Owner.getChildByName(str);
+                    if (this._Owner.getChildByName(str)) {
+                        return this._Owner.getChildByName(str);
                     }
                     else {
                         console.log('场景内不存在子节点：', str);
@@ -1399,12 +1412,12 @@
                 lwgOpenScene(openSceneName, closeSelf, func, zOrder) {
                     let closeName;
                     if (closeSelf == undefined || closeSelf == true) {
-                        closeName = this.OwnerScene.name;
+                        closeName = this._Scene.name;
                     }
                     Admin._openScene(openSceneName, closeName, func, zOrder);
                 }
                 lwgCloseScene(sceneName, func) {
-                    Admin._closeScene(sceneName ? sceneName : this.Owner.name, func);
+                    Admin._closeScene(sceneName ? sceneName : this._Owner.name, func);
                 }
                 lwgOnAwake() { }
                 onEnable() {
@@ -3262,6 +3275,35 @@
             Tools.format_NumAddStr = format_NumAddStr;
             let Node;
             (function (Node) {
+                function leaveStage(_Sprite, func) {
+                    let Parent = _Sprite.parent;
+                    let gPoint = Parent.localToGlobal(new Laya.Point(_Sprite.x, _Sprite.y));
+                    if (gPoint.x > Laya.stage.width + 10 || gPoint.x < -10) {
+                        if (func) {
+                            func();
+                        }
+                    }
+                    if (gPoint.y > Laya.stage.height + 10 || gPoint.y < -10) {
+                        if (func) {
+                            func();
+                        }
+                    }
+                    return new Laya.Point(gPoint.x, gPoint.y);
+                }
+                Node.leaveStage = leaveStage;
+                function checkTwoDistance(_Sprite1, _Sprite2, distance, func) {
+                    let Parent1 = _Sprite1.parent;
+                    let gPoint1 = Parent1.localToGlobal(new Laya.Point(_Sprite1.x, _Sprite1.y));
+                    let Parent2 = _Sprite2.parent;
+                    let gPoint2 = Parent2.localToGlobal(new Laya.Point(_Sprite2.x, _Sprite2.y));
+                    if (gPoint1.distance(gPoint2.x, gPoint2.y) < distance) {
+                        if (func) {
+                            func();
+                        }
+                    }
+                    return gPoint1.distance(gPoint2.x, gPoint2.y);
+                }
+                Node.checkTwoDistance = checkTwoDistance;
                 function zOrderByY(sp, zOrder, along) {
                     let arr = [];
                     if (sp.numChildren == 0) {
@@ -5509,16 +5551,20 @@
             prefab2D: {
                 LwgGold: {
                     url: 'Prefab/LwgGold.json',
-                    prefab: new Laya.Prefab,
+                    prefab: null,
                 },
                 Weapon: {
                     url: 'Prefab/Weapon.json',
-                    prefab: new Laya.Prefab,
+                    prefab: null,
                 },
                 Enemy: {
                     url: 'Prefab/Enemy.json',
-                    prefab: new Laya.Prefab,
+                    prefab: null,
                 },
+                EnemyBullet: {
+                    url: 'Prefab/EnemyBullet.json',
+                    prefab: null,
+                }
             },
             scene2D: {
                 UIStart: "Scene/" + _SceneName.Start + '.json',
@@ -5598,54 +5644,111 @@
             set moveRotateSpeed(speed) {
                 if (!_Game._fireControl.rotateSwitch) {
                     this['_rotateSpeed'] = speed;
-                    EventAdmin._notify(_Event._Game_WeaponSate, [_WeaponSateType.mouseMove]);
+                    EventAdmin._notify(_Event.WeaponSate, [_WeaponSateType.mouseMove]);
                 }
             },
         };
         let _Event;
         (function (_Event) {
-            _Event["_Game_WeaponSate"] = "_Game_WeaponSate";
+            _Event["WeaponSate"] = "_Game_WeaponSate";
+            _Event["EnemyMove"] = "_Game_EnemyMove";
+            _Event["calculateBlood"] = "_Game_calculateBlood";
+            _Event["destroyEnemy"] = "_Game_destroyEnemy";
+            _Event["closeScene"] = "_Game_closeScene";
         })(_Event = _Game._Event || (_Game._Event = {}));
         let _WeaponSateType;
         (function (_WeaponSateType) {
-            _WeaponSateType["rotate"] = "rotate";
-            _WeaponSateType["mouseMove"] = "mouseMove";
-            _WeaponSateType["launch"] = "launch";
-            _WeaponSateType["free"] = "free";
+            _WeaponSateType["rotate"] = "_WeaponSateType_rotate";
+            _WeaponSateType["mouseMove"] = "_WeaponSateType_mouseMove";
+            _WeaponSateType["launch"] = "_WeaponSateType_launch";
+            _WeaponSateType["free"] = "_WeaponSateType_free";
         })(_WeaponSateType = _Game._WeaponSateType || (_Game._WeaponSateType = {}));
+        let _EnemySate;
+        (function (_EnemySate) {
+            _EnemySate["activity"] = "_EnemySate_activity";
+            _EnemySate["death"] = "_EnemySate_death";
+        })(_EnemySate = _Game._EnemySate || (_Game._EnemySate = {}));
         function _init() {
         }
         _Game._init = _init;
+        class _EnemyBullet extends Admin._Object {
+            constructor() {
+                super(...arguments);
+                this.speed = 5;
+            }
+            lwgOnStart() {
+                let GPoint = this._SceneImg('HeroContent').localToGlobal(new Laya.Point(this._SceneImg('Hero').x, this._SceneImg('Hero').y));
+                let p = new Laya.Point(this._Owner.x - GPoint.x, this._Owner.y - GPoint.y);
+                p.normalize();
+                TimerAdmin._frameLoop(1, this, () => {
+                    this._Owner.x -= p.x * this.speed;
+                    this._Owner.y -= p.y * this.speed;
+                    Tools.Node.leaveStage(this._Owner, () => {
+                        this._Owner.removeSelf();
+                        return;
+                    });
+                });
+                TimerAdmin._frameLoop(1, this, () => {
+                    Tools.Node.checkTwoDistance(this._Owner, this._SceneImg('Hero'), 50, () => {
+                        this._Owner.removeSelf();
+                        EventAdmin._notify(_Event.calculateBlood, (1));
+                    });
+                });
+            }
+        }
+        _Game._EnemyBullet = _EnemyBullet;
         class _Enemy extends Admin._Object {
+            constructor() {
+                super(...arguments);
+                this.time = 0;
+                this.state = '';
+            }
+            lwgOnStart() {
+                this.state = _EnemySate.activity;
+                TimerAdmin._frameRandomLoop(60, 100, this, () => {
+                    if (this.state == _EnemySate.activity) {
+                        let bullet = Tools.Node.prefabCreate(_PreloadUrl._list.prefab2D.EnemyBullet.prefab);
+                        bullet.addComponent(_EnemyBullet);
+                        let GPoint = this._Parent.localToGlobal(new Laya.Point(this._Owner.x, this._Owner.y));
+                        this._Scene.addChild(bullet);
+                        bullet.pos(GPoint.x, GPoint.y);
+                    }
+                });
+                let rotate = Tools.randomOneHalf() == 1 ? -0.5 : 0.5;
+                TimerAdmin._frameLoop(1, this, () => {
+                    let point = Tools.Point.getRoundPos(this._Owner.rotation += rotate, this._SceneImg('MobileFrame').width / 2 + this._Owner.height / 2, new Laya.Point(this._SceneImg('LandContent').width / 2, this._SceneImg('LandContent').height / 2));
+                    this._Owner.x = point.x;
+                    this._Owner.y = point.y;
+                });
+            }
         }
         _Game._Enemy = _Enemy;
         class _Weapon extends Admin._Object {
             constructor() {
                 super(...arguments);
-                this.weapon = {
-                    distance: 0,
-                    baseSpeed: 60,
-                    accelerated: 1,
-                    get state() {
-                        return this['Statevalue'];
-                    },
-                    set state(val) {
-                        this['Statevalue'] = val;
-                    },
-                    speed: () => {
-                        if (!this['weaponGetTime']) {
-                            this['weaponGetTime'] = 0;
-                        }
-                        this['weaponGetTime']++;
-                        this.weapon.baseSpeed += this.weapon.accelerated;
-                        let speed = this.weapon.baseSpeed * this['weaponGetTime'];
-                        return this.weapon.distance + speed;
-                    }
-                };
+                this.distance = 0;
+                this.baseSpeed = 60;
+                this.accelerated = 1;
+            }
+            get state() {
+                return this['Statevalue'];
+            }
+            ;
+            set state(_state) {
+                this['Statevalue'] = _state;
+            }
+            ;
+            speed() {
+                if (!this['weaponGetTime']) {
+                    this['weaponGetTime'] = 0;
+                }
+                this['weaponGetTime']++;
+                this.baseSpeed += this.accelerated;
+                let speed = this.baseSpeed * this['weaponGetTime'];
+                return this.distance + speed;
             }
             lwgOnAwake() {
-                this.Parent = this.Owner.parent;
-                this.weapon.distance = this.Parent.width / 2;
+                this.distance = this._Parent.width / 2;
             }
             lwgOnStart() {
             }
@@ -5653,57 +5756,58 @@
                 var getAim = () => {
                     let Fulcrum = _Game._fireControl.Aim.getChildAt(0);
                     let point = _Game._fireControl.Aim.localToGlobal(new Laya.Point(Fulcrum.x, Fulcrum.y));
-                    let gOwnerXY = this.Parent.localToGlobal(new Laya.Point(this.Owner.x, this.Owner.y));
-                    if (point.distance(gOwnerXY.x, gOwnerXY.y) < 30) {
-                        this.Owner.scale(1.2, 1.2);
+                    let g_OwnerXY = this._Parent.localToGlobal(new Laya.Point(this._Owner.x, this._Owner.y));
+                    if (point.distance(g_OwnerXY.x, g_OwnerXY.y) < 30) {
+                        this._Owner.scale(1.2, 1.2);
                     }
                     else {
-                        this.Owner.scale(1, 1);
+                        this._Owner.scale(1, 1);
                     }
                 };
                 var move = (rSpeed, radius) => {
-                    let point = Tools.Point.getRoundPos(rSpeed ? this.Owner.rotation += rSpeed : this.Owner.rotation, radius, new Laya.Point(this.Parent.width / 2, this.Parent.height / 2));
-                    this.Owner.x = point.x;
-                    this.Owner.y = point.y;
+                    let point = Tools.Point.getRoundPos(rSpeed ? this._Owner.rotation += rSpeed : this._Owner.rotation, radius, new Laya.Point(this._Parent.width / 2, this._Parent.height / 2));
+                    this._Owner.x = point.x;
+                    this._Owner.y = point.y;
                 };
-                EventAdmin._register(_Event._Game_WeaponSate, this, (type) => {
-                    if (this.weapon.state == _WeaponSateType.launch || this.weapon.state == _WeaponSateType.free) {
+                EventAdmin._register(_Event.WeaponSate, this, (type) => {
+                    if (this.state == _WeaponSateType.launch || this.state == _WeaponSateType.free) {
                         return;
                     }
                     Laya.timer.clearAll(this);
                     if (type == _WeaponSateType.rotate) {
                         TimerAdmin._frameLoop(1, this, () => {
-                            move(_Game._fireControl.moveRotateSpeed > 0 ? 0.1 : -0.1, this.Parent.width / 2 - 50);
+                            move(_Game._fireControl.moveRotateSpeed > 0 ? 0.1 : -0.1, this._Parent.width / 2 - 50);
                             getAim();
                         });
                     }
                     else if (type == _WeaponSateType.mouseMove) {
-                        move(_Game._fireControl.moveRotateSpeed, this.Parent.width / 2 - 50);
+                        move(_Game._fireControl.moveRotateSpeed, this._Parent.width / 2 - 50);
                         getAim();
                     }
                     else if (type == _WeaponSateType.launch) {
-                        if (this.Owner.scaleX == 1.2) {
-                            this.weapon.state = _WeaponSateType.free;
+                        if (this._Owner.scaleX == 1.2) {
+                            this.state = _WeaponSateType.free;
                             TimerAdmin._frameLoop(1, this, () => {
-                                this.weapon.state = _WeaponSateType.launch;
-                                move(null, this.weapon.speed());
+                                this.state = _WeaponSateType.launch;
+                                move(null, this.speed());
                                 for (let index = 0; index < _Game._fireControl.EnemyParent.numChildren; index++) {
                                     const element = _Game._fireControl.EnemyParent.getChildAt(index);
                                     let point = _Game._fireControl.EnemyParent.localToGlobal(new Laya.Point(element.x, element.y));
-                                    let gOwnerXY = this.Parent.localToGlobal(new Laya.Point(this.Owner.x, this.Owner.y));
-                                    if (point.distance(gOwnerXY.x, gOwnerXY.y) < 50) {
-                                        this.weapon.state = _WeaponSateType.free;
+                                    let g_OwnerXY = this._Parent.localToGlobal(new Laya.Point(this._Owner.x, this._Owner.y));
+                                    if (point.distance(g_OwnerXY.x, g_OwnerXY.y) < 50) {
+                                        this.state = _WeaponSateType.free;
                                         Laya.timer.clearAll(this);
-                                        if (this.Owner.name == element.name.substr(5)) {
+                                        if (this._Owner.name == element.name.substr(5)) {
+                                            EventAdmin._notify(_Event.destroyEnemy, (1));
                                             element.removeSelf();
-                                            this.Owner.removeSelf();
+                                            this._Owner.removeSelf();
                                         }
                                         else {
                                             TimerAdmin._frameLoop(1, this, () => {
-                                                this.Owner.y += 10;
-                                                this.Owner.rotation += 5;
-                                                if (this.Owner.y > Laya.stage.height) {
-                                                    this.Owner.removeSelf();
+                                                this._Owner.y += 40;
+                                                this._Owner.rotation += 10;
+                                                if (this._Owner.y > Laya.stage.height) {
+                                                    this._Owner.removeSelf();
                                                 }
                                             });
                                         }
@@ -5714,7 +5818,7 @@
                         }
                         else {
                             TimerAdmin._frameLoop(1, this, () => {
-                                move(_Game._fireControl.moveRotateSpeed > 0 ? 0.1 : -0.1, this.Parent.width / 2 - 50);
+                                move(_Game._fireControl.moveRotateSpeed > 0 ? 0.1 : -0.1, this._Parent.width / 2 - 50);
                                 getAim();
                             });
                         }
@@ -5742,7 +5846,35 @@
                     Weapon.addComponent(_Weapon);
                     Weapon.name = _Data._arr[index][_Data._property.name];
                 }
-                EventAdmin._notify(_Event._Game_WeaponSate, [_WeaponSateType.rotate]);
+                EventAdmin._notify(_Event.WeaponSate, [_WeaponSateType.rotate]);
+            }
+            lwgEventRegister() {
+                let bloodNum = 20;
+                let _width = 100;
+                EventAdmin._register(_Event.calculateBlood, this, (number) => {
+                    let Blood = this.ImgVar('Blood').getChildAt(0);
+                    Blood.width = Blood.width - _width / 20;
+                    bloodNum -= number;
+                    if (!this['bloodNumSwitch']) {
+                        if (bloodNum <= 0) {
+                            this['bloodNumSwitch'] = true;
+                            this.lwgOpenScene(_SceneName.Defeated, false);
+                        }
+                    }
+                });
+                let enemyNum = this.ImgVar('EnemyParent').numChildren;
+                EventAdmin._register(_Event.destroyEnemy, this, () => {
+                    enemyNum -= 1;
+                    if (!this['EnemyNumSwitch']) {
+                        if (enemyNum <= 0) {
+                            this['EnemyNumSwitch'] = true;
+                            this.lwgOpenScene(_SceneName.Victory, false);
+                        }
+                    }
+                });
+                EventAdmin._register(_Event.closeScene, this, () => {
+                    this.lwgCloseScene();
+                });
             }
             lwgOnStart() {
                 TimerAdmin._frameLoop(1, this, () => {
@@ -5753,12 +5885,7 @@
                 for (let index = 0; index < this.ImgVar('EnemyParent').numChildren; index++) {
                     const element = this.ImgVar('EnemyParent').getChildAt(index);
                     Tools.Node.changePovit(element, element.width / 2, element.height / 2);
-                    let rotate = Tools.randomOneHalf() == 1 ? -0.5 : 0.5;
-                    TimerAdmin._frameLoop(1, this, () => {
-                        let point = Tools.Point.getRoundPos(element.rotation += rotate, this.ImgVar('MobileFrame').width / 2 + element.height / 2, new Laya.Point(this.ImgVar('LandContent').width / 2, this.ImgVar('LandContent').height / 2));
-                        element.x = point.x;
-                        element.y = point.y;
-                    });
+                    element.addComponent(_Enemy);
                 }
             }
             lwgBtnClick() {
@@ -5775,12 +5902,12 @@
                             _Game._fireControl.moveRotateSpeed = 2;
                         }
                         _Game._fireControl.moveDownY = e.stageY;
-                        EventAdmin._notify(_Event._Game_WeaponSate, [_WeaponSateType.mouseMove]);
+                        EventAdmin._notify(_Event.WeaponSate, [_WeaponSateType.mouseMove]);
                     }
                 }, (e) => {
                     _Game._fireControl.rotateSwitch = true;
                     _Game._fireControl.moveDownY = 0;
-                    EventAdmin._notify(_Event._Game_WeaponSate, [_WeaponSateType.launch]);
+                    EventAdmin._notify(_Event.WeaponSate, [_WeaponSateType.launch]);
                 }, (e) => {
                     _Game._fireControl.rotateSwitch = true;
                     _Game._fireControl.moveDownY = 0;
@@ -5788,12 +5915,12 @@
                 Click._on(Click._Type.noEffect, this.ImgVar('AimOperation'), this, (e) => {
                     this.aimControl.moveDownY = e.stageY;
                 }, (e) => {
-                    if (this.aimControl.moveDownY && Math.abs(this.aimControl.moveDownY - e.stageY) > 10) {
+                    if (this.aimControl.moveDownY && Math.abs(this.aimControl.moveDownY - e.stageY) > 5) {
                         if (this.aimControl.moveDownY - e.stageY > 0) {
-                            this.ImgVar('Aim').rotation += 5;
+                            this.ImgVar('Aim').rotation += 2.5;
                         }
                         else {
-                            this.ImgVar('Aim').rotation -= 5;
+                            this.ImgVar('Aim').rotation -= 2.5;
                         }
                         if (this.ImgVar('Aim').rotation < -45) {
                             this.ImgVar('Aim').rotation = -45;
@@ -5808,11 +5935,43 @@
                 }, (e) => {
                     this.aimControl.moveDownY = null;
                 });
+                Click._on(Click._Type.noEffect, this.ImgVar('Hero'), this, () => {
+                    this['HeroMove'] = true;
+                }, (e) => {
+                    if (this['HeroMove']) {
+                        this.ImgVar('HeroContent').x = e.stageX;
+                        this.ImgVar('HeroContent').y = e.stageY;
+                    }
+                }, () => {
+                    this['HeroMove'] = false;
+                }, () => {
+                    this['HeroMove'] = false;
+                });
             }
         }
         _Game.Game = Game;
     })(_Game || (_Game = {}));
     var _Game$1 = _Game.Game;
+
+    var _Defeated;
+    (function (_Defeated) {
+        class _data {
+        }
+        _Defeated._data = _data;
+        function _init() {
+        }
+        _Defeated._init = _init;
+        class Defeated extends Admin._SceneBase {
+            lwgBtnClick() {
+                Click._on(Click._Type.largen, this.ImgVar('BtnBack'), this, null, null, () => {
+                    this.lwgOpenScene(_SceneName.Start);
+                    EventAdmin._notify(_Game._Event.closeScene);
+                });
+            }
+        }
+        _Defeated.Defeated = Defeated;
+    })(_Defeated || (_Defeated = {}));
+    var _Defeated$1 = _Defeated.Defeated;
 
     var _Guide;
     (function (_Guide) {
@@ -6022,8 +6181,8 @@
             }
             lwgBtnClick() {
                 Click._on(Click._Type.largen, this.btnVar('BtnStart'), this, null, null, () => {
-                    let levelName = _SceneName.Game + Admin._game.level;
-                    this.lwgOpenScene(_SceneName.Game + Admin._game.level, true, () => {
+                    let levelName = _SceneName.Game + 1;
+                    this.lwgOpenScene(levelName, true, () => {
                         if (!Admin._sceneControl[levelName].getComponent(_Game.Game)) {
                             Admin._sceneControl[levelName].addComponent(_Game.Game);
                         }
@@ -6038,19 +6197,41 @@
     })(_Start || (_Start = {}));
     var _Start$1 = _Start.Start;
 
+    var _Victory;
+    (function (_Victory) {
+        class _data {
+        }
+        _Victory._data = _data;
+        function _init() {
+        }
+        _Victory._init = _init;
+        class Victory extends Admin._SceneBase {
+            lwgBtnClick() {
+                Click._on(Click._Type.largen, this.ImgVar('BtnGet'), this, null, null, () => {
+                    this.lwgOpenScene(_SceneName.Start);
+                    EventAdmin._notify(_Game._Event.closeScene);
+                });
+            }
+        }
+        _Victory.Victory = Victory;
+    })(_Victory || (_Victory = {}));
+    var _Victory$1 = _Victory.Victory;
+
     var SceneName;
     (function (SceneName) {
     })(SceneName || (SceneName = {}));
     class LwgInit extends _LwgInitScene {
         lwgOnAwake() {
             _LwgInit._pkgInfo = [];
-            Admin._platform.name = Admin._platform.tpye.Bytedance;
+            Admin._platform.name = Admin._platform.tpye.Research;
             Admin._sceneAnimation.presentAni = Admin._sceneAnimation.type.stickIn.random;
             Admin._moudel = {
                 _PreLoad: _PreLoad,
                 _Guide: _Guide,
                 _Start: _Start,
                 _Game: _Game,
+                _Victory: _Victory,
+                _Defeated: _Defeated,
             };
         }
     }

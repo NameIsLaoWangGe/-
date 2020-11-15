@@ -24,16 +24,20 @@ export module _PreloadUrl {
         prefab2D: {
             LwgGold: {
                 url: 'Prefab/LwgGold.json',
-                prefab: new Laya.Prefab,
+                prefab: null as Laya.Prefab,
             },
             Weapon: {
                 url: 'Prefab/Weapon.json',
-                prefab: new Laya.Prefab,
+                prefab: null as Laya.Prefab,
             },
             Enemy: {
                 url: 'Prefab/Enemy.json',
-                prefab: new Laya.Prefab,
+                prefab: null as Laya.Prefab,
             },
+            EnemyBullet: {
+                url: 'Prefab/EnemyBullet.json',
+                prefab: null as Laya.Prefab,
+            }
         },
         // texture: {
         //     star1: {

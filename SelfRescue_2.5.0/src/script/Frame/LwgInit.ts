@@ -1,6 +1,7 @@
 
 import ZJADMgr from "../TJ/ZJADMgr";
 import { Admin, DateAdmin, EventAdmin, _LwgInit, _LwgInitScene, _SceneName } from "./Lwg";
+import { _Defeated } from "./_Defeated";
 import { _Game } from "./_Game";
 import { _Guide } from "./_Guide";
 import { _PreLoad } from "./_PreLoad";
@@ -23,7 +24,7 @@ export default class LwgInit extends _LwgInitScene {
             // { name: "sp2", root: "3DScene" },
             // { name: "sp3", root: "3DPrefab" },
         ];
-        Admin._platform.name = Admin._platform.tpye.Bytedance;
+        Admin._platform.name = Admin._platform.tpye.Research;
         Admin._sceneAnimation.presentAni = Admin._sceneAnimation.type.stickIn.random;
         Admin._moudel = {
             _PreLoad: _PreLoad,
@@ -34,7 +35,8 @@ export default class LwgInit extends _LwgInitScene {
             // _PreLoadStep: _PreLoadStep,
             // _SelectLevel: _SelectLevel,
             // _Settle: _Settle,
-            // _Victory: _Victory,
+            _Victory: _Victory,
+            _Defeated: _Defeated,
             // _Share: _Share,
             // _Special: _Special,
             // _PropTry: _PropTry,

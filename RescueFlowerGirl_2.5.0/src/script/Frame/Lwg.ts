@@ -1,5 +1,3 @@
-
-import GameConfig from "../../GameConfig";
 /**综合模板*/
 export module lwg {
     /**暂停模块，控制游戏的暂停和开启*/
@@ -10,7 +8,7 @@ export module lwg {
          * 创建通用剩余体力数量prefab
          * @param parent 父节点
          */
-        export function _createBtnPause(parent): void {
+        export function _createBtnPause(parent: Laya.Sprite): void {
             let sp: Laya.Sprite;
             Laya.loader.load('prefab/BtnPause.json', Laya.Handler.create(this, function (prefab: Laya.Prefab) {
                 let _prefab = new Laya.Prefab();
@@ -30,76 +28,16 @@ export module lwg {
             lwg.Admin._openScene('UIPause', null, null, null);
         }
     }
-
-    /**互推模块*/
-    export module Elect {
-        /**
-         * 创建通用重来prefab
-         * @param parent 父节点
-         * @param y y位置
-         */
-        export function _createP201_01(parent): void {
-            let sp: Laya.Sprite;
-            Laya.loader.load('prefab/P201.json', Laya.Handler.create(this, function (prefab: Laya.Prefab) {
-                let _prefab = new Laya.Prefab();
-                _prefab.json = prefab;
-                sp = Laya.Pool.getItemByCreateFun('P201', _prefab.create, _prefab);
-                parent.addChild(sp);
-                sp.pos(80, 290);
-                sp.zOrder = 65;
-            }));
-        }
-    }
-
     /**提示模块*/
     export module Dialogue {
-        /**提示文字的类型描述*/
-        export enum HintContent {
-            '金币不够了！',
-            '没有可以购买的皮肤了！',
-            '暂时没有广告，过会儿再试试吧！',
-            '暂无皮肤!',
-            '暂无分享!',
-            '暂无提示机会!',
-            '观看完整广告才能获取奖励哦！',
-            '通关上一关才能解锁本关！',
-            '分享成功后才能获取奖励！',
-            '分享成功!',
-            '暂无视频，玩一局游戏之后分享！',
-            '消耗2点体力！',
-            '今日体力福利已领取！',
-            '分享成功，获得125金币！',
-            '分享成功，获得50金币！',
-            '限定皮肤已经获得，请前往皮肤界面查看。',
-            '分享失败！',
-            '兑换码错误！',
-            '尚未获得该商品!',
-            '恭喜获得新皮肤!',
-            '请前往皮肤限定界面获取!',
-            '通过相应的关卡数达到就可以得到了!',
-            '点击金币抽奖按钮购买!',
-            '没有领取次数了！',
-            '增加三次开启宝箱次数！',
-            '观看广告可以获得三次开宝箱次数！',
-            '没有宝箱领可以领了！',
-            '请前往皮肤界面购买！',
-            '今天已经签到过了！',
-            '没有抽奖次数了，请通过观看广告获取！',
-            '没有库存了！',
-            '牌数太少，无法使用道具！',
-            '没有可以购买的卡牌了！',
-            '敬请期待!'
-        }
         enum Skin {
             blackBord = 'Frame/UI/ui_orthogon_black.png'
         }
-
         /**
-         * 动态创建，第一次创建比较卡，是因为第一次绘制，而不是加载，需要优化
+         * 动态创建，第一次创建比较卡，如果第一次绘制这张合图，可以不合图
          * @param describe 类型，也就是提示文字类型
          */
-        export function createHint_Middle(describe: number): void {
-
+        export function createHint_Middle(describe: string): void {
             let Hint_M = Laya.Pool.getItemByClass('Hint_M', Laya.Sprite);
             Hint_M.name = 'Hint_M';//标识符和名称一样
 
@@ -128,7 +66,7 @@ export module lwg {
             let Dec = new Laya.Label();
             Hint_M.addChild(Dec);
             Dec.width = Laya.stage.width
-            Dec.text = HintContent[describe];
+            Dec.text = describe;
             Dec.pivotX = Laya.stage.width / 2;
             Dec.x = Laya.stage.width / 2;
             Dec.height = 100;
@@ -152,7 +90,6 @@ export module lwg {
                 });
             });
         }
-
         /**获取对话框内容，内容必须已经预加载*/
         export let _dialogContent = {
             get Array(): Array<any> {
@@ -328,104 +265,15 @@ export module lwg {
         }
     }
 
-    /**体力模块*/
-    export module Execution {
-
-        /**体力*/
-        export let _execution = {
-            get value(): number {
-                return Laya.LocalStorage.getItem('_execution') ? Number(Laya.LocalStorage.getItem('_execution')) : 15;
-            },
-            set value(val) {
-                Laya.LocalStorage.setItem('_execution', val.toString());
-            }
-        };
-
-
-        /**指代当前剩余体力节点*/
-        export let ExecutionNumNode: Laya.Sprite;
-        /**
-         * 创建通用剩余体力数量prefab
-         * @param parent 父节点
-         */
-        export function _createExecutionNum(parent): void {
-            let sp: Laya.Sprite;
-            Laya.loader.load('prefab/ExecutionNum.json', Laya.Handler.create(this, function (prefab: Laya.Prefab) {
-                let _prefab = new Laya.Prefab();
-                _prefab.json = prefab;
-                sp = Laya.Pool.getItemByCreateFun('prefab', _prefab.create, _prefab);
-                parent.addChild(sp);
-                let num = sp.getChildByName('Num') as Laya.FontClip;
-                // num.value = Global._execution.toString();
-                sp.pos(297, 90);
-                sp.zOrder = 50;
-                ExecutionNumNode = sp;
-                ExecutionNumNode.name = 'ExecutionNumNode';
-            }));
-        }
-
-
-        /**
-         * 创建体力增加的prefab
-         * @param x x位置
-         * @param y y位置
-         * @param func 回调函数
-        */
-        export function _createAddExecution(x, y, func): void {
-            let sp: Laya.Sprite;
-            Laya.loader.load('prefab/execution.json', Laya.Handler.create(this, function (prefab: Laya.Prefab) {
-                let _prefab = new Laya.Prefab();
-                _prefab.json = prefab;
-                sp = Laya.Pool.getItemByCreateFun('prefab', _prefab.create, _prefab);
-                Laya.stage.addChild(sp);
-                sp.x = Laya.stage.width / 2;
-                sp.y = Laya.stage.height / 2;
-                sp.zOrder = 50;
-                if (ExecutionNumNode) {
-                    Animation2D.move_Simple(sp, sp.x, sp.y, ExecutionNumNode.x, ExecutionNumNode.y, 800, 100, f => {
-                        Animation2D.fadeOut(sp, 1, 0, 200, 0, f => {
-                            lwg.Animation2D.upDwon_Shake(ExecutionNumNode, 10, 80, 0, null);
-                            if (func) {
-                                func();
-                            }
-                        });
-                    }, Laya.Ease.expoIn);
-                }
-            }));
-        }
-
-        /**
-       * 创建体力消耗动画
-       * @param  subEx 消耗多少体力值
-      */
-        export function createConsumeEx(subEx): void {
-            let label = Laya.Pool.getItemByClass('label', Laya.Label) as Laya.Label;
-            label.name = 'label';//标识符和名称一样
-            Laya.stage.addChild(label);
-            label.text = '-2';
-            label.fontSize = 40;
-            label.bold = true;
-            label.color = '#59245c';
-            label.x = ExecutionNumNode.x + 100;
-            label.y = ExecutionNumNode.y - label.height / 2 + 4;
-            label.zOrder = 100;
-            lwg.Animation2D.fadeOut(label, 0, 1, 200, 150, f => {
-                lwg.Animation2D.leftRight_Shake(ExecutionNumNode, 15, 60, 0, null);
-                lwg.Animation2D.fadeOut(label, 1, 0, 600, 400, f => {
-                });
-            });
-        }
-    }
-
     /**金币模块*/
     export module Gold {
         /**金币数量*/
         export let _num = {
             get value(): number {
-                return Laya.LocalStorage.getItem('_goldNum') ? Number(Laya.LocalStorage.getItem('_goldNum')) : 0;
+                return Laya.LocalStorage.getItem('GoldNum') ? Number(Laya.LocalStorage.getItem('GoldNum')) : 0;
             },
             set value(val: number) {
-                Laya.LocalStorage.setItem('_goldNum', val.toString());
+                Laya.LocalStorage.setItem('GoldNum', val.toString());
             }
         };
         /**指代当前全局的的金币资源节点*/
@@ -436,7 +284,7 @@ export module lwg {
          * @param y y位置
          * @param parent 父节点，不传则是舞台
          */
-        export function createGoldNode(x: number, y: number, parent?: Laya.Sprite): void {
+        export function _createGoldNode(x: number, y: number, parent?: Laya.Sprite): void {
             if (!parent) {
                 parent = Laya.stage;
             }
@@ -449,7 +297,7 @@ export module lwg {
                 _prefab.json = prefab;
                 sp = Laya.Pool.getItemByCreateFun('gold', _prefab.create, _prefab);
                 let Num = sp.getChildByName('Num') as Laya.Label;
-                Num.text = Tools.format_FormatNumber(_num.value);
+                Num.text = Tools._Format.formatNumber(_num.value);
                 parent.addChild(sp);
                 sp.pos(x, y);
                 sp.zOrder = 100;
@@ -458,18 +306,18 @@ export module lwg {
         }
 
         /**增加金币以并且在节点上也表现出来*/
-        export function _addGold(number: number) {
+        export function _add(number: number) {
             _num.value += Number(number);
             let Num = GoldNode.getChildByName('Num') as Laya.Text;
-            Num.text = Tools.format_FormatNumber(_num.value);
+            Num.text = Tools._Format.formatNumber(_num.value);
         }
         /**增加金币节点上的表现动画，并不会增加金币*/
-        export function addGoldDisPlay(number: number) {
+        export function _addDisPlay(number: number) {
             let Num = GoldNode.getChildByName('Num') as Laya.FontClip;
             Num.value = (Number(Num.value) + Number(number)).toString();
         }
         /**增加金币，但是不表现出来*/
-        export function addGoldNoDisPlay(number: number) {
+        export function _addNoDisPlay(number: number) {
             _num.value += Number(number);
         }
         /**
@@ -478,7 +326,7 @@ export module lwg {
          * @param x 允许改变一次X轴位置
          * @param y 允许改变一次Y轴位置
         */
-        export function goldAppear(delayed?: number, x?: number, y?: number): void {
+        export function _nodeAppear(delayed?: number, x?: number, y?: number): void {
             if (!GoldNode) {
                 return;
             }
@@ -503,7 +351,7 @@ export module lwg {
          * GoldNode消失动画
          * @param delayed 延时时间
         */
-        export function goldVinish(delayed?: number): void {
+        export function _nodeVinish(delayed?: number): void {
             if (!GoldNode) {
                 return;
             }
@@ -518,11 +366,11 @@ export module lwg {
 
         /**框架中的地址*/
         enum SkinUrl {
-            "Frame/Effects/icon_gold.png"
+            "Frame/Effects/iconGold.png"
         }
 
         /**创建单个金币*/
-        export function createOneGold(width: number, height: number, url: string): Laya.Image {
+        export function _createOne(width: number, height: number, url: string): Laya.Image {
             let Gold = Laya.Pool.getItemByClass('addGold', Laya.Image) as Laya.Image;
             Gold.name = 'addGold';//标识符和名称一样
             let num = Math.floor(Math.random() * 12);
@@ -555,17 +403,17 @@ export module lwg {
         * @param func1 每一个金币移动完成后执行的回调
         * @param func2 金币全部创建完成后的回调
         */
-        export function getGoldAni_Single(parent: Laya.Sprite, number: number, width: number, height: number, url: string, firstPoint: Laya.Point, targetPoint: Laya.Point, func1?: Function, func2?: Function): void {
+        export function _getAni_Single(parent: Laya.Sprite, number: number, width: number, height: number, url: string, firstPoint: Laya.Point, targetPoint: Laya.Point, func1?: Function, func2?: Function): void {
 
             for (let index = 0; index < number; index++) {
                 Laya.timer.once(index * 30, this, () => {
 
-                    let Gold = createOneGold(width, height, url);
+                    let Gold = _createOne(width, height, url);
 
                     parent.addChild(Gold);
 
                     Animation2D.move_Scale(Gold, 1, firstPoint.x, firstPoint.y, targetPoint.x, targetPoint.y, 1, 350, 0, null, () => {
-                        PalyAudio.playSound(PalyAudio.voiceUrl.huodejinbi);
+                        Audio._playSound(Audio._voiceUrl.huodejinbi);
                         if (index === number - 1) {
 
                             Laya.timer.once(200, this, () => {
@@ -597,9 +445,9 @@ export module lwg {
          * @param func1 每一个金币移动完成后执行的回调
          * @param func2 金币全部创建完成后的回调
          */
-        export function _getGoldAni_Heap(parent?: Laya.Sprite, number?: number, width?: number, height?: number, url?: string, firstPoint?: Laya.Point, targetPoint?: Laya.Point, func1?: Function, func2?: Function): void {
+        export function _getAni_Heap(parent?: Laya.Sprite, number?: number, width?: number, height?: number, url?: string, firstPoint?: Laya.Point, targetPoint?: Laya.Point, func1?: Function, func2?: Function): void {
             for (let index = 0; index < number; index++) {
-                let Gold = createOneGold(width ? width : 100, height ? height : 100, url ? url : SkinUrl[0]);
+                let Gold = _createOne(width ? width : 100, height ? height : 100, url ? url : SkinUrl[0]);
                 parent = parent ? parent : Laya.stage;
                 parent.addChild(Gold);
                 firstPoint = firstPoint ? firstPoint : new Laya.Point(Laya.stage.width / 2, Laya.stage.height / 2);
@@ -609,7 +457,7 @@ export module lwg {
                 // Gold.rotation = Math.random() * 360;
                 Animation2D.move_Scale(Gold, 0.5, firstPoint.x, firstPoint.y, x, y, 1, 300, Math.random() * 100 + 100, Laya.Ease.expoIn, () => {
                     Animation2D.move_Scale(Gold, 1, Gold.x, Gold.y, targetPoint.x, targetPoint.y, 1, 400, Math.random() * 200 + 100, Laya.Ease.cubicOut, () => {
-                        PalyAudio.playSound(PalyAudio.voiceUrl.huodejinbi);
+                        Audio._playSound(Audio._voiceUrl.huodejinbi);
                         if (index === number - 1) {
 
                             Laya.timer.once(200, this, () => {
@@ -626,132 +474,6 @@ export module lwg {
                         Gold.removeSelf();
                     })
                 });
-            }
-        }
-
-        /**类粒子特效的通用父类*/
-        export class GoldAniBase extends Laya.Script {
-            /**挂载当前脚本的节点*/
-            Owner: Laya.Sprite;
-            /**所在场景*/
-            selfScene: Laya.Scene;
-            /**移动开关*/
-            moveSwitch: boolean;
-            /**时间线*/
-            timer: number;
-            /**在组中的位置*/
-            group: number;
-            /**在行中的位置*/
-            row: number;
-            /**在列中的位置*/
-            line: number;
-            /**初始角度*/
-            startAngle: number;
-            /**基础速度*/
-            startSpeed: number;
-            /**加速度*/
-            accelerated: number;
-
-            /**随机大小*/
-            startScale: number;
-            /**随机起始透明度*/
-            startAlpha: number;
-            /**初始角度*/
-            startRotat: number;
-
-            /**随机旋转方向*/
-            rotateDir: string;
-            /**随机旋转角度*/
-            rotateRan: number;
-            /**随机消失时间*/
-            continueTime: number;
-
-            onAwake(): void {
-                this.initProperty();
-            }
-            onEnable(): void {
-                this.Owner = this.owner as Laya.Sprite;
-                this.selfScene = this.Owner.scene;
-                let calssName = this['__proto__']['constructor'].name;
-                this.Owner[calssName] = this;
-                // console.log(this.Owner.getBounds());
-                this.timer = 0;
-                this.lwgInit();
-                this.propertyAssign();
-
-            }
-            /**初始化，在onEnable中执行，重写即可覆盖*/
-            lwgInit(): void {
-            }
-            /**初始化特效单元的属性*/
-            initProperty(): void {
-            }
-            /**一些节点上的初始属性赋值*/
-            propertyAssign(): void {
-                if (this.startAlpha) {
-                    this.Owner.alpha = this.startAlpha;
-                }
-                if (this.startScale) {
-                    this.Owner.scale(this.startScale, this.startScale);
-                }
-                if (this.startRotat) {
-                    this.Owner.rotation = this.startRotat;
-                }
-            }
-            /**
-              * 通用按角度移动移动，按单一角度移动
-              * @param angle 角度
-              * @param basedSpeed 基础速度
-              */
-            commonSpeedXYByAngle(angle, speed) {
-                this.Owner.x += Tools.Point.SpeedXYByAngle(angle, speed + this.accelerated).x;
-                this.Owner.y += Tools.Point.SpeedXYByAngle(angle, speed + this.accelerated).y;
-            }
-            /**移动规则*/
-            moveRules(): void {
-            }
-            onUpdate(): void {
-                this.moveRules();
-            }
-            onDisable(): void {
-                Laya.Pool.recover(this.Owner.name, this.Owner);
-                this.destroy();//删除自己，下次重新添加
-                Laya.Tween.clearAll(this);
-                Laya.timer.clearAll(this);
-            }
-        }
-
-        /**炸开后再前往同一个地点，用于金币增加动画*/
-        export class AddGold extends GoldAniBase {
-            /**属于那一列*/
-            line: number;
-            /**目标位置X*/
-            targetX: number;
-            /**目标位置Y*/
-            targetY: number;
-            /**回调函数*/
-            func: any
-            lwgInit(): void {
-                this.Owner.width = 115;
-                this.Owner.height = 111;
-                this.Owner.pivotX = this.Owner.width / 2;
-                this.Owner.pivotY = this.Owner.height / 2;
-            }
-            initProperty(): void {
-            }
-            moveRules(): void {
-                if (this.moveSwitch) {
-                    this.timer++;
-                    if (this.timer > 0) {
-                        lwg.Animation2D.move_Scale(this.Owner, 1, this.Owner.x, this.Owner.y, this.targetX, this.targetY, 0.35, 250, 0, f => {
-                            this.Owner.removeSelf();
-                            if (this.func !== null) {
-                                this.func();
-                            }
-                        });
-                        this.moveSwitch = false;
-                    }
-                }
             }
         }
     }
@@ -921,6 +643,8 @@ export module lwg {
      * 计时器的封装
     */
     export module TimerAdmin {
+        /**总控制开关,默认为打开*/
+        export let _switch: boolean = true;
         /**
          * 普通无限循环，基于帧
          * @param delay 间隔帧数
@@ -932,10 +656,14 @@ export module lwg {
          */
         export function _frameLoop(delay: number, caller: any, method: Function, immediately?: boolean, args?: any[], coverBefore?: boolean): void {
             if (immediately) {
-                method();
+                if (_switch) {
+                    method();
+                }
             }
             Laya.timer.frameLoop(delay, caller, () => {
-                method();
+                if (_switch) {
+                    method();
+                }
             }, args, coverBefore);
         }
 
@@ -950,13 +678,17 @@ export module lwg {
          */
         export function _frameRandomLoop(delay1: number, delay2: number, caller: any, method: Function, immediately?: boolean, args?: any[], coverBefore?: boolean): void {
             if (immediately) {
-                method();
+                if (_switch) {
+                    method();
+                }
             }
             var func = () => {
-                let delay = Tools.randomOneInt(delay1, delay2);
+                let delay = Tools._Number.randomOneInt(delay1, delay2);
                 Laya.timer.frameOnce(delay, caller, () => {
-                    method();
-                    func()
+                    if (_switch) {
+                        method();
+                        func()
+                    }
                 }, args, coverBefore)
             }
             func();
@@ -967,21 +699,30 @@ export module lwg {
          * @param delay 时间间隔
          * @param num 次数
          * @param method 回调函数
+         * @param compeletMethod 全部完成后的回调函数 
          * @param immediately 是否立即执行一次，默认为false
          * @param args 
          * @param coverBefore 
          */
-        export function _frameNumLoop(delay: number, num: number, caller: any, method: Function, immediately?: boolean, args?: any[], coverBefore?: boolean): void {
+        export function _frameNumLoop(delay: number, num: number, caller: any, method: Function, compeletMethod?: Function, immediately?: boolean, args?: any[], coverBefore?: boolean): void {
             if (immediately) {
-                method();
+                if (_switch) {
+                    method();
+                }
             }
             let num0 = 0;
             var func = () => {
-                num0++;
-                if (num0 > num) {
-                    Laya.timer.clear(caller, func);
-                } else {
-                    method();
+                if (_switch) {
+                    num0++;
+                    if (num0 >= num) {
+                        method();
+                        if (compeletMethod) {
+                            compeletMethod();
+                        }
+                        Laya.timer.clear(caller, func);
+                    } else {
+                        method();
+                    }
                 }
             }
             Laya.timer.frameLoop(delay, caller, func, args, coverBefore);
@@ -1015,10 +756,14 @@ export module lwg {
          */
         export function _loop(delay: number, caller: any, method: Function, immediately?: boolean, args?: any[], coverBefore?: boolean): void {
             if (immediately) {
-                method();
+                if (_switch) {
+                    method();
+                }
             }
             Laya.timer.loop(delay, caller, () => {
-                method();
+                if (_switch) {
+                    method();
+                }
             }, args, coverBefore);
         }
 
@@ -1034,13 +779,17 @@ export module lwg {
          */
         export function _randomLoop(delay1: number, delay2: number, caller: any, method: Function, immediately?: boolean, args?: any[], coverBefore?: boolean): void {
             if (immediately) {
-                method();
+                if (_switch) {
+                    method();
+                }
             }
             var func = () => {
-                let delay = Tools.randomOneInt(delay1, delay2);
+                let delay = Tools._Number.randomOneInt(delay1, delay2);
                 Laya.timer.once(delay, caller, () => {
-                    method();
-                    func();
+                    if (_switch) {
+                        method();
+                        func()
+                    }
                 }, args, coverBefore);
             }
             func();
@@ -1055,17 +804,23 @@ export module lwg {
          * @param args 
          * @param coverBefore 
          */
-        export function _numLoop(delay: number, num: number, caller: any, method: Function, immediately?: boolean, args?: any[], coverBefore?: boolean): void {
+        export function _numLoop(delay: number, num: number, caller: any, method: Function, compeletMethod?: Function, immediately?: boolean, args?: any[], coverBefore?: boolean): void {
             if (immediately) {
                 method();
             }
             let num0 = 0;
             var func = () => {
-                num0++;
-                if (num0 > num) {
-                    Laya.timer.clear(caller, func);
-                } else {
-                    method();
+                if (_switch) {
+                    num0++;
+                    if (num0 > num) {
+                        method();
+                        if (compeletMethod) {
+                            compeletMethod();
+                        }
+                        Laya.timer.clear(caller, func);
+                    } else {
+                        method();
+                    }
                 }
             }
             Laya.timer.loop(delay, caller, func, args, coverBefore);
@@ -1089,47 +844,250 @@ export module lwg {
             }, args, coverBefore)
         }
     }
-    /**游戏整体控制*/
-    export module Admin {
-        /**渠道，控制一些节点的变化,默认为null*/
-        export let _platform = {
-            /**渠道类型*/
-            tpye: {
-                Bytedance: 'Bytedance',
-                WeChat: 'WeChat',
-                OPPO: 'OPPO',
-                OPPOTest: 'OPPOTest',
-                VIVO: 'VIVO',
-                /**通用*/
-                General: 'General',
-                /**web包*/
-                Web: 'Web',
-                /**web测试包,会清除本地数据*/
-                WebTest: 'WebTest',
-                /**研发中*/
-                Research: 'Research',
+
+    /**适配设置*/
+    export module Adaptive {
+        export let _Use = {
+            get value(): [number, number] {
+                return this['Adaptive_value'] ? this['Adaptive_value'] : null;
             },
-            get name(): string {
+            /**
+             * 设计分辨率
+             *@param val [_designWidth，_desigheight]
+             */
+            set value(val: [number, number]) {
+                this['Adaptive_value'] = val;
+            }
+        }
+        /**
+         * @export 根据舞台按场景内节点位置比例适配X轴
+         * @param {Array<Laya.Sprite>} arr 节点数组
+         */
+        export function _stageWidth(arr: Array<Laya.Sprite>): void {
+            for (let index = 0; index < arr.length; index++) {
+                const element = arr[index] as Laya.Sprite;
+                if (element.pivotX == 0 && element.width) {
+                    element.x = element.x / _Use.value[0] * Laya.stage.width + element.width / 2;
+                } else {
+                    element.x = element.x / _Use.value[0] * Laya.stage.width;
+                }
+            }
+        }
+        /**
+         * @export 根据舞台按场景内节点位置比例适配Y轴
+         * @param {Array<Laya.Sprite>} arr 节点数组
+         */
+        export function _stageHeight(arr: Array<Laya.Sprite>): void {
+            for (let index = 0; index < arr.length; index++) {
+                const element = arr[index] as Laya.Sprite;
+                if (element.pivotY == 0 && element.height) {
+                    element.y = element.y / _Use.value[1] * element.scaleX * Laya.stage.height + element.height / 2;
+                } else {
+                    element.y = element.y / _Use.value[1] * element.scaleX * Laya.stage.height;
+                }
+            }
+        }
+        /**
+         * @export 根据宽高居中
+         * @param {Array<Laya.Sprite>} arr 节点数组
+         * @param {Laya.Sprite} target 依据什么居中舞台或者父节点
+         */
+        export function _center(arr: Array<Laya.Sprite>, target: Laya.Sprite): void {
+            for (let index = 0; index < arr.length; index++) {
+                const element = arr[index] as Laya.Sprite;
+                if (element.width > 0) {
+                    element.x = target.width / 2 - (element.width / 2 - element.pivotX) * element.scaleX;
+                } else {
+                    element.x = target.width / 2;
+                }
+                if (element.height > 0) {
+                    element.y = target.height / 2 - (element.height / 2 - element.pivotY) * element.scaleY;
+                } else {
+                    element.y = target.height / 2;
+                }
+            }
+        }
+    }
+
+    export module SceneAnimation {
+        export let _Type = {
+            /**渐隐渐出*/
+            fadeOut: 'fadeOut',
+            /**用于竖屏,类似于用手拿着一角放入，对节点摆放有需求，需要整理节点，通过大块父节点将琐碎的scene中的直接子节点减少，并且锚点要在最左或者最右，否则达不到最佳效果*/
+            stickIn: {
+                random: 'random',
+                // left: 'left',
+                // right: 'right',
+                upLeftDownLeft: 'upLeftDownRight',
+                // upLeftDownRight: 'upLeftDownRight',
+                upRightDownLeft: 'upRightDownLeft',
+            },
+            leftMove: 'leftMove',
+            rightMove: 'rightMove',
+            centerRotate: 'centerRotate',
+            drawUp: 'drawUp',
+        }
+        export let _vanishSwitch = false;
+        export let _openSwitch = true;
+        export let _Use = {
+            get value(): string {
+                return this['SceneAnimation_name'] ? this['SceneAnimation_name'] : null;
+            },
+            set value(val: string) {
+                this['SceneAnimation_name'] = val;
+            }
+        };
+        /**通用场景消失动画*/
+        export function _commonVanishAni(CloseScene: Laya.Scene, closeFunc: Function) {
+            CloseScene[CloseScene.name].lwgBeforeVanishAni();
+            let time: number;
+            let delay: number;
+            switch (_Use.value) {
+                case _Type.fadeOut:
+                    time = 150;
+                    delay = 50;
+                    if (CloseScene['Background']) {
+                        Animation2D.fadeOut(CloseScene, 1, 0, time / 2);
+                    }
+                    Animation2D.fadeOut(CloseScene, 1, 0, time, delay, () => {
+                        closeFunc();
+                    })
+                    break;
+                case _Type.stickIn.random:
+                    closeFunc();
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        /**通用场景进场动画*/
+        export function _commonOpenAni(Scene: Laya.Scene): number {
+            let time: number;
+            let delay: number;
+            let sumDelay: number;//总延迟
+            var afterAni = () => {
+                Admin._clickLock.switch = false;
+                if (Scene[Scene.name]) {
+                    Scene[Scene.name].lwgOpenAniAfter();
+                    Scene[Scene.name].lwgBtnRegister();
+                }
+            }
+            switch (_Use.value) {
+                case _Type.fadeOut:
+                    time = 400;
+                    delay = 300;
+                    if (Scene['Background']) {
+                        Animation2D.fadeOut(Scene, 0, 1, time / 2, delay);
+                    }
+                    Animation2D.fadeOut(Scene, 0, 1, time, 0);
+                    sumDelay = 400;
+                    break;
+                case _Type.stickIn.upLeftDownLeft:
+                    _stickIn(Scene, _Type.stickIn.upLeftDownLeft)
+                    break;
+                case _Type.stickIn.upRightDownLeft:
+                    _stickIn(Scene, _Type.stickIn.upRightDownLeft);
+                case _Type.stickIn.random:
+                    _stickIn(Scene, _Type.stickIn.random);
+                default:
+                    break;
+            }
+            Laya.timer.once(sumDelay, this, () => {
+                afterAni();
+            })
+            return sumDelay;
+        }
+        function _stickIn(Scene: Laya.Scene, type: string): number {
+            let sumDelay: number = 0;
+            let time: number = 700;
+            let delay: number = 100;
+            if (Scene.getChildByName('Background')) {
+                Animation2D.fadeOut(Scene.getChildByName('Background'), 0, 1, time);
+            }
+            let stickInLeftArr = Tools._Node.zOrderByY(Scene, false);
+            for (let index = 0; index < stickInLeftArr.length; index++) {
+                const element = stickInLeftArr[index] as Laya.Image;
+                if (element.name !== 'Background' && element.name.substr(0, 5) !== 'NoAni') {
+                    let originalPovitX = element.pivotX;
+                    let originalPovitY = element.pivotY;
+                    switch (type) {
+                        case _Type.stickIn.upLeftDownLeft:
+                            element.rotation = element.y > Laya.stage.height / 2 ? -180 : 180;
+                            Tools._Node.changePivot(element, 0, 0);
+
+                            break;
+                        case _Type.stickIn.upRightDownLeft:
+                            element.rotation = element.y > Laya.stage.height / 2 ? -180 : 180;
+                            Tools._Node.changePivot(element, element.rotation == 180 ? element.width : 0, 0);
+
+                            break;
+                        case _Type.stickIn.random:
+                            element.rotation = Tools._Number.randomOneHalf() == 1 ? 180 : -180;
+                            Tools._Node.changePivot(element, Tools._Number.randomOneHalf() == 1 ? 0 : element.width, Tools._Number.randomOneHalf() == 1 ? 0 : element.height);
+                            break;
+                        default:
+                            break;
+                    }
+                    let originalX = element.x;
+                    let originalY = element.y;
+                    element.x = element.pivotX > element.width / 2 ? 800 + element.width : -800 - element.width;
+                    element.y = element.rotation > 0 ? element.y + 200 : element.y - 200;
+                    Animation2D.simple_Rotate(element, element.rotation, 0, time, delay * index);
+                    Animation2D.move_Simple(element, element.x, element.y, originalX, originalY, time, delay * index, () => {
+                        Tools._Node.changePivot(element, originalPovitX, originalPovitY);
+                    });
+                }
+            }
+            sumDelay = Scene.numChildren * delay + time + 200;
+            return sumDelay;
+        }
+    }
+
+    /**平台*/
+    export module Platform {
+        /**渠道类型*/
+        export let _Tpye = {
+            Bytedance: 'Bytedance',
+            WeChat: 'WeChat',
+            OPPO: 'OPPO',
+            OPPOTest: 'OPPOTest',
+            VIVO: 'VIVO',
+            /**通用*/
+            General: 'General',
+            /**web包*/
+            Web: 'Web',
+            /**web测试包,会清除本地数据*/
+            WebTest: 'WebTest',
+            /**研发中*/
+            Research: 'Research',
+        };
+        export let _Ues = {
+            get value(): string {
                 return this['_platform_name'] ? this['_platform_name'] : null;
             },
-            set name(val: string) {
+            set value(val: string) {
                 this['_platform_name'] = val;
                 switch (val) {
-                    case _platform.tpye.WebTest:
+                    case _Tpye.WebTest:
                         Laya.LocalStorage.clear();
-                        _Gold._num.value = 5000;
+                        Gold._num.value = 5000;
                         break;
-                    case _platform.tpye.Research:
+                    case _Tpye.Research:
                         Laya.Stat.show();
-                        _Gold._num.value = 50000000000000;
+                        Gold._num.value = 50000000000000;
                         break;
 
                     default:
                         break;
                 }
             }
-        };
+        }
+    }
 
+    /**游戏整体控制*/
+    export module Admin {
         /**等级*/
         export let _game = {
             /**游戏控制开关*/
@@ -1207,7 +1165,7 @@ export module lwg {
             set switch(bool: boolean) {
                 if (bool) {
                     if (!Laya.stage.getChildByName('__stageClickLock__')) {
-                        console.log('锁住点击！');
+                        // console.log('锁住点击！')
                         let __stageClickLock__ = new Laya.Sprite();
                         __stageClickLock__.name = '__stageClickLock__';
                         Laya.stage.addChild(__stageClickLock__);
@@ -1215,7 +1173,7 @@ export module lwg {
                         __stageClickLock__.width = Laya.stage.width;
                         __stageClickLock__.height = Laya.stage.height;
                         __stageClickLock__.pos(0, 0);
-                        Click._on(Click._Type.noEffect, __stageClickLock__, this, null, null, (e: Laya.Event) => {
+                        Click._on(Click._Type.no, __stageClickLock__, this, null, null, (e: Laya.Event) => {
                             console.log('舞台点击被锁住了！请用admin._clickLock=false解锁');
                             e.stopPropagation();
                         });
@@ -1244,7 +1202,7 @@ export module lwg {
             __lockClick__.width = Laya.stage.width;
             __lockClick__.height = Laya.stage.height;
             __lockClick__.pos(0, 0);
-            Click._on(Click._Type.noEffect, __lockClick__, this, null, null, (e: Laya.Event) => {
+            Click._on(Click._Type.no, __lockClick__, this, null, null, (e: Laya.Event) => {
                 console.log('场景点击被锁住了！请用admin._unlockPreventClick（）解锁');
                 e.stopPropagation();
             });
@@ -1267,7 +1225,7 @@ export module lwg {
         /**常用场景的名称，和脚本默认导出类名保持一致*/
         export enum _SceneName {
             PreLoad = 'PreLoad',
-            PreLoadStep = 'PreLoadStep',
+            PreLoadCutIn = 'PreLoadCutIn',
             Guide = 'Guide',
             Start = 'Start',
             Shop = 'Shop',
@@ -1301,53 +1259,54 @@ export module lwg {
             SelectLevel = 'SelectLevel',
             Settle = 'Settle',
             Special = 'Special',
+            Compound = 'Compound',
         }
 
         /**
          *预加载后打开场景，预加载内容将在预加载界面按照界面名称执行
-         * @param {string} openSceneName 需要打开的场景名称
-         * @param {string} [cloesSceneName] 需要关闭的场景，默认为null
+         * @param {string} openName 需要打开的场景名称
+         * @param {string} [cloesName] 需要关闭的场景，默认为null
          * @param {Function} [func] 完成回调，默认为null
          * @param {number} [zOrder] 指定层级，默认为最上层
          */
-        export function _preLoadOpenScene(openSceneName: string, cloesSceneName?: string, func?: Function, zOrder?: number) {
-            _openScene(_SceneName.PreLoadStep);
-            _preLoadOpenSceneLater.openSceneName = openSceneName;
-            _preLoadOpenSceneLater.cloesSceneName = cloesSceneName;
+        export function _preLoadOpenScene(openName: string, cloesName?: string, func?: Function, zOrder?: number) {
+            _openScene(_SceneName.PreLoadCutIn);
+            _preLoadOpenSceneLater.openName = openName;
+            _preLoadOpenSceneLater.cloesName = cloesName;
             _preLoadOpenSceneLater.func = func;
             _preLoadOpenSceneLater.zOrder = zOrder;
         }
         /**预加载完毕后，需要打开的场景信息*/
         export let _preLoadOpenSceneLater = {
-            openSceneName: null,
-            cloesSceneName: null,
+            openName: null,
+            cloesName: null,
             func: null,
             zOrder: null,
         }
         /**
           * 打开场景
-          * @param openSceneName 需要打开的场景名称
-          * @param cloesSceneName 需要关闭的场景，默认为null
+          * @param openName 需要打开的场景名称
+          * @param cloesName 需要关闭的场景，默认为null
           * @param func 完成回调，默认为null
           * @param zOrder 指定层级
          */
-        export function _openScene(openSceneName: string, cloesSceneName?: string, func?: Function, zOrder?: number): void {
+        export function _openScene(openName: string, cloesName?: string, func?: Function, zOrder?: number): void {
             Admin._clickLock.switch = true;
-            Laya.Scene.load('Scene/' + openSceneName + '.json', Laya.Handler.create(this, function (scene: Laya.Scene) {
-                if (_moudel['_' + openSceneName]) {
-                    if (_moudel['_' + openSceneName][openSceneName]) {
-                        if (!scene.getComponent(_moudel['_' + openSceneName][openSceneName])) {
-                            scene.addComponent(_moudel['_' + openSceneName][openSceneName]);
+            Laya.Scene.load('Scene/' + openName + '.json', Laya.Handler.create(this, function (scene: Laya.Scene) {
+                if (_moudel['_' + openName]) {
+                    if (_moudel['_' + openName][openName]) {
+                        if (!scene.getComponent(_moudel['_' + openName][openName])) {
+                            scene.addComponent(_moudel['_' + openName][openName]);
                         }
                     }
                 } else {
-                    console.log(openSceneName,'场景没有同名脚本！');
+                    console.log(`${openName}场景没有同名脚本！,需在LwgInit脚本中导入该模块！`);
                 }
                 scene.width = Laya.stage.width;
                 scene.height = Laya.stage.height;
                 var openf = () => {
-                    if (Tools.Node.checkChildren(Laya.stage, openSceneName)) {
-                        console.log(openSceneName, '场景重复出现！请检查代码');
+                    if (Tools._Node.checkChildren(Laya.stage, openName)) {
+                        console.log(openName, '场景重复出现！请检查代码');
                         return;
                     }
                     if (zOrder) {
@@ -1359,16 +1318,16 @@ export module lwg {
                         func();
                     }
                 }
-                scene.name = openSceneName;
-                _sceneControl[openSceneName] = scene;//装入场景容器，此容器内每个场景唯一
+                scene.name = openName;
+                _sceneControl[openName] = scene;//装入场景容器，此容器内每个场景唯一
                 // 背景图自适应并且居中
                 let background = scene.getChildByName('Background') as Laya.Image;
                 if (background) {
                     background.width = Laya.stage.width;
                     background.height = Laya.stage.height;
                 }
-                if (_sceneControl[cloesSceneName]) {
-                    _closeScene(cloesSceneName, openf);
+                if (_sceneControl[cloesName]) {
+                    _closeScene(cloesName, openf);
                 } else {
                     openf();
                 }
@@ -1395,7 +1354,7 @@ export module lwg {
                 }
             }
             // 如果关闭了场景消失动画，则不会执行任何动画
-            if (!_sceneAnimation.vanishSwitch) {
+            if (!SceneAnimation._vanishSwitch) {
                 closef();
                 return;
             }
@@ -1412,143 +1371,11 @@ export module lwg {
                             _clickLock.switch = false;
                         })
                     } else {
-                        _commonVanishAni(_sceneControl[closeName], closef);
+                        SceneAnimation._commonVanishAni(_sceneControl[closeName], closef);
                     }
                 }
             }
         }
-        /**通用动效*/
-        export let _sceneAnimation = {
-            type: {
-                /**渐隐渐出*/
-                fadeOut: 'fadeOut',
-                /**类似于用手拿着一角放入，对节点摆放有需求，需要整理节点，通过大块父节点将琐碎的scene中的直接子节点减少，并且锚点要在最左或者最右，否则达不到最佳效果*/
-                stickIn: {
-                    random: 'random',
-                    // left: 'left',
-                    // right: 'right',
-                    upLeftDownLeft: 'upLeftDownRight',
-                    // upLeftDownRight: 'upLeftDownRight',
-                    upRightDownLeft: 'upRightDownLeft',
-                },
-                leftMove: 'leftMove',
-                rightMove: 'rightMove',
-                centerRotate: 'centerRotate',
-                drawUp: 'drawUp',
-            },
-            vanishSwitch: false,
-            openSwitch: true,
-            presentAni: 'fadeOut',
-        }
-
-        /**通用场景消失动画*/
-        function _commonVanishAni(CloseScene: Laya.Scene, closeFunc: Function) {
-            CloseScene[CloseScene.name].lwgBeforeVanishAni();
-            let time: number;
-            let delay: number;
-            switch (_sceneAnimation.presentAni) {
-                case _sceneAnimation.type.fadeOut:
-                    time = 150;
-                    delay = 50;
-                    if (CloseScene['Background']) {
-                        Animation2D.fadeOut(CloseScene, 1, 0, time / 2);
-                    }
-                    Animation2D.fadeOut(CloseScene, 1, 0, time, delay, () => {
-                        closeFunc();
-                    })
-                    break;
-                case _sceneAnimation.type.stickIn.random:
-                    closeFunc();
-                    break;
-
-                default:
-                    break;
-            }
-        }
-
-        /**通用场景进场动画*/
-        function _commonOpenAni(Scene: Laya.Scene): number {
-            let time: number;
-            let delay: number;
-            let sumDelay: number;//总延迟
-            var afterAni = () => {
-                _clickLock.switch = false;
-                if (Scene[Scene.name]) {
-                    Scene[Scene.name].lwgOpenAniAfter();
-                    Scene[Scene.name].lwgBtnClick();
-                }
-            }
-            switch (_sceneAnimation.presentAni) {
-                case _sceneAnimation.type.fadeOut:
-                    time = 400;
-                    delay = 300;
-                    if (Scene['Background']) {
-                        Animation2D.fadeOut(Scene, 0, 1, time / 2, delay);
-                    }
-                    Animation2D.fadeOut(Scene, 0, 1, time, 0);
-                    sumDelay = 400;
-                    break;
-                case _sceneAnimation.type.stickIn.upLeftDownLeft:
-                    _sceneAnimationTypeStickIn(Scene, _sceneAnimation.type.stickIn.upLeftDownLeft)
-                    break;
-                case _sceneAnimation.type.stickIn.upRightDownLeft:
-                    _sceneAnimationTypeStickIn(Scene, _sceneAnimation.type.stickIn.upRightDownLeft);
-                case _sceneAnimation.type.stickIn.random:
-                    _sceneAnimationTypeStickIn(Scene, _sceneAnimation.type.stickIn.random);
-                default:
-                    break;
-            }
-            Laya.timer.once(sumDelay, this, () => {
-                afterAni();
-            })
-            return sumDelay;
-        }
-
-        function _sceneAnimationTypeStickIn(Scene: Laya.Scene, type: string): number {
-            let sumDelay: number = 0;
-            let time: number = 700;
-            let delay: number = 100;
-            if (Scene.getChildByName('Background')) {
-                Animation2D.fadeOut(Scene.getChildByName('Background'), 0, 1, time);
-            }
-            let stickInLeftArr = Tools.Node.zOrderByY(Scene, false);
-            for (let index = 0; index < stickInLeftArr.length; index++) {
-                const element = stickInLeftArr[index] as Laya.Image;
-                if (element.name !== 'Background' && element.name.substr(0, 5) !== 'NoAni') {
-                    let originalPovitX = element.pivotX;
-                    let originalPovitY = element.pivotY;
-                    switch (type) {
-                        case _sceneAnimation.type.stickIn.upLeftDownLeft:
-                            element.rotation = element.y > Laya.stage.height / 2 ? -180 : 180;
-                            Tools.Node.changePovit(element, 0, 0);
-
-                            break;
-                        case _sceneAnimation.type.stickIn.upRightDownLeft:
-                            element.rotation = element.y > Laya.stage.height / 2 ? -180 : 180;
-                            Tools.Node.changePovit(element, element.rotation == 180 ? element.width : 0, 0);
-
-                            break;
-                        case _sceneAnimation.type.stickIn.random:
-                            element.rotation = Tools.randomOneHalf() == 1 ? 180 : -180;
-                            Tools.Node.changePovit(element, Tools.randomOneHalf() == 1 ? 0 : element.width, Tools.randomOneHalf() == 1 ? 0 : element.height);
-                            break;
-                        default:
-                            break;
-                    }
-                    let originalX = element.x;
-                    let originalY = element.y;
-                    element.x = element.pivotX > element.width / 2 ? 800 + element.width : -800 - element.width;
-                    element.y = element.rotation > 0 ? element.y + 200 : element.y - 200;
-                    Animation2D.simple_Rotate(element, element.rotation, 0, time, delay * index);
-                    Animation2D.move_Simple(element, element.x, element.y, originalX, originalY, time, delay * index, () => {
-                        Tools.Node.changePovit(element, originalPovitX, originalPovitY);
-                    });
-                }
-            }
-            sumDelay = Scene.numChildren * delay + time + 200;
-            return sumDelay;
-        }
-
 
         /**游戏当前处于什么状态中，并非是当前打开的场景*/
         export let _gameState = {
@@ -1565,8 +1392,8 @@ export module lwg {
                 Defeated: 'defeated',
             },
             state: 'Start',
-            setState(calssName: string): void {
-                switch (calssName) {
+            setState(_calssName: string): void {
+                switch (_calssName) {
                     case _SceneName.Start:
                         _gameState.state = _gameState.type.Start;
                         break;
@@ -1585,83 +1412,203 @@ export module lwg {
             }
         };
 
+        /**
+         * 脚本通用类
+         * */
+        class _ScriptBase extends Laya.Script {
+            /**游戏开始前执行一次，重写覆盖*/
+            lwgOnAwake(): void { };
+            /**适配位置*/
+            lwgAdaptive(): void { };
+            /**场景中的一些事件，在lwgOnEnable中注册,lwgOnStart以后可以发送这些事件*/
+            lwgEventRegister(): void { };
+            _EvReg(name: string, func: Function): void {
+                EventAdmin._register(name, this, func);
+            }
+            _EvNotify(name: string, args?: Array<any>): void {
+                EventAdmin._notify(name, args);
+            }
+            /**初始化，在onEnable中执行，重写即可覆盖*/
+            lwgOnEnable(): void { }
+            /**初始化完毕后，onUpdate前执行一次，重写覆盖*/
+            lwgOnStart(): void { }
+            /**按钮点击事件注册，在开场动画执行之后注册，在onEnable中完成*/
+            lwgBtnRegister(): void { };
+            /**
+             * 按下触发的点击事件注册,可以用(e)=>{}简写传递的函数参数
+             * @param target 节点
+             * @param caller 执行域
+             * @param down 按下回调
+             * @param effect 效果类型输入null则没有效果
+             * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
+            */
+            _btnDown(target: Laya.Node, down?: Function, effect?: string): void {
+                Click._on(effect == undefined ? Click._Use.value : effect, target, this, (e: Laya.Event) => {
+                    Click._switch && down && down(e)
+                }, null, null, null);
+            }
+            /**
+              * 抬起触发点击事件注册,可以用(e)=>{}简写传递的函数参数
+              * @param target 节点
+              * @param move 移动回调
+              * @param effect 效果类型输入null则没有效果
+               * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
+             */
+            _btnMove(target: Laya.Node, move: Function, effect?: string): void {
+                Click._on(effect == undefined ? Click._Use.value : effect, target, this, null, (e: Laya.Event) => {
+                    Click._switch && move && move(e)
+                }, null, null);
+            }
+
+            /**
+             * 抬起触发点击事件注册,可以用(e)=>{}简写传递的函数参数
+             * @param target 节点
+             * @param up 抬起回调
+             * @param effect 效果类型输入null则没有效果
+           * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
+           */
+            _btnUp(target: Laya.Node, up: Function, effect?: string): void {
+                Click._on(effect == undefined ? Click._Use.value : effect, target, this, null, null, (e: Laya.Event) => {
+                    Click._switch && up && up(e);
+                }, null);
+            }
+            /**
+              * 抬起触发点击事件注册,可以用(e)=>{}简写传递的函数参数
+              * @param target 节点
+              * @param out 移出回调
+              * @param effect 效果类型输入null则没有效果
+               * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
+             */
+            _btnOut(target: Laya.Node, out: Function, effect?: string): void {
+                Click._on(effect == undefined ? Click._Use.value : effect, target, this, null, null, null, (e: Laya.Event) => { Click._switch && out && out(e) });
+            }
+            /**
+              * 通用事件注册,可以用(e)=>{}简写传递的函数参数
+              * @param effect 效果类型输入null则没有效果
+              * @param target 节点
+              * @param down 按下
+              * @param move 移动
+              * @param up 抬起
+              * @param out 按下
+              * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
+             */
+            _btnFour(target: Laya.Node, down?: Function, move?: Function, up?: Function, out?: Function, effect?: string): void {
+                Click._on(effect == null ? effect : Click._Use.value, target, this,
+                    (e: Laya.Event) => { Click._switch && down && down(e) },
+                    (e: Laya.Event) => { Click._switch && move && move(e) },
+                    (e: Laya.Event) => { Click._switch && up && up(e) },
+                    (e: Laya.Event) => { Click._switch && out && out(e) });
+            }
+            ownerSceneName: string = '';
+            /**
+              * 打开场景
+              * @param openName 需要打开的场景名称
+              * @param closeSelf 是否关闭当前场景,默认为true
+              * @param preLoadCutIn 是否进入预加载页面，进入后需要在PreLoadCutIn界面进行操作，默认为false；
+              * @param func 完成回调，默认为null
+              * @param zOrder 指定层级
+             */
+            _openScene(openName: string, closeSelf?: boolean, preLoadCutIn?: boolean, func?: Function, zOrder?: number): void {
+                let closeName: string;
+                if (closeSelf == undefined || closeSelf == true) {
+                    closeName = this.ownerSceneName;
+                }
+                if (!preLoadCutIn) {
+                    Admin._openScene(openName, closeName, func, zOrder);
+                } else {
+                    Admin._preLoadOpenScene(openName, closeName, func, zOrder);
+                }
+            }
+            /**
+             * 关闭场景
+             * @param sceneName 默认为当前场景
+             * @param func 关闭后的回调函数
+             * */
+            _closeScene(sceneName?: string, func?: Function): void {
+                Admin._closeScene(sceneName ? sceneName : this.ownerSceneName, func);
+            }
+            /**每帧执行，不要执行onUpdate，只执行lwgOnUpdate*/
+            lwgOnUpdate(): void { };
+            /**离开时执行不要执行onDisable，只执行lwgDisable*/
+            lwgOnDisable(): void { };
+            onStageMouseDown(e: Laya.Event): void { Click._switch && this.lwgOnStageDown(e) };
+            onStageMouseMove(e: Laya.Event): void { Click._switch && this.lwgOnStageMove(e) };
+            onStageMouseUp(e: Laya.Event): void { Click._switch && this.lwgOnStageUp(e) };
+            lwgOnStageDown(e: Laya.Event): void { };
+            lwgOnStageMove(e: Laya.Event): void { };
+            lwgOnStageUp(e: Laya.Event): void { };
+        }
+
         /**2D场景通用父类*/
-        export class _SceneBase extends Laya.Script {
-            // Owner: Laya.Scene;
+        export class _SceneBase extends _ScriptBase {
             /**类名*/
-            calssName: string = _SceneName.PreLoad;
+            private _calssName: string = _SceneName.PreLoad;
             constructor() {
                 super();
             }
+
             /**挂载当前脚本的节点*/
-            get Owner(): Laya.Scene {
+            get _Owner(): Laya.Scene {
                 return this.owner as Laya.Scene;
             }
-            // 常用节点获取
-            SpriteVar(str: string): Laya.Sprite {
-                if (this.Owner[str]) {
-                    return this.Owner[str] as Laya.Sprite;
+            private getVar(name: string, type: string): any {
+                if (!this[`_Scene${type}${name}`]) {
+                    if (this._Owner[name]) {
+                        return this[`_Scene${type}${name}`] = this._Owner[name];
+                    } else {
+                        console.log('场景内不存在var节点：', name);
+                        return undefined;
+                    }
                 } else {
-                    console.log('场景内不存在全局节点：', str);
-                    return undefined;
+                    return this[`_Scene${type}${name}`];
                 }
+            }
+            // 常用节点获取
+            _SpriteVar(name: string): Laya.Sprite {
+                return this.getVar(name, '_SpriteVar');
             }
             /**常用动画组件获取*/
-            AniVar(str: string): Laya.Animation {
-                if (this.Owner[str]) {
-                    return this.Owner[str] as Laya.Animation;
-                } else {
-                    console.log('场景内不存在动画：', str);
-                    return undefined;
-                }
+            _AniVar(name: string): Laya.Animation {
+                return this.getVar(name, '_AniVar');
             }
-            btnVar(str: string): Laya.Sprite {
-                if (this.Owner[str]) {
-                    return this.Owner[str] as Laya.Image;
-                } else {
-                    console.log('场景内不存在全局按钮：', str);
-                    return undefined;
-                }
+            _BtnVar(name: string): Laya.Button {
+                return this.getVar(name, '_BtnVar');
             }
-            ImgVar(str: string): Laya.Image {
-                if (this.Owner[str]) {
-                    return this.Owner[str] as Laya.Image;
-                } else {
-                    console.log('场景内不存在全局节点：', str);
-                    return undefined;
-                }
+            _ImgVar(name: string): Laya.Image {
+                return this.getVar(name, '_ImgVar');
             }
-            ListVar(str: string): Laya.List {
-                if (this.Owner[str]) {
-                    return this.Owner[str] as Laya.List;
-                } else {
-                    console.log('场景内不存在全局节点：', str);
-                }
+            _LabelVar(name: string): Laya.Label {
+                return this.getVar(name, '_LabelVar');
             }
-            TapVar(str: string): Laya.Tab {
-                if (this.Owner[str]) {
-                    return this.Owner[str] as Laya.Tab;
-                } else {
-                    console.log('场景内不存在全局节点：', str);
-                }
+            _ListVar(name: string): Laya.List {
+                return this.getVar(name, '_ListVar');
+            }
+            _TapVar(name: string): Laya.Tab {
+                return this.getVar(name, '_TapVar');
+            }
+            _TextVar(name: string): Laya.Text {
+                return this.getVar(name, '_TextVar');
+            }
+            _FontClipVar(name: string): Laya.FontClip {
+                return this.getVar(name, '_FontClipVar');
+            }
+            _FontBox(name: string): Laya.Box {
+                return this.getVar(name, '_FontBox');
             }
             onAwake(): void {
                 // 类名
-                if (this.Owner.name == null) {
+                if (this._Owner.name == null) {
                     console.log('场景名称失效，脚本赋值失败');
                 } else {
-                    this.calssName = this.Owner.name;
-                    this.Owner[this.calssName] = this;
+                    // 组件变为的self属性
+                    this._calssName = this._Owner.name;
+                    this._Owner[this._calssName] = this;
                 }
-                // 组件变为的self属性
-                _gameState.setState(this.calssName);
+                this.ownerSceneName = this.owner.name;
                 this.moduleOnAwake();
                 this.lwgOnAwake();
                 this.lwgAdaptive();
-                // Tomato.scenePrintPoint(this.calssName, Tomato.scenePointType.open);
             }
-            /**游戏开始前执行一次，重写覆盖*/
-            lwgOnAwake(): void { };
             /**每个模块优先执行的页面开始前执行的函数，比lwgOnAwake更早执行*/
             moduleOnAwake(): void { }
             onEnable() {
@@ -1673,55 +1620,12 @@ export module lwg {
             }
             /**每个模块优先执行的初始化函数，比lwgOnEnable早执行*/
             moduleOnEnable(): void { };
-            /**场景中的一些事件，在lwgOnAwake和lwgOnEnable之间执行*/
-            lwgEventRegister(): void { };
             /**模块中的事件*/
             moduleEventRegister(): void { };
-
-            /**初始化，在onEnable中执行，重写即可覆盖*/
-            lwgOnEnable(): void { }
             onStart(): void {
                 this.moduleOnStart();
                 this.lwgOnStart();
             }
-            /**b
-             * 点击事件注册,可以用(e)=>{}简写传递的函数参数
-             * @param effect 效果类型 1.'largen'
-             * @param target 节点
-             * @param caller 执行域
-             * @param down 按下函数
-             * @param move 移动函数
-             * @param up 抬起函数
-             * @param out 出屏幕函数
-           * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
-           */
-            btnRig(effect: string, target: Laya.Node, caller, down?: Function, move?: Function, up?: Function, out?: Function): void {
-                Click._on(effect, target, caller, down, move, up, out);
-            }
-            /**
-              * 打开场景
-              * @param openSceneName 需要打开的场景名称
-              * @param closeSelf 是否关闭当前场景,默认为关闭当前场景
-              * @param func 完成回调，默认为null
-              * @param zOrder 指定层级
-             */
-            lwgOpenScene(openSceneName: string, closeSelf?: boolean, func?: Function, zOrder?: number): void {
-                let closeName;
-                if (closeSelf == undefined || closeSelf == true) {
-                    closeName = this.Owner.name;
-                }
-                Admin._openScene(openSceneName, closeName, func, zOrder);
-            }
-            /**
-             * 关闭场景，
-             * @param sceneName 默认为当前场景
-             * @param func 关闭后的回调函数
-             * */
-            lwgCloseScene(sceneName?: string, func?: Function): void {
-                Admin._closeScene(sceneName ? sceneName : this.Owner.name, func);
-            }
-            /**初始化完毕后，onUpdate前执行一次，重写覆盖*/
-            lwgOnStart(): void { }
             moduleOnStart(): void { }
             /**通过openni返回的时间来延时开启点击事件*/
             private btnAndlwgOpenAni(): void {
@@ -1730,112 +1634,44 @@ export module lwg {
                     Laya.timer.once(time, this, () => {
                         _clickLock.switch = false;
                         this.lwgOpenAniAfter();
-                        this.lwgBtnClick();
+                        this.lwgBtnRegister();
                     });
                 } else {
-                    time = _commonOpenAni(this.Owner);
+                    time = SceneAnimation._commonOpenAni(this._Owner);
                 }
             }
             /**开场动画,返回的数字为时间倒计时，倒计时结束后开启点击事件,也可以用来屏蔽通用动画，只需返回一个数字即可,如果场景内节点是以prefab添加进去的，那么必须卸载lwgOpenAni之前*/
             lwgOpenAni(): number { return null };
             /**开场动画之后执行*/
             lwgOpenAniAfter(): void { };
-            /**按钮点击事件注册*/
-            lwgBtnClick(): void { };
-            /**按照y坐标的比例适配*/
-            lwgAdaptiveProportion(arr: Array<Laya.Sprite>): void {
-                for (let index = 0; index < arr.length; index++) {
-                    const element = arr[index] as Laya.Sprite;
-                    element.y / GameConfig.height * Laya.stage.height;
-                }
+            /**按照当前Y轴坐标的高度的比例适配，适配整个舞台*/
+            _adaHeight(arr: Array<Laya.Sprite>): void {
+                Adaptive._stageHeight(arr);
             };
-            /**一些节点的自适应*/
-            lwgAdaptive(): void { };
+            /**按照当前X轴的高度的比例适配*/
+            _adaWidth(arr: Array<Laya.Sprite>): void {
+                Adaptive._stageWidth(arr);
+            };
+            /**按照当前X轴的高度的比例适配*/
+            _adaptiveCenter(arr: Array<Laya.Sprite>): void {
+                Adaptive._center(arr, Laya.stage);
+            };
             onUpdate(): void { this.lwgOnUpdate() };
-            /**每帧执行*/
-            lwgOnUpdate(): void { };
             /**离场动画前执行*/
             lwgBeforeVanishAni(): void { }
             /**离场动画,也可以用来屏蔽通用动画，只需返回一个数字即可*/
             lwgVanishAni(): number { return null };
             onDisable(): void {
-                Animation2D.fadeOut(this.Owner, 1, 0, 2000, 1);
+                Animation2D.fadeOut(this._Owner, 1, 0, 2000, 1);
                 this.lwgOnDisable();
                 Laya.timer.clearAll(this);
                 Laya.Tween.clearAll(this);
                 EventAdmin._offCaller(this);
-                // Tomato.scenePrintPoint(this.calssName, Tomato.scenePointType.close);
             }
-            /**离开时执行，子类不执行onDisable，只执行lwgDisable*/
-            lwgOnDisable(): void { };
         }
 
-        // /**2D角色通用父类*/
-        // export class _Person extends Laya.Script {
-        //     /**物理组件*/
-        //     constructor() {
-        //         super();
-        //     }
-        //     /**挂载当前脚本的节点*/
-        //     get Owner(): Laya.Sprite {
-        //         return this.owner as Laya.Sprite;
-        //     }
-        //     get OwnerScene(): Laya.Sprite {
-        //         return this.owner.scene as Laya.Scene;
-        //     }
-        //     /**物理组件*/
-        //     get OwnerRig(): Laya.RigidBody {
-        //         if (this.Owner.getComponent(Laya.RigidBody)) {
-        //             return this.Owner.getComponent(Laya.RigidBody);
-        //         } else {
-        //             return null;
-        //         }
-        //     }
-        //     onAwake(): void {
-        //         this.lwgOnAwake();
-        //     }
-        //     lwgOnAwake(): void {
-        //     }
-        //     onEnable(): void {
-        //         this.lwgEventRegister();
-        //         this.lwgOnEnable();
-        //     }
-        //     lwgEventRegister(): void {
-
-        //     }
-        //     /**初始化，在onEnable中执行，重写即可覆盖*/
-        //     lwgOnEnable(): void {
-        //     }
-        //     onStart(): void {
-        //         this.lwgOnStart();
-        //     }
-        //     lwgOnStart(): void { }
-        //     /**
-        //       * 打开场景
-        //       * @param openSceneName 需要打开的场景名称
-        //       * @param closeSelf 是否关闭当前场景,默认为关闭当前场景
-        //       * @param func 完成回调，默认为null
-        //       * @param zOrder 指定层级
-        //      */
-        //     lwgOpenScene(openSceneName: string, closeSelf?: boolean, func?: Function, zOrder?: number): void {
-        //         let closeName;
-        //         if (closeSelf == undefined || closeSelf == true) {
-        //             closeName = this.OwnerScene.name;
-        //         }
-        //         Admin._openScene(openSceneName, closeName, func, zOrder);
-        //     }
-        //     /**
-        //     * 关闭场景，
-        //     * @param sceneName 默认为当前场景
-        //     * @param func 关闭后的回调函数
-        //     * */
-        //     lwgCloseScene(sceneName?: string, func?: Function): void {
-        //         Admin._closeScene(sceneName ? sceneName : this.Owner.name, func);
-        //     }
-        // }
-
-        /**2D物件通用父类*/
-        export class _Object extends Laya.Script {
+        /**2D角色、物件通用父类*/
+        export class _ObjectBase extends _ScriptBase {
             constructor() {
                 super();
             }
@@ -1853,82 +1689,312 @@ export module lwg {
                     return this.owner.parent as Laya.Image | Laya.Sprite;
                 }
             }
-            _SceneImg(name: string): Laya.Image {
-                if (this._Scene[name]) {
-                    return this._Scene[name];
+            /**物理组件*/
+            get _RigidBody(): Laya.RigidBody {
+                if (!this._Owner['_OwnerRigidBody']) {
+                    this._Owner['_OwnerRigidBody'] = this._Owner.getComponent(Laya.RigidBody);
+                }
+                return this._Owner['_OwnerRigidBody'];
+            }
+            /**矩形碰撞组件*/
+            get _BoxCollier(): Laya.BoxCollider {
+                if (!this._Owner['_OwnerBoxCollier']) {
+                    this._Owner['_OwnerBoxCollier'] = this._Owner.getComponent(Laya.BoxCollider);
+                }
+                return this._Owner['_OwnerBoxCollier'];
+            }
+            /**圆形碰撞组件*/
+            get _CilrcleCollier(): Laya.BoxCollider {
+                if (!this._Owner['_OwnerCilrcleCollier']) {
+                    return this._Owner['_OwnerCilrcleCollier'] = this._Owner.getComponent(Laya.BoxCollider);
+                }
+                return this._Owner['_OwnerCilrcleCollier'];
+            }
+            /**自定义碰撞组件*/
+            get _PolygonCollier(): Laya.BoxCollider {
+                if (!this._Owner['_OwnerPolygonCollier']) {
+                    return this._Owner['_OwnerPolygonCollier'] = this._Owner.getComponent(Laya.BoxCollider);
+                }
+                return this._Owner['_OwnerPolygonCollier'];
+            }
+            private getSceneVar(name: string, type: string): any {
+                if (!this[`_Scene${type}${name}`]) {
+                    if (this._Scene[name]) {
+                        return this[`_Scene${type}${name}`] = this._Scene[name];
+                    } else {
+                        console.log(`场景内不存在var节点${name}`);
+                    }
                 } else {
-                    console.log(`场景内不存在节点${name}`);
+                    return this[`_Scene${type}${name}`];
                 }
             }
-            /**物理组件*/
-            get OwnerRig(): Laya.RigidBody {
-                if (this._Owner.getComponent(Laya.RigidBody)) {
-                    return this._Owner.getComponent(Laya.RigidBody);
+            _SceneSprite(name: string): Laya.Sprite {
+                return this.getSceneVar(name, '_SceneSprite');
+            }
+            _SceneImg(name: string): Laya.Image {
+                return this.getSceneVar(name, '_SceneImg');
+            }
+            _SceneLabel(name: string): Laya.Label {
+                return this.getSceneVar(name, '_SceneLabel');
+            }
+            _SceneList(name: string): Laya.List {
+                return this.getSceneVar(name, '_SceneList');
+            }
+            _SceneTap(name: string): Laya.Tab {
+                return this.getSceneVar(name, '_SceneTap');
+            }
+            _SceneText(name: string): Laya.Text {
+                return this.getSceneVar(name, '_SceneText');
+            }
+            _SceneFontClip(name: string): Laya.FontClip {
+                return this.getSceneVar(name, '_SceneFontClip');
+            }
+            _SceneBox(name: string): Laya.Box {
+                return this.getSceneVar(name, '_SceneBox');
+            }
+            getChild(name: string, type: string): any {
+                if (!this[`${type}${name}`]) {
+                    if (this._Owner.getChildByName(name)) {
+                        return this[`${type}${name}`] = this._Owner.getChildByName(name);
+                    } else {
+                        console.log('场景内不存在子节点：', name);
+                        return null;
+                    }
                 } else {
-                    return null;
+                    return this[`${type}${name}`];
                 }
+            }
+            _ImgChild(name: string): Laya.Image {
+                return this.getChild(name, '_ImgChild');
+            }
+            _SpriteChild(name: string): Laya.Sprite {
+                return this.getChild(name, '_SpriteChild');
+            }
+            _LableChild(name: string): Laya.Label {
+                return this.getChild(name, '_LableChild');
+            }
+            _ListChild(name: string): Laya.List {
+                return this.getChild(name, '_ListChild');
+            }
+            _TapChild(name: string): Laya.Tab {
+                return this.getChild(name, '_TapChild');
+            }
+            _TapBox(name: string): Laya.Box {
+                return this.getChild(name, '_TapBox');
+            }
+            _TapFontClip(name: string): Laya.FontClip {
+                return this.getChild(name, '_TapFontClip');
             }
             onAwake(): void {
+                // 组件变为的self属性
+                this._Owner[this['__proto__']['constructor'].name] = this;
+                this.ownerSceneName = this._Scene.name;
                 this.lwgOnAwake();
+                this.lwgAdaptive();
             }
-            ImgChild(str: string): Laya.Image {
-                if (this._Owner.getChildByName(str)) {
-                    return this._Owner.getChildByName(str) as Laya.Image;
-                } else {
-                    console.log('场景内不存在子节点：', str);
-                    return undefined;
-                }
-            }
-            /**
-              * 打开场景
-              * @param openSceneName 需要打开的场景名称
-              * @param closeSelf 是否关闭当前场景,默认为关闭当前场景
-              * @param func 完成回调，默认为null
-              * @param zOrder 指定层级
-             */
-            lwgOpenScene(openSceneName: string, closeSelf?: boolean, func?: Function, zOrder?: number): void {
-                let closeName;
-                if (closeSelf == undefined || closeSelf == true) {
-                    closeName = this._Scene.name;
-                }
-                Admin._openScene(openSceneName, closeName, func, zOrder);
-            }
-            /**
-            * 关闭场景，
-            * @param sceneName 默认为当前场景
-            * @param func 关闭后的回调函数
-            * */
-            lwgCloseScene(sceneName?: string, func?: Function): void {
-                Admin._closeScene(sceneName ? sceneName : this._Owner.name, func);
-            }
-            /**声明一些节点*/
-            lwgOnAwake(): void { }
             onEnable(): void {
-                this.lwgBtnClick();
+                this.lwgBtnRegister();
                 this.lwgEventRegister();
                 this.lwgOnEnable();
             }
-            /**初始化，在onEnable中执行，重写即可覆盖*/
-            lwgOnEnable(): void { }
-            /**点击事件注册*/
-            lwgBtnClick(): void { }
-            /**事件注册*/
-            lwgEventRegister(): void { }
             onStart(): void {
                 this.lwgOnStart();
             }
-            lwgOnStart(): void { }
             onUpdate(): void {
                 this.lwgOnUpdate();
             }
-            lwgOnUpdate(): void { }
             onDisable(): void {
                 this.lwgOnDisable();
                 Laya.timer.clearAll(this);
                 EventAdmin._offCaller(this);
             }
-            /**离开时执行，子类不执行onDisable，只执行lwgDisable*/
-            lwgOnDisable(): void { }
+        }
+    }
+
+    /**数据管理*/
+    export module DataAdmin {
+        export class _Store {
+            getVariables(name: string): void {
+
+            }
+        }
+        /**new出一个通用数据表管理对象，如果不通用，则可以继承使用*/
+        export class _Table {
+            /**一些通用的属性名称*/
+            _property = {
+                name: 'name',
+                chName: 'chName',
+                classify: 'classify',
+                unlockWay: 'unlockWay',
+                conditionNum: 'conditionNum',
+                degreeNum: 'degreeNum',
+                compelet: 'compelet',
+                unlock: 'unlock',
+                have: 'have',
+                getAward: 'getAward',
+            };
+            _arr: Array<any> = [];
+            /**
+             * @param {string} dataName 在本地
+             * @param {Array<any>} arrUrl 数据表地址
+             * @param localStorage 是否存储在本地
+             * @param proName 通过这属性名称，检索对比每个对象的个数，一般是‘name’
+             */
+            constructor(dataName?: string, arrUrl?: string, localStorage?: boolean, proName?: string) {
+                if (dataName) {
+                    if (localStorage) {
+                        this._arr = Tools.jsonCompare(arrUrl, dataName, proName ? proName : 'name');
+                    } else {
+                        if (Laya.Loader.getRes(arrUrl)) {
+                            this._arr = Laya.Loader.getRes(arrUrl);
+                        } else {
+                            console.log(arrUrl, '数据表不存在！');
+                        }
+                    }
+                }
+            }
+            /**
+             *通过名称获取属性值
+             * @param {string} name 名称
+             * @param {string} pro 属性值
+             */
+            _getProperty(name: string, pro: string): any {
+                let value: any;
+                for (const key in this._arr) {
+                    if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                        const element = this._arr[key];
+                        if (element[this._property.name] == name) {
+                            value = element[pro];
+                            break;
+                        }
+                    }
+                }
+                return value;
+            };
+            /**
+             *通过名称获取属性值
+             * @param {string} name 名称
+             * @param {string} pro 属性名
+             * @param {any} value 属性值
+            */
+            _setProperty(name: string, pro: string, value: any): any {
+                for (const key in this._arr) {
+                    if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                        const element = this._arr[key];
+                        if (element[this._property.name] == name) {
+                            element[pro] = value;
+                            break;
+                        }
+                    }
+                }
+                return value;
+            };
+
+            /**
+             * 通过一个属性和值随机出一个对象
+             * @param {string} [pro] 属性名如果不输入则从表中盲选一个。
+             * @param {*} [value] 属性值默认为null
+             * @memberof _DataTable
+             */
+            _randomOne(proName?: string, value?: any): any {
+                let data1: any;
+                let arr = [];
+                for (const key in this._arr) {
+                    if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                        const element = this._arr[key];
+                        if (element[proName]) {
+                            arr.push(element);
+                        }
+                    }
+                }
+                if (arr.length == 0) {
+                    return null;
+                } else {
+                    let any = Tools._Array.randomGetOne(arr);
+                    return any;
+                }
+            }
+            /**
+             * 通过某个属性名称和值获取所有复合条件的属性，可以查找品类
+             * @param {string} proName 属性名
+             * @param {*} value 值
+             * @memberof _DataTable
+             */
+            _getPropertyArr(proName: string, value: any): Array<any> {
+                let arr = [];
+                for (const key in this._arr) {
+                    if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                        const element = this._arr[key];
+                        if (element[proName] && element[proName] == value) {
+                            arr.push(element);
+                        }
+                    }
+                }
+                return arr;
+            }
+            /**
+             * 通过某个属性名称设置全部属性值
+             * @param {string} proName 属性名
+             * @param {*} value 值
+             * @return {*}  {Array<any>}
+             * @memberof _DataTable
+             */
+            _setPropertyArr(proName: string, value: any): Array<any> {
+                let arr = [];
+                for (const key in this._arr) {
+                    if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                        const element = this._arr[key];
+                        if (element[proName]) {
+                            element[proName] == value;
+                            arr.push(element);
+                        }
+                    }
+                }
+                return arr;
+            }
+
+            /**
+              * 通过resCondition/degree,设置某种完成状态，返回false表示没有完成，true刚好完成，-1已经拥有或者是没有该对象
+              * @param calssName 商品种类
+              * @param name 商品名称
+              * @param number 完成几次，不传则默认为1次
+              * @param func 回调函数，可以在条件完成数次后执行某个步骤
+             */
+            _checkCondition(name: string, number?: number, func?: Function): any {
+                let chek: any = null;
+                number = number == undefined ? 1 : number;
+                let degreeNum = this._getProperty(name, this._property.degreeNum);
+                let condition = this._getProperty(name, this._property.conditionNum);
+                let compelet = this._getProperty(name, this._property.compelet);
+                if (!compelet) {
+                    if (condition <= degreeNum + number) {
+                        this._setProperty(name, this._property.degreeNum, condition);
+                        this._setProperty(name, this._property.compelet, true);
+                        chek = true;
+                    } else {
+                        this._setProperty(name, this._property.degreeNum, degreeNum + number);
+                        chek = false;
+                    }
+                } else {
+                    chek = -1;
+                }
+                if (func) {
+                    func();
+                }
+                return chek;
+            }
+            /**检测所有是否都完成了*/
+            _checkAllCompelet(): boolean {
+                let bool: boolean = true;
+                for (let index = 0; index < this._arr.length; index++) {
+                    const element = this._arr[index];
+                    if (!element[this._property.compelet]) {
+                        bool = false;
+                        return bool;
+                    }
+                }
+                return bool;
+            }
         }
     }
 
@@ -1943,7 +2009,6 @@ export module lwg {
         export function RGBToHexString(r, g, b) {
             return '#' + ("00000" + (r << 16 | g << 8 | b).toString(16)).slice(-6);
         }
-
         /**
         * RGB三个颜色值转换成16进制的字符串‘#xxxxxx’；
         * @param r 
@@ -1959,7 +2024,6 @@ export module lwg {
             return arr
         }
 
-
         /**
          * 给一张图片染色,包括其子节点,也可以设置一个消失时间
          * @param node 节点
@@ -1970,7 +2034,7 @@ export module lwg {
             let cf = new Laya.ColorFilter();
             node.blendMode = 'null';
             if (!RGBA) {
-                cf.color(Tools.randomOneNumber(255, 100, true), Tools.randomOneNumber(255, 100, true), Tools.randomOneNumber(255, 100, true), 1)
+                cf.color(Tools._Number.randomOneBySection(255, 100, true), Tools._Number.randomOneBySection(255, 100, true), Tools._Number.randomOneBySection(255, 100, true), 1)
             } else {
                 cf.color(RGBA[0], RGBA[1], RGBA[2], RGBA[3])
             }
@@ -2057,7 +2121,7 @@ export module lwg {
                 RGBA0 = [node.filters[0]['_alpha'][0], node.filters[0]['_alpha'][1], node.filters[0]['_alpha'][2], node.filters[0]['_alpha'][3] ? node.filters[0]['_alpha'][3] : 1];
             }
             // 随机出一条颜色值
-            let RGBA = [Tools.randomCountNumer(RGBA1[0], RGBA2[0])[0], Tools.randomCountNumer(RGBA1[1], RGBA2[1])[0], Tools.randomCountNumer(RGBA1[2], RGBA2[2])[0], Tools.randomCountNumer(RGBA1[3] ? RGBA1[3] : 1, RGBA2[3] ? RGBA2[3] : 1)[0]];
+            let RGBA = [Tools._Number.randomCountBySection(RGBA1[0], RGBA2[0])[0], Tools._Number.randomCountBySection(RGBA1[1], RGBA2[1])[0], Tools._Number.randomCountBySection(RGBA1[2], RGBA2[2])[0], Tools._Number.randomCountBySection(RGBA1[3] ? RGBA1[3] : 1, RGBA2[3] ? RGBA2[3] : 1)[0]];
             let speedR = (RGBA[0] - RGBA0[0]) / frameTime;
             let speedG = (RGBA[1] - RGBA0[1]) / frameTime;
             let speedB = (RGBA[2] - RGBA0[2]) / frameTime;
@@ -2131,15 +2195,15 @@ export module lwg {
                     this.height = height ? height : 100;
                     this.pivotX = this.width / 2;
                     this.pivotY = this.height / 2;
-                    this.rotation = rotation ? Tools.randomOneNumber(rotation[0], rotation[1]) : Tools.randomOneNumber(360);
-                    this.skin = urlArr ? Tools.arrayRandomGetOne(urlArr) : _SkinUrl.花3;
+                    this.rotation = rotation ? Tools._Number.randomOneBySection(rotation[0], rotation[1]) : Tools._Number.randomOneBySection(360);
+                    this.skin = urlArr ? Tools._Array.randomGetOne(urlArr) : _SkinUrl.花3;
                     this.zOrder = zOrder ? zOrder : 0;
                     this.alpha = 0;
                     let RGBA = [];
-                    RGBA[0] = colorRGBA ? Tools.randomOneNumber(colorRGBA[0][0], colorRGBA[1][0]) : Tools.randomOneNumber(0, 255);
-                    RGBA[1] = colorRGBA ? Tools.randomOneNumber(colorRGBA[0][1], colorRGBA[1][1]) : Tools.randomOneNumber(0, 255);
-                    RGBA[2] = colorRGBA ? Tools.randomOneNumber(colorRGBA[0][2], colorRGBA[1][2]) : Tools.randomOneNumber(0, 255);
-                    RGBA[3] = colorRGBA ? Tools.randomOneNumber(colorRGBA[0][3], colorRGBA[1][3]) : Tools.randomOneNumber(0, 255);
+                    RGBA[0] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][0], colorRGBA[1][0]) : Tools._Number.randomOneBySection(0, 255);
+                    RGBA[1] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][1], colorRGBA[1][1]) : Tools._Number.randomOneBySection(0, 255);
+                    RGBA[2] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][2], colorRGBA[1][2]) : Tools._Number.randomOneBySection(0, 255);
+                    RGBA[3] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][3], colorRGBA[1][3]) : Tools._Number.randomOneBySection(0, 255);
                     Color._colour(this, RGBA);
                 }
             }
@@ -2160,9 +2224,9 @@ export module lwg {
              */
             export function _continuous(parent: Laya.Sprite, centerPoint?: Laya.Point, width?: number, height?: number, rotation?: Array<number>, urlArr?: Array<string>, colorRGBA?: Array<Array<number>>, zOrder?: number, scale?: Array<number>, speed?: Array<number>, accelerated?: Array<number>): void {
                 let Img = new _ApertureImage(parent, centerPoint, width, height, rotation, urlArr, colorRGBA, zOrder);
-                let _speed = speed ? Tools.randomOneNumber(speed[0], speed[1]) : 0.025;
-                let _accelerated = accelerated ? Tools.randomOneNumber(accelerated[0], accelerated[1]) : 0.0005;
-                let _scale = scale ? Tools.randomOneNumber(scale[0], scale[1]) : 2;
+                let _speed = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : 0.025;
+                let _accelerated = accelerated ? Tools._Number.randomOneBySection(accelerated[0], accelerated[1]) : 0.0005;
+                let _scale = scale ? Tools._Number.randomOneBySection(scale[0], scale[1]) : 2;
                 let moveCaller = {
                     alpha: true,
                     scale: false,
@@ -2219,25 +2283,25 @@ export module lwg {
                 constructor(parent: Laya.Sprite, centerPoint: Laya.Point, sectionWH: Array<number>, width: Array<number>, height: Array<number>, rotation: Array<number>, urlArr: Array<string>, colorRGBA: Array<Array<number>>, zOrder: number) {
                     super();
                     parent.addChild(this);
-                    let sectionWidth = sectionWH ? Tools.randomOneNumber(sectionWH[0]) : Tools.randomOneNumber(200);
-                    let sectionHeight = sectionWH ? Tools.randomOneNumber(sectionWH[1]) : Tools.randomOneNumber(50);
-                    sectionWidth = Tools.randomOneHalf() == 0 ? sectionWidth : -sectionWidth;
-                    sectionHeight = Tools.randomOneHalf() == 0 ? sectionHeight : -sectionHeight;
+                    let sectionWidth = sectionWH ? Tools._Number.randomOneBySection(sectionWH[0]) : Tools._Number.randomOneBySection(200);
+                    let sectionHeight = sectionWH ? Tools._Number.randomOneBySection(sectionWH[1]) : Tools._Number.randomOneBySection(50);
+                    sectionWidth = Tools._Number.randomOneHalf() == 0 ? sectionWidth : -sectionWidth;
+                    sectionHeight = Tools._Number.randomOneHalf() == 0 ? sectionHeight : -sectionHeight;
                     this.x = centerPoint ? centerPoint.x + sectionWidth : sectionWidth;
                     this.y = centerPoint ? centerPoint.y + sectionHeight : sectionHeight;
-                    this.width = width ? Tools.randomOneNumber(width[0], width[1]) : Tools.randomOneNumber(20, 50);
-                    this.height = height ? Tools.randomOneNumber(height[0], height[1]) : this.width;
+                    this.width = width ? Tools._Number.randomOneBySection(width[0], width[1]) : Tools._Number.randomOneBySection(20, 50);
+                    this.height = height ? Tools._Number.randomOneBySection(height[0], height[1]) : this.width;
                     this.pivotX = this.width / 2;
                     this.pivotY = this.height / 2;
-                    this.skin = urlArr ? Tools.arrayRandomGetOne(urlArr) : _SkinUrl.圆形1;
-                    this.rotation = rotation ? Tools.randomOneNumber(rotation[0], rotation[1]) : 0;
+                    this.skin = urlArr ? Tools._Array.randomGetOne(urlArr) : _SkinUrl.圆形1;
+                    this.rotation = rotation ? Tools._Number.randomOneBySection(rotation[0], rotation[1]) : 0;
                     this.alpha = 0;
                     this.zOrder = zOrder ? zOrder : 0;
                     let RGBA = [];
-                    RGBA[0] = colorRGBA ? Tools.randomOneNumber(colorRGBA[0][0], colorRGBA[1][0]) : Tools.randomOneNumber(0, 255);
-                    RGBA[1] = colorRGBA ? Tools.randomOneNumber(colorRGBA[0][1], colorRGBA[1][1]) : Tools.randomOneNumber(0, 255);
-                    RGBA[2] = colorRGBA ? Tools.randomOneNumber(colorRGBA[0][2], colorRGBA[1][2]) : Tools.randomOneNumber(0, 255);
-                    RGBA[3] = colorRGBA ? Tools.randomOneNumber(colorRGBA[0][3], colorRGBA[1][3]) : Tools.randomOneNumber(0, 255);
+                    RGBA[0] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][0], colorRGBA[1][0]) : Tools._Number.randomOneBySection(0, 255);
+                    RGBA[1] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][1], colorRGBA[1][1]) : Tools._Number.randomOneBySection(0, 255);
+                    RGBA[2] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][2], colorRGBA[1][2]) : Tools._Number.randomOneBySection(0, 255);
+                    RGBA[3] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][3], colorRGBA[1][3]) : Tools._Number.randomOneBySection(0, 255);
                     Color._colour(this, RGBA);
                 }
             }
@@ -2260,10 +2324,10 @@ export module lwg {
              */
             export function _snow(parent: Laya.Sprite, centerPoint?: Laya.Point, sectionWH?: Array<number>, width?: Array<number>, height?: Array<number>, rotation?: Array<number>, urlArr?: Array<string>, colorRGBA?: Array<Array<number>>, zOrder?: number, distance?: Array<number>, rotationSpeed?: [number, number], speed?: Array<number>, windX?: [number, number]): Laya.Image {
                 let Img = new _ParticleImgBase(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder);
-                let _rotationSpeed = rotationSpeed ? Tools.randomOneNumber(rotationSpeed[0], rotationSpeed[1]) : Tools.randomOneNumber(0, 1);
-                _rotationSpeed = Tools.randomOneHalf() == 0 ? _rotationSpeed : -_rotationSpeed;
-                let speed0 = speed ? Tools.randomOneNumber(speed[0], speed[1]) : Tools.randomOneNumber(1, 2.5);
-                let _windX = windX ? Tools.randomOneNumber(windX[0], windX[1]) : 0;
+                let _rotationSpeed = rotationSpeed ? Tools._Number.randomOneBySection(rotationSpeed[0], rotationSpeed[1]) : Tools._Number.randomOneBySection(0, 1);
+                _rotationSpeed = Tools._Number.randomOneHalf() == 0 ? _rotationSpeed : -_rotationSpeed;
+                let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(1, 2.5);
+                let _windX = windX ? Tools._Number.randomOneBySection(windX[0], windX[1]) : 0;
                 let moveCaller = {
                     alpha: true,
                     move: false,
@@ -2271,7 +2335,7 @@ export module lwg {
                 };
                 Img['moveCaller'] = moveCaller;
                 let distance0 = 0;
-                let distance1 = distance ? Tools.randomOneNumber(distance[0], distance[1]) : Tools.randomOneNumber(100, 300);
+                let distance1 = distance ? Tools._Number.randomOneBySection(distance[0], distance[1]) : Tools._Number.randomOneBySection(100, 300);
                 TimerAdmin._frameLoop(1, moveCaller, () => {
                     Img.x += _windX;
                     Img.rotation += _rotationSpeed;
@@ -2320,8 +2384,8 @@ export module lwg {
               */
             export function _fallingVertical(parent: Laya.Sprite, centerPoint?: Laya.Point, sectionWH?: Array<number>, width?: Array<number>, height?: Array<number>, rotation?: Array<number>, urlArr?: Array<string>, colorRGBA?: [[number, number, number, number], [number, number, number, number]], zOrder?: number, distance?: Array<number>, speed?: Array<number>, accelerated?: Array<number>): Laya.Image {
                 let Img = new _ParticleImgBase(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder);
-                let speed0 = speed ? Tools.randomOneNumber(speed[0], speed[1]) : Tools.randomOneNumber(4, 8);
-                let accelerated0 = accelerated ? Tools.randomOneNumber(accelerated[0], accelerated[1]) : Tools.randomOneNumber(0.25, 0.45);
+                let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(4, 8);
+                let accelerated0 = accelerated ? Tools._Number.randomOneBySection(accelerated[0], accelerated[1]) : Tools._Number.randomOneBySection(0.25, 0.45);
                 let acc = 0;
                 let moveCaller = {
                     alpha: true,
@@ -2330,7 +2394,7 @@ export module lwg {
                 };
                 Img['moveCaller'] = moveCaller;
                 let distance0 = 0;
-                let distance1 = distance ? Tools.randomOneNumber(distance[0], distance[1]) : Tools.randomOneNumber(100, 300);
+                let distance1 = distance ? Tools._Number.randomOneBySection(distance[0], distance[1]) : Tools._Number.randomOneBySection(100, 300);
                 TimerAdmin._frameLoop(1, moveCaller, () => {
                     if (Img.alpha < 1 && moveCaller.alpha) {
                         Img.alpha += 0.05;
@@ -2378,8 +2442,8 @@ export module lwg {
              */
             export function _slowlyUp(parent: Laya.Sprite, centerPoint?: Laya.Point, sectionWH?: Array<number>, width?: Array<number>, height?: Array<number>, rotation?: Array<number>, urlArr?: Array<string>, colorRGBA?: Array<Array<number>>, zOrder?: number, distance?: Array<number>, speed?: Array<number>, accelerated?: Array<number>): Laya.Image {
                 let Img = new _ParticleImgBase(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder);
-                let speed0 = speed ? Tools.randomOneNumber(speed[0], speed[1]) : Tools.randomOneNumber(1.5, 2);
-                let accelerated0 = accelerated ? Tools.randomOneNumber(accelerated[0], accelerated[1]) : Tools.randomOneNumber(0.001, 0.005);
+                let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(1.5, 2);
+                let accelerated0 = accelerated ? Tools._Number.randomOneBySection(accelerated[0], accelerated[1]) : Tools._Number.randomOneBySection(0.001, 0.005);
                 let acc = 0;
                 let moveCaller = {
                     alpha: true,
@@ -2389,7 +2453,7 @@ export module lwg {
                 Img['moveCaller'] = moveCaller;
                 let fy = Img.y;
                 let distance0 = 0;
-                let distance1 = distance ? Tools.randomOneNumber(distance[0], distance[1]) : Tools.randomOneNumber(-250, -600);
+                let distance1 = distance ? Tools._Number.randomOneBySection(distance[0], distance[1]) : Tools._Number.randomOneBySection(-250, -600);
                 TimerAdmin._frameLoop(1, moveCaller, () => {
                     if (Img.alpha < 1 && moveCaller.alpha) {
                         Img.alpha += 0.03;
@@ -2440,8 +2504,8 @@ export module lwg {
             export function _spray(parent: Laya.Sprite, centerPoint?: Laya.Point, sectionWH?: [number, number], width?: [number, number], height?: [number, number], rotation?: [number, number], urlArr?: [], colorRGBA?: [[number, number, number, number], [number, number, number, number]], zOrder?: number, moveAngle?: [number, number], distance?: [number, number], rotationSpeed?: [number, number], speed?: [number, number], accelerated?: [number, number]): Laya.Image {
                 let Img = new _ParticleImgBase(parent, centerPoint, [0, 0], width, height, rotation, urlArr, colorRGBA, zOrder);
                 let centerPoint0 = centerPoint ? centerPoint : new Laya.Point(0, 0);
-                let speed0 = speed ? Tools.randomOneNumber(speed[0], speed[1]) : Tools.randomOneNumber(3, 10);
-                let accelerated0 = accelerated ? Tools.randomOneNumber(accelerated[0], accelerated[1]) : Tools.randomOneNumber(0.25, 0.45);
+                let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(3, 10);
+                let accelerated0 = accelerated ? Tools._Number.randomOneBySection(accelerated[0], accelerated[1]) : Tools._Number.randomOneBySection(0.25, 0.45);
                 let acc = 0;
                 let moveCaller = {
                     alpha: true,
@@ -2450,9 +2514,9 @@ export module lwg {
                 };
                 Img['moveCaller'] = moveCaller;
                 let radius = 0;
-                let distance1 = distance ? Tools.randomOneNumber(distance[0], distance[1]) : Tools.randomOneNumber(100, 200);
-                let angle0 = moveAngle ? Tools.randomOneNumber(moveAngle[0], moveAngle[1]) : Tools.randomOneNumber(0, 360);
-                let rotationSpeed0 = rotationSpeed ? Tools.randomOneNumber(rotationSpeed[0], rotationSpeed[1]) : Tools.randomOneNumber(0, 20);
+                let distance1 = distance ? Tools._Number.randomOneBySection(distance[0], distance[1]) : Tools._Number.randomOneBySection(100, 200);
+                let angle0 = moveAngle ? Tools._Number.randomOneBySection(moveAngle[0], moveAngle[1]) : Tools._Number.randomOneBySection(0, 360);
+                let rotationSpeed0 = rotationSpeed ? Tools._Number.randomOneBySection(rotationSpeed[0], rotationSpeed[1]) : Tools._Number.randomOneBySection(0, 20);
                 TimerAdmin._frameLoop(1, moveCaller, () => {
                     Img.rotation += rotationSpeed0;
                     if (Img.alpha < 1 && moveCaller.alpha) {
@@ -2477,7 +2541,7 @@ export module lwg {
                         }
                         acc += accelerated0;
                         radius += speed0 + acc;
-                        let point = Tools.Point.getRoundPos(angle0, radius, centerPoint0);
+                        let point = Tools._Point.getRoundPos(angle0, radius, centerPoint0);
                         Img.pos(point.x, point.y);
                     }
                 })
@@ -2505,34 +2569,34 @@ export module lwg {
                 let Img = new _ParticleImgBase(parent, centerPoint, [0, 0], width, height, rotation, urlArr, colorRGBA, zOrder);
                 let _angle: number = 0;
                 sectionWH = sectionWH ? sectionWH : [100, 100];
-                let fixedXY = Tools.randomOneHalf() == 0 ? 'x' : 'y';
+                let fixedXY = Tools._Number.randomOneHalf() == 0 ? 'x' : 'y';
                 curtailAngle = curtailAngle ? curtailAngle : 60;
                 if (fixedXY == 'x') {
-                    if (Tools.randomOneHalf() == 0) {
+                    if (Tools._Number.randomOneHalf() == 0) {
                         Img.x += sectionWH[0];
-                        _angle = Tools.randomOneHalf() == 0 ? Tools.randomOneNumber(0, 90 - curtailAngle) : Tools.randomOneNumber(0, -90 + curtailAngle);
+                        _angle = Tools._Number.randomOneHalf() == 0 ? Tools._Number.randomOneBySection(0, 90 - curtailAngle) : Tools._Number.randomOneBySection(0, -90 + curtailAngle);
 
                     } else {
                         Img.x -= sectionWH[0];
-                        _angle = Tools.randomOneNumber(90 + curtailAngle, 270 - curtailAngle);
+                        _angle = Tools._Number.randomOneBySection(90 + curtailAngle, 270 - curtailAngle);
                     }
-                    Img.y += Tools.randomOneNumber(-sectionWH[1], sectionWH[1]);
+                    Img.y += Tools._Number.randomOneBySection(-sectionWH[1], sectionWH[1]);
                 } else {
-                    if (Tools.randomOneHalf() == 0) {
+                    if (Tools._Number.randomOneHalf() == 0) {
                         Img.y -= sectionWH[1];
-                        _angle = Tools.randomOneNumber(180 + curtailAngle, 360 - curtailAngle);
+                        _angle = Tools._Number.randomOneBySection(180 + curtailAngle, 360 - curtailAngle);
                     } else {
                         Img.y += sectionWH[1];
-                        _angle = Tools.randomOneNumber(0 + curtailAngle, 180 - curtailAngle);
+                        _angle = Tools._Number.randomOneBySection(0 + curtailAngle, 180 - curtailAngle);
                     }
-                    Img.x += Tools.randomOneNumber(-sectionWH[0], sectionWH[0]);
+                    Img.x += Tools._Number.randomOneBySection(-sectionWH[0], sectionWH[0]);
                 }
-                let p = Tools.d2_angle_Vector(_angle);
-                let _distance = distance ? Tools.randomOneNumber(distance[0], distance[1]) : Tools.randomOneNumber(20, 50);
-                let speed0 = speed ? Tools.randomOneNumber(speed[0], speed[1]) : Tools.randomOneNumber(0.5, 1);
-                let accelerated0 = accelerated ? Tools.randomOneNumber(accelerated[0], accelerated[1]) : Tools.randomOneNumber(0.25, 0.45);
+                let p = Tools._Point.angleByPoint(_angle);
+                let _distance = distance ? Tools._Number.randomOneBySection(distance[0], distance[1]) : Tools._Number.randomOneBySection(20, 50);
+                let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(0.5, 1);
+                let accelerated0 = accelerated ? Tools._Number.randomOneBySection(accelerated[0], accelerated[1]) : Tools._Number.randomOneBySection(0.25, 0.45);
                 let acc = 0;
-                let rotationSpeed0 = rotateSpeed ? Tools.randomOneNumber(rotateSpeed[0], rotateSpeed[1]) : Tools.randomOneNumber(0, 20);
+                let rotationSpeed0 = rotateSpeed ? Tools._Number.randomOneBySection(rotateSpeed[0], rotateSpeed[1]) : Tools._Number.randomOneBySection(0, 20);
                 let firstP = new Laya.Point(Img.x, Img.y);
                 let moveCaller = {
                     alpha: true,
@@ -2589,8 +2653,8 @@ export module lwg {
             export function _moveToTargetToMove(parent: Laya.Sprite, centerPoint?: Laya.Point, width?: Array<number>, height?: Array<number>, rotation?: Array<number>, angle?: Array<number>, urlArr?: Array<string>, colorRGBA?: Array<Array<number>>, zOrder?: number, distance1?: Array<number>, distance2?: Array<number>, rotationSpeed?: Array<null>, speed?: Array<number>, accelerated?: Array<number>): Laya.Image {
                 let Img = new _ParticleImgBase(parent, centerPoint, [0, 0], width, height, rotation, urlArr, colorRGBA, zOrder);
                 let centerPoint0 = centerPoint ? centerPoint : new Laya.Point(0, 0);
-                let speed0 = speed ? Tools.randomOneNumber(speed[0], speed[1]) : Tools.randomOneNumber(5, 6);
-                let accelerated0 = accelerated ? Tools.randomOneNumber(accelerated[0], accelerated[1]) : Tools.randomOneNumber(0.25, 0.45);
+                let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(5, 6);
+                let accelerated0 = accelerated ? Tools._Number.randomOneBySection(accelerated[0], accelerated[1]) : Tools._Number.randomOneBySection(0.25, 0.45);
                 let acc = 0;
                 let moveCaller = {
                     alpha: true,
@@ -2601,12 +2665,12 @@ export module lwg {
                 };
                 Img['moveCaller'] = moveCaller;
                 let radius = 0;
-                let dis1 = distance1 ? Tools.randomOneNumber(distance1[0], distance1[1]) : Tools.randomOneNumber(100, 200);
-                let dis2 = distance2 ? Tools.randomOneNumber(distance2[0], distance2[1]) : Tools.randomOneNumber(100, 200);
+                let dis1 = distance1 ? Tools._Number.randomOneBySection(distance1[0], distance1[1]) : Tools._Number.randomOneBySection(100, 200);
+                let dis2 = distance2 ? Tools._Number.randomOneBySection(distance2[0], distance2[1]) : Tools._Number.randomOneBySection(100, 200);
 
-                let angle0 = angle ? Tools.randomOneNumber(angle[0], angle[1]) : Tools.randomOneNumber(0, 360);
+                let angle0 = angle ? Tools._Number.randomOneBySection(angle[0], angle[1]) : Tools._Number.randomOneBySection(0, 360);
                 Img.rotation = angle0 - 90;
-                let rotationSpeed0 = rotationSpeed ? Tools.randomOneNumber(rotationSpeed[0], rotationSpeed[1]) : Tools.randomOneNumber(0, 20);
+                let rotationSpeed0 = rotationSpeed ? Tools._Number.randomOneBySection(rotationSpeed[0], rotationSpeed[1]) : Tools._Number.randomOneBySection(0, 20);
                 TimerAdmin._frameLoop(1, moveCaller, () => {
                     if (moveCaller.alpha) {
                         acc += accelerated0;
@@ -2645,7 +2709,7 @@ export module lwg {
                             Laya.timer.clearAll(moveCaller);
                         }
                     }
-                    let point = Tools.Point.getRoundPos(angle0, radius, centerPoint0);
+                    let point = Tools._Point.getRoundPos(angle0, radius, centerPoint0);
                     Img.pos(point.x, point.y);
                 })
                 return Img;
@@ -2669,15 +2733,15 @@ export module lwg {
                 let Img = new Laya.Image();
                 parent.addChild(Img);
                 width = width ? width : [25, 50];
-                Img.width = Tools.randomCountNumer(width[0], width[1])[0];
-                Img.height = height ? Tools.randomCountNumer(height[0], height[1])[0] : Img.width;
+                Img.width = Tools._Number.randomCountBySection(width[0], width[1])[0];
+                Img.height = height ? Tools._Number.randomCountBySection(height[0], height[1])[0] : Img.width;
                 Img.pivotX = Img.width / 2;
                 Img.pivotY = Img.height / 2;
-                Img.skin = urlArr ? Tools.arrayRandomGetOut(urlArr)[0] : _SkinUrl[Tools.randomCountNumer(0, 12)[0]];
-                let radius0 = Tools.randomCountNumer(radius[0], radius[1])[0];
+                Img.skin = urlArr ? Tools._Array.randomGetOut(urlArr)[0] : _SkinUrl[Tools._Number.randomCountBySection(0, 12)[0]];
+                let radius0 = Tools._Number.randomCountBySection(radius[0], radius[1])[0];
                 Img.alpha = 0;
-                let speed0 = speed ? Tools.randomCountNumer(speed[0], speed[1])[0] : Tools.randomCountNumer(5, 10)[0];
-                let angle = rotation ? Tools.randomCountNumer(rotation[0], rotation[1])[0] : Tools.randomCountNumer(0, 360)[0];
+                let speed0 = speed ? Tools._Number.randomCountBySection(speed[0], speed[1])[0] : Tools._Number.randomCountBySection(5, 10)[0];
+                let angle = rotation ? Tools._Number.randomCountBySection(rotation[0], rotation[1])[0] : Tools._Number.randomCountBySection(0, 360)[0];
                 let caller = {};
                 let acc = 0;
                 accelerated = accelerated ? accelerated : 0.35;
@@ -2690,7 +2754,7 @@ export module lwg {
                         acc += accelerated;
                         radius0 -= (speed0 + acc);
                     }
-                    let point = Tools.Point.getRoundPos(angle, radius0, centerPoint);
+                    let point = Tools._Point.getRoundPos(angle, radius0, centerPoint);
                     Img.pos(point.x, point.y);
                     if (point.distance(centerPoint.x, centerPoint.y) <= 20 || point.distance(centerPoint.x, centerPoint.y) >= 1000) {
                         Img.removeSelf();
@@ -2710,18 +2774,18 @@ export module lwg {
                         return;
                     }
                     parent.addChild(this);
-                    this.skin = urlArr ? Tools.arrayRandomGetOne(urlArr) : _SkinUrl.星星1;
-                    this.width = width ? Tools.randomOneNumber(width[0], width[1]) : 80;
-                    this.height = height ? Tools.randomOneNumber(height[0], height[1]) : this.width;
+                    this.skin = urlArr ? Tools._Array.randomGetOne(urlArr) : _SkinUrl.星星1;
+                    this.width = width ? Tools._Number.randomOneBySection(width[0], width[1]) : 80;
+                    this.height = height ? Tools._Number.randomOneBySection(height[0], height[1]) : this.width;
                     this.pivotX = this.width / 2;
                     this.pivotY = this.height / 2;
-                    let p = radiusXY ? Tools.Point.randomPointByCenter(centerPos, radiusXY[0], radiusXY[1], 1) : Tools.Point.randomPointByCenter(centerPos, 100, 100, 1);
+                    let p = radiusXY ? Tools._Point.randomPointByCenter(centerPos, radiusXY[0], radiusXY[1], 1) : Tools._Point.randomPointByCenter(centerPos, 100, 100, 1);
                     this.pos(p[0].x, p[0].y);
                     let RGBA = [];
-                    RGBA[0] = colorRGBA ? Tools.randomOneNumber(colorRGBA[0][0], colorRGBA[1][0]) : Tools.randomOneNumber(0, 255);
-                    RGBA[1] = colorRGBA ? Tools.randomOneNumber(colorRGBA[0][1], colorRGBA[1][1]) : Tools.randomOneNumber(0, 255);
-                    RGBA[2] = colorRGBA ? Tools.randomOneNumber(colorRGBA[0][2], colorRGBA[1][2]) : Tools.randomOneNumber(0, 255);
-                    RGBA[3] = colorRGBA ? Tools.randomOneNumber(colorRGBA[0][3], colorRGBA[1][3]) : Tools.randomOneNumber(0, 255);
+                    RGBA[0] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][0], colorRGBA[1][0]) : Tools._Number.randomOneBySection(0, 255);
+                    RGBA[1] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][1], colorRGBA[1][1]) : Tools._Number.randomOneBySection(0, 255);
+                    RGBA[2] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][2], colorRGBA[1][2]) : Tools._Number.randomOneBySection(0, 255);
+                    RGBA[3] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][3], colorRGBA[1][3]) : Tools._Number.randomOneBySection(0, 255);
                     Color._colour(this, RGBA);
                     this.alpha = 0;
                 }
@@ -2746,10 +2810,10 @@ export module lwg {
                 // 最大放大大小
                 Img.scaleX = 0;
                 Img.scaleY = 0;
-                let _scale = scale ? Tools.randomOneNumber(scale[0], scale[1]) : Tools.randomOneNumber(0.8, 1.2);
-                let _speed = speed ? Tools.randomOneNumber(speed[0], speed[1]) : Tools.randomOneNumber(0.01, 0.02);
-                let _rotateSpeed = rotateSpeed ? Tools.randomOneInt(rotateSpeed[0], rotateSpeed[1]) : Tools.randomOneInt(0, 5);
-                _rotateSpeed = Tools.randomOneHalf() == 0 ? -_rotateSpeed : _rotateSpeed;
+                let _scale = scale ? Tools._Number.randomOneBySection(scale[0], scale[1]) : Tools._Number.randomOneBySection(0.8, 1.2);
+                let _speed = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(0.01, 0.02);
+                let _rotateSpeed = rotateSpeed ? Tools._Number.randomOneInt(rotateSpeed[0], rotateSpeed[1]) : Tools._Number.randomOneInt(0, 5);
+                _rotateSpeed = Tools._Number.randomOneHalf() == 0 ? -_rotateSpeed : _rotateSpeed;
                 let moveCaller = {
                     appear: true,
                     scale: false,
@@ -2843,16 +2907,16 @@ export module lwg {
                 constructor(parent: Laya.Sprite, urlArr: Array<string>, colorRGBA: Array<Array<number>>, width: Array<number>, height: Array<number>, zOrder: number) {
                     super();
                     parent.addChild(this);
-                    this.skin = urlArr ? Tools.arrayRandomGetOne(urlArr) : _SkinUrl.圆形发光1;
-                    this.width = width ? Tools.randomOneNumber(width[0], width[1]) : 80;
-                    this.height = height ? Tools.randomOneNumber(height[0], height[1]) : this.width;
+                    this.skin = urlArr ? Tools._Array.randomGetOne(urlArr) : _SkinUrl.圆形发光1;
+                    this.width = width ? Tools._Number.randomOneBySection(width[0], width[1]) : 80;
+                    this.height = height ? Tools._Number.randomOneBySection(height[0], height[1]) : this.width;
                     this.pivotX = this.width / 2;
                     this.pivotY = this.height / 2;
                     let RGBA = [];
-                    RGBA[0] = colorRGBA ? Tools.randomOneNumber(colorRGBA[0][0], colorRGBA[1][0]) : Tools.randomOneNumber(0, 255);
-                    RGBA[1] = colorRGBA ? Tools.randomOneNumber(colorRGBA[0][1], colorRGBA[1][1]) : Tools.randomOneNumber(0, 255);
-                    RGBA[2] = colorRGBA ? Tools.randomOneNumber(colorRGBA[0][2], colorRGBA[1][2]) : Tools.randomOneNumber(0, 255);
-                    RGBA[3] = colorRGBA ? Tools.randomOneNumber(colorRGBA[0][3], colorRGBA[1][3]) : Tools.randomOneNumber(0, 255);
+                    RGBA[0] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][0], colorRGBA[1][0]) : Tools._Number.randomOneBySection(0, 255);
+                    RGBA[1] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][1], colorRGBA[1][1]) : Tools._Number.randomOneBySection(0, 255);
+                    RGBA[2] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][2], colorRGBA[1][2]) : Tools._Number.randomOneBySection(0, 255);
+                    RGBA[3] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][3], colorRGBA[1][3]) : Tools._Number.randomOneBySection(0, 255);
                     Color._colour(this, RGBA);
                     this.zOrder = zOrder ? zOrder : 0;
                     this.alpha = 0;
@@ -2921,7 +2985,7 @@ export module lwg {
                     let targetXY = [posArray[index][0], posArray[index][1]];
                     let distance = (new Laya.Point(Img.x, Img.y)).distance(targetXY[0], targetXY[1]);
                     if (parallel) {
-                        Img.rotation = Tools.d2_Vector_Angle(Img.x - targetXY[0], Img.y - targetXY[1]) + 180;
+                        Img.rotation = Tools._Point.pointByAngle(Img.x - targetXY[0], Img.y - targetXY[1]) + 180;
                     }
                     let time = speed * 100 + distance / 5;
                     if (index == posArray.length + 1) {
@@ -2943,6 +3007,17 @@ export module lwg {
 
     /**点击事件模块 */
     export module Click {
+        export let _switch: boolean = true;
+        /**按钮音效*/
+        export let _audioUrl: string;
+        /**
+         * 当前气球被缩放的比例
+         * */
+        export let _balloonScale: number;
+        /**
+        * 当前小甲虫被缩放的比例
+        * */
+        export let _beetleScale: number;
         /**
          * 动态创建一个按钮
          */
@@ -2951,28 +3026,25 @@ export module lwg {
             let img = new Laya.Image();
             let label = new Laya.Label();
         }
-        /**点击事件类型*/
-        export enum _Type {
+        /**点击效果类型*/
+        export let _Type = {
             /**无效果*/
-            noEffect = 'noEffect',
+            no: 'no',
             /**点击放大*/
-            largen = 'largen',
+            largen: 'largen',
             /**类似气球*/
-            balloon = 'balloon',
+            balloon: 'balloon',
             /**小虫子*/
-            beetle = 'beetle',
+            beetle: 'beetle',
         }
-
-        /**按钮音效*/
-        export let _audioUrl: string;
-        /**
-         * 当前气球被缩放的比例
-         * */
-        export let _balloonScale;
-        /**
-        * 当前小甲虫被缩放的比例
-        * */
-        export let _beetleScale;
+        export let _Use = {
+            get value(): string {
+                return this['Click_name'] ? this['Click_name'] : null;
+            },
+            set value(val: string) {
+                this['Click_name'] = val;
+            }
+        }
         /**b
          * 点击事件注册,可以用(e)=>{}简写传递的函数参数
          * @param effect 效果类型 1.'largen'
@@ -2984,27 +3056,25 @@ export module lwg {
          * @param out 出屏幕函数
          * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
          */
-        export function _on(effect:string, target: Laya.Node, caller: any, down?: Function, move?: Function, up?: Function, out?: Function): void {
-            let btnEffect;
+        export function _on(effect: string, target: Laya.Node, caller: any, down?: Function, move?: Function, up?: Function, out?: Function): void {
+            let btnEffect: any;
             switch (effect) {
-                case _Type.noEffect:
-                    btnEffect = new Btn_NoEffect();
+                case _Type.no:
+                    btnEffect = new _NoEffect();
                     break;
                 case _Type.largen:
-                    btnEffect = new Btn_LargenEffect();
+                    btnEffect = new _Largen();
                     break;
                 case _Type.balloon:
-                    btnEffect = new Btn_Balloon();
+                    btnEffect = new _Balloon();
                     break;
                 case _Type.balloon:
-                    btnEffect = new Btn_Beetle();
+                    btnEffect = new _Beetle();
                     break;
                 default:
-                    btnEffect = new Btn_LargenEffect();
+                    btnEffect = new _NoEffect();
                     break;
             }
-            // let caller = null;
-
             target.on(Laya.Event.MOUSE_DOWN, caller, down);
             target.on(Laya.Event.MOUSE_MOVE, caller, move);
             target.on(Laya.Event.MOUSE_UP, caller, up);
@@ -3026,23 +3096,23 @@ export module lwg {
          * @param out 出屏幕函数
          * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
          */
-        export function _off(effect, target, caller, down?: Function, move?: Function, up?: Function, out?: Function): void {
-            let btnEffect;
+        export function _off(effect: string, target: any, caller: any, down?: Function, move?: Function, up?: Function, out?: Function): void {
+            let btnEffect: any;
             switch (effect) {
-                case _Type.noEffect:
-                    btnEffect = new Btn_NoEffect();
+                case _Type.no:
+                    btnEffect = new _NoEffect();
                     break;
                 case _Type.largen:
-                    btnEffect = new Btn_LargenEffect();
+                    btnEffect = new _Largen();
                     break;
                 case _Type.balloon:
-                    btnEffect = new Btn_Balloon();
+                    btnEffect = new _Balloon();
                     break;
                 case _Type.balloon:
-                    btnEffect = new Btn_Beetle();
+                    btnEffect = new _Beetle();
                     break;
                 default:
-                    btnEffect = new Btn_LargenEffect();
+                    btnEffect = new _Largen();
                     break;
             }
 
@@ -3061,47 +3131,47 @@ export module lwg {
     /**
      * 没有效果的点击事件，有时候用于防止界面的事件穿透
      */
-    export class Btn_NoEffect {
+    export class _NoEffect {
         constructor() {
         }
         /**按下*/
-        down(event): void {
+        down(event: Laya.Event): void {
             // console.log('无点击效果的点击');
         }
         /**移动*/
-        move(event): void {
+        move(event: Laya.Event): void {
         }
         /**抬起*/
-        up(event): void {
+        up(event: Laya.Event): void {
         }
         /**出屏幕*/
-        out(event): void {
+        out(event: Laya.Event): void {
         }
     }
 
     /**
      * 点击放大的按钮点击效果,每个类是一种效果，和点击的声音一一对应
      */
-    export class Btn_LargenEffect {
+    export class _Largen {
         constructor() {
         }
         /**按下*/
-        down(event): void {
+        down(event: Laya.Event): void {
             event.currentTarget.scale(1.1, 1.1);
-            PalyAudio.playSound(Click._audioUrl);
+            Audio._playSound(Click._audioUrl);
         }
         /**移动*/
-        move(event): void {
+        move(event: Laya.Event): void {
         }
 
         /**抬起*/
-        up(event): void {
+        up(event: Laya.Event): void {
             event.currentTarget.scale(1, 1);
             // btnPrintPoint('on', event.currentTarget.name);
         }
 
         /**出屏幕*/
-        out(event): void {
+        out(event: Laya.Event): void {
             event.currentTarget.scale(1, 1);
         }
     }
@@ -3109,24 +3179,24 @@ export module lwg {
     /**
      * 气球的点击效果
      */
-    export class Btn_Balloon {
+    export class _Balloon {
         constructor() {
         }
         /**按下*/
-        down(event): void {
+        down(event: Laya.Event): void {
             event.currentTarget.scale(Click._balloonScale + 0.06, Click._balloonScale + 0.06);
-            PalyAudio.playSound(Click._audioUrl);
+            Audio._playSound(Click._audioUrl);
         }
         /**抬起*/
-        up(event): void {
+        up(event: Laya.Event): void {
             event.currentTarget.scale(Click._balloonScale, Click._balloonScale);
         }
         /**移动*/
-        move(event): void {
+        move(event: Laya.Event): void {
             event.currentTarget.scale(Click._balloonScale, Click._balloonScale);
         }
         /**出屏幕*/
-        out(event): void {
+        out(event: Laya.Event): void {
             event.currentTarget.scale(Click._balloonScale, Click._balloonScale);
         }
     }
@@ -3134,24 +3204,24 @@ export module lwg {
     /**
      * 气球的点击效果
      */
-    export class Btn_Beetle {
+    export class _Beetle {
         constructor() {
         }
         /**按下*/
-        down(event): void {
+        down(event: Laya.Event): void {
             event.currentTarget.scale(Click._beetleScale + 0.06, Click._beetleScale + 0.06);
-            PalyAudio.playSound(Click._audioUrl);
+            Audio._playSound(Click._audioUrl);
         }
         /**抬起*/
-        up(event): void {
+        up(event: Laya.Event): void {
             event.currentTarget.scale(Click._beetleScale, Click._beetleScale);
         }
         /**移动*/
-        move(event): void {
+        move(event: Laya.Event): void {
             event.currentTarget.scale(Click._beetleScale, Click._beetleScale);
         }
         /**出屏幕*/
-        out(event): void {
+        out(event: Laya.Event): void {
             event.currentTarget.scale(Click._beetleScale, Click._beetleScale);
         }
     }
@@ -3411,9 +3481,9 @@ export module lwg {
                 Admin._clickLock.switch = true;
             }
             Laya.Tween.to(node, { x: node.x - range }, time, null, Laya.Handler.create(this, function () {
-                // PalyAudio.playSound(Enum.AudioName.commonShake, 1);
+                // Audio._playSound(Enum.AudioName.commonShake, 1);
                 Laya.Tween.to(node, { x: node.x + range * 2 }, time, null, Laya.Handler.create(this, function () {
-                    // PalyAudio.playSound(Enum.AudioName.commonShake, 1);
+                    // Audio._playSound(Enum.AudioName.commonShake, 1);
                     Laya.Tween.to(node, { x: node.x - range }, time, null, Laya.Handler.create(this, function () {
                         if (func) {
                             func();
@@ -3644,6 +3714,22 @@ export module lwg {
         }
 
         /**
+         * @export 移动和旋转
+         * @param {Laya.Sprite} Node 节点
+         * @param {number} tRotate 最终角度
+         * @param {number} tPoint 目标位置
+         * @param {number} time 花费时间
+         * @param {number} [delayed] 延时时间
+         * @param {Function} [func] 回调函数
+         */
+        export function move_rotate(Node: Laya.Sprite, tRotate: number, tPoint: Laya.Point, time: number, delayed?: number, func?: Function): void {
+            Laya.Tween.to(Node, { rotation: tRotate, x: tPoint.x, y: tPoint.y }, time, null, Laya.Handler.create(Node['move_rotate'], () => {
+                if (func) {
+                    func();
+                }
+            }), delayed ? delayed : 0);
+        }
+        /**
          *旋转+放大缩小 
          * @param target 目标节点
          * @param fRotate 初始角度
@@ -3772,14 +3858,14 @@ export module lwg {
         export function cardRotateX_TowFace(node: Laya.Sprite, time: number, func1?: Function, delayed?: number, func2?: Function): void {
             Laya.Tween.to(node, { scaleX: 0 }, time, null, Laya.Handler.create(this, function () {
                 // 所有子节点消失
-                Tools.Node.childrenVisible2D(node, false);
+                Tools._Node.childrenVisible2D(node, false);
                 if (func1) {
                     func1();
                 }
                 Laya.Tween.to(node, { scaleX: 1 }, time * 0.9, null, Laya.Handler.create(this, function () {
                     Laya.Tween.to(node, { scaleX: 0 }, time * 0.8, null, Laya.Handler.create(this, function () {
 
-                        Tools.Node.childrenVisible2D(node, true);
+                        Tools._Node.childrenVisible2D(node, true);
 
                         Laya.Tween.to(node, { scaleX: 1 }, time * 0.7, null, Laya.Handler.create(this, function () {
                             if (func2) {
@@ -3825,14 +3911,14 @@ export module lwg {
         export function cardRotateY_TowFace(node: Laya.Sprite, time: number, func1?: Function, delayed?: number, func2?: Function): void {
             Laya.Tween.to(node, { scaleY: 0 }, time, null, Laya.Handler.create(this, function () {
                 // 所有子节点消失
-                Tools.Node.childrenVisible2D(node, false);
+                Tools._Node.childrenVisible2D(node, false);
                 if (func1) {
                     func1();
                 }
                 Laya.Tween.to(node, { scaleY: 1 }, time, null, Laya.Handler.create(this, function () {
                     Laya.Tween.to(node, { scaleY: 0 }, time, null, Laya.Handler.create(this, function () {
                         Laya.Tween.to(node, { scaleY: 1 }, time * 1 / 2, null, Laya.Handler.create(this, function () {
-                            Tools.Node.childrenVisible2D(node, true);
+                            Tools._Node.childrenVisible2D(node, true);
                             if (func2) {
                                 func2();
                             }
@@ -4027,7 +4113,7 @@ export module lwg {
          * @param func 完成后的回调
          */
         export function swell_shrink(node, firstScale, scale1, time, delayed?: number, func?: Function): void {
-            // PalyAudio.playSound(Enum.AudioName.commonPopup, 1);
+            // Audio._playSound(Enum.AudioName.commonPopup, 1);
             if (!delayed) {
                 delayed = 0;
             }
@@ -4249,7 +4335,7 @@ export module lwg {
         }
 
         /**
-         * 旋转放大回弹动画，旋转放大角度增加=》原始大小和角度=，旋转放大角度增加=》原始大小和角度，有一个回来效果
+         * 旋转放大回弹动画，旋转放大角度增加=》原始大小和角度=，旋转放大角��增加=》原始大小和角度，有一个回来效果
          * @param target 目标
          * @param eAngle 延伸角度，就是回收前的多出的角度
          * @param eScale 延伸大小，就是回收前的放大的大小
@@ -4310,11 +4396,11 @@ export module lwg {
                 if (value) {
                     val = 1;
                     Laya.LocalStorage.setItem('Setting_bgMusic', val.toString());
-                    PalyAudio.playMusic();
+                    Audio._playMusic();
                 } else {
                     val = 0;
                     Laya.LocalStorage.setItem('Setting_bgMusic', val.toString());
-                    PalyAudio.stopMusic();
+                    Audio._stopMusic();
                 }
             }
         };
@@ -4337,7 +4423,7 @@ export module lwg {
         };
 
         /**设置按钮节点*/
-        export let BtnSetNode: Laya.Sprite;
+        export let _BtnSet: Laya.Sprite;
         /**
          * 创建一个设置按钮
          * @param x X轴坐标
@@ -4347,7 +4433,7 @@ export module lwg {
          * @param url 图片地址没有则是默认图片
          * @param parent 父节点，不传则就在舞台上
         */
-        export function createSetBtn(x: number, y: number, width?: number, height?: number, skin?: string, parent?: Laya.Sprite, ZOder?: number): Laya.Image {
+        export function _createBtnSet(x: number, y: number, width?: number, height?: number, skin?: string, parent?: Laya.Sprite, ZOder?: number): Laya.Image {
             let btn = new Laya.Image;
             btn.width = width ? width : 100;
             btn.height = width ? width : 100;
@@ -4367,8 +4453,8 @@ export module lwg {
                 Admin._openScene(Admin._SceneName.Set);
             }
             Click._on(Click._Type.largen, btn, null, null, btnSetUp, null);
-            BtnSetNode = btn;
-            BtnSetNode.name = 'BtnSetNode';
+            _BtnSet = btn;
+            _BtnSet.name = 'BtnSetNode';
             return btn;
         }
 
@@ -4378,22 +4464,22 @@ export module lwg {
          * @param x 改变一次X轴位置
          * @param y 改变一次Y轴位置
         */
-        export function setBtnAppear(delayed?: number, x?: number, y?: number): void {
-            if (!BtnSetNode) {
+        export function btnSetAppear(delayed?: number, x?: number, y?: number): void {
+            if (!_BtnSet) {
                 return;
             }
             if (delayed) {
-                Animation2D.scale_Alpha(BtnSetNode, 0, 1, 1, 1, 1, 1, delayed, 0, f => {
-                    BtnSetNode.visible = true;
+                Animation2D.scale_Alpha(_BtnSet, 0, 1, 1, 1, 1, 1, delayed, 0, f => {
+                    _BtnSet.visible = true;
                 });
             } else {
-                BtnSetNode.visible = true;
+                _BtnSet.visible = true;
             }
             if (x) {
-                BtnSetNode.x = x;
+                _BtnSet.x = x;
             }
             if (y) {
-                BtnSetNode.y = y;
+                _BtnSet.y = y;
             }
         }
 
@@ -4401,16 +4487,16 @@ export module lwg {
          * 设置按钮的消失
          * @param delayed 延时时间
         */
-        export function setBtnVinish(delayed?: number): void {
-            if (!BtnSetNode) {
+        export function btnSetVinish(delayed?: number): void {
+            if (!_BtnSet) {
                 return;
             }
             if (delayed) {
-                Animation2D.scale_Alpha(BtnSetNode, 1, 1, 1, 1, 1, 0, delayed, 0, f => {
-                    BtnSetNode.visible = false;
+                Animation2D.scale_Alpha(_BtnSet, 1, 1, 1, 1, 1, 0, delayed, 0, f => {
+                    _BtnSet.visible = false;
                 });
             } else {
-                BtnSetNode.visible = false;
+                _BtnSet.visible = false;
             }
         }
     }
@@ -4418,24 +4504,23 @@ export module lwg {
     /**
      * 2.音乐播放模块
      */
-    export module PalyAudio {
+    export module Audio {
         /**音效地址*/
-        export enum voiceUrl {
-            btn = 'Frame/Voice/btn.wav',
-            bgm = 'Frame/Voice/bgm.mp3',
-            victory = 'Frame/Voice/guoguan.wav',
-            defeated = 'Frame/Voice/wancheng.wav',
-            huodejinbi = 'Frame/Voice/huodejinbi.wav',
+        export enum _voiceUrl {
+            btn = 'Lwg/Voice/btn.wav',
+            bgm = 'Lwg/Voice/bgm.mp3',
+            victory = 'Lwg/Voice/guoguan.wav',
+            defeated = 'Lwg/Voice/wancheng.wav',
+            huodejinbi = 'Lwg/Voice/huodejinbi.wav',
         }
-
         /**通用音效播放
          * @param url 音效地址，不传则是默认音效
          * @param number 播放次数，默认1次
          * @param func 播放完毕回调
          */
-        export function playSound(url?: string, number?: number, func?: Function) {
+        export function _playSound(url?: string, number?: number, func?: Function) {
             if (!url) {
-                url = voiceUrl.btn;
+                url = _voiceUrl.btn;
             }
             if (!number) {
                 number = 1;
@@ -4454,9 +4539,9 @@ export module lwg {
          * @param number 播放次数，默认1次
          * @param func 播放完毕回调
          */
-        export function playDefeatedSound(url?: string, number?: number, func?: Function) {
+        export function _playDefeatedSound(url?: string, number?: number, func?: Function) {
             if (!url) {
-                url = voiceUrl.defeated;
+                url = _voiceUrl.defeated;
             }
             if (!number) {
                 number = 1;
@@ -4475,9 +4560,9 @@ export module lwg {
           * @param number 播放次数，默认1次
           * @param func 播放完毕回调
           */
-        export function playVictorySound(url?: string, number?: number, func?: Function) {
+        export function _playVictorySound(url?: string, number?: number, func?: Function) {
             if (!url) {
-                url = voiceUrl.victory;
+                url = _voiceUrl.victory;
             }
             if (!number) {
                 number = 1;
@@ -4496,9 +4581,9 @@ export module lwg {
         * @param number 循环次数，0表示无限循环
         * @param delayed 延时时间，默认0
         */
-        export function playMusic(url?: string, number?: number, delayed?: number) {
+        export function _playMusic(url?: string, number?: number, delayed?: number) {
             if (!url) {
-                url = voiceUrl.bgm;
+                url = _voiceUrl.bgm;
             }
             if (!number) {
                 number = 0;
@@ -4510,9 +4595,8 @@ export module lwg {
                 Laya.SoundManager.playMusic(url, number, Laya.Handler.create(this, function () { }), delayed);
             }
         }
-
         /**停止播放背景音乐*/
-        export function stopMusic() {
+        export function _stopMusic() {
             Laya.SoundManager.stopMusic();
         }
     }
@@ -4527,56 +4611,77 @@ export module lwg {
         export function color_RGBtoHexString(r, g, b) {
             return '#' + ("00000" + (r << 16 | g << 8 | b).toString(16)).slice(-6);
         }
-
-        /**
-          * 将数字格式化，例如1000 = 1k；
-          * @param number 数字
-          */
-        export function format_FormatNumber(crc: number, fixNum = 0) {
-            let textTemp;
-            if (crc >= 1e27) {
-                textTemp = (crc / 1e27).toFixed(fixNum) + "ae";
-            } else if (crc >= 1e24) {
-                textTemp = (crc / 1e24).toFixed(fixNum) + "ad";
-            } else if (crc >= 1e21) {
-                textTemp = (crc / 1e21).toFixed(fixNum) + "ac";
-            } else if (crc >= 1e18) {
-                textTemp = (crc / 1e18).toFixed(fixNum) + "ab";
-            } else if (crc >= 1e15) {
-                textTemp = (crc / 1e15).toFixed(fixNum) + "aa";
-            } else if (crc >= 1e12) {
-                textTemp = (crc / 1e12).toFixed(fixNum) + "t";
-            } else if (crc >= 1e9) {
-                textTemp = (crc / 1e9).toFixed(fixNum) + "b";
-            } else if (crc >= 1e6) {
-                textTemp = (crc / 1e6).toFixed(fixNum) + "m";
-            } else if (crc >= 1e3) {
-                textTemp = (crc / 1e3).toFixed(fixNum) + "k";
-            } else {
-                textTemp = Math.round(crc).toString();
+        /**格式化*/
+        export module _Format {
+            /**
+             * 将数字格式化，例如1000 = 1k；
+             * @param number 数字
+            */
+            export function formatNumber(crc: number, fixNum = 0) {
+                let textTemp;
+                if (crc >= 1e27) {
+                    textTemp = (crc / 1e27).toFixed(fixNum) + "ae";
+                } else if (crc >= 1e24) {
+                    textTemp = (crc / 1e24).toFixed(fixNum) + "ad";
+                } else if (crc >= 1e21) {
+                    textTemp = (crc / 1e21).toFixed(fixNum) + "ac";
+                } else if (crc >= 1e18) {
+                    textTemp = (crc / 1e18).toFixed(fixNum) + "ab";
+                } else if (crc >= 1e15) {
+                    textTemp = (crc / 1e15).toFixed(fixNum) + "aa";
+                } else if (crc >= 1e12) {
+                    textTemp = (crc / 1e12).toFixed(fixNum) + "t";
+                } else if (crc >= 1e9) {
+                    textTemp = (crc / 1e9).toFixed(fixNum) + "b";
+                } else if (crc >= 1e6) {
+                    textTemp = (crc / 1e6).toFixed(fixNum) + "m";
+                } else if (crc >= 1e3) {
+                    textTemp = (crc / 1e3).toFixed(fixNum) + "k";
+                } else {
+                    textTemp = Math.round(crc).toString();
+                }
+                return textTemp;
             }
-            return textTemp;
+            /**
+              * 字符串和数字相加返回字符串
+              **/
+            export function strAddNum(str: string, num: number): string {
+                return (Number(str) + num).toString();
+            }
+            /**
+             * 数字和字符串相加返回数字
+             * */
+            export function NumAddStr(num: number, str: string): number {
+                return Number(str) + num;
+            }
         }
-
-        /**
-         * 字符串和数字相加返回字符串
-         * */
-        export function format_StrAddNum(str: string, num: number): string {
-            return (Number(str) + num).toString();
-        }
-        /**
-         * 数字和字符串相加返回数字
-         * */
-        export function format_NumAddStr(num: number, str: string): number {
-            return Number(str) + num;
-        }
-        export module Node {
+        /**节点相关*/
+        export module _Node {
 
             /**
-             * 检测节点是否超出舞台
-             * @param _Sprite 节点
-             * @param func 回调函数
-             * */
+             * @export 简单拷贝一张img，只拷贝通用属性，深度拷贝可以借鉴通过对象的深度copy
+             * @param {Laya.Image} Target 拷贝目标
+             * @return {*}  {Laya.Image}
+             */
+            export function simpleCopyImg(Target: Laya.Image): Laya.Image {
+                let Img = new Laya.Image;
+                Img.skin = Target.skin;
+                Img.width = Target.width;
+                Img.height = Target.height;
+                Img.pivotX = Target.pivotX;
+                Img.pivotY = Target.pivotY;
+                Img.scaleX = Target.scaleX;
+                Img.scaleY = Target.scaleY;
+                Img.skewX = Target.skewX;
+                Img.skewY = Target.skewY;
+                Img.rotation = Target.rotation;
+                return Img;
+            }
+            /**
+              * 检测节点是否超出舞台
+              * @param _Sprite 节点
+              * @param func 回调函数
+              * */
             export function leaveStage(_Sprite: Laya.Sprite, func: Function): Laya.Point {
                 let Parent = _Sprite.parent as Laya.Sprite;
                 let gPoint = Parent.localToGlobal(new Laya.Point(_Sprite.x, _Sprite.y));
@@ -4594,12 +4699,12 @@ export module lwg {
             }
 
             /**
-             * 检测两个节点的距离,基于舞台
-             * @param _Sprite1 节点1
-             * @param _Sprite2 节点2
-             * @param distance 距离
-             * @param func 回调函数
-             */
+            * 检测两个节点的距离是否在指定距离之内,基于舞台
+            * @param _Sprite1 节点1
+            * @param _Sprite2 节点2
+            * @param distance 距离
+            * @param func 回调函数
+            */
             export function checkTwoDistance(_Sprite1: Laya.Sprite, _Sprite2: Laya.Sprite, distance: number, func: Function): number {
                 let Parent1 = _Sprite1.parent as Laya.Sprite;
                 let gPoint1 = Parent1.localToGlobal(new Laya.Point(_Sprite1.x, _Sprite1.y));
@@ -4612,7 +4717,6 @@ export module lwg {
                 }
                 return gPoint1.distance(gPoint2.x, gPoint2.y);
             }
-
             /**
              * @export 返回子节点随着Y轴进行排序数组
              * @param {Laya.Sprite} sp 节点
@@ -4628,7 +4732,7 @@ export module lwg {
                     const element = sp.getChildAt(index);
                     arr.push(element);
                 }
-                Tools.objArrPropertySort(arr, 'y');
+                _ObjArray.onPropertySort(arr, 'y');
                 if (zOrder) {
                     for (let index = 0; index < arr.length; index++) {
                         const element = arr[index];
@@ -4655,7 +4759,7 @@ export module lwg {
              * @param {number} _pivotY 
              * @param {number} int 是转换为整数，如果内部有遮罩必须要整数,默认为false
              */
-            export function changePovit(sp: Laya.Sprite, _pivotX: number, _pivotY: number, int?: boolean): void {
+            export function changePivot(sp: Laya.Sprite, _pivotX: number, _pivotY: number, int?: boolean): void {
                 let originalPovitX = sp.pivotX;
                 let originalPovitY = sp.pivotY;
                 if (int) {
@@ -4664,6 +4768,28 @@ export module lwg {
                 }
                 if (sp.width) {
                     sp.pivot(_pivotX, _pivotY);
+                    sp.x += (sp.pivotX - originalPovitX);
+                    sp.y += (sp.pivotY - originalPovitY);
+                }
+            }
+            /**
+               * @export  Povit居中并且不改变位置
+               * @param {Laya.Sprite} sp 节点
+               * @param {number} _pivotX 
+               * @param {number} _pivotY 
+               * @param {number} int 是转换为整数，如果内部有遮罩必须要整数,默认为false
+               */
+            export function changePivotCenter(sp: Laya.Sprite, int?: boolean): void {
+                let originalPovitX = sp.pivotX;
+                let originalPovitY = sp.pivotY;
+                let _pivotX: number;
+                let _pivotY: number;
+                if (int) {
+                    _pivotX = Math.round(sp.width / 2);
+                    _pivotY = Math.round(sp.height / 2);
+                }
+                if (sp.width) {
+                    sp.pivot(sp.width / 2, sp.height / 2);
                     sp.x += (sp.pivotX - originalPovitX);
                     sp.y += (sp.pivotY - originalPovitY);
                 }
@@ -4695,7 +4821,7 @@ export module lwg {
                 for (let i = 0; i < node.numChildren; i++) {
                     indexArr.push(i);
                 }
-                let randomIndex = Tools.arrayRandomGetOut(indexArr, num);
+                let randomIndex = Tools._Array.randomGetOut(indexArr, num);
                 for (let j = 0; j < randomIndex.length; j++) {
                     childArr.push(node.getChildAt(randomIndex[j]));
                 }
@@ -4790,18 +4916,16 @@ export module lwg {
                     }
                 }
             }
-
             /**
              *通prefab过prefab创建一个实例
              * @param {Laya.Prefab} prefab 预制体
              * @param {string} [name] 名称
              * @return {*}  {Laya.Sprite}
              */
-            export function prefabCreate(prefab: Laya.Prefab, name?: string): Laya.Sprite {
+            export function createPrefab(prefab: Laya.Prefab, name?: string): Laya.Sprite {
                 let sp: Laya.Sprite = Laya.Pool.getItemByCreateFun(name ? name : prefab.json['props']['name'], prefab.create, prefab);
                 return sp;
             }
-
             /**
              *2D隐藏或者打开所有子节点
              * @param node 节点
@@ -4834,7 +4958,7 @@ export module lwg {
                 }
             }
 
-            /**3D递归向下查找子节点*/
+            /**3D递归向下查找第一个子节点*/
             export function findChild3D(parent: any, name: string): Laya.MeshSprite3D {
                 var item: Laya.MeshSprite3D = null;
                 //寻找自身一级目录下的子物体有没有该名字的子物体
@@ -4891,291 +5015,356 @@ export module lwg {
                 return arr;
             }
         }
-
-        /**
-         * 返回0或者1，用随机二分之一概率,返回后0是false，true是1，所以Boolen和number都可以判断
-         * */
-        export function randomOneHalf(): number {
-            let number;
-            number = Math.floor(Math.random() * 2);
-            return number;
-        }
-
-        /**
-         * 在某个区间内取一个整数
-         * @param section1 区间1
-         * @param section2 区间2，不输入则是0~section1
-         */
-        export function randomOneInt(section1, section2?: number): number {
-            if (section2) {
-                return Math.floor(Math.random() * (section2 - section1)) + section1;
-            } else {
-                return Math.floor(Math.random() * section1);
+        /**数字相关*/
+        export module _Number {
+            /**
+               * 返回0或者1，用随机二分之一概率,返回后0是false，true是1，所以Boolen和number都可以判断
+               * */
+            export function randomOneHalf(): number {
+                let number;
+                number = Math.floor(Math.random() * 2);
+                return number;
             }
-        }
 
-        /**
-         * 返回一个数值区间内的数个随机数
-         * @param section1 区间1
-         * @param section2 区间2,不输入则是0~section1
-         * @param count 数量默认是1个
-         * @param intSet 是否是整数,默认是整数，为true
-         */
-        export function randomCountNumer(section1: number, section2?: number, count?: number, intSet?: boolean): Array<number> {
-            let arr = [];
-            if (!count) {
-                count = 1;
+            /**
+             * 在某个区间内取一个整数
+             * @param section1 区间1
+             * @param section2 区间2，不输入则是0~section1
+             */
+            export function randomOneInt(section1, section2?: number): number {
+                if (section2) {
+                    return Math.floor(Math.random() * (section2 - section1)) + section1;
+                } else {
+                    return Math.floor(Math.random() * section1);
+                }
             }
-            if (section2) {
-                while (count > arr.length) {
-                    let num;
-                    if (intSet || intSet == undefined) {
+
+            /**
+             * 返回一个数值区间内的数个随机数
+             * @param section1 区间1
+             * @param section2 区间2,不输入则是0~section1
+             * @param count 数量默认是1个
+             * @param intSet 是否是整数,默认是整数，为true
+             */
+            export function randomCountBySection(section1: number, section2?: number, count?: number, intSet?: boolean): Array<number> {
+                let arr = [];
+                if (!count) {
+                    count = 1;
+                }
+                if (section2) {
+                    while (count > arr.length) {
+                        let num;
+                        if (intSet || intSet == undefined) {
+                            num = Math.floor(Math.random() * (section2 - section1)) + section1;
+                        } else {
+                            num = Math.random() * (section2 - section1) + section1;
+                        }
+                        arr.push(num);
+                        _Array.unique01(arr);
+                    };
+                    return arr;
+                } else {
+                    while (count > arr.length) {
+                        let num;
+                        if (intSet || intSet == undefined) {
+                            num = Math.floor(Math.random() * section1);
+                        } else {
+                            num = Math.random() * section1;
+                        }
+                        arr.push(num);
+                        _Array.unique01(arr);
+                    }
+                    return arr;
+                }
+            }
+            /**
+            * 返回一个数值区间内的1个随机数
+            * @param section1 区间1
+            * @param section2 区间2,不输入则是0~section1
+            * @param intSet 是否是整数,默认是不整数，为false
+            */
+            export function randomOneBySection(section1: number, section2?: number, intSet?: boolean): number {
+                let chage: number;
+                if (section1 > section2) {
+                    chage = section1;
+                    section1 = section2;
+                    section2 = chage;
+                }
+                if (section2) {
+                    let num: number;
+                    if (intSet) {
                         num = Math.floor(Math.random() * (section2 - section1)) + section1;
                     } else {
                         num = Math.random() * (section2 - section1) + section1;
                     }
-                    arr.push(num);
-                    Tools.arrayUnique_01(arr);
-                };
-                return arr;
-            } else {
-                while (count > arr.length) {
+                    return num;
+                } else {
                     let num;
-                    if (intSet || intSet == undefined) {
+                    if (intSet) {
                         num = Math.floor(Math.random() * section1);
                     } else {
                         num = Math.random() * section1;
                     }
-                    arr.push(num);
-                    Tools.arrayUnique_01(arr);
+                    return num;
+                }
+            }
+        }
+        /**坐标相关*/
+        export module _Point {
+            /**
+             * @export 获取当前节点在另一个节点坐标系中的局部坐标
+             * @param {Laya.Sprite} element 坐标节点
+             * @param {Laya.Sprite} Other 另一个节点
+             */
+            export function getOtherLocal(element: Laya.Sprite, Other: Laya.Sprite): Laya.Point {
+                let Parent = element.parent as Laya.Image;
+                let gPoint = Parent.localToGlobal(new Laya.Point(element.x, element.y));
+                return Other.globalToLocal(gPoint);
+            }
+            /**
+             * 根据角度计算弧度
+             * @param angle 角度
+             */
+            export function angleByRad(angle: number) {
+                return angle / 180 * Math.PI;
+            }
+            /**
+             *返回两个二维物体的距离
+             * @param {Laya.Sprite} obj1
+             * @param {Laya.Sprite} obj2
+             * @return {*}  {number}
+             */
+            export function twoNodeDistance(obj1: Laya.Sprite, obj2: Laya.Sprite): number {
+                let point = new Laya.Point(obj1.x, obj1.y);
+                let len = point.distance(obj2.x, obj2.y);
+                return len;
+            }
+            /**
+              * 在Laya2维世界中
+              * 求向量的夹角在坐标系中的角度
+              * @param x 坐标x
+              * @param y 坐标y
+              * */
+            export function pointByAngle(x: number, y: number): number {
+                let radian: number = Math.atan2(x, y) //弧度  0.6435011087932844
+                let angle: number = 90 - radian * (180 / Math.PI); //角度  36.86989764584402;
+                if (angle <= 0) {
+                    angle = 270 + (90 + angle);
+                }
+                return angle - 90;
+            };
+
+            /**
+              * 在Laya2维世界中,属性检查器中的角度
+              * 通过一个角度，返回一个单位向量
+              * @param x 坐标x
+              * @param y 坐标y
+              * */
+            export function angleByPoint(angle): Laya.Point {
+                let radian = (90 - angle) / (180 / Math.PI);
+                let p = new Laya.Point(Math.sin(radian), Math.cos(radian));
+                p.normalize();
+                return p;
+            };
+
+            /**
+              * 二维坐标中一个点按照另一个点旋转一定的角度后，得到的点
+              * @param x0 原点X
+              * @param y0 原点Y
+              * @param x1 旋转点X
+              * @param y1 旋转点Y
+              * @param angle 角度
+              */
+            export function dotRotatePoint(x0: number, y0: number, x1: number, y1: number, angle: number): Laya.Point {
+                let x2 = x0 + (x1 - x0) * Math.cos(angle * Math.PI / 180) - (y1 - y0) * Math.sin(angle * Math.PI / 180);
+                let y2 = y0 + (x1 - x0) * Math.sin(angle * Math.PI / 180) + (y1 - y0) * Math.cos(angle * Math.PI / 180);
+                return new Laya.Point(x2, y2);
+            }
+
+            /**
+             * 根据不同的角度和速度计算坐标,从而产生位移
+             * @param angle 角度
+             * @param len 长度
+             * */
+            export function angleAndLenByPoint(angle: number, len: number): Laya.Point {
+                if (angle % 90 === 0 || !angle) {
+                    //debugger
+                }
+                const speedXY = { x: 0, y: 0 };
+                speedXY.x = len * Math.cos(angle * Math.PI / 180);
+                speedXY.y = len * Math.sin(angle * Math.PI / 180);
+                return new Laya.Point(speedXY.x, speedXY.y);
+            }
+
+            /**
+            * 求圆上的点的坐标，可以根据角度和半径作出圆形位移
+            * @param angle 角度
+            * @param radius 半径
+            * @param centerPos 原点
+            */
+            export function getRoundPos(angle: number, radius: number, centerPos: Laya.Point): Laya.Point {
+                var center = centerPos; //圆心坐标
+                var radius = radius; //半径
+                var hudu = (2 * Math.PI / 360) * angle; //90度角的弧度
+
+                var X = center.x + Math.sin(hudu) * radius; //求出90度角的x坐标
+                var Y = center.y - Math.cos(hudu) * radius; //求出90度角的y坐标
+                return new Laya.Point(X, Y);
+            }
+
+            /**
+             * 返回在一个中心点周围的随机产生数个点的数组
+             * @param centerPos 中心点坐标
+             * @param radiusX X轴半径
+             * @param radiusY Y轴半径
+             * @param count 产生多少个随机点
+             */
+            export function randomPointByCenter(centerPos: Laya.Point, radiusX: number, radiusY: number, count?: number): Array<Laya.Point> {
+                if (!count) {
+                    count = 1;
+                }
+                let arr: Array<Laya.Point> = [];
+                for (let index = 0; index < count; index++) {
+                    let x0 = Tools._Number.randomCountBySection(0, radiusX, 1, false);
+                    let y0 = Tools._Number.randomCountBySection(0, radiusY, 1, false);
+                    let diffX = Tools._Number.randomOneHalf() == 0 ? x0[0] : -x0[0];
+                    let diffY = Tools._Number.randomOneHalf() == 0 ? y0[0] : -y0[0];
+                    let p = new Laya.Point(centerPos.x + diffX, centerPos.y + diffY);
+                    arr.push(p);
                 }
                 return arr;
             }
-        }
-
-        /**
-        * 返回一个数值区间内的1个随机数
-        * @param section1 区间1
-        * @param section2 区间2,不输入则是0~section1
-        * @param intSet 是否是整数,默认是不整数，为false
-        */
-        export function randomOneNumber(section1: number, section2?: number, intSet?: boolean): number {
-            let chage: number;
-            if (section1 > section2) {
-                chage = section1;
-                section1 = section2;
-                section2 = chage;
-            }
-            if (section2) {
-                let num: number;
-                if (intSet) {
-                    num = Math.floor(Math.random() * (section2 - section1)) + section1;
-                } else {
-                    num = Math.random() * (section2 - section1) + section1;
+            /**
+             * @export 返回两个点之间连线上均匀排布的点
+             * @param {Laya.Point} p1 点1
+             * @param {Laya.Point} p2 点2
+             * @param {number} num 个数
+             * @return {*}  {Array<Laya.Point>}
+             */
+            export function getPArrBetweenTwoP(p1: Laya.Point, p2: Laya.Point, num: number): Array<Laya.Point> {
+                let arr: Array<Laya.Point> = [];
+                let x0 = p2.x - p1.x;
+                let y0 = p2.y - p1.y;
+                for (let index = 0; index < num; index++) {
+                    arr.push(new Laya.Point(p1.x + (x0 / num) * index, p1.y + (y0 / num) * index));
                 }
-                return num;
-            } else {
-                let num;
-                if (intSet) {
-                    num = Math.floor(Math.random() * section1);
-                } else {
-                    num = Math.random() * section1;
+                if (arr.length >= 1) {
+                    arr.unshift();
                 }
-                return num;
-            }
-        }
-
-
-        /**返回两个二维物体的距离*/
-        export function d2_twoObjectsLen(obj1: Laya.Sprite, obj2: Laya.Sprite): number {
-            let point = new Laya.Point(obj1.x, obj1.y);
-            let len = point.distance(obj2.x, obj2.y);
-            return len;
-        }
-
-        /**
-          * 在Laya2维世界中
-          * 求向量的夹角在坐标系中的角度
-          * @param x 坐标x
-          * @param y 坐标y
-          * */
-        export function d2_Vector_Angle(x, y): number {
-            let radian: number = Math.atan2(x, y) //弧度  0.6435011087932844
-            let angle: number = 90 - radian * (180 / Math.PI); //角度  36.86989764584402;
-            if (angle <= 0) {
-                angle = 270 + (90 + angle);
-            }
-            return angle - 90;
-        };
-
-        /**
-         * 在Laya2维世界中,属性检查器中的角度
-         * 通过一个角度，返回一个单位向量
-         * @param x 坐标x
-         * @param y 坐标y
-         * */
-        export function d2_angle_Vector(angle): Laya.Point {
-            let radian = (90 - angle) / (180 / Math.PI);
-            let p = new Laya.Point(Math.sin(radian), Math.cos(radian));
-            p.normalize();
-            return p;
-        };
-
-        /**
-         * 返回两个三维物体的世界空间的距离
-         * @param obj1 物体1
-         * @param obj2 物体2
-         */
-        export function d3_twoObjectsLen(obj1: Laya.MeshSprite3D, obj2: Laya.MeshSprite3D): number {
-            let obj1V3: Laya.Vector3 = obj1.transform.position;
-            let obj2V3: Laya.Vector3 = obj2.transform.position;
-            let p = new Laya.Vector3();
-            // 向量相减后计算长度
-            Laya.Vector3.subtract(obj1V3, obj2V3, p);
-            let lenp = Laya.Vector3.scalarLength(p);
-            return lenp;
-        }
-
-        /**
-         * 返回两个3维向量之间的距离
-        * @param v1 物体1
-        * @param v2 物体2
-        */
-        export function d3_twoPositionLen(v1: Laya.Vector3, v2: Laya.Vector3): number {
-            let p = d3_twoSubV3(v1, v2);
-            let lenp = Laya.Vector3.scalarLength(p);
-            return lenp;
-        }
-
-        /**
-          * 返回相同坐标系中两个三维向量的相减向量（obj1-obj2）
-          * @param V3_01 向量1
-          * @param V3_02 向量2
-          * @param normalizing 是否是单位向量,默认为不是
-          */
-        export function d3_twoSubV3(V3_01: Laya.Vector3, V3_02: Laya.Vector3, normalizing?: boolean): Laya.Vector3 {
-            let p = new Laya.Vector3();
-            // 向量相减后计算长度
-            Laya.Vector3.subtract(V3_01, V3_02, p);
-            if (normalizing) {
-                let p1: Laya.Vector3 = new Laya.Vector3();
-                Laya.Vector3.normalize(p, p1);
-                return p1;
-            } else {
-                return p;
-            }
-        }
-
-        /**
-          * 3D世界中，制约一个物体不会超过和另一个点的最长距离,如果超过或者等于则设置这个球面坐标，并且返回这个坐标
-          * @param originV3 原点的位置
-          * @param obj 物体
-          * @param length 长度
-         */
-        export function d3_maximumDistanceLimi(originV3: Laya.Vector3, obj: Laya.Sprite3D, length: number): Laya.Vector3 {
-            // 两个向量相减等于手臂到手的向量
-            let subP = new Laya.Vector3();
-            let objP = obj.transform.position;
-            Laya.Vector3.subtract(objP, originV3, subP);
-            // 向量的长度
-            let lenP = Laya.Vector3.scalarLength(subP);
-            if (lenP >= length) {
-                // 归一化向量
-                let normalizP = new Laya.Vector3();
-                Laya.Vector3.normalize(subP, normalizP);
-                // 坐标
-                let x = originV3.x + normalizP.x * length;
-                let y = originV3.y + normalizP.y * length;
-                let z = originV3.z + normalizP.z * length;
-                let p = new Laya.Vector3(x, y, z);
-                obj.transform.position = p;
-                return p;
-            }
-        }
-
-        /**
-         * 射线检测，返回射线扫描结果，可以筛选结果
-         * @param camera 摄像机
-         * @param scene3D 当前场景
-         * @param vector2 触摸点
-         * @param filtrateName 找出指定触摸的模型的信息，如果不传则返回全部信息数组；
-         */
-        export function d3_rayScanning(camera: Laya.Camera, scene3D: Laya.Scene3D, vector2: Laya.Vector2, filtrateName?: string): any {
-            /**射线*/
-            let _ray: Laya.Ray = new Laya.Ray(new Laya.Vector3(0, 0, 0), new Laya.Vector3(0, 0, 0));
-            /**射线扫描结果*/
-            let outs: Array<Laya.HitResult> = new Array<Laya.HitResult>();
-            //射线碰撞到碰撞框，碰撞框的isTrigger属性要勾上，这样只检测碰撞，不产生碰撞反应
-            camera.viewportPointToRay(vector2, _ray);
-            scene3D.physicsSimulation.rayCastAll(_ray, outs);
-            if (outs.length != 0 && filtrateName) {
-                let outsChaild = null;
-                for (var i = 0; i < outs.length; i++) {
-                    //找到挡屏
-                    let hitResult = outs[i].collider.owner;
-                    if (hitResult.name === filtrateName) {
-                        // 开启移动
-                        outsChaild = outs[i];
-                    }
+                if (arr.length >= 1) {
+                    arr.pop();
                 }
-                return outsChaild;
-            } else {
-                return outs;
+                return arr;
             }
-        }
-
-        /**
-         * 将3D坐标转换成屏幕坐标
-         * @param v3 3D世界的坐标
-         * @param camera 摄像机
-        */
-        export function d3_TransitionScreenPointfor(v3: Laya.Vector3, camera: Laya.Camera): Laya.Vector2 {
-            let ScreenV4 = new Laya.Vector4();
-            camera.viewport.project(v3, camera.projectionViewMatrix, ScreenV4);
-            let point: Laya.Vector2 = new Laya.Vector2();
-            point.x = ScreenV4.x;
-            point.y = ScreenV4.y;
-            return point;
-        }
-
-        /**
-          * 播放动画。
-          * @param Sp3D 节点
-          * @param name 如果为null则播放默认动画，否则按名字播放动画片段。
-          * @param normalizedTime 归一化的播放起始时间。
-          * @param layerIndex 层索引。
-          */
-        export function d3_animatorPlay(Sp3D: Laya.Sprite3D, aniName?: string, normalizedTime?: number, layerIndex?: number): Laya.Animator {
-            let sp3DAni = Sp3D.getComponent(Laya.Animator) as Laya.Animator;
-            if (!sp3DAni) {
-                console.log(Sp3D.name, '没有动画组件');
-                return;
-            }
-            if (!layerIndex) {
-                layerIndex = 0;
-            }
-            sp3DAni.play(aniName, layerIndex, normalizedTime);
-            return sp3DAni;
-        }
-
-        /**
-         * 返回一个向量相对于一个点的反向向量，或者反向向量的单位向量，可用于一个物体被另一个物体击退
-         * @param type 二维还是三维
-         * @param Vecoter1 固定点
-         * @param Vecoter2 反弹物体向量
-         * @param normalizing 是否归一成单位向量
-         */
-        export function dAll_reverseVector(type: string, Vecoter1: any, Vecoter2: any, normalizing: boolean): Laya.Vector3 {
-            let p;
-            if (type === '2d') {
+            /**
+              * 返回一个向量相对于一个点的反向向量，或者反向向量的单位向量，可用于一个物体被另一个物体击退
+              * @param type 二维还是三维
+              * @param Vecoter1 固定点
+              * @param Vecoter2 反弹物体向量
+              * @param normalizing 是否归一成单位向量
+              */
+            export function reverseVector(Vecoter1: any, Vecoter2: any, normalizing: boolean): Laya.Vector3 {
+                let p;
                 p = new Laya.Point(Vecoter1.x - Vecoter2.x, Vecoter1.y - Vecoter2.y);
                 if (normalizing) {
                     p.normalize();
                 }
                 return p;
+            }
+        }
+        /**3D相关*/
+        export module _3D {
+            /**
+              * 返回两个三维物体的世界空间的距离
+              * @param obj1 物体1
+              * @param obj2 物体2
+              */
+            export function twoNodeDistance(obj1: Laya.MeshSprite3D, obj2: Laya.MeshSprite3D): number {
+                let obj1V3: Laya.Vector3 = obj1.transform.position;
+                let obj2V3: Laya.Vector3 = obj2.transform.position;
+                let p = new Laya.Vector3();
+                // 向量相减后计算长度
+                Laya.Vector3.subtract(obj1V3, obj2V3, p);
+                let lenp = Laya.Vector3.scalarLength(p);
+                return lenp;
+            }
+            /**
+              * 返回两个3维向量之间的距离
+              * @param v1 物体1
+              * @param v2 物体2
+              */
+            export function twoPositionDistance(v1: Laya.Vector3, v2: Laya.Vector3): number {
+                let p = twoSubV3(v1, v2);
+                let lenp = Laya.Vector3.scalarLength(p);
+                return lenp;
+            }
+            /**
+              * 返回相同坐标系中两个三维向量的相减向量（obj1-obj2）
+              * @param V31 向量1
+              * @param V32 向量2
+              * @param normalizing 是否是单位向量,默认为不是
+              */
+            export function twoSubV3(V31: Laya.Vector3, V32: Laya.Vector3, normalizing?: boolean): Laya.Vector3 {
+                let p = new Laya.Vector3();
+                // 向量相减后计算长度
+                Laya.Vector3.subtract(V31, V32, p);
+                if (normalizing) {
+                    let p1: Laya.Vector3 = new Laya.Vector3();
+                    Laya.Vector3.normalize(p, p1);
+                    return p1;
+                } else {
+                    return p;
+                }
+            }
 
-            } else if (type === '3d') {
-                p = new Laya.Vector3(Vecoter1.x - Vecoter2.x, Vecoter1.y - Vecoter2.y, Vecoter1.z - Vecoter2.z);
+            /**
+             * 3D世界中，制约一个物体不会超过和另一个点的最长距离,如果超过或者等于则设置这个球面坐标，并且返回这个坐标
+             * @param originV3 原点的位置
+             * @param obj 物体
+             * @param length 长度
+             */
+            export function maximumDistanceLimi(originV3: Laya.Vector3, obj: Laya.Sprite3D, length: number): Laya.Vector3 {
+                // 两个向量相减等于手臂到手的向量
+                let subP = new Laya.Vector3();
+                let objP = obj.transform.position;
+                Laya.Vector3.subtract(objP, originV3, subP);
+                // 向量的长度
+                let lenP = Laya.Vector3.scalarLength(subP);
+                if (lenP >= length) {
+                    // 归一化向量
+                    let normalizP = new Laya.Vector3();
+                    Laya.Vector3.normalize(subP, normalizP);
+                    // 坐标
+                    let x = originV3.x + normalizP.x * length;
+                    let y = originV3.y + normalizP.y * length;
+                    let z = originV3.z + normalizP.z * length;
+                    let p = new Laya.Vector3(x, y, z);
+                    obj.transform.position = p;
+                    return p;
+                }
+            }
+            /**
+              * 将3D坐标转换成屏幕坐标
+              * @param v3 3D世界的坐标
+              * @param camera 摄像机
+             */
+            export function posToScreen(v3: Laya.Vector3, camera: Laya.Camera): Laya.Vector2 {
+                let ScreenV4 = new Laya.Vector4();
+                camera.viewport.project(v3, camera.projectionViewMatrix, ScreenV4);
+                let point: Laya.Vector2 = new Laya.Vector2();
+                point.x = ScreenV4.x;
+                point.y = ScreenV4.y;
+                return point;
+            }
+            /**
+              * 返回一个向量相对于一个点的反向向量，或者反向向量的单位向量，可用于一个物体被另一个物体击退
+              * @param type 二维还是三维
+              * @param Vecoter1 固定点
+              * @param Vecoter2 反弹物体向量
+              * @param normalizing 是否归一成单位向量
+              */
+            export function reverseVector(Vecoter1: any, Vecoter2: any, normalizing: boolean): Laya.Vector3 {
+                let p = new Laya.Vector3(Vecoter1.x - Vecoter2.x, Vecoter1.y - Vecoter2.y, Vecoter1.z - Vecoter2.z);
                 if (normalizing) {
                     let returnP = new Laya.Vector3();
                     Laya.Vector3.normalize(p, returnP);
@@ -5184,16 +5373,93 @@ export module lwg {
                     return p;
                 }
             }
-        }
 
-        export function sk_indexControl(sk: Laya.Skeleton, name: string): void {
-            sk.play(name, true);//从初始位置开始继续播放
-            sk.player.currentTime = 15 * 1000 / sk.player.cacheFrameRate;
-        }
+            // /**
+            //   * 射线检测，返回射线扫描结果，可以筛选结果
+            //   * @param camera 摄像机
+            //   * @param scene3D 当前场景
+            //   * @param vector2 触摸点
+            //   * @param filtrateName 找出指定触摸的模型的信息，如果不传则返回全部信息数组；
+            //   */
+            // export function rayScanningFirst(camera: Laya.Camera, scene3D: Laya.Scene3D, vector2: Laya.Vector2): string {
+            //     /**射线*/
+            //     let _ray: Laya.Ray = new Laya.Ray(new Laya.Vector3(0, 0, 0), new Laya.Vector3(0, 0, 0));
+            //     /**射线扫描结果*/
+            //     let outs: Array<Laya.HitResult> = new Array<Laya.HitResult>();
+            //     //射线碰撞到碰撞框，碰撞框的isTrigger属性要勾上，这样只检测碰撞，不产生碰撞反应
+            //     camera.viewportPointToRay(vector2, _ray);
+            //     scene3D.physicsSimulation.rayCastAll(_ray, outs);
+            //     for (var i = 0; i < outs.length; i++) {
+            //         //找到挡屏
+            //         let hitResult = outs[i].collider.owner;
+            //         if (i == 0) {
+            //             console.log(hitResult.name);
+            //             return hitResult.name;
+            //         }
+            //     }
+            // }
+            /**
+             * 射线检测，返回射线扫描结果，可以筛选结果
+             * @param camera 摄像机
+             * @param scene3D 当前场景
+             * @param vector2 触摸点
+             * @param filtrateName 找出指定触摸的模型的信息，如果不传则返回全部信息数组；
+             */
+            export function rayScanning(camera: Laya.Camera, scene3D: Laya.Scene3D, vector2: Laya.Vector2, filtrateName?: Array<string>): any {
+                /**射线*/
+                let _ray: Laya.Ray = new Laya.Ray(new Laya.Vector3(0, 0, 0), new Laya.Vector3(0, 0, 0));
+                /**射线扫描结果*/
+                let outs: Array<Laya.HitResult> = new Array<Laya.HitResult>();
+                //射线碰撞到碰撞框，碰撞框的isTrigger属性要勾上，这样只检测碰撞，不产生碰撞反应
+                camera.viewportPointToRay(vector2, _ray);
+                scene3D.physicsSimulation.rayCastAll(_ray, outs);
+                if (filtrateName) {
+                    let outsChaild = null;
+                    for (var i = 0; i < outs.length; i++) {
+                        //找到挡屏
+                        let hitResult = outs[i].collider.owner;
+                        for (let index = 0; index < filtrateName.length; index++) {
+                            if (hitResult.name == filtrateName[index]) {
+                                // 开启移动
+                                outsChaild = outs[i];
+                            }
+                        }
+                    }
+                    return outsChaild;
+                } else {
+                    return outs;
+                }
+            }
 
+            /**
+              * 播放动画。
+              * @param Sp3D 节点
+              * @param name 如果为null则播放默认动画，否则按名字播放动画片段。
+              * @param normalizedTime 归一化的播放起始时间。
+              * @param layerIndex 层索引。
+              */
+            export function animatorPlay(Sp3D: Laya.Sprite3D, aniName?: string, normalizedTime?: number, layerIndex?: number): Laya.Animator {
+                let sp3DAni = Sp3D.getComponent(Laya.Animator) as Laya.Animator;
+                if (!sp3DAni) {
+                    console.log(Sp3D.name, '没有动画组件');
+                    return;
+                }
+                if (!layerIndex) {
+                    layerIndex = 0;
+                }
+                sp3DAni.play(aniName, layerIndex, normalizedTime);
+                return sp3DAni;
+            }
+        }
+        /**骨骼动画相关*/
+        export module _Skeleton {
+            export function sk_indexControl(sk: Laya.Skeleton, name: string): void {
+                sk.play(name, true);//从初始位置开始继续播放
+                sk.player.currentTime = 15 * 1000 / sk.player.cacheFrameRate;
+            }
+        }
         /**绘制类*/
-        export module Draw {
-
+        export module _Draw {
             /**
               * 为一个节点绘制一个扇形遮罩
               * 想要遮罩的形状发生变化，必须先将父节点的cacheAs改回“none”，接着改变其角度，再次将cacheAs改为“bitmap”，必须在同一帧内进行，因为是同一帧，所以在当前帧最后或者下一帧前表现出来，帧内时间不会表现任何状态，这是个思路，帧内做任何变化都不会显示，只要帧结尾改回来就行。
@@ -5227,7 +5493,7 @@ export module lwg {
              */
             export function reverseRoundMask(node, x: number, y: number, radius: number, eliminate?: boolean): Laya.Sprite {
                 if (eliminate == undefined || eliminate == true) {
-                    Node.removeAllChildren(node);
+                    _Node.removeAllChildren(node);
                 }
                 let interactionArea = new Laya.Sprite();
                 interactionArea.name = 'reverseRoundMask';
@@ -5240,8 +5506,6 @@ export module lwg {
                 interactionArea.pos(x, y);
                 return interactionArea;
             }
-
-
             /**
              * 在一个节点上绘制一个圆形反向遮罩,可以绘制很多个，清除直接删除node中的子节点即可
              * 圆角矩形的中心点在节点的中间
@@ -5255,7 +5519,7 @@ export module lwg {
              */
             export function reverseRoundrectMask(node, x: number, y: number, width: number, height: number, round: number, eliminate?: boolean): void {
                 if (eliminate == undefined || eliminate == true) {
-                    Node.removeAllChildren(node);
+                    _Node.removeAllChildren(node);
                 }
                 let interactionArea = new Laya.Sprite();
                 interactionArea.name = 'reverseRoundrectMask';
@@ -5272,430 +5536,323 @@ export module lwg {
                 interactionArea.pos(x, y);
             }
         }
-
-        /**
-         * 对象数组按照对象的某个属性排序
-         * @param array 对象数组
-         * @param property 对象中一个相同的属性名称
-         */
-        export function objArrPropertySort(array: Array<any>, property: string): Array<any> {
-            var compare = function (obj1, obj2) {
-                var val1 = obj1[property];
-                var val2 = obj2[property];
-                if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
-                    val1 = Number(val1);
-                    val2 = Number(val2);
-                }
-                if (val1 < val2) {
-                    return -1;
-                } else if (val1 > val2) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            }
-            array.sort(compare);
-            return array;
-        }
-
-        /**
-         * 对比两个对象数组中的某个对象属性，返回相对第一个数组中有的这个property属性，第二个数组中没有这个属性的对象数组，例如两张数据表，通过名字查找，objArr2有8个不同的名字，objArr1也有（也可以没有）这个8个名字，并且objArr1还多了其他两个名字，那么返回objArr1中这两个个名字
-         * @param objArr1 对象数组1
-         * @param objArr2 对象数组2
-         * @param property 需要对比的属性名称
-        */
-        export function objArr2DifferentPropertyObjArr1(objArr1: Array<any>, objArr2: Array<any>, property: string): Array<any> {
-            var result = [];
-            for (var i = 0; i < objArr1.length; i++) {
-                var obj1 = objArr1[i];
-                var obj1Name = obj1[property];
-                var isExist = false;
-
-                for (var j = 0; j < objArr2.length; j++) {
-                    var obj2 = objArr2[j];
-                    var obj2Name = obj2[property];
-                    if (obj2Name == obj1Name) {
-                        isExist = true;
-                        break;
-                    }
-                }
-                if (!isExist) {
-                    result.push(obj1);
-                }
-            }
-            return result;
-        }
-
-        /**
-         * 返回两个数组对象中，有相同属性的对象集合
-         * @param data1 对象数组1
-         * @param data2 对象数组2
-         * @param property 需要对比的属性名称
-         */
-        export function objArr1IdenticalPropertyObjArr2(data1: Array<any>, data2: Array<any>, property: string): Array<any> {
-            var result = [];
-            for (var i = 0; i < data1.length; i++) {
-                var obj1 = data1[i];
-                var obj1Name = obj1[property];
-                var isExist = false;
-
-                for (var j = 0; j < data2.length; j++) {
-                    var obj2 = data2[j];
-                    var obj2Name = obj2[property];
-                    if (obj2Name == name) {
-                        isExist = true;
-                        break;
-                    }
-                }
-                if (isExist) {
-                    result.push(obj1);
-                }
-            }
-            return result;
-        }
-
-        /**
-         * 对象数组去重，根据对象的某个属性值去重
-         * @param arr 数组
-         * @param property 属性
-         * */
-        export function objArrUnique(arr, property): void {
-            for (var i = 0, len = arr.length; i < len; i++) {
-                for (var j = i + 1, len = arr.length; j < len; j++) {
-                    if (arr[i][property] === arr[j][property]) {
-                        arr.splice(j, 1);
-                        j--;        // 每删除一个数j的值就减1
-                        len--;      // j值减小时len也要相应减1（减少循环次数，节省性能）   
-                    }
-                }
-            }
-            return arr;
-        }
-
-        /**
-         * 根据一个对像的属性，从对象数组中返回某个属性的值数组
-         * @param arr 
-         * @param property 
-         */
-        export function objArrGetValue(objArr, property): Array<any> {
-            let arr = [];
-            for (let i = 0; i < objArr.length; i++) {
-                if (objArr[i][property]) {
-                    arr.push(objArr[i][property]);
-                }
-            }
-            return arr;
-        }
-
-        /**
-         * 对象数组的拷贝
-         * @param ObjArray 需要拷贝的对象数组 
-         */
-        export function objArray_Copy(ObjArray): any {
-            var sourceCopy = ObjArray instanceof Array ? [] : {};
-            for (var item in ObjArray) {
-                sourceCopy[item] = typeof ObjArray[item] === 'object' ? obj_Copy(ObjArray[item]) : ObjArray[item];
-            }
-            return sourceCopy;
-        }
-
-        /**
-         * 对象的拷贝
-         * @param obj 需要拷贝的对象
-         */
-        export function obj_Copy(obj) {
-            var objCopy = {};
-            for (const item in obj) {
-                if (obj.hasOwnProperty(item)) {
-                    const element = obj[item];
-                    if (typeof element === 'object') {
-                        // 其中有一种情况是对某个对象值为数组的拷贝
-                        if (Array.isArray(element)) {
-                            let arr1 = array_Copy(element);
-                            objCopy[item] = arr1;
-                        } else {
-                            obj_Copy(element);
-                        }
-                    } else {
-                        objCopy[item] = element;
-                    }
-                }
-            }
-            return objCopy;
-        }
-
-        /**
-         * 往第一个数组中陆续添加第二个数组中的元素
-         * @param array1 
-         * @param array2
-         */
-        export function arrayAddToarray(array1, array2): Array<any> {
-            for (let index = 0; index < array2.length; index++) {
-                const element = array2[index];
-                array1.push(element);
-            }
-            return array1;
-        }
-
-        /**
-         * 从一个数组中随机取出几个元素，如果刚好是数组长度，则等于是乱序,此方法不会改变原数组
-         * @param arr 数组
-         * @param num 取出几个元素默认为1个
-         */
-        export function arrayRandomGetOut(arr: Array<any>, num?: number): any {
-            if (!num) {
-                num = 1;
-            }
-            let arrCopy = Tools.array_Copy(arr);
-            let arr0 = [];
-            if (num > arrCopy.length) {
-                return '数组长度小于取出的数！';
-            } else {
-                for (let index = 0; index < num; index++) {
-                    let ran = Math.round(Math.random() * (arrCopy.length - 1));
-                    let a1 = arrCopy[ran];
-                    arrCopy.splice(ran, 1);
-                    arr0.push(a1);
-                }
-                return arr0;
-            }
-        }
-
-        /**
-        * 从一个数组中随机取出1个元素
-        * @param arr 数组
-        */
-        export function arrayRandomGetOne(arr: Array<any>): any {
-            let arrCopy = Tools.array_Copy(arr);
-            let ran = Math.round(Math.random() * (arrCopy.length - 1));
-            return arrCopy[ran];
-        }
-
-        /**
-         * 普通数组复制 
-         * @param arr1 被复制的数组
-         */
-        export function array_Copy(arr1): Array<any> {
-            var arr = [];
-            for (var i = 0; i < arr1.length; i++) {
-                arr.push(arr1[i]);
-            }
-            return arr;
-        }
-
-        /**
-         * 数组去重
-         * @param arr 数组
-        */
-        export function arrayUnique_01(arr): Array<any> {
-            for (var i = 0, len = arr.length; i < len; i++) {
-                for (var j = i + 1, len = arr.length; j < len; j++) {
-                    if (arr[i] === arr[j]) {
-                        arr.splice(j, 1);
-                        j--;        // 每删除一个数j的值就减1
-                        len--;      // j值减小时len也要相���减1（减少循环次数，节省性能）   
-                    }
-                }
-            }
-            return arr;
-        }
-
-        /**数组去重*/
-        export function arrayUnique_02(arr): Array<any> {
-            arr = arr.sort();
-            var arr1 = [arr[0]];
-            for (var i = 1, len = arr.length; i < len; i++) {
-                if (arr[i] !== arr[i - 1]) {
-                    arr1.push(arr[i]);
-                }
-            }
-            return arr1;
-        }
-
-        /**ES6数组去重,返回的数组是新数组，需接收*/
-        export function arrayUnique_03(arr): Array<any> {
-            return Array.from(new Set(arr));
-        }
-
-        /**
-         * 返回从第一个数组中排除第二个数组中的元素，也就是第二个数组中没有第一个数组中的这些元素，如果第一个数组包含第二个数组，那么刚好等于是第一个数组排除第二个数组的元素
-         * @param arr1 
-         * @param arr2 
-         */
-        export function array1ExcludeArray2(arr1, arr2): Array<any> {
-
-            let arr1Capy = array_Copy(arr1);
-            let arr2Capy = array_Copy(arr2);
-
-            // console.log(arr1,arr2)
-            for (let i = 0; i < arr1Capy.length; i++) {
-                for (let j = 0; j < arr2Capy.length; j++) {
-                    if (arr1Capy[i] == arr2Capy[j]) {
-                        arr1Capy.splice(i, 1);
-                        i--;
-                    }
-                }
-            }
-            return arr1Capy;
-        }
-
-        /**
-         * 找出几个数组中都有的元素，或者相互没有的元素，
-         * 查找方法如下：如果某个元素的个数等于数组个数，这说明他们都有；
-         * @param arrays 数组组成的数组
-         * @param exclude 默认为false,false为返回都有的元素，true为返回排除这些相同元素，也就是相互没有的元素
-         */
-        export function array_ExcludeArrays(arrays: Array<Array<any>>, exclude?: boolean): Array<any> {
-            // 避免三重for循环嵌套，一步一步做
-            // 取出所有元素
-            let arr0 = [];
-            for (let i = 0; i < arrays.length; i++) {
-                for (let j = 0; j < arrays[i].length; j++) {
-                    arr0.push(arrays[i][j]);
-                }
-            }
-            // 保留arr0，赋值一份
-            let arr1 = Tools.array_Copy(arr0);
-            // 去重排列出元素列表
-            let arr2 = Tools.arrayUnique_01(arr1);
-
-            // 列出记录数量的数组
-            let arrNum = [];
-            for (let k = 0; k < arr2.length; k++) {
-                arrNum.push({
-                    name: arr2[k],
-                    num: 0,
-                });
-            }
-
-            // 记录数量
-            for (let l = 0; l < arr0.length; l++) {
-                for (let m = 0; m < arrNum.length; m++) {
-                    if (arr0[l] == arrNum[m]['name']) {
-                        arrNum[m]['num']++;
-                    }
-                }
-            }
-            // 找出数量和arrays长度相同或者不相同的数组
-            let arrAllHave = [];
-            let arrDiffHave = [];
-            for (let n = 0; n < arrNum.length; n++) {
-                const element = arrNum[n];
-                if (arrNum[n]['num'] == arrays.length) {
-                    arrAllHave.push(arrNum[n]['name']);
-                } else {
-                    arrDiffHave.push(arrNum[n]['name']);
-                }
-            }
-            if (!exclude) {
-                return arrAllHave;
-            } else {
-                return arrDiffHave;
-            }
-        }
-
-
-        export module Point {
+        /**对象数组相关*/
+        export module _ObjArray {
             /**
-              * 二维坐标中一个点按照另一个点旋转一定的角度后，得到的点
-              * @param x0 原点X
-              * @param y0 原点Y
-              * @param x1 旋转点X
-              * @param y1 旋转点Y
-              * @param angle 角度
+              * 对象数组按照对象的某个属性排序
+              * @param array 对象数组
+              * @param property 对象中一个相同的属性名称
               */
-            export function dotRotatePoint(x0, y0, x1, y1, angle): Laya.Point {
-                let x2 = x0 + (x1 - x0) * Math.cos(angle * Math.PI / 180) - (y1 - y0) * Math.sin(angle * Math.PI / 180);
-                let y2 = y0 + (x1 - x0) * Math.sin(angle * Math.PI / 180) + (y1 - y0) * Math.cos(angle * Math.PI / 180);
-                return new Laya.Point(x2, y2);
-            }
-
-            /**
-             * 根据不同的角度和速度计算坐标,从而产生位移
-             * @param angle 角度
-             * @param speed 移动速度
-             * */
-            export function SpeedXYByAngle(angle: number, speed: number): Laya.Point {
-                if (angle % 90 === 0 || !angle) {
-                    //debugger
+            export function onPropertySort(array: Array<any>, property: string): Array<any> {
+                var compare = function (obj1, obj2) {
+                    var val1 = obj1[property];
+                    var val2 = obj2[property];
+                    if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
+                        val1 = Number(val1);
+                        val2 = Number(val2);
+                    }
+                    if (val1 < val2) {
+                        return -1;
+                    } else if (val1 > val2) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
                 }
-                const speedXY = { x: 0, y: 0 };
-                speedXY.x = speed * Math.cos(angle * Math.PI / 180);
-                speedXY.y = speed * Math.sin(angle * Math.PI / 180);
-                return new Laya.Point(speedXY.x, speedXY.y);
+                array.sort(compare);
+                return array;
             }
 
             /**
-            * 求圆上的点的坐标，可以根据角度和半径作出圆形位移
-            * @param angle 角度
-            * @param radius 半径
-            * @param centerPos 原点
-            */
-            export function getRoundPos(angle: number, radius: number, centerPos: Laya.Point): Laya.Point {
-                var center = centerPos; //圆心坐标
-                var radius = radius; //半径
-                var hudu = (2 * Math.PI / 360) * angle; //90度角的弧度
-
-                var X = center.x + Math.sin(hudu) * radius; //求出90度角的x坐标
-                var Y = center.y - Math.cos(hudu) * radius; //求出90度角的y坐标
-                return new Laya.Point(X, Y);
-            }
-
-            /**
-             * 返回在一个中心点周围的随机产生数个点的数组
-             * @param centerPos 中心点坐标
-             * @param radiusX X轴半径
-             * @param radiusY Y轴半径
-             * @param count 产生多少个随机点
+              * 对比两个对象数组中的某个对象属性，返回相对第一个数组中有的这个property属性，第二个数组中没有这个属性的对象数组，例如两张数据表，通过名字查找，objArr2有8个不同的名字，objArr1也有（也可以没有）这个8个名字，并且objArr1还多了其他两个名字，那么返回objArr1中这两个个名字
+              * @param objArr1 对象数组1
+              * @param objArr2 对象数组2
+              * @param property 需要对比的属性名称
              */
-            export function randomPointByCenter(centerPos: Laya.Point, radiusX: number, radiusY: number, count?: number): Array<Laya.Point> {
-                if (!count) {
-                    count = 1;
+            export function differentPropertyTwo(objArr1: Array<any>, objArr2: Array<any>, property: string): Array<any> {
+                var result = [];
+                for (var i = 0; i < objArr1.length; i++) {
+                    var obj1 = objArr1[i];
+                    var obj1Name = obj1[property];
+                    var isExist = false;
+
+                    for (var j = 0; j < objArr2.length; j++) {
+                        var obj2 = objArr2[j];
+                        var obj2Name = obj2[property];
+                        if (obj2Name == obj1Name) {
+                            isExist = true;
+                            break;
+                        }
+                    }
+                    if (!isExist) {
+                        result.push(obj1);
+                    }
                 }
-                let arr: Array<Laya.Point> = [];
-                for (let index = 0; index < count; index++) {
-                    let x0 = Tools.randomCountNumer(0, radiusX, 1, false);
-                    let y0 = Tools.randomCountNumer(0, radiusY, 1, false);
-                    let diffX = Tools.randomOneHalf() == 0 ? x0[0] : -x0[0];
-                    let diffY = Tools.randomOneHalf() == 0 ? y0[0] : -y0[0];
-                    let p = new Laya.Point(centerPos.x + diffX, centerPos.y + diffY);
-                    arr.push(p);
+                return result;
+            }
+
+
+            /**
+             * 返回两个数组对象中，有相同属性的对象集合
+             * @param data1 对象数组1
+             * @param data2 对象数组2
+             * @param property 需要对比的属性名称
+             */
+            export function identicalPropertyObjArr(data1: Array<any>, data2: Array<any>, property: string): Array<any> {
+                var result = [];
+                for (var i = 0; i < data1.length; i++) {
+                    var obj1 = data1[i];
+                    var obj1Name = obj1[property];
+                    var isExist = false;
+
+                    for (var j = 0; j < data2.length; j++) {
+                        var obj2 = data2[j];
+                        var obj2Name = obj2[property];
+                        if (obj2Name == name) {
+                            isExist = true;
+                            break;
+                        }
+                    }
+                    if (isExist) {
+                        result.push(obj1);
+                    }
+                }
+                return result;
+            }
+            /**
+              * 对象数组去重，根据对象的某个属性值去重
+              * @param arr 数组
+              * @param property 属性
+              * */
+            export function objArrUnique(arr: Array<any>, property: string): any {
+                for (var i = 0, len = arr.length; i < len; i++) {
+                    for (var j = i + 1, len = arr.length; j < len; j++) {
+                        if (arr[i][property] === arr[j][property]) {
+                            arr.splice(j, 1);
+                            j--;        // 每删除一个数j的值就减1
+                            len--;      // j值减小时len也要相应减1（减少循环次数，节省性能）   
+                        }
+                    }
+                }
+                return arr;
+            }
+
+
+            /**
+             * 根据一个对像的属性，从对象数组中返回某个属性的值数组
+             * @param arr 
+             * @param property 
+             */
+            export function getArrByValue(objArr: Array<any>, property: string): Array<any> {
+                let arr = [];
+                for (let i = 0; i < objArr.length; i++) {
+                    if (objArr[i][property]) {
+                        arr.push(objArr[i][property]);
+                    }
                 }
                 return arr;
             }
 
             /**
-             * @export 返回两个点之间连线上均匀排布的点
-             * @param {Laya.Point} p1 点1
-             * @param {Laya.Point} p2 点2
-             * @param {number} num 个数
-             * @return {*}  {Array<Laya.Point>}
+             * 对象数组的拷贝
+             * @param ObjArray 需要拷贝的对象数组 
              */
-            export function getPArrBetweenTwoP(p1: Laya.Point, p2: Laya.Point, num: number): Array<Laya.Point> {
-                let arr: Array<Laya.Point> = [];
-                let x0 = p2.x - p1.x;
-                let y0 = p2.y - p1.y;
-                for (let index = 0; index < num; index++) {
-                    arr.push(new Laya.Point(p1.x + (x0 / num) * index, p1.y + (y0 / num) * index));
+            export function arrCopy(ObjArray: Array<any>): any {
+                var sourceCopy = ObjArray instanceof Array ? [] : {};
+                for (var item in ObjArray) {
+                    sourceCopy[item] = typeof ObjArray[item] === 'object' ? objCopy(ObjArray[item]) : ObjArray[item];
                 }
-                if (arr.length >= 1) {
-                    arr.unshift();
-                }
-                if (arr.length >= 1) {
-                    arr.pop();
-                }
-                return arr;
+                return sourceCopy;
             }
-
-
+            /**
+              * 对象的拷贝
+              * @param obj 需要拷贝的对象
+              */
+            export function objCopy(obj: any) {
+                var copyObj = {};
+                for (const item in obj) {
+                    if (obj.hasOwnProperty(item)) {
+                        const element = obj[item];
+                        if (typeof element === 'object') {
+                            // 其中有一种情况是对某个对象值为数组的拷贝
+                            if (Array.isArray(element)) {
+                                let arr1 = _Array.copy(element);
+                                copyObj[item] = arr1;
+                            } else {
+                                objCopy(element);
+                            }
+                        } else {
+                            copyObj[item] = element;
+                        }
+                    }
+                }
+                return objCopy;
+            }
         }
 
-        /**
-         * 根据角度计算弧度
-         * @param angle 角度
-         */
-        export function angle_GetRad(angle) {
-            return angle / 180 * Math.PI;
+        /**数组相关*/
+        export module _Array {
+            /**
+              * 往第一个数组中陆续添加第二个数组中的元素
+              * @param array1 
+              * @param array2
+              */
+            export function oneAddToarray(array1, array2): Array<any> {
+                for (let index = 0; index < array2.length; index++) {
+                    const element = array2[index];
+                    array1.push(element);
+                }
+                return array1;
+            }
+            /**
+             * 从一个数组中随机取出几个元素，如果刚好是数组长度，则等于是乱序,此方法不会改变原数组
+             * @param arr 数组
+             * @param num 取出几个元素默认为1个
+             */
+            export function randomGetOut(arr: Array<any>, num?: number): any {
+                if (!num) {
+                    num = 1;
+                }
+                let arrCopy = _Array.copy(arr);
+                let arr0 = [];
+                if (num > arrCopy.length) {
+                    return '数组长度小于取出的数！';
+                } else {
+                    for (let index = 0; index < num; index++) {
+                        let ran = Math.round(Math.random() * (arrCopy.length - 1));
+                        let a1 = arrCopy[ran];
+                        arrCopy.splice(ran, 1);
+                        arr0.push(a1);
+                    }
+                    return arr0;
+                }
+            }
+
+            /**
+            * 从一个数组中随机取出1个元素
+            * @param arr 数组
+            */
+            export function randomGetOne(arr: Array<any>): any {
+                let arrCopy = copy(arr);
+                let ran = Math.round(Math.random() * (arrCopy.length - 1));
+                return arrCopy[ran];
+            }
+            /**
+              * 普通数组复制 
+              * @param arr1 被复制的数组
+              */
+            export function copy(arr1): Array<any> {
+                var arr = [];
+                for (var i = 0; i < arr1.length; i++) {
+                    arr.push(arr1[i]);
+                }
+                return arr;
+            }
+            /**
+             * 数组去重
+             * @param arr 数组
+            */
+            export function unique01(arr): Array<any> {
+                for (var i = 0, len = arr.length; i < len; i++) {
+                    for (var j = i + 1, len = arr.length; j < len; j++) {
+                        if (arr[i] === arr[j]) {
+                            arr.splice(j, 1);
+                            j--;        // 每删除一个数j的值就减1
+                            len--;      // j值减小时len也要相���减1（减少循环次数，节省性能）   
+                        }
+                    }
+                }
+                return arr;
+            }
+            /**数组去重*/
+            export function unique02(arr): Array<any> {
+                arr = arr.sort();
+                var arr1 = [arr[0]];
+                for (var i = 1, len = arr.length; i < len; i++) {
+                    if (arr[i] !== arr[i - 1]) {
+                        arr1.push(arr[i]);
+                    }
+                }
+                return arr1;
+            }
+            /**ES6数组去重,返回的数组是新数组，需接收*/
+            export function unique03(arr): Array<any> {
+                return Array.from(new Set(arr));
+            }
+
+            /**
+              * 返回从第一个数组中排除第二个数组中的元素，也就是第二个数组中没有第一个数组中的这些元素，如果第一个数组包含第二个数组，那么刚好等于是第一个数组排除第二个数组的元素
+              * @param arr1 
+              * @param arr2 
+              */
+            export function oneExcludeOtherOne(arr1, arr2): Array<any> {
+                let arr1Capy = _Array.copy(arr1);
+                let arr2Capy = _Array.copy(arr2);
+                // console.log(arr1,arr2)
+                for (let i = 0; i < arr1Capy.length; i++) {
+                    for (let j = 0; j < arr2Capy.length; j++) {
+                        if (arr1Capy[i] == arr2Capy[j]) {
+                            arr1Capy.splice(i, 1);
+                            i--;
+                        }
+                    }
+                }
+                return arr1Capy;
+            }
+            /**
+              * 找出几个数组中都有的元素，或者相互没有的元素，
+              * 查找方法如下：如果某个元素的个数等于数组个数，这说明他们都有；
+              * @param arrays 数组组成的数组
+              * @param exclude 默认为false,false为返回都有的元素，true为返回排除这些相同元素，也就是相互没有的元素
+              */
+            export function moreExclude(arrays: Array<Array<any>>, exclude?: boolean): Array<any> {
+                // 避免三重for循环嵌套，一步一步做
+                // 取出所有元素
+                let arr0 = [];
+                for (let i = 0; i < arrays.length; i++) {
+                    for (let j = 0; j < arrays[i].length; j++) {
+                        arr0.push(arrays[i][j]);
+                    }
+                }
+                // 保留arr0，赋值一份
+                let arr1 = copy(arr0);
+                // 去重排列出元素列表
+                let arr2 = copy(arr1);
+
+                // 列出记录数量的数组
+                let arrNum = [];
+                for (let k = 0; k < arr2.length; k++) {
+                    arrNum.push({
+                        name: arr2[k],
+                        num: 0,
+                    });
+                }
+
+                // 记录数量
+                for (let l = 0; l < arr0.length; l++) {
+                    for (let m = 0; m < arrNum.length; m++) {
+                        if (arr0[l] == arrNum[m]['name']) {
+                            arrNum[m]['num']++;
+                        }
+                    }
+                }
+                // 找出数量和arrays长度相同或者不相同的数组
+                let arrAllHave = [];
+                let arrDiffHave = [];
+                for (let n = 0; n < arrNum.length; n++) {
+                    const element = arrNum[n];
+                    if (arrNum[n]['num'] == arrays.length) {
+                        arrAllHave.push(arrNum[n]['name']);
+                    } else {
+                        arrDiffHave.push(arrNum[n]['name']);
+                    }
+                }
+                if (!exclude) {
+                    return arrAllHave;
+                } else {
+                    return arrDiffHave;
+                }
+            }
         }
 
         /**
@@ -5708,7 +5865,7 @@ export module lwg {
             // 第一步，先尝试从本地缓存获取数据，
             // 第二步，如果本地缓存有，那么需要和数据表中的数据进行对比，把缓存没有的新增对象复制进去
             // 第三步，如果本地缓存没有，那么直接从数据表获取
-            let dataArr;
+            let dataArr: any;
             try {
                 Laya.LocalStorage.getJSON(storageName);
                 // console.log(Laya.LocalStorage.getJSON(storageName));
@@ -5724,9 +5881,9 @@ export module lwg {
                     let dataArr_0: Array<any> = Laya.loader.getRes(url)['RECORDS'];
                     // 如果本地数据条数大于json条数，说明json减东西了，不会对比，json只能增加不能删减
                     if (dataArr_0.length >= dataArr.length) {
-                        let diffArray = Tools.objArr2DifferentPropertyObjArr1(dataArr_0, dataArr, propertyName);
+                        let diffArray = _ObjArray.differentPropertyTwo(dataArr_0, dataArr, propertyName);
                         console.log('两个数据的差值为：', diffArray);
-                        Tools.arrayAddToarray(dataArr, diffArray);
+                        _Array.oneAddToarray(dataArr, diffArray);
                     } else {
                         console.log(storageName + '数据表填写有误，长度不能小于之前的长度');
                     }
@@ -5745,1279 +5902,6 @@ export module lwg {
         }
     }
 
-
-    /**商城模块,用于购买和穿戴，主要是购买和存储，次要是穿戴*/
-    export module Shop {
-        /**商品品类集合，重写则规定列表顺序*/
-        export let goodsClassArr: Array<Array<any>> = [];
-        /**商品图片对应的文件夹名称集合，顺序必须和商品品类顺序一样*/
-        export let classWarehouse: Array<string> = [];
-        /**商品种类切换页*/
-        export let _ShopTap: Laya.Tab;
-        /**假如还有一个商品切换页_OtherTap*/
-        export let _OtherTap: Laya.Tab;
-        /**商品列表*/
-        export let _ShopList: Laya.List;
-
-        /**试用商品名称记录，一般用于皮肤试用,包括试用类别名称和名字*/
-        export let _tryName: Array<string> = [];
-
-        //皮肤*****************************************************************************************************
-        /**皮肤的总数据，存储对象依次为[{名称，获取方式，剩余数量或者次数}]*/
-        export let allSkin = [];
-        /**默认皮肤*/
-        export let defaultSkin: string;
-        /**当前穿戴的皮肤*/
-        export let _currentSkin = {
-            get name(): string {
-                return Laya.LocalStorage.getItem('Shop_currentSkin') ? Laya.LocalStorage.getItem('Shop_currentSkin') : null;
-            },
-            set name(name: string) {
-                Laya.LocalStorage.setItem('Shop_currentSkin', name);
-            }
-        };
-
-        //默认道具**********************************************************************************************************
-        /**所有道具*/
-        export let allProps: Array<any> = [];
-        /**当前道具*/
-        export let defaultProp: string;
-        /**当前道具*/
-        export let _currentProp = {
-            get name(): string {
-                return Laya.LocalStorage.getItem('Shop_currentProp') ? Laya.LocalStorage.getItem('Shop_currentProp') : null;
-            },
-            set name(name: string) {
-                Laya.LocalStorage.setItem('Shop_currentProp', name);
-            }
-        };
-
-        //其他道具，第三种物品的统称***********************************************************************************
-        /**所有其他道具集合*/
-        export let allOther: Array<any> = [];
-        /**默认穿戴的其他道具*/
-        export let defaultOther: string;
-        /**当前使用的其他物品*/
-        export let _currentOther = {
-            get name(): string {
-                return Laya.LocalStorage.getItem('Shop_crrentOther') ? Laya.LocalStorage.getItem('Shop_crrentOther') : null;
-            },
-            set name(name: string) {
-                Laya.LocalStorage.setItem('Shop_crrentOther', name);
-            }
-        };
-
-        /**今日用了商品的种类，用在开始游戏界面，可能会有些任务需要用到*/
-        export let useSkinType = [];
-        /**
-         * 用过的皮肤都放进useSkinType，会自动去重
-         * @param skin 皮肤名称
-         */
-        export function setUseSkinType(): number {
-            let arr = [];
-            try {
-                // 拉取
-                if (Laya.LocalStorage.getJSON('Shop_useSkinType')) {
-                    arr = JSON.parse(Laya.LocalStorage.getJSON('Shop_useSkinType'));
-                    useSkinType = arr !== null ? arr['Shop_useSkinType'] : [];
-                    // 去重
-                    useSkinType.push(_currentOther.name, _currentProp.name, _currentSkin.name);
-                    useSkinType = Tools.arrayUnique_03(useSkinType);
-                }
-            } catch (error) {
-
-            }
-            // 上传
-            let data = {
-                Shop_useSkinType: useSkinType,
-            }
-            Laya.LocalStorage.setJSON('Shop_useSkinType', JSON.stringify(data));
-            return useSkinType.length;
-        }
-
-        /**
-         * 通过名称获取商品的一个属性值
-         * @param goodsClass 品类名称
-         * @param name 商品名称
-         * @param property 商品属性
-         * */
-        export function getProperty(goodsClass: string, name: string, property: string): any {
-            let pro = null;
-            let arr = getClassArr(goodsClass);
-            for (let index = 0; index < arr.length; index++) {
-                const element = arr[index];
-                if (element['name'] === name) {
-                    pro = element[property];
-                    break;
-                }
-            }
-            if (pro !== null) {
-                return pro;
-            } else {
-                console.log(name + '找不到属性:' + property, pro);
-                return null;
-            }
-        }
-
-        /**
-         * 通过名称设置或者增加一个商品的一个属性值
-         * @param goodsClass 品类名称
-         * @param name 商品名称
-         * @param property 设置或者增加商品属性名称
-         * @param value 需要设置或者增加的属性值
-         * */
-        export function setProperty(goodsClass: string, name: string, property: string, value: any): void {
-            let arr = getClassArr(goodsClass);
-            for (let index = 0; index < arr.length; index++) {
-                const element = arr[index];
-                if (element['name'] === name) {
-                    element[property] = value;
-                    break;
-                }
-            }
-            let data = {};
-            data[goodsClass] = arr;
-            Laya.LocalStorage.setJSON(goodsClass, JSON.stringify(data));
-            if (_ShopList) {
-                _ShopList.refresh();
-            }
-        }
-
-        /**
-         * 返回当前品类中已经拥有的商品
-         * @param   goodsClass 商品品类
-        */
-        export function getHaveArr(goodsClass: string): Array<any> {
-            let arr = getClassArr(goodsClass);
-            let arrHave = [];
-            for (let index = 0; index < arr.length; index++) {
-                const element = arr[index];
-                if (element[GoodsProperty.have]) {
-                    arrHave.push(element);
-                }
-            }
-            return arrHave;
-        }
-
-        /**
-         * 返回当前只能用金币购买的商品数组
-         * @param goodsClass 商品品类
-         * @param have 是否显示获取到的，true为已获得，flase为没有获得，不传则是全部
-         * @param excludeCurrent 假设当前的装扮的皮肤恰好是金币购买的，是否排除这个皮肤，默认为不排除
-         * */
-        export function getwayGoldArr(goodsClass: string, have?: boolean, excludeCurrent?: boolean) {
-            let arr = getClassArr(goodsClass);
-            let arrNoHave = [];
-            for (let index = 0; index < arr.length; index++) {
-                const element = arr[index];
-                if (have && have !== undefined) {
-                    if (element[GoodsProperty.have] && element[GoodsProperty.getway] === Getway.gold) {
-                        arrNoHave.push(element);
-                    }
-                }
-                else if (!have && have !== undefined) {
-                    if (!element[GoodsProperty.have] && element[GoodsProperty.getway] === Getway.gold) {
-                        arrNoHave.push(element);
-                    }
-                }
-                else if (have == undefined) {
-                    if (element[GoodsProperty.getway] === Getway.gold) {
-                        arrNoHave.push(element);
-                    }
-                }
-            }
-
-            if (excludeCurrent && excludeCurrent !== undefined) {
-                for (let index = 0; index < arrNoHave.length; index++) {
-                    const element = arrNoHave[index];
-                    if (element[GoodsProperty.name] === get_Current(goodsClass)) {
-                        arrNoHave.splice(index, 1);
-                        break;
-                    }
-                }
-            }
-            return arrNoHave;
-        }
-
-        /**
-         * 返回当前只能通过关卡进度获取的商品品类
-         * @param goodsClass 商品品类
-         * @param have 是否显示获取到的，true为已获得，flase为没有获得，不传则是全部
-         * */
-        export function getwayIneedwinArr(goodsClass: string, have?: boolean) {
-            let arr = getClassArr(goodsClass);
-            let arrIneedwin = [];
-            for (let index = 0; index < arr.length; index++) {
-                const element = arr[index];
-                if (have && have !== undefined) {
-                    if (element[GoodsProperty.have] && element[GoodsProperty.getway] === Getway.ineedwin) {
-                        arrIneedwin.push(element);
-                    }
-                } else if (!have && have !== undefined) {
-                    if (!element[GoodsProperty.have] && element[GoodsProperty.getway] === Getway.ineedwin) {
-                        arrIneedwin.push(element);
-                    }
-                } else if (have == undefined) {
-                    if (element[GoodsProperty.getway] === Getway.ineedwin) {
-                        arrIneedwin.push(element);
-                    }
-                }
-            }
-            return arrIneedwin;
-        }
-
-        /**根据品类返回当前使用的皮肤*/
-        export function get_Current(goodsClass: string): string {
-            let _current = null;
-            switch (goodsClass) {
-                case GoodsClass.Skin:
-                    _current = _currentSkin.name;
-                    break;
-                case GoodsClass.Props:
-                    _current = _currentProp.name;
-                    break;
-                case GoodsClass.Other:
-                    _current = _currentOther.name;
-                    break;
-                default:
-                    break;
-            }
-            return _current;
-        }
-
-        /**根据品类返回品类名称数组*/
-        export function getClassArr(goodsClass: string): Array<any> {
-            let arr = [];
-            switch (goodsClass) {
-                case GoodsClass.Skin:
-                    arr = allSkin;
-                    break;
-                case GoodsClass.Props:
-                    arr = allProps;
-                    break;
-                case GoodsClass.Other:
-                    arr = allOther;
-                    break;
-
-                default:
-                    break;
-            }
-            return arr;
-        }
-
-        /**
-         * 通过resCondition/condition，购买商品，有些商品需要购买很多次，购买后，并且设置成购买状态，返回false表示没有购买完成，true刚好完成，-1已经拥有或者是没有改商品
-         * @param calssName 商品种类
-         * @param name 商品名称
-         * @param number 购买几次，不传则默认为1次
-         */
-        export function buyGoods(calssName: string, name: string, number?: number): any {
-            if (!number) {
-                number = 1;
-            }
-            let resCondition = getProperty(calssName, name, GoodsProperty.resCondition);
-            let condition = getProperty(calssName, name, GoodsProperty.condition);
-            let have = getProperty(calssName, name, GoodsProperty.have);
-            if (have !== true && have !== null) {
-                if (condition <= resCondition + number) {
-                    setProperty(calssName, name, GoodsProperty.resCondition, condition);
-                    setProperty(calssName, name, GoodsProperty.have, true);
-                    if (_ShopList) {
-                        _ShopList.refresh();
-                    }
-                    return true;
-                } else {
-                    setProperty(calssName, name, GoodsProperty.resCondition, resCondition + number);
-                    if (_ShopList) {
-                        _ShopList.refresh();
-                    }
-                    return false;
-                }
-            } else {
-                return -1;
-            }
-        }
-
-        /**在startLoding界面或者开始界面执行一次！*/
-        export function initShop(): void {
-            //如果上个日期等于今天的日期，那么从存储中获取，如果不相等则直接从数据表中获取
-            Shop.allSkin = Tools.jsonCompare('GameData/Shop/Skin.json', GoodsClass.Skin, GoodsProperty.name);
-            Shop.allProps = Tools.jsonCompare('GameData/Shop/Props.json', GoodsClass.Props, GoodsProperty.name);
-            Shop.allOther = Tools.jsonCompare('GameData/Shop/Other.json', GoodsClass.Other, GoodsProperty.name);
-        }
-
-        /**商品属性列表，数据表中的商品应该有哪些属性,name和have是必须有的属性,可以无限增加*/
-        export enum GoodsProperty {
-            /**名称*/
-            name = 'name',
-            /**获取途径*/
-            getway = 'getway',
-            /**根据获取途径，给予需要条件的总量*/
-            condition = 'condition',
-            /**根据获取途径，剩余需要条件的数量，会平凡改这个数量*/
-            resCondition = 'resCondition',
-            /**排列顺序*/
-            arrange = 'arrange',
-            /**获得顺序，我们可能会给予玩家固定的获得顺序*/
-            getOder = 'getOder',
-            /**是否已经拥有*/
-            have = 'have',
-        }
-
-        /**获得方式列举,方式可以添加*/
-        export enum Getway {
-            /**免费获取*/
-            free = 'free',
-            /**看广告*/
-            ads = 'ads',
-            /**特殊页面看广告*/
-            adsXD = 'adsXD',
-            /**关卡中获得，或者是过了多少关获得*/
-            ineedwin = 'ineedwin',
-            /**金币购买*/
-            gold = 'gold',
-            /**钻石购买购买*/
-            diamond = 'diamond',
-            /**彩蛋获取*/
-            easte_registerg = 'easte_registerg',
-            /**其他方式*/
-            other = 'other',
-        }
-
-        /**商店中的商品大致类别,同时对应图片地址的文件夹*/
-        export enum GoodsClass {
-            /**皮肤*/
-            Skin = 'Shop_Skin',
-            /**道具*/
-            Props = 'Shop_Props',
-            /**其他商品*/
-            Other = 'Shop_Other',
-        }
-        /**事件名称*/
-        export enum EventType {
-            select = 'select',
-        }
-
-        export class ShopScene extends Admin._SceneBase {
-            moduleOnAwake(): void {
-                /**结构，如果没有则为null*/
-                Shop._ShopTap = this.Owner['MyTap'];
-                Shop._ShopList = this.Owner['MyList'];
-                if (!Shop.allSkin) {
-                    Shop.allSkin = Tools.jsonCompare('GameData/Shop/Skin.json', GoodsClass.Skin, GoodsProperty.name);
-                }
-                if (!Shop.allProps) {
-                    Shop.allProps = Tools.jsonCompare('GameData/Shop/Props.json', GoodsClass.Props, GoodsProperty.name);
-                }
-                if (!Shop.allOther) {
-                    Shop.allOther = Tools.jsonCompare('GameData/Shop/Other.json', GoodsClass.Other, GoodsProperty.name);
-                }
-                goodsClassArr = [Shop.allSkin, Shop.allProps, Shop.allOther];
-                classWarehouse = [GoodsClass.Skin, GoodsClass.Props, GoodsClass.Skin];
-            }
-            moduleOnEnable(): void {
-                this.myList_Create();
-                this.myTap_Create();
-            }
-            /**Tap初始化*/
-            myTap_Create(): void {
-                Shop._ShopTap.selectHandler = new Laya.Handler(this, this.myTap_Select);
-            }
-            /**myTap的触摸监听*/
-            myTap_Select(index: number): void { }
-            /**初始化list*/
-            myList_Create(): void {
-                Shop._ShopList.selectEnable = true;
-                // Shop._ShopList.vScrollBarSkin = "";
-                // this._ShopList.scrollBar.elasticBackTime = 0;//设置橡皮筋回弹时间。单位为毫秒。
-                // this._ShopList.scrollBar.elasticDistance = 500;//设置橡皮筋极限距离。
-                Shop._ShopList.selectHandler = new Laya.Handler(this, this.myList_Scelet);
-                Shop._ShopList.renderHandler = new Laya.Handler(this, this.myList_Update);
-                this.myList_refresh();
-            }
-            /**list选中监听*/
-            myList_Scelet(index: number): void { }
-            /**list列表刷新*/
-            myList_Update(cell, index: number): void { }
-            /**刷新list数据,重写覆盖，默认为皮肤*/
-            myList_refresh(): void {
-                if (Shop._ShopList && goodsClassArr.length > 0) {
-                    Shop._ShopList.array = goodsClassArr[0];
-                    Shop._ShopList.refresh();
-                }
-            }
-        }
-    }
-
-    /**胜利宝箱模块*/
-    export module VictoryBox {
-        /**宝箱列表组件*/
-        export let _BoxList: Laya.List;
-        /**宝箱数据集合*/
-        export let _BoxArray = [];
-        /**还可以打开宝箱的次数,初始默认为三次，重写覆盖*/
-        export let _canOpenNum: number = 3;
-        /**已经领取了几次奖励*/
-        export let _alreadyOpenNum: number = 0;
-        /**看宝箱可以领取的最大次数*/
-        export let _adsMaxOpenNum: number = 6;
-        /**第几次打开宝箱界面*/
-        export let _openVictoryBoxNum: number = 0;
-        /**当前被选中的那个宝箱是什么宝箱*/
-        export let _selectBox: string;
-        /**
-         * 通过名称获取宝箱的一个属性值
-         * @param name 宝箱名称
-         * @param property 宝箱属性名称
-         * */
-        export function getProperty(name: string, property: string): any {
-            let pro = null;
-            for (let index = 0; index < _BoxArray.length; index++) {
-                const element = _BoxArray[index];
-                if (element['name'] === name) {
-                    pro = element[property];
-                    break;
-                }
-            }
-            if (pro !== null) {
-                return pro;
-            } else {
-                console.log(name + '找不到属性:' + property, pro);
-                return null;
-            }
-        }
-
-        /**
-         * 通过名称设置或者增加一个宝箱的一个属性值
-         * @param name 宝箱名称
-         * @param property 宝箱属性名称
-         * @param value 需要设置或者增加的属性值
-         * */
-        export function setProperty(name: string, property: string, value: any): void {
-            for (let index = 0; index < _BoxArray.length; index++) {
-                const element = _BoxArray[index];
-                if (element['name'] === name) {
-                    element[property] = value;
-                    break;
-                }
-            }
-            if (_BoxList) {
-                _BoxList.refresh();
-            }
-        }
-
-        /**宝箱属性*/
-        export enum BoxProperty {
-            /**奖励名称*/
-            name = 'name',
-            /**奖励类型*/
-            rewardType = 'rewardType',
-            /**奖励数量*/
-            rewardNum = 'rewardNum',
-            /**是否已经被打开*/
-            openState = 'openState',
-            /**是否需要看广告*/
-            ads = 'ads',
-            /**是否被选中*/
-            select = 'select',
-        }
-
-        /**事件类型*/
-        export enum EventType {
-            /**开宝箱*/
-            openBox = 'openBox',
-        }
-        /**胜利宝箱场景父类*/
-        export class VictoryBoxScene extends Admin._SceneBase {
-            moduleOnAwake(): void {
-                /**结构，如果没有则为null*/
-                VictoryBox._BoxList = this.Owner['MyList'];
-                //注意这里要复制数组，不可以直接赋值
-                _BoxArray = Tools.objArray_Copy(Laya.loader.getRes("GameData/VictoryBox/VictoryBox.json")['RECORDS']);
-                _selectBox = null;
-                _canOpenNum = 3;
-                _openVictoryBoxNum++;
-                _adsMaxOpenNum = 6;
-                _alreadyOpenNum = 0;
-            }
-            moduleOnEnable(): void {
-                this.boxList_Create();
-            }
-            /**初始化list*/
-            boxList_Create(): void {
-                VictoryBox._BoxList.selectEnable = true;
-                // VictoryBox._BoxList.vScrollBarSkin = "";//不需要移动时，就不设置移动条
-                // this._ShopList.scrollBar.elasticBackTime = 0;//设置橡皮筋回弹时间。单位为毫秒。
-                // this._ShopList.scrollBar.elasticDistance = 500;//设置橡皮筋极限距离。
-                VictoryBox._BoxList.selectHandler = new Laya.Handler(this, this.boxList_Scelet);
-                VictoryBox._BoxList.renderHandler = new Laya.Handler(this, this.boxList_Update);
-                this.boxList_refresh();
-            }
-            /**list选中监听*/
-            boxList_Scelet(index: number): void { }
-            /**list列表刷新*/
-            boxList_Update(cell, index: number): void { }
-            /**刷新list数据,重写覆盖，默认为皮肤*/
-            boxList_refresh(): void {
-                if (VictoryBox._BoxList) {
-                    VictoryBox._BoxList.array = _BoxArray;
-                    VictoryBox._BoxList.refresh();
-                }
-            }
-        }
-    }
-
-    /**签到模块*/
-    export module CheckIn {
-        /**从哪个界面弹出的签到*/
-        export let _fromWhich: string = Admin._SceneName.PreLoad;
-        /**签到list列表*/
-        export let _checkList: Laya.List;
-        /**列表信息*/
-        export let _checkArray: Array<any>;
-        /**上次的签到日期，主要判断今日会不会弹出签到，不一样则弹出签到，一样则不弹出签到*/
-        export let _lastCheckDate = {
-            get date(): number {
-                return Laya.LocalStorage.getItem('Check_lastCheckDate') ? Number(Laya.LocalStorage.getItem('Check_lastCheckDate')) : -1;
-            },
-            // 日期写数字
-            set date(date: number) {
-                Laya.LocalStorage.setItem('Check_lastCheckDate', date.toString());
-            }
-        }
-        /**当前签到第几天了，7日签到为7天一个循环*/
-        export let _checkInNum = {
-            get number(): number {
-                return Laya.LocalStorage.getItem('Check_checkInNum') ? Number(Laya.LocalStorage.getItem('Check_checkInNum')) : 0;
-            },
-            /**次数写数字*/
-            set number(num: number) {
-                Laya.LocalStorage.setItem('Check_checkInNum', num.toString());
-            }
-        }
-
-        /**
-         * 今天是否已经签到
-         */
-        export let _todayCheckIn = {
-            get bool(): boolean {
-                return _lastCheckDate.date == DateAdmin._date.date ? true : false;
-            },
-        }
-
-        /**
-         * 通过名称获取签到的一个属性值
-         * @param name 签到名称
-         * @param property 签到属性名称
-         * */
-        export function getProperty(name: string, property: string): any {
-            let pro = null;
-            for (let index = 0; index < _checkArray.length; index++) {
-                const element = _checkArray[index];
-                if (element['name'] === name) {
-                    pro = element[property];
-                    break;
-                }
-            }
-            if (pro !== null) {
-                return pro;
-            } else {
-                console.log(name + '找不到属性:' + property, pro);
-                return null;
-            }
-        }
-
-        /**
-         * 通过名称设置或者增加一个签到的一个属性值
-         * @param className 签到种类
-         * @param name 签到类型
-         * @param property 签到属性名称
-         * @param value 需要设置或者增加的属性值
-         * */
-        export function setProperty(className, name: string, property: string, value: any): void {
-            for (let index = 0; index < _checkArray.length; index++) {
-                const element = _checkArray[index];
-                if (element['name'] === name) {
-                    element[property] = value;
-                    break;
-                }
-            }
-            let data = {};
-            data[className] = _checkArray;
-            Laya.LocalStorage.setJSON(className, JSON.stringify(data));
-            if (_checkList) {
-                _checkList.refresh();
-            }
-        }
-
-        /**
-         * 是否弹出签到页面
-         */
-        export function openCheckIn(): void {
-            if (!_todayCheckIn.bool) {
-                console.log('没有签到过，弹出签到页面！');
-                Admin._openScene(Admin._SceneName.CheckIn);
-            } else {
-                if (SkinQualified._adsNum.value < 7) {
-                    Admin._openScene(Admin._SceneName.SkinQualified);
-                }
-                console.log('签到过了，今日不可以再签到');
-            }
-        }
-
-        /**
-         * 七日签到，签到一次并且返回今天的奖励
-        */
-        export function todayCheckIn_7Days(): number {
-            _lastCheckDate.date = DateAdmin._date.date;
-            _checkInNum.number++;
-            setProperty(CheckClass.chek_7Days, 'day' + _checkInNum.number, CheckProPerty.checkInState, true);
-            let rewardNum = getProperty('day' + _checkInNum.number, CheckProPerty.rewardNum);
-            return rewardNum;
-        }
-
-        /**
-         * 签到初始化
-         * */
-        export function init(): void {
-            if (_checkInNum.number === 7 && !_todayCheckIn.bool) {
-                _checkInNum.number = 0;
-                Laya.LocalStorage.removeItem(CheckClass.chek_7Days);
-            }
-        }
-
-        /**签到种类*/
-        export enum CheckClass {
-            chek_7Days = 'Chek_7Days',
-            chek_15Days = 'Chek_15Days',
-            chek_30Days = 'Chek_30Days',
-        }
-
-        /**签到中的属性*/
-        export enum CheckProPerty {
-            /**名称，第几天*/
-            name = 'name',
-            /**奖励类型*/
-            rewardType = 'rewardType',
-            /**签到奖励*/
-            rewardNum = 'rewardNum',
-            /**是否签到过了*/
-            checkInState = 'checkInState',
-            /**排列顺序*/
-            arrange = 'arrange',
-        }
-
-        /**事件类型*/
-        export enum EventType {
-            /**移除签到按钮*/
-            removeCheckBtn = 'removeCheckBtn',
-        }
-
-        export class CheckInScene extends Admin._SceneBase {
-            moduleOnAwake(): void {
-                /**结构，如果没有则为null*/
-                CheckIn._checkList = this.Owner['CheckList'];
-                //注意这里要复制数组，不可以直接赋值
-                _checkArray = Tools.jsonCompare('GameData/CheckIn/CheckIn.json', CheckClass.chek_7Days, CheckProPerty.name);
-            }
-            moduleOnEnable(): void {
-                this.checkList_Create();
-            }
-            moduleEventRegister(): void {
-
-            }
-            /**初始化list*/
-            checkList_Create(): void {
-                CheckIn._checkList.selectEnable = true;
-                // CheckIn._checkList.vScrollBarSkin = "";//不需要移动时，就不设置移动条
-                // this._ShopList.scrollBar.elasticBackTime = 0;//设置橡皮筋回����时间。单位为毫秒。
-                // this._ShopList.scrollBar.elasticDistance = 500;//设置橡皮筋极限距离。
-                CheckIn._checkList.selectHandler = new Laya.Handler(this, this.checkList_Scelet);
-                CheckIn._checkList.renderHandler = new Laya.Handler(this, this.checkList_Update);
-                this.checkList_refresh();
-            }
-            /**list选中监听*/
-            checkList_Scelet(index: number): void { }
-            /**list列表刷新*/
-            checkList_Update(cell, index: number): void { }
-            /**刷新list数据,重写覆盖，默认为皮肤*/
-            checkList_refresh(): void {
-                if (CheckIn._checkList) {
-                    CheckIn._checkList.array = _checkArray;
-                    CheckIn._checkList.refresh();
-                }
-            }
-        }
-    }
-
-    /**限定皮肤模块*/
-    export module SkinQualified {
-        /**从哪个界面弹出了XDSkin*/
-        export let _fromScene: string;
-        /**需要看几次广告才可以获得限定皮肤,默认三次，重写覆盖*/
-        export let _needAdsNum: number;
-        /**已经几次看广告*/
-        export let _adsNum = {
-            get value(): number {
-                return Laya.LocalStorage.getItem('SkinQualified_adsNum') ? Number(Laya.LocalStorage.getItem('SkinQualified_adsNum')) : 0;
-            },
-            /**次数写数字*/
-            set value(value: number) {
-                Laya.LocalStorage.setItem('SkinQualified_adsNum', value.toString());
-            }
-        }
-        /**
-         * 是否弹出限定皮肤界面
-         * @param fromScene 从哪个界面进来的
-        */
-        export function openUISkinQualified(fromScene): void {
-            if (_adsNum.value >= _needAdsNum) {
-                return;
-            } else {
-                Admin._openScene(Admin._SceneName.SkinQualified);
-                _fromScene = fromScene;
-            }
-        }
-
-        export enum EventType {
-            /**获得限定皮肤*/
-            acquisition = 'acquisition',
-        }
-
-        /**限定皮肤场景父类*/
-        export class SkinQualifiedScene extends Admin._SceneBase {
-            moduleOnEnable(): void {
-                _needAdsNum = 3;
-            }
-        }
-    }
-
-    /**皮肤装扮界面*/
-    export module Skin {
-        /**皮肤list*/
-        export let _SkinList: Laya.List;
-        /**皮肤切换页*/
-        export let _SkinTap: Laya.Tab;
-        /**皮肤总数集合*/
-        export let _skinClassArr = [];
-
-        /**头部装饰数组*/
-        export let _headSkinArr = [];
-        /**当前眼部的装扮*/
-        export let _currentHead = {
-            get name(): string {
-                return Laya.LocalStorage.getItem('Skin_currentHead') ? Laya.LocalStorage.getItem('Skin_currentHead') : null;
-            },
-            set name(name: string) {
-                Laya.LocalStorage.setItem('Skin_currentHead', name);
-            }
-
-        };
-        /**眼部装饰数组*/
-        export let _eyeSkinArr = [];
-        /**当前眼部的装扮*/
-        export let _currentEye = {
-            get name(): string {
-                return Laya.LocalStorage.getItem('Skin_currentEye') ? Laya.LocalStorage.getItem('Skin_currentEye') : null;
-            },
-            set name(name: string) {
-                Laya.LocalStorage.setItem('Skin_currentEye', name);
-            }
-        };
-
-        /**装饰类别*/
-        export enum SkinClass {
-            head = 'head',
-            eye = 'eye',
-            body = 'body',
-            upperBody = 'upperBody',
-            lowerBody = 'lowerBody',
-        }
-
-        export enum SkinProperty {
-            /**名称*/
-            name = 'name',
-            /**获取途径*/
-            getway = 'getway',
-            /**根据获取途径，给予需要条件的总量*/
-            condition = 'condition',
-            /**根据获取途径，剩余需要条件的数量，会平凡改这个数量*/
-            resCondition = 'resCondition',
-            /**排列顺序*/
-            arrange = 'arrange',
-            /**获得顺序，我们可能会给予玩家固定的获得顺序*/
-            getOder = 'getOder',
-            /**类别*/
-            classify = 'classify',
-            /**是否已经拥有*/
-            have = 'have',
-        }
-
-        /**事件名称*/
-        export enum EventType {
-            /**购买*/
-            purchase = 'purchase',
-            /**选择*/
-            select = 'select',
-        }
-        export class SkinScene extends Admin._SceneBase {
-            moduleOnAwake(): void {
-                /**结构，如果没有则为null*/
-                Skin._SkinTap = this.Owner['SkinTap'];
-                Skin._SkinList = this.Owner['SkinList'];
-
-                _skinClassArr = [_eyeSkinArr, _headSkinArr];
-            }
-            moduleOnEnable(): void {
-                this.skinList_Create();
-                this.skinTap_Create();
-            }
-            /**Tap初始化*/
-            skinTap_Create(): void {
-                Skin._SkinTap.selectHandler = new Laya.Handler(this, this.skinTap_Select);
-            }
-            /**skinTap的触摸监听*/
-            skinTap_Select(index: number): void { }
-            /**初始化list*/
-            skinList_Create(): void {
-                Skin._SkinList.selectEnable = true;
-                // Skin._SkinList.vScrollBarSkin = "";
-                // this._ShopList.scrollBar.elasticBackTime = 0;//设置橡皮筋回弹时间。单位为毫秒。
-                // this._ShopList.scrollBar.elasticDistance = 500;//设置橡皮筋极限距离。
-                Skin._SkinList.selectHandler = new Laya.Handler(this, this.skinList_Scelet);
-                Skin._SkinList.renderHandler = new Laya.Handler(this, this.skinList_Update);
-                this.skinList_refresh();
-            }
-            /**list选中监听*/
-            skinList_Scelet(index: number): void { }
-            /**list列表刷新*/
-            skinList_Update(cell: Laya.Box, index: number): void { }
-            /**刷新list数据,重写覆盖，默认为皮肤*/
-            skinList_refresh(): void {
-                if (Skin._SkinList && _skinClassArr.length > 1) {
-                    Skin._SkinList.array = _skinClassArr[0];
-                    Skin._SkinList.refresh();
-                }
-            }
-        }
-    }
-    /**对游戏总的一些彩蛋进行管理*/
-    export module Easte_registerg {
-        /**彩蛋1任务集合*/
-        export let _easte_registerg_1Arr: Array<any> = [];
-
-        /**彩蛋1是否已经被触发*/
-        export let _easte_registerg_1 = {
-            get value(): boolean {
-                if (!Laya.LocalStorage.getItem('_easte_registerg_01')) {
-                    return false;
-                } else {
-                    return true;
-                }
-            },
-            set value(val: boolean) {
-                Laya.LocalStorage.setItem('_easte_registerg_01', val.toString());
-            }
-        };
-        /**彩蛋1是否达成*/
-        export let _easte_registerg_1Complete: boolean;
-
-        /**初始化彩蛋模块*/
-        export function initEaste_registerg(): void {
-            _easte_registerg_1Arr = Tools.jsonCompare("GameData/Easte_registerg/Easte_registerg.json", Classify.Easte_registerg_01, Property.name);
-            Laya.loader.getRes("GameData/Easte_registerg/Easte_registerg.json")['RECORDS'];
-        }
-
-        /**
-         * 获取一个彩蛋中的某个属性信息
-         * @param className 彩蛋种类
-         * @param name 某个任务名称
-         * @param property 属性名
-         * */
-        export function getProperty(classify: string, name: string, property: string): any {
-            let pro = null;
-            let arr = getClassArr(classify);
-            for (let index = 0; index < arr.length; index++) {
-                const element = arr[index];
-                if (element['name'] === name) {
-                    pro = element[property];
-                    break;
-                }
-            }
-            if (pro !== null) {
-                return pro;
-            } else {
-                console.log(name + '找不到属性:' + property, pro);
-                return null;
-            }
-        }
-
-        /**
-         * 设置某个彩蛋的某个属性，并且返回这个值
-         * @param classify 彩蛋种类
-         * @param name 彩蛋中某个任务名称
-         * @param property 彩蛋属性
-         * @param value 属性值
-        */
-        export function setProperty(classify: string, name: string, property: string, value: any): void {
-            let arr = getClassArr(classify);
-            for (let index = 0; index < arr.length; index++) {
-                const element = arr[index];
-                if (element['name'] === name) {
-                    element[property] = value;
-                    break;
-                }
-            }
-            let data = {};
-            data[classify] = arr;
-            Laya.LocalStorage.setJSON(classify, JSON.stringify(data));
-        }
-
-        /**根据彩蛋类型返回一个彩蛋的所有任务*/
-        export function getClassArr(classify: string): Array<any> {
-            let arr = [];
-            switch (classify) {
-                case Classify.Easte_registerg_01:
-                    arr = _easte_registerg_1Arr;
-                    break;
-                default:
-                    break;
-            }
-            return arr;
-        }
-
-        /** 
-         * 通过resCondition/condition，做任务并且完成了这次任务，然后检总进度是否完成,返回是否完成
-        * @param classify 任务种类
-        * @param name 任务名称
-        * @param number 做几次任务，不传则默认为0次，不传则是检测完成状况
-        */
-        export function doDetection(classify: string, name: string, number?: number): any {
-            if (!number) {
-                number = 0;
-            }
-            let resCondition = getProperty(classify, name, Property.resCondition);
-            let condition = getProperty(classify, name, Property.condition);
-            if (!getProperty(classify, name, Property.complete)) {
-                if (condition <= resCondition + number) {
-                    setProperty(classify, name, Property.resCondition, condition);
-                    setProperty(classify, name, Property.complete, true);
-                    console.log(getProperty(classify, name, Property.complete));
-                    return true;
-                } else {
-                    setProperty(classify, name, Property.resCondition, resCondition + number);
-
-                    return false;
-                }
-            } else {
-                return true;
-            }
-        }
-
-        /**
-         * 检测所有彩蛋任务是否完成,完成则返回1，没有完成则返回0
-         * @param classify 哪一个彩蛋
-         * */
-        export function detectAllTasks(classify: string): number {
-            let num = 1;
-            let arr = getClassArr(classify);
-            for (const key in arr) {
-                if (arr.hasOwnProperty(key)) {
-                    const element = arr[key];
-                    let resCondition = getProperty(classify, element.name, Property.resCondition);
-                    let condition = getProperty(classify, element.name, Property.condition);
-                    if (condition > resCondition) {
-                        num = 0;
-                    }
-                }
-            }
-            if (num == 1) {
-                console.log(classify, '完成了！');
-            } else {
-                console.log(classify, '没有完成！');
-            }
-            return num;
-        }
-
-        /**奖励类型*/
-        export enum rewardType {
-            gold = 'gold',
-            diamond = 'diamond',
-            /**部件*/
-            assembly = 'assembly',
-        }
-
-        /**
-         * 彩蛋中通用属性
-         */
-        export enum Property {
-            /**名称*/
-            name = 'name',
-            /**彩蛋描述*/
-            explain = 'explain',
-            /**需要完成任务的总数*/
-            condition = 'condition',
-            /**根据获取途径，剩余需要条件的数量，会平凡改这个数量*/
-            resCondition = 'resCondition',
-            /**是否完成*/
-            complete = 'complete',
-        }
-
-        /**彩蛋列表种类*/
-        export enum Classify {
-            Easte_registerg_01 = 'Easte_registerg_01',
-        }
-
-        /**彩蛋中的任务名称*/
-        export enum Name {
-            assembly_1 = 'assembly_1',
-            assembly_2 = 'assembly_2',
-            assembly_3 = 'assembly_3',
-            assembly_4 = 'assembly_4',
-            assembly_5 = 'assembly_5',
-        }
-
-        /**彩蛋模块事件类型*/
-        export enum EventType {
-            /**触发彩蛋*/
-            trigger = 'trigger',
-            /**看广告完成任务*/
-            easte_registergAds = 'easte_registergAds',
-        }
-
-        /**彩蛋场景继承类*/
-        export class Easte_registergScene extends Admin._SceneBase {
-            moduleOnAwake(): void {
-            }
-            /**初始化json数据*/
-            moduleOnEnable(): void {
-
-            }
-            moduleEventRegister(): void {
-
-            }
-        }
-    }
-
-    /**胜利模块*/
-    export module Victory {
-        export class VictoryScene extends Admin._SceneBase {
-            moduleOnAwake(): void {
-
-            };
-            moduleEventRegister(): void {
-
-            };
-            moduleOnEnable(): void {
-
-            };
-        }
-    }
-    /**失败模块*/
-    export module Defeated {
-        export class DefeatedScene extends Admin._SceneBase {
-            moduleOnAwake(): void {
-
-            };
-            moduleEventRegister(): void {
-
-            };
-            moduleOnEnable(): void {
-
-            };
-        }
-    }
-
-    /**抽卡模块*/
-    export module DrawCard {
-
-        /**
-         * 当前免费抽奖看广告次数
-         * */
-        export let _freeAds = {
-            get num(): number {
-                return Laya.LocalStorage.getItem('DrawCard_freeAdsNum') ? Number(Laya.LocalStorage.getItem('DrawCard_freeAdsNum')) : 0;
-            },
-            set num(val) {
-                Laya.LocalStorage.setItem('DrawCard_freeAdsNum', val.toString());
-            }
-        }
-
-        /**
-         * 剩余抽奖次数,初始化为2次
-         */
-        export let _residueDraw = {
-            get num(): number {
-                return Laya.LocalStorage.getItem('DrawCard_residueDraw') ? Number(Laya.LocalStorage.getItem('DrawCard_residueDraw')) : 2;
-            },
-            set num(val) {
-                Laya.LocalStorage.setItem('DrawCard_residueDraw', val.toString());
-            }
-        };
-
-        /**
-         * 总共抽了几次卡牌
-         * */
-        export let _drawCount = {
-            get num(): number {
-                return Laya.LocalStorage.getItem('DrawCard_drawCount') ? Number(Laya.LocalStorage.getItem('DrawCard_drawCount')) : 0;
-            },
-            set num(val) {
-                Laya.LocalStorage.setItem('DrawCard_drawCount', val.toString());
-            }
-        }
-
-        /**抽奖通用场景*/
-        export class DrawCardScene extends Admin._SceneBase {
-            moduleOnAwake(): void {
-
-            };
-            moduleEventRegister(): void {
-
-            };
-            moduleOnEnable(): void {
-
-            };
-        }
-    }
-
-    /**
-     * 分享模块
-     */
-    export module Share {
-
-        /**从哪个界面弹出的分享*/
-        export let _fromWhich: string = Admin._SceneName.Victory;
-
-        export class ShareScene extends Admin._SceneBase {
-            moduleOnAwake(): void {
-
-            };
-            moduleEventRegister(): void {
-
-            };
-            moduleOnEnable(): void {
-
-            };
-        }
-    }
-
-    /**道具试用模块*/
-    export module PropTry {
-        export class PropTryScene extends Admin._SceneBase {
-            moduleOnAwake(): void {
-
-            };
-            moduleEventRegister(): void {
-
-            };
-            moduleOnEnable(): void {
-
-            };
-        }
-    }
-
-    /**背包系统*/
-    export module Backpack {
-        /**特殊道具1*/
-        export let _prop1 = {
-            get num(): number {
-                return Laya.LocalStorage.getItem('Backpack_prop1') ? Number(Laya.LocalStorage.getItem('Backpack_prop1')) : 1;
-            },
-            set num(val) {
-                Laya.LocalStorage.setItem('Backpack_prop1', val.toString());
-            }
-        }
-        /**特殊道具2*/
-        export let _prop2 = {
-            get num(): number {
-                return Laya.LocalStorage.getItem('Backpack_prop2') ? Number(Laya.LocalStorage.getItem('Backpack_prop2')) : 1;
-            },
-            set num(val) {
-                Laya.LocalStorage.setItem('Backpack_prop2', val.toString());
-            }
-        }
-
-        /**奖杯数量*/
-        export let _trophy = {
-            get num(): number {
-                return Laya.LocalStorage.getItem('Backpack_trophy') ? Number(Laya.LocalStorage.getItem('Backpack_trophy')) : 0;
-            },
-            set num(val) {
-                Laya.LocalStorage.setItem('Backpack_trophy', val.toString());
-            }
-        }
-
-        /**
-         * 当前拥有的卡牌
-         */
-        export let _haveCardArray = {
-            get arr(): Array<string> {
-                try {
-                    let data = Laya.LocalStorage.getJSON('Backpack_haveCardArray')
-                    if (data) {
-                        return JSON.parse(data);;
-                    } else {
-                        return [];
-                    }
-                } catch (error) {
-                    return [];
-                }
-            },
-
-            set arr(array: Array<string>) {
-                Laya.LocalStorage.setJSON('Backpack_haveCardArray', JSON.stringify(array));
-            },
-
-            /**增加,数组形式，可添加多个,会自动除去重复的卡牌*/
-            add(arr1: Array<string>): Array<string> {
-                let arr0 = _haveCardArray.arr;
-                for (let index = 0; index < arr1.length; index++) {
-                    arr0.push(arr1[index]);
-                }
-                let arr00 = Tools.arrayUnique_01(arr0);
-                Laya.LocalStorage.setJSON('Backpack_haveCardArray', JSON.stringify(arr00));
-                return arr00;
-            },
-            /**减少,数组形式，可减少多个*/
-            sub(arr1: Array<string>): Array<string> {
-                let arr0 = _haveCardArray.arr;
-                for (let i = 0; i < arr0.length; i++) {
-                    for (let j = 0; j < arr1.length; j++) {
-                        if (arr0[i] == arr1[j]) {
-                            arr0.splice(i, 1);
-                            i--;
-                        }
-                    }
-                }
-                Laya.LocalStorage.setJSON('Backpack_haveCardArray', JSON.stringify(arr0));
-                return arr0;
-            }
-        }
-
-        /**当前还没有获得的卡牌*/
-        // export let _noHaveCard = {
-        //     get arr(): Array<string> {
-        //         let arr0 = _haveCardArray.arr;
-        //         let arr = Tools.array1ExcludeArray2(Game3D.getAllCardName(), arr0);
-        //         return arr;
-        //     },
-        // }
-
-        /**
-         * 道具数组,对象数组的数组
-         * */
-        export let _backpackArray: Array<Array<{}>> = [];
-
-        export class BackpackScene extends Admin._SceneBase {
-            moduleOnAwake(): void {
-            };
-            moduleEventRegister(): void {
-            };
-            moduleOnEnable(): void {
-            };
-        }
-    }
 
     export module LwgPreLoad {
         /**3D场景的加载，其他3D物体，贴图，Mesh详见：  https://ldc2.layabox.com/doc/?nav=zh-ts-4-3-1   */
@@ -7052,8 +5936,8 @@ export module lwg {
         /**当前加载到哪个分类数组*/
         export let _loadOrderIndex: number = 0;
 
-        /**在何处加载，是初始化加载还是页面中加载*/
-        export let _whereToLoad: string = Admin._SceneName.PreLoad;
+        /**两种类型，页面前加载还是初始化前*/
+        export let _loadType: string = Admin._SceneName.PreLoad;
         export enum _ListName {
             scene3D = 'scene3D',
             prefab3D = 'prefab3D',
@@ -7081,7 +5965,7 @@ export module lwg {
                         return;
                     }
                     console.log('当前进度条进度为:', _currentProgress.value / _sumProgress);
-                    console.log('进度条停止！');
+                    // console.log('进度条停止！');
                     console.log('所有资源加载完成！此时所有资源可通过例如 Laya.loader.getRes("url")获取');
                     EventAdmin._notify(LwgPreLoad._Event.complete);
                 } else {
@@ -7178,7 +6062,7 @@ export module lwg {
                             }
                         }
                     }
-                    _loadOrder = [_pic2D, _scene2D, _prefab2D, _scene3D, _prefab3D, _json, _texture, _texture2D, _mesh3D, _material, _skeleton];
+                    _loadOrder = [_pic2D, _scene2D, _prefab2D, _prefab3D, _json, _texture, _texture2D, _mesh3D, _material, _skeleton, _scene3D];
                     for (let index = 0; index < _loadOrder.length; index++) {
                         _sumProgress += _loadOrder[index].length;
                         if (_loadOrder[index].length <= 0) {
@@ -7199,13 +6083,13 @@ export module lwg {
                     let time = this.lwgAllComplete();
                     Laya.timer.once(time, this, () => {
                         // 通过预加载进入页面
-                        this.Owner.name = _whereToLoad;
-                        Admin._sceneControl[_whereToLoad] = this.Owner;
-                        if (_whereToLoad !== Admin._SceneName.PreLoad) {
-                            if (Admin._preLoadOpenSceneLater.openSceneName) {
-                                Admin._openScene(Admin._preLoadOpenSceneLater.openSceneName, Admin._preLoadOpenSceneLater.cloesSceneName, () => {
+                        this._Owner.name = _loadType;
+                        Admin._sceneControl[_loadType] = this._Owner;
+                        if (_loadType !== Admin._SceneName.PreLoad) {
+                            if (Admin._preLoadOpenSceneLater.openName) {
+                                Admin._openScene(Admin._preLoadOpenSceneLater.openName, Admin._preLoadOpenSceneLater.cloesName, () => {
                                     Admin._preLoadOpenSceneLater.func;
-                                    Admin._closeScene(_whereToLoad);
+                                    Admin._closeScene(_loadType);
                                 }, Admin._preLoadOpenSceneLater.zOrder);
                             }
                         } else {
@@ -7220,10 +6104,10 @@ export module lwg {
                                     }
                                 }
                             }
-                            PalyAudio.playMusic();
-                            Admin._closeScene(_whereToLoad, () => {
-                                _whereToLoad = Admin._SceneName.PreLoadStep;
-                            });
+                            Audio._playMusic();
+                            this._openScene(_SceneName.Guide, true, false, () => {
+                                _loadType = Admin._SceneName.PreLoadCutIn;
+                            })
                         }
                     })
                 });
@@ -7283,7 +6167,7 @@ export module lwg {
                             if (Scene == null) {
                                 console.log('XXXXXXXXXXX3D场景' + _scene3D[index]['url'] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
                             } else {
-                                _scene3D[index]['scene'] = Scene;
+                                _scene3D[index]['Scene'] = Scene;
                                 console.log('3D场景' + _scene3D[index]['url'] + '加载完成！', '数组下标为：', index);
                             }
                             EventAdmin._notify(_Event.progress);
@@ -7296,7 +6180,7 @@ export module lwg {
                             if (Sp == null) {
                                 console.log('XXXXXXXXXXX3D预设体' + _prefab3D[index]['url'] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
                             } else {
-                                _prefab3D[index]['prefab'] = Sp;
+                                _prefab3D[index]['Prefab'] = Sp;
                                 console.log('3D预制体' + _prefab3D[index]['url'] + '加载完成！', '数组下标为：', index);
                             }
                             EventAdmin._notify(_Event.progress);
@@ -7329,19 +6213,20 @@ export module lwg {
                         break;
 
                     case _texture2D:
-                        Laya.Texture2D.load(_texture2D[index]['url'], Laya.Handler.create(this, (tex: Laya.Texture2D) => {
+                        //加载纹理资源
+                        Laya.Texture2D.load(_texture2D[index]['url'], Laya.Handler.create(this, function (tex: Laya.Texture2D): void {
                             if (tex == null) {
                                 console.log('XXXXXXXXXXX2D纹理' + _texture2D[index]['url'] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
                             } else {
                                 _texture2D[index]['texture2D'] = tex;
-                                console.log('2D纹理' + _texture2D[index]['url'] + '加载完成！', '数组下标为：', index);
+                                console.log('3D纹理' + _texture2D[index]['url'] + '加载完成！', '数组下标为：', index);
                             }
                             EventAdmin._notify(_Event.progress);
                         }));
                         break;
 
                     case _material:
-                        Laya.Material.load(_material[index]['url'], Laya.Handler.create(this, (any) => {
+                        Laya.Material.load(_material[index]['url'], Laya.Handler.create(this, (any: any) => {
                             if (any == null) {
                                 console.log('XXXXXXXXXXX材质' + _material[index]['url'] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
                             } else {
@@ -7419,11 +6304,11 @@ export module lwg {
         }
         /**开始*/
         export function _init() {
-            switch (Admin._platform.name) {
-                case Admin._platform.tpye.WeChat:
+            switch (Platform._Ues.value) {
+                case Platform._Tpye.WeChat:
                     _loadPkg_Wechat();
                     break;
-                case Admin._platform.tpye.OPPO || Admin._platform.tpye.VIVO:
+                case Platform._Tpye.OPPO || Platform._Tpye.VIVO:
                     _loadPkg_VIVO();
                     break;
                 default:
@@ -7472,10 +6357,211 @@ export module lwg {
         export class _LwgInitScene extends Admin._SceneBase {
             moduleOnStart(): void {
                 _init();
-                this.lwgOpenScene(_SceneName.PreLoad, null, () => {
-                    // this.Owner.close();
-                });
+                this._openScene(_SceneName.PreLoad);
             };
+        }
+    }
+
+    /**体力模块*/
+    export module Execution {
+        /**当前剩余行动力的数量*/
+        export let _execution = {
+            get value(): number {
+                if (!this['_Execution_executionNum']) {
+                    return Laya.LocalStorage.getItem('_Execution_executionNum') ? Number(Laya.LocalStorage.getItem('_Execution_executionNum')) : 15;
+                }
+                return this['_Execution_executionNum'];
+            },
+            set value(val: number) {
+                console.log(val);
+                this['_Execution_executionNum'] = val;
+                Laya.LocalStorage.setItem('_Execution_executionNum', val.toString());
+            }
+        };
+        export let _addExDate = {
+            get value(): number {
+                if (!this['_Execution_addExDate']) {
+                    return Laya.LocalStorage.getItem('_Execution_addExDate') ? Number(Laya.LocalStorage.getItem('_Execution_addExDate')) : (new Date()).getDay();
+                }
+                return this['_Execution_addExDate'];
+            },
+            set value(val: number) {
+                this['_Execution_addExDate'] = val;
+                Laya.LocalStorage.setItem('_Execution_addExDate', val.toString());
+            }
+        }
+        export let _addExHours = {
+            get value(): number {
+                if (!this['_Execution_addExHours']) {
+                    return Laya.LocalStorage.getItem('_Execution_addExHours') ? Number(Laya.LocalStorage.getItem('_Execution_addExHours')) : (new Date()).getHours();
+                }
+                return this['_Execution_addExHours'];
+            },
+            set value(val: number) {
+                this['_Execution_addExHours'] = val;
+                Laya.LocalStorage.setItem('_Execution_addExHours', val.toString());
+            }
+        };
+        export let _addMinutes = {
+            get value(): number {
+                if (!this['_Execution_addMinutes']) {
+                    return Laya.LocalStorage.getItem('_Execution_addMinutes') ? Number(Laya.LocalStorage.getItem('_Execution_addMinutes')) : (new Date()).getMinutes();
+                }
+                return this['_Execution_addMinutes'];
+            },
+            set value(val: number) {
+                this['_Execution_addMinutes'] = val;
+                Laya.LocalStorage.setItem('_Execution_addMinutes', val.toString());
+            }
+        };
+        /**指代当前剩余体力节点*/
+        export let _ExecutionNode: Laya.Sprite;
+        /**
+         * 创建通用剩余体力数量prefab
+         * @param parent 父节点
+         */
+        export function _createExecutionNode(parent): void {
+            let sp: Laya.Sprite;
+            Laya.loader.load('prefab/ExecutionNum.json', Laya.Handler.create(this, function (prefab: Laya.Prefab) {
+                let _prefab = new Laya.Prefab();
+                _prefab.json = prefab;
+                sp = Laya.Pool.getItemByCreateFun('prefab', _prefab.create, _prefab);
+                parent.addChild(sp);
+                let num = sp.getChildByName('Num') as Laya.FontClip;
+                num.value = _execution.value.toString();
+                sp.pos(297, 90);
+                sp.zOrder = 50;
+                _ExecutionNode = sp;
+                _ExecutionNode.name = '_ExecutionNode';
+            }));
+        }
+        /**
+         * 创建体力增加的prefab
+         * @param x x位置
+         * @param y y位置
+         * @param func 回调函数
+        */
+        export function _addExecution(x: number, y: number, func: Function): void {
+            let sp: Laya.Sprite;
+            Laya.loader.load('prefab/execution.json', Laya.Handler.create(this, function (prefab: Laya.Prefab) {
+                let _prefab = new Laya.Prefab();
+                _prefab.json = prefab;
+                sp = Laya.Pool.getItemByCreateFun('prefab', _prefab.create, _prefab);
+                Laya.stage.addChild(sp);
+                sp.x = Laya.stage.width / 2;
+                sp.y = Laya.stage.height / 2;
+                sp.zOrder = 50;
+                if (_ExecutionNode) {
+                    Animation2D.move_Simple(sp, sp.x, sp.y, _ExecutionNode.x, _ExecutionNode.y, 800, 100, f => {
+                        Animation2D.fadeOut(sp, 1, 0, 200, 0, f => {
+                            Animation2D.upDwon_Shake(_ExecutionNode, 10, 80, 0, null);
+                            if (func) {
+                                func();
+                            }
+                        });
+                    });
+                }
+            }));
+        }
+        /**
+         * 创建体力消耗动画
+         * @param  subEx 消耗多少体力值
+         */
+        export function createConsumeEx(subEx): void {
+            let label = Laya.Pool.getItemByClass('label', Laya.Label) as Laya.Label;
+            label.name = 'label';//标识符和名称一样
+            Laya.stage.addChild(label);
+            label.text = '-2';
+            label.fontSize = 40;
+            label.bold = true;
+            label.color = '#59245c';
+            label.x = _ExecutionNode.x + 100;
+            label.y = _ExecutionNode.y - label.height / 2 + 4;
+            label.zOrder = 100;
+            Animation2D.fadeOut(label, 0, 1, 200, 150, f => {
+                Animation2D.leftRight_Shake(_ExecutionNode, 15, 60, 0, null);
+                Animation2D.fadeOut(label, 1, 0, 600, 400, f => {
+                });
+            });
+        }
+
+        export class ExecutionNode extends Admin._ObjectBase {
+            Num: Laya.FontClip;
+            CountDown: Laya.Label;
+            CountDown_board: Laya.Label;
+
+            lwgOnAwake(): void {
+                this.Num = this._Owner.getChildByName('Num') as Laya.FontClip;
+                this.CountDown = this._Owner.getChildByName('CountDown') as Laya.Label;
+                this.CountDown_board = this._Owner.getChildByName('CountDown_board') as Laya.Label;
+                this.countNum = 59;
+                this.CountDown.text = '00:' + this.countNum;
+                this.CountDown_board.text = this.CountDown.text;
+
+                // 获取上次的体力
+                let d = new Date;
+                if (d.getDate() !== _addExDate.value) {
+                    _execution.value = 15;
+                } else {
+                    if (d.getHours() == _addExHours.value) {
+                        console.log(d.getMinutes(), _addMinutes.value);
+                        _execution.value += (d.getMinutes() - _addMinutes.value);
+                        if (_execution.value > 15) {
+                            _execution.value = 15;
+                        }
+                    } else {
+                        _execution.value = 15;
+                    }
+                }
+                this.Num.value = _execution.value.toString();
+                _addExDate.value = d.getDate();
+                _addExHours.value = d.getHours();
+                _addMinutes.value = d.getMinutes();
+            }
+
+            /**计时器*/
+            time: number = 0;
+            /**时钟当前秒数*/
+            countNum: number = 59;
+            /**倒计时，一分钟一点体力*/
+            countDownAddEx(): void {
+                this.time++;
+                if (this.time % 60 == 0) {
+                    this.countNum--;
+                    if (this.countNum < 0) {
+                        this.countNum = 59;
+                        _execution.value += 1;
+                        this.Num.value = _execution.value.toString();
+                        let d = new Date;
+                        _addExHours.value = d.getHours();
+                        _addMinutes.value = d.getMinutes();
+                    }
+                    if (this.countNum >= 10 && this.countNum <= 59) {
+                        this.CountDown.text = '00:' + this.countNum;
+                        this.CountDown_board.text = this.CountDown.text;
+
+                    } else if (this.countNum >= 0 && this.countNum < 10) {
+                        this.CountDown.text = '00:0' + this.countNum;
+                        this.CountDown_board.text = this.CountDown.text;
+                    }
+                }
+            }
+            timeSwitch: boolean = true;
+            lwgOnUpdate(): void {
+                if (Number(this.Num.value) >= 15) {
+                    if (this.timeSwitch) {
+                        _execution.value = 15;
+                        this.Num.value = _execution.value.toString();
+                        this.CountDown.text = '00:00';
+                        this.CountDown_board.text = this.CountDown.text;
+                        this.countNum = 60;
+                        this.timeSwitch = false;
+                    }
+                } else {
+                    this.timeSwitch = true;
+                    this.countDownAddEx();
+                }
+            }
         }
     }
 }
@@ -7483,15 +6569,20 @@ export default lwg;
 // 全局控制
 export let Admin = lwg.Admin;
 export let _SceneBase = Admin._SceneBase;
+export let _ObjectBase = Admin._ObjectBase;
 export let _SceneName = Admin._SceneName;
+export let Platform = lwg.Platform;
+export let SceneAnimation = lwg.SceneAnimation;
+export let Adaptive = lwg.Adaptive;
+export let DataAdmin = lwg.DataAdmin;
 export let EventAdmin = lwg.EventAdmin;
 export let DateAdmin = lwg.DateAdmin;
 export let TimerAdmin = lwg.TimerAdmin;
 export let Pause = lwg.Pause;
 export let Execution = lwg.Execution;
-export let _Gold = lwg.Gold;
+export let Gold = lwg.Gold;
 export let Setting = lwg.Setting;
-export let PalyAudio = lwg.PalyAudio;
+export let Audio = lwg.Audio;
 export let Click = lwg.Click;
 export let Color = lwg.Color;
 export let Effects = lwg.Effects;
@@ -7499,36 +6590,8 @@ export let Dialogue = lwg.Dialogue;
 export let Animation2D = lwg.Animation2D;
 export let Animation3D = lwg.Animation3D;
 export let Tools = lwg.Tools;
-export let Elect = lwg.Elect;
-//场景相关 
+//预加载和初始化
 export let _LwgPreLoad = lwg.LwgPreLoad;
 export let _PreLoadScene = lwg.LwgPreLoad._PreLoadScene;
 export let _LwgInit = lwg._LwgInit;
 export let _LwgInitScene = lwg._LwgInit._LwgInitScene;
-
-export let Shop = lwg.Shop;
-export let ShopScene = lwg.Shop.ShopScene;
-export let VictoryBox = lwg.VictoryBox;
-export let VictoryBoxScene = lwg.VictoryBox.VictoryBoxScene;
-export let CheckIn = lwg.CheckIn;
-export let CheckInScene = lwg.CheckIn.CheckInScene;
-export let SkinQualified = lwg.SkinQualified;
-export let SkinXDScene = lwg.SkinQualified.SkinQualifiedScene;
-export let Skin = lwg.Skin;
-export let SkinScene = lwg.Skin.SkinScene;
-export let Easte_registerg = lwg.Easte_registerg;
-export let Victory = lwg.Victory;
-export let VictoryScene = lwg.Victory.VictoryScene;
-export let Defeated = lwg.Defeated;
-export let DefeatedScene = lwg.Defeated.DefeatedScene;
-export let DrawCard = lwg.DrawCard;
-export let DrawCardScene = lwg.DrawCard.DrawCardScene;
-export let Share = lwg.Share;
-export let ShareScene = lwg.Share.ShareScene;
-export let PropTry = lwg.PropTry;
-export let PropTryScene = lwg.PropTry.PropTryScene;
-export let Backpack = lwg.Backpack;
-export let BackpackScene = lwg.Backpack.BackpackScene;
-// 其他
-
-

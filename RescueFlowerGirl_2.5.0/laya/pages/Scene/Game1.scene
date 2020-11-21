@@ -1,5 +1,4 @@
 {
-    "x":0,
     "type":"View",
     "selectedBox":2,
     "selecteID":32,
@@ -15,7 +14,6 @@
     "compId":2,
     "child":[
         {
-            "x":15,
             "type":"Image",
             "searchKey":"Image,Background,Background",
             "props":{"y":0,"x":0,"var":"Background","skin":"Game/UI/Game/SceneStyle_01/Bg.png","name":"Background"},
@@ -29,7 +27,6 @@
                 ]
         },
         {
-            "x":15,
             "type":"Image",
             "searchKey":"Image,Yun1",
             "props":{"y":284,"x":-112,"skin":"Game/UI/Game/SceneStyle_01/yun_01.png","name":"Yun1"},
@@ -43,7 +40,6 @@
                 ]
         },
         {
-            "x":15,
             "type":"Image",
             "searchKey":"Image,Yun2",
             "props":{"y":442,"x":617,"skin":"Game/UI/Game/SceneStyle_01/yun_02.png","name":"Yun2"},
@@ -57,7 +53,6 @@
                 ]
         },
         {
-            "x":15,
             "type":"Image",
             "searchKey":"Image,LandContent,LandContent",
             "props":{"y":370,"x":360,"width":450,"var":"LandContent","rotation":0,"pivotY":225,"pivotX":225,"name":"LandContent","height":450},
@@ -70,7 +65,6 @@
             "compId":30,
             "child":[
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,BehindScenery,BehindScenery",
                     "props":{"y":0,"x":0,"width":427,"var":"BehindScenery","name":"BehindScenery","height":449},
@@ -83,7 +77,6 @@
                     "compId":33,
                     "child":[
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image",
                             "props":{"y":67,"x":220,"width":101,"skin":"Game/UI/Game/SceneStyle_01/botany_01.png","scaleY":0.7,"scaleX":0.7,"rotation":-4,"pivotY":117,"pivotX":51,"height":117},
@@ -97,7 +90,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image",
                             "props":{"y":352,"x":119,"width":101,"skin":"Game/UI/Game/SceneStyle_01/botany_01.png","scaleY":0.9,"scaleX":0.9,"rotation":216,"pivotY":117,"pivotX":51,"height":117},
@@ -111,7 +103,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image",
                             "props":{"y":210,"x":387,"width":101,"skin":"Game/UI/Game/SceneStyle_01/botany_01.png","scaleY":0.7,"scaleX":0.7,"rotation":94,"pivotY":117,"pivotX":51,"height":117},
@@ -126,7 +117,6 @@
                         }]
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,EnemyParent,EnemyParent",
                     "props":{"y":0,"x":0,"width":415,"var":"EnemyParent","name":"EnemyParent","height":428},
@@ -139,7 +129,6 @@
                     "compId":41,
                     "child":[
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,Enemyblue",
                             "props":{"y":18,"x":241,"width":74,"presetID":1,"preset":"laya/pages/prefab/Enemy.prefab","pivotY":37,"pivotX":37,"name":"Enemyblue","height":74},
@@ -154,7 +143,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,Enemyyellow",
                             "props":{"y":194,"x":432,"width":74,"skin":"Game/UI/Game/Enemy/enemy_01_yellow.png","rotation":80,"pivotY":37,"pivotX":37,"name":"Enemyyellow","height":74},
@@ -169,7 +157,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,Enemyred",
                             "props":{"y":436,"x":207.5,"width":74,"skin":"Game/UI/Game/Enemy/enemy_01_red.png","rotation":-177,"pivotY":37,"pivotX":37,"name":"Enemyred","height":74},
@@ -185,7 +172,6 @@
                         }]
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,MiddleScenery,MiddleScenery",
                     "props":{"y":0,"x":0,"width":427,"var":"MiddleScenery","name":"MiddleScenery","height":449},
@@ -198,7 +184,6 @@
                     "compId":53,
                     "child":[
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image",
                             "props":{"y":114,"x":112,"width":101,"skin":"Game/UI/Game/SceneStyle_01/botany_02.png","scaleY":0.8,"scaleX":0.8,"rotation":-45,"pivotY":140,"pivotX":51,"height":140},
@@ -212,7 +197,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image",
                             "props":{"y":306,"x":92,"width":105,"skin":"Game/UI/Game/SceneStyle_01/botany_03.png","scaleY":0.9,"scaleX":0.9,"rotation":-122,"pivotY":163,"pivotX":53,"height":163},
@@ -226,7 +210,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image",
                             "props":{"y":163.5,"x":375.5,"width":101,"skin":"Game/UI/Game/SceneStyle_01/botany_02.png","scaleY":0.8,"scaleX":0.8,"rotation":71,"pivotY":140,"pivotX":51,"height":140},
@@ -240,7 +223,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image",
                             "props":{"y":352,"x":322,"width":105,"skin":"Game/UI/Game/SceneStyle_01/botany_03.png","scaleY":0.8,"scaleX":0.8,"rotation":141,"pivotY":163,"pivotX":53,"height":163},
@@ -255,7 +237,6 @@
                         }]
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,Land",
                     "props":{"y":225,"x":225,"width":403,"skin":"Game/UI/Game/SceneStyle_01/land.png","pivotY":202,"pivotX":202,"name":"Land","height":404},
@@ -270,7 +251,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,FrontScenery",
                     "props":{"y":23,"x":23,"width":427,"name":"FrontScenery","height":449},
@@ -283,7 +263,6 @@
                     "compId":46,
                     "child":[
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image",
                             "props":{"y":154,"x":53,"width":61,"skin":"Game/UI/Game/SceneStyle_01/stone_01.png","rotation":-77,"pivotY":42,"pivotX":31,"height":42},
@@ -298,7 +277,6 @@
                         }]
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,MobileFrame,MobileFrame",
                     "props":{"y":50,"x":49,"width":351,"var":"MobileFrame","name":"MobileFrame","height":351},
@@ -313,7 +291,6 @@
                 }]
         },
         {
-            "x":15,
             "type":"Image",
             "searchKey":"Image,Heroine,Heroine",
             "props":{"y":358,"x":360,"width":94,"var":"Heroine","skin":"Game/UI/Game/Heroine/heroine_01.png","pivotY":42,"pivotX":47,"name":"Heroine","height":84},
@@ -327,7 +304,6 @@
                 ]
         },
         {
-            "x":15,
             "type":"Image",
             "searchKey":"Image,WeaponOperation,WeaponOperation",
             "props":{"y":0,"x":360,"width":360,"var":"WeaponOperation","name":"WeaponOperation","height":1280},
@@ -341,7 +317,6 @@
                 ]
         },
         {
-            "x":15,
             "type":"Image",
             "searchKey":"Image,AimOperation,AimOperation",
             "props":{"y":0,"x":0,"width":360,"var":"AimOperation","name":"AimOperation","height":1280},
@@ -355,7 +330,6 @@
                 ]
         },
         {
-            "x":15,
             "type":"Image",
             "searchKey":"Image,HeroContent,HeroContent",
             "props":{"y":1053,"x":360,"width":129,"var":"HeroContent","pivotY":62,"pivotX":65,"name":"HeroContent","height":124},
@@ -368,7 +342,6 @@
             "compId":32,
             "child":[
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,Aim,Aim",
                     "props":{"y":68,"x":65,"width":158,"var":"Aim","skin":"Game/UI/Game/aim.png","pivotY":164,"pivotX":79,"name":"Aim","height":130},
@@ -395,7 +368,6 @@
                         }]
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,Hero,Hero",
                     "props":{"y":62,"x":64.5,"width":118,"var":"Hero","skin":"Game/UI/Game/Hero/Hero_01.png","pivotY":62,"pivotX":59,"name":"Hero","height":123},
@@ -409,7 +381,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,WeaponParent,WeaponParent",
                     "props":{"y":-110,"x":-115,"width":360,"var":"WeaponParent","name":"WeaponParent","height":369},
@@ -424,10 +395,9 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,Blood,Blood",
-                    "props":{"y":-8,"x":13,"width":104,"var":"Blood","skin":"Frame/UI/ui_l_orthogon_white.png","sizeGrid":"10,20,12,16","name":"Blood","height":16},
+                    "props":{"y":-8,"x":13,"width":104,"var":"Blood","skin":"Lwg/UI/ui_l_orthogon_white.png","sizeGrid":"10,20,12,16","name":"Blood","height":16},
                     "nodeParent":32,
                     "label":"Blood",
                     "isOpen":false,
@@ -439,7 +409,7 @@
                         {
                             "type":"Image",
                             "searchKey":"Image",
-                            "props":{"y":2,"x":2,"width":100,"skin":"Frame/UI/ui_orthogon_green.png","sizeGrid":"1,1,1,1","height":12},
+                            "props":{"y":2,"x":2,"width":100,"skin":"Lwg/UI/ui_orthogon_green.png","sizeGrid":"1,1,1,1","height":12},
                             "nodeParent":76,
                             "label":"Image",
                             "isDirectory":false,

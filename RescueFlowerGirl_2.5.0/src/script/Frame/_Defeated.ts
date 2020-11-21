@@ -7,9 +7,9 @@ export module _Defeated {
     export function _init(): void {
     }
     export class Defeated extends Admin._SceneBase {
-        lwgBtnClick(): void {
-            Click._on(Click._Type.largen, this.ImgVar('BtnBack'), this, null, null, () => {
-                this.lwgOpenScene(_SceneName.Start);
+        lwgBtnRegister(): void {
+           this._btnUp( this._ImgVar('BtnBack'), () => {
+                this._openScene(_SceneName.Start);
                 EventAdmin._notify(_Game._Event.closeScene);
             })
         }

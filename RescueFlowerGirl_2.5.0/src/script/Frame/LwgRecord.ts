@@ -34,6 +34,17 @@ export module record {
 
         'mask遮罩问题1' = '节点如果为Image,那么它的遮罩必须为mask，否则可能会导致一些显示问题',
         'mask遮罩问题2' = '有遮罩的图片的坐标必须是整数，不能有小数，否则可能导致遮罩有一根细线的存在，可能是遮罩只会遮罩整数坐标，导致计算错误',
+
+        '截屏对应源码修改' = '截屏  var htmlCanvas: Laya.HTMLCanvas = this.Owner.drawToCanvas(this.Owner.width, this.Owner.height, 0, 0);htmlCanvas.toBase64("image/png"),对应core中的源码修改，才可以上传平台，被平台识别，搜索‘ImageData’，如下:// var imgdata=/*__JS__ */new ImageData(canvasWidth,canvasHeight); //注释这一句，这句是报错的地方;   var canvx = new HTMLCanvas(true); //创建一个canvas,canvx.size(canvasWidth, canvasHeight); //设置宽高;这个和ImageData保持一致;  var ctx2dx = canvx.getContext(`2d`); //获取上下文;var imgdata = ctx2dx.getImageData(0,0,canvasWidth,canvasHeight); //获取imageData，来替代ImageData;',
+
+        '2Dtexture' = '2Dtexture不需要打包，一般在unity中导出，如果在laya中也要设置不打包',
+
+        'drawToTexture()和drawToCanvas()' = '这两个截图方法都是在新建的canves对象上进行绘制的，这个canves应该默认是舞台或者是设计宽度，所以其中的偏移量应该恰好是绘制的sprite的x，y，才能够刚好进行截图，所以根据sprite的宽高即可控制截图的大小，有时候截不到图，应该是x，y的偏移量问题，宽高和坐标都是sprite的即可',
+
+        '每次赋值新贴图Texture/Texture2D的时候，旧的贴图要删掉'='destroy()掉，否则内存增加很快，尤其是用drawToTexture()和drawToCanvas()绘制的行的贴图',
+
+        'texture/texture2D的引用属性'='贴图如果不new出一个的话，多个sprite用同一个贴图的时候，销毁其中一个贴图必然会引发其他贴图消失，因为是引用关系',
+
     }
     /**
      * 关于2d物理引擎
@@ -45,7 +56,9 @@ export module record {
         dynamic = 'dynamic物理类型，是运动类型，无论是自由运动，通过力来运动，通过坐标移动，都可以可以产生碰撞反应，坐标移动的话，可以做如下设置this.rig.setVelocity({ x: 0, y: 0 });',
 
         'childMove' = '子节点刚体不会跟着主节点的移动而移动，所以在update里面可以设置子节点跟随，或者建立多个刚体,此方法在相互碰撞中可能会产生问题',
-        'BoxCollider' = '方形碰撞框，目前是以两个物体的第一次碰到的边作为进入碰撞，持续碰撞，结束碰撞来计算的，所以对碰撞框是有要求的，例如父节点的box被挤压后，有穿透，带着子节点位移了，很容易就会结束碰撞'
+        'BoxCollider' = '方形碰撞框，目前是以两个物体的第一次碰到的边作为进入碰撞，持续碰撞，结束碰撞来计算的，所以对碰撞框是有要求的，例如父节点的box被挤压后，有穿透，带着子节点位移了，很容易就会结束碰撞',
+
+        'Laya.Physics.I.worldRoot=scene' = '物理世界根节点，有时候需要整体移动物理世界，可以将物理世界根节点设置为场景，这样的话可以整体移动场景，物理世界将一起移动，其他节点似乎不可以；如果不这么做，必须分别移动带有物理的节点，才可以，很麻烦，也可以',
     }
 
     export enum Unity {

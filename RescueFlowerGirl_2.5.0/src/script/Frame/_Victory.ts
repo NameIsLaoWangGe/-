@@ -1,7 +1,6 @@
 import ADManager from "../TJ/Admanager";
-import lwg, { Admin, Click, _Gold, Tools, Dialogue, _SceneName, EventAdmin, DateAdmin } from "./Lwg";
+import lwg, { Admin, Click, Tools, Dialogue, _SceneName, EventAdmin, DateAdmin } from "./Lwg";
 import { _Game } from "./_Game";
-import { _PreloadUrl } from "./_PreLoad";
 import { _Share } from "./_Share";
 import { _Special } from "./_Special";
 export module _Victory {
@@ -11,9 +10,9 @@ export module _Victory {
     }
     export class Victory extends Admin._SceneBase {
 
-        lwgBtnClick(): void {
-            Click._on(Click._Type.largen, this.ImgVar('BtnGet'), this, null, null, () => {
-                this.lwgOpenScene(_SceneName.Start);
+        lwgBtnRegister(): void {
+            this._btnUp(this._ImgVar('BtnGet'), () => {
+                this._openScene(_SceneName.Start);
                 EventAdmin._notify(_Game._Event.closeScene);
             })
         }

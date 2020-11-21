@@ -39,9 +39,10 @@ P 0587871F vscroll$up.png
 P 5FD17798 vscroll.png
 P DDDDFB9E vslider$bar.png
 P 01BAE7F5 vslider.png
-D Frame
 D Game
-D Frame/Effects
+D Lwg
+D Game/UI
+D Lwg/Effects
 P 479E26FC aixin1.png
 P D31680DB aixin2.png
 P DBA95F56 aixin3.png
@@ -64,7 +65,7 @@ P 53D31D10 xuehua1.png
 P 4A512E89 yezi1.png
 P CAAFC187 yuan1.png
 P B63DD538 yuanfaguang.png
-D Frame/UI
+D Lwg/UI
 P 5FCECF63 icon_cusp.png
 P C36AA67B icon_execution.png
 P A5763191 icon_gold.png
@@ -135,14 +136,13 @@ P 06EEE25E ui_square_c_008.png
 P D6262B24 ui_square_c_009.png
 P 7331617A ui_square_c_010.png
 P 87918B79 ui_square_c_011.png
-D Frame/Voice
+D Lwg/Voice
 R 285FF3DD bgm.mp3
 R 626CADAF btn.wav
 R 9B501DC8 chijinbi.wav
 R E23D09D2 guoguan.wav
 R 9140B217 huodejinbi.wav
 R 6E72E92F wancheng.wav
-D Game/UI
 D Game/UI/Common
 P 50A4ECB6 a.png
 R 5F25687D bg1.png
@@ -268,11 +268,16 @@ D Game/UI/Game/Enemy
 P 1DAA2131 enemy_01_blue.png
 P DD5D2384 enemy_01_red.png
 P CB64019F enemy_01_yellow.png
+P BC084FE5 shell.png
 D Game/UI/Game/Hero
 P 1A862E8E Hero_01.png
-P AEFBD686 Hero_01_weapon_blue.png
-P 27C484EB Hero_01_weapon_red.png
-P 7967AD6E Hero_01_weapon_yellow.png
+P 10088DB6 Hero_01_bow_blue.png
+P 165C15A8 Hero_01_bow_normalc.png
+P 54772D34 Hero_01_bow_red.png
+P 1204CC09 Hero_01_bow_yellow.png
+P DA1F0D39 Hero_01_weapon_blue.png
+P BA6B5FC1 Hero_01_weapon_red.png
+P 6AAD91FA Hero_01_weapon_yellow.png
 D Game/UI/Game/Heroine
 P 01D78A36 heroine_01.png
 D Game/UI/Game/SceneStyle_01
@@ -281,7 +286,7 @@ P A8B1BF61 botany_01.png
 P AD3E0037 botany_02.png
 P FF57FADE botany_03.png
 P 5EEEAC0C land.png
-P 936BE08D stone_01.png
+P 8ADE13FE stone_01.png
 P C2FD683B yun_01.png
 P F548A71A yun_02.png
 D Game/UI/SelectLevel/IconDress

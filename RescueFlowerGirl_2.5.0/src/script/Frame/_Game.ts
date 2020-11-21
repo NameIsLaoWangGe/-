@@ -1,6 +1,5 @@
-import { Admin, Animation2D, Click, EventAdmin, TimerAdmin, Tools, _Gold, _SceneName } from "./Lwg";
-import { SceneName } from "./LwgInit";
-import { _PreloadUrl } from "./_PreLoad";
+import { Admin, Animation2D, Click, EventAdmin, TimerAdmin, Tools, _SceneName } from "./Lwg";
+import { _Res } from "./_PreLoad";
 import { _PropTry } from "./_PropTry";
 
 /**游戏场景模块*/
@@ -79,7 +78,7 @@ export module _Game {
     }
     export function _init(): void {
     }
-    export class _EnemyBullet extends Admin._Object {
+    export class _EnemyBullet extends Admin._ObjectBase {
         speed = 5;
         lwgOnStart(): void {
             let GPoint = this._SceneImg('HeroContent').localToGlobal(new Laya.Point(this._SceneImg('Hero').x, this._SceneImg('Hero').y));
@@ -88,42 +87,42 @@ export module _Game {
             TimerAdmin._frameLoop(1, this, () => {
                 this._Owner.x -= p.x * this.speed;
                 this._Owner.y -= p.y * this.speed;
-                Tools.Node.leaveStage(this._Owner, () => {
+                Tools._Node.leaveStage(this._Owner, () => {
                     this._Owner.removeSelf();
                     return;
                 });
             })
             TimerAdmin._frameLoop(1, this, () => {
-                Tools.Node.checkTwoDistance(this._Owner, this._SceneImg('Hero'), 50, () => {
+                Tools._Node.checkTwoDistance(this._Owner, this._SceneImg('Hero'), 50, () => {
                     this._Owner.removeSelf();
                     EventAdmin._notify(_Event.calculateBlood, (1));
                 })
             })
         }
     }
-    export class _Enemy extends Admin._Object {
+    export class _Enemy extends Admin._ObjectBase {
         time = 0;
         state = '';
         lwgOnStart(): void {
             this.state = _EnemySate.activity
             TimerAdmin._frameRandomLoop(60, 100, this, () => {
                 if (this.state == _EnemySate.activity) {
-                    let bullet = Tools.Node.prefabCreate(_PreloadUrl._list.prefab2D.EnemyBullet.prefab)
+                    let bullet = Tools._Node.createPrefab(_Res._list.prefab2D.EnemyBullet.prefab)
                     bullet.addComponent(_EnemyBullet);
                     let GPoint = this._Parent.localToGlobal(new Laya.Point(this._Owner.x, this._Owner.y));
                     this._Scene.addChild(bullet);
                     bullet.pos(GPoint.x, GPoint.y);
                 }
             })
-            let rotate = Tools.randomOneHalf() == 1 ? -0.5 : 0.5;
+            let rotate = Tools._Number.randomOneHalf() == 1 ? -0.5 : 0.5;
             TimerAdmin._frameLoop(1, this, () => {
-                let point = Tools.Point.getRoundPos(this._Owner.rotation += rotate, this._SceneImg('MobileFrame').width / 2 + this._Owner.height / 2, new Laya.Point(this._SceneImg('LandContent').width / 2, this._SceneImg('LandContent').height / 2))
+                let point = Tools._Point.getRoundPos(this._Owner.rotation += rotate, this._SceneImg('MobileFrame').width / 2 + this._Owner.height / 2, new Laya.Point(this._SceneImg('LandContent').width / 2, this._SceneImg('LandContent').height / 2))
                 this._Owner.x = point.x;
                 this._Owner.y = point.y;
             })
         }
     }
-    export class _Weapon extends Admin._Object {
+    export class _Weapon extends Admin._ObjectBase {
         distance = 0;
         baseSpeed = 60;
         accelerated = 1;
@@ -160,7 +159,7 @@ export module _Game {
                 }
             }
             var move = (rSpeed: number, radius: number) => {
-                let point = Tools.Point.getRoundPos(rSpeed ? this._Owner.rotation += rSpeed : this._Owner.rotation, radius, new Laya.Point(this._Parent.width / 2, this._Parent.height / 2))
+                let point = Tools._Point.getRoundPos(rSpeed ? this._Owner.rotation += rSpeed : this._Owner.rotation, radius, new Laya.Point(this._Parent.width / 2, this._Parent.height / 2))
                 this._Owner.x = point.x;
                 this._Owner.y = point.y;
             }
@@ -220,9 +219,9 @@ export module _Game {
     export class Game extends Admin._SceneBase {
         lwgOnEnable(): void {
             for (let index = 0; index < _Data._arr.length; index++) {
-                let Weapon = Tools.Node.prefabCreate(_PreloadUrl._list.prefab2D.Weapon.prefab) as Laya.Image;
-                this.ImgVar('WeaponParent').addChild(Weapon);
-                let point = Tools.Point.getRoundPos(index / _Data._arr.length * 360, this.ImgVar('WeaponParent').width / 2 - 50, new Laya.Point(this.ImgVar('WeaponParent').width / 2, this.ImgVar('WeaponParent').height / 2))
+                let Weapon = Tools._Node.createPrefab(_Res._list.prefab2D.Weapon.prefab) as Laya.Image;
+                this._ImgVar('WeaponParent').addChild(Weapon);
+                let point = Tools._Point.getRoundPos(index / _Data._arr.length * 360, this._ImgVar('WeaponParent').width / 2 - 50, new Laya.Point(this._ImgVar('WeaponParent').width / 2, this._ImgVar('WeaponParent').height / 2))
                 Weapon.x = point.x;
                 Weapon.y = point.y;
                 Weapon.rotation = index / _Data._arr.length * 360;
@@ -237,41 +236,41 @@ export module _Game {
             let bloodNum = 20;
             let _width = 100;
             EventAdmin._register(_Event.calculateBlood, this, (number: number) => {
-                let Blood = this.ImgVar('Blood').getChildAt(0) as Laya.Image;
+                let Blood = this._ImgVar('Blood').getChildAt(0) as Laya.Image;
                 Blood.width = Blood.width - _width / 20;
                 bloodNum -= number;
                 if (!this['bloodNumSwitch']) {
                     if (bloodNum <= 0) {
                         this['bloodNumSwitch'] = true
-                        this.lwgOpenScene(_SceneName.Defeated, false);
+                        this._openScene(_SceneName.Defeated, false);
                     }
                 }
             });
 
-            let enemyNum = this.ImgVar('EnemyParent').numChildren;
+            let enemyNum = this._ImgVar('EnemyParent').numChildren;
             EventAdmin._register(_Event.destroyEnemy, this, () => {
                 enemyNum -= 1;
                 if (!this['EnemyNumSwitch']) {
                     if (enemyNum <= 0) {
                         this['EnemyNumSwitch'] = true
-                        this.lwgOpenScene(_SceneName.Victory, false);
+                        this._openScene(_SceneName.Victory, false);
                     }
                 }
             });
             EventAdmin._register(_Event.closeScene, this, () => {
-                this.lwgCloseScene();
+                this._closeScene();
             });
         }
 
         lwgOnStart(): void {
             TimerAdmin._frameLoop(1, this, () => {
-                this.ImgVar('LandContent').rotation += 0.1;
+                this._ImgVar('LandContent').rotation += 0.1;
             })
-            _fireControl.EnemyParent = this.ImgVar('EnemyParent');
-            _fireControl.Aim = this.ImgVar('Aim');
-            for (let index = 0; index < this.ImgVar('EnemyParent').numChildren; index++) {
-                const element = this.ImgVar('EnemyParent').getChildAt(index) as Laya.Image;
-                Tools.Node.changePovit(element, element.width / 2, element.height / 2);
+            _fireControl.EnemyParent = this._ImgVar('EnemyParent');
+            _fireControl.Aim = this._ImgVar('Aim');
+            for (let index = 0; index < this._ImgVar('EnemyParent').numChildren; index++) {
+                const element = this._ImgVar('EnemyParent').getChildAt(index) as Laya.Image;
+                Tools._Node.changePivot(element, element.width / 2, element.height / 2);
                 element.addComponent(_Enemy);
             }
         }
@@ -280,9 +279,9 @@ export module _Game {
             moveDownY: 0 as number,
         }
 
-        lwgBtnClick(): void {
-            this.ImgVar('AimOperation').height = this.ImgVar('WeaponOperation').height = Laya.stage.height;
-            Click._on(Click._Type.noEffect, this.ImgVar('WeaponOperation'), this,
+        lwgBtnRegister(): void {
+            this._ImgVar('AimOperation').height = this._ImgVar('WeaponOperation').height = Laya.stage.height;
+            this._btnFour(this._ImgVar('WeaponOperation'),
                 (e: Laya.Event) => {
                     _fireControl.rotateSwitch = false;
                     _fireControl.moveDownY = e.stageY;
@@ -309,22 +308,22 @@ export module _Game {
                 },
             );
 
-            Click._on(Click._Type.noEffect, this.ImgVar('AimOperation'), this,
+            this._btnFour(this._ImgVar('AimOperation'),
                 (e: Laya.Event) => {
                     this.aimControl.moveDownY = e.stageY;
                 },
                 (e: Laya.Event) => {
                     if (this.aimControl.moveDownY && Math.abs(this.aimControl.moveDownY - e.stageY) > 5) {
                         if (this.aimControl.moveDownY - e.stageY > 0) {
-                            this.ImgVar('Aim').rotation += 2.5;
+                            this._ImgVar('Aim').rotation += 2.5;
                         } else {
-                            this.ImgVar('Aim').rotation -= 2.5;
+                            this._ImgVar('Aim').rotation -= 2.5;
                         }
-                        if (this.ImgVar('Aim').rotation < -45) {
-                            this.ImgVar('Aim').rotation = -45;
+                        if (this._ImgVar('Aim').rotation < -45) {
+                            this._ImgVar('Aim').rotation = -45;
                         }
-                        if (45 < this.ImgVar('Aim').rotation) {
-                            this.ImgVar('Aim').rotation = 45;
+                        if (45 < this._ImgVar('Aim').rotation) {
+                            this._ImgVar('Aim').rotation = 45;
                         }
                         this.aimControl.moveDownY = e.stageY;
                     }
@@ -337,23 +336,22 @@ export module _Game {
                 },
             );
 
-            Click._on(Click._Type.noEffect, this.ImgVar('Hero'), this,
+            this._btnFour(this._ImgVar('Hero'),
                 () => {
                     this['HeroMove'] = true;
                 },
-                (e: Laya.Event) => {
-                    if (this['HeroMove']) {
-                        this.ImgVar('HeroContent').x = e.stageX;
-                        this.ImgVar('HeroContent').y = e.stageY;
-                    }
-                },
+                null,
                 () => {
                     this['HeroMove'] = false;
                 },
-                () => {
-                    this['HeroMove'] = false;
-                }
+                null,
             )
+        }
+        lwgOnStageMove(e: Laya.Event): void {
+            if (this['HeroMove']) {
+                this._ImgVar('HeroContent').x = e.stageX;
+                this._ImgVar('HeroContent').y = e.stageY;
+            }
         }
 
     }

@@ -27,60 +27,8 @@
             }
             Pause.btnPauseUp = btnPauseUp;
         })(Pause = lwg.Pause || (lwg.Pause = {}));
-        let Elect;
-        (function (Elect) {
-            function _createP201_01(parent) {
-                let sp;
-                Laya.loader.load('prefab/P201.json', Laya.Handler.create(this, function (prefab) {
-                    let _prefab = new Laya.Prefab();
-                    _prefab.json = prefab;
-                    sp = Laya.Pool.getItemByCreateFun('P201', _prefab.create, _prefab);
-                    parent.addChild(sp);
-                    sp.pos(80, 290);
-                    sp.zOrder = 65;
-                }));
-            }
-            Elect._createP201_01 = _createP201_01;
-        })(Elect = lwg.Elect || (lwg.Elect = {}));
         let Dialogue;
         (function (Dialogue) {
-            let HintContent;
-            (function (HintContent) {
-                HintContent[HintContent["\u91D1\u5E01\u4E0D\u591F\u4E86\uFF01"] = 0] = "\u91D1\u5E01\u4E0D\u591F\u4E86\uFF01";
-                HintContent[HintContent["\u6CA1\u6709\u53EF\u4EE5\u8D2D\u4E70\u7684\u76AE\u80A4\u4E86\uFF01"] = 1] = "\u6CA1\u6709\u53EF\u4EE5\u8D2D\u4E70\u7684\u76AE\u80A4\u4E86\uFF01";
-                HintContent[HintContent["\u6682\u65F6\u6CA1\u6709\u5E7F\u544A\uFF0C\u8FC7\u4F1A\u513F\u518D\u8BD5\u8BD5\u5427\uFF01"] = 2] = "\u6682\u65F6\u6CA1\u6709\u5E7F\u544A\uFF0C\u8FC7\u4F1A\u513F\u518D\u8BD5\u8BD5\u5427\uFF01";
-                HintContent[HintContent["\u6682\u65E0\u76AE\u80A4!"] = 3] = "\u6682\u65E0\u76AE\u80A4!";
-                HintContent[HintContent["\u6682\u65E0\u5206\u4EAB!"] = 4] = "\u6682\u65E0\u5206\u4EAB!";
-                HintContent[HintContent["\u6682\u65E0\u63D0\u793A\u673A\u4F1A!"] = 5] = "\u6682\u65E0\u63D0\u793A\u673A\u4F1A!";
-                HintContent[HintContent["\u89C2\u770B\u5B8C\u6574\u5E7F\u544A\u624D\u80FD\u83B7\u53D6\u5956\u52B1\u54E6\uFF01"] = 6] = "\u89C2\u770B\u5B8C\u6574\u5E7F\u544A\u624D\u80FD\u83B7\u53D6\u5956\u52B1\u54E6\uFF01";
-                HintContent[HintContent["\u901A\u5173\u4E0A\u4E00\u5173\u624D\u80FD\u89E3\u9501\u672C\u5173\uFF01"] = 7] = "\u901A\u5173\u4E0A\u4E00\u5173\u624D\u80FD\u89E3\u9501\u672C\u5173\uFF01";
-                HintContent[HintContent["\u5206\u4EAB\u6210\u529F\u540E\u624D\u80FD\u83B7\u53D6\u5956\u52B1\uFF01"] = 8] = "\u5206\u4EAB\u6210\u529F\u540E\u624D\u80FD\u83B7\u53D6\u5956\u52B1\uFF01";
-                HintContent[HintContent["\u5206\u4EAB\u6210\u529F!"] = 9] = "\u5206\u4EAB\u6210\u529F!";
-                HintContent[HintContent["\u6682\u65E0\u89C6\u9891\uFF0C\u73A9\u4E00\u5C40\u6E38\u620F\u4E4B\u540E\u5206\u4EAB\uFF01"] = 10] = "\u6682\u65E0\u89C6\u9891\uFF0C\u73A9\u4E00\u5C40\u6E38\u620F\u4E4B\u540E\u5206\u4EAB\uFF01";
-                HintContent[HintContent["\u6D88\u80172\u70B9\u4F53\u529B\uFF01"] = 11] = "\u6D88\u80172\u70B9\u4F53\u529B\uFF01";
-                HintContent[HintContent["\u4ECA\u65E5\u4F53\u529B\u798F\u5229\u5DF2\u9886\u53D6\uFF01"] = 12] = "\u4ECA\u65E5\u4F53\u529B\u798F\u5229\u5DF2\u9886\u53D6\uFF01";
-                HintContent[HintContent["\u5206\u4EAB\u6210\u529F\uFF0C\u83B7\u5F97125\u91D1\u5E01\uFF01"] = 13] = "\u5206\u4EAB\u6210\u529F\uFF0C\u83B7\u5F97125\u91D1\u5E01\uFF01";
-                HintContent[HintContent["\u5206\u4EAB\u6210\u529F\uFF0C\u83B7\u5F9750\u91D1\u5E01\uFF01"] = 14] = "\u5206\u4EAB\u6210\u529F\uFF0C\u83B7\u5F9750\u91D1\u5E01\uFF01";
-                HintContent[HintContent["\u9650\u5B9A\u76AE\u80A4\u5DF2\u7ECF\u83B7\u5F97\uFF0C\u8BF7\u524D\u5F80\u76AE\u80A4\u754C\u9762\u67E5\u770B\u3002"] = 15] = "\u9650\u5B9A\u76AE\u80A4\u5DF2\u7ECF\u83B7\u5F97\uFF0C\u8BF7\u524D\u5F80\u76AE\u80A4\u754C\u9762\u67E5\u770B\u3002";
-                HintContent[HintContent["\u5206\u4EAB\u5931\u8D25\uFF01"] = 16] = "\u5206\u4EAB\u5931\u8D25\uFF01";
-                HintContent[HintContent["\u5151\u6362\u7801\u9519\u8BEF\uFF01"] = 17] = "\u5151\u6362\u7801\u9519\u8BEF\uFF01";
-                HintContent[HintContent["\u5C1A\u672A\u83B7\u5F97\u8BE5\u5546\u54C1!"] = 18] = "\u5C1A\u672A\u83B7\u5F97\u8BE5\u5546\u54C1!";
-                HintContent[HintContent["\u606D\u559C\u83B7\u5F97\u65B0\u76AE\u80A4!"] = 19] = "\u606D\u559C\u83B7\u5F97\u65B0\u76AE\u80A4!";
-                HintContent[HintContent["\u8BF7\u524D\u5F80\u76AE\u80A4\u9650\u5B9A\u754C\u9762\u83B7\u53D6!"] = 20] = "\u8BF7\u524D\u5F80\u76AE\u80A4\u9650\u5B9A\u754C\u9762\u83B7\u53D6!";
-                HintContent[HintContent["\u901A\u8FC7\u76F8\u5E94\u7684\u5173\u5361\u6570\u8FBE\u5230\u5C31\u53EF\u4EE5\u5F97\u5230\u4E86!"] = 21] = "\u901A\u8FC7\u76F8\u5E94\u7684\u5173\u5361\u6570\u8FBE\u5230\u5C31\u53EF\u4EE5\u5F97\u5230\u4E86!";
-                HintContent[HintContent["\u70B9\u51FB\u91D1\u5E01\u62BD\u5956\u6309\u94AE\u8D2D\u4E70!"] = 22] = "\u70B9\u51FB\u91D1\u5E01\u62BD\u5956\u6309\u94AE\u8D2D\u4E70!";
-                HintContent[HintContent["\u6CA1\u6709\u9886\u53D6\u6B21\u6570\u4E86\uFF01"] = 23] = "\u6CA1\u6709\u9886\u53D6\u6B21\u6570\u4E86\uFF01";
-                HintContent[HintContent["\u589E\u52A0\u4E09\u6B21\u5F00\u542F\u5B9D\u7BB1\u6B21\u6570\uFF01"] = 24] = "\u589E\u52A0\u4E09\u6B21\u5F00\u542F\u5B9D\u7BB1\u6B21\u6570\uFF01";
-                HintContent[HintContent["\u89C2\u770B\u5E7F\u544A\u53EF\u4EE5\u83B7\u5F97\u4E09\u6B21\u5F00\u5B9D\u7BB1\u6B21\u6570\uFF01"] = 25] = "\u89C2\u770B\u5E7F\u544A\u53EF\u4EE5\u83B7\u5F97\u4E09\u6B21\u5F00\u5B9D\u7BB1\u6B21\u6570\uFF01";
-                HintContent[HintContent["\u6CA1\u6709\u5B9D\u7BB1\u9886\u53EF\u4EE5\u9886\u4E86\uFF01"] = 26] = "\u6CA1\u6709\u5B9D\u7BB1\u9886\u53EF\u4EE5\u9886\u4E86\uFF01";
-                HintContent[HintContent["\u8BF7\u524D\u5F80\u76AE\u80A4\u754C\u9762\u8D2D\u4E70\uFF01"] = 27] = "\u8BF7\u524D\u5F80\u76AE\u80A4\u754C\u9762\u8D2D\u4E70\uFF01";
-                HintContent[HintContent["\u4ECA\u5929\u5DF2\u7ECF\u7B7E\u5230\u8FC7\u4E86\uFF01"] = 28] = "\u4ECA\u5929\u5DF2\u7ECF\u7B7E\u5230\u8FC7\u4E86\uFF01";
-                HintContent[HintContent["\u6CA1\u6709\u62BD\u5956\u6B21\u6570\u4E86\uFF0C\u8BF7\u901A\u8FC7\u89C2\u770B\u5E7F\u544A\u83B7\u53D6\uFF01"] = 29] = "\u6CA1\u6709\u62BD\u5956\u6B21\u6570\u4E86\uFF0C\u8BF7\u901A\u8FC7\u89C2\u770B\u5E7F\u544A\u83B7\u53D6\uFF01";
-                HintContent[HintContent["\u6CA1\u6709\u5E93\u5B58\u4E86\uFF01"] = 30] = "\u6CA1\u6709\u5E93\u5B58\u4E86\uFF01";
-                HintContent[HintContent["\u724C\u6570\u592A\u5C11\uFF0C\u65E0\u6CD5\u4F7F\u7528\u9053\u5177\uFF01"] = 31] = "\u724C\u6570\u592A\u5C11\uFF0C\u65E0\u6CD5\u4F7F\u7528\u9053\u5177\uFF01";
-                HintContent[HintContent["\u6CA1\u6709\u53EF\u4EE5\u8D2D\u4E70\u7684\u5361\u724C\u4E86\uFF01"] = 32] = "\u6CA1\u6709\u53EF\u4EE5\u8D2D\u4E70\u7684\u5361\u724C\u4E86\uFF01";
-                HintContent[HintContent["\u656C\u8BF7\u671F\u5F85!"] = 33] = "\u656C\u8BF7\u671F\u5F85!";
-            })(HintContent = Dialogue.HintContent || (Dialogue.HintContent = {}));
             let Skin;
             (function (Skin) {
                 Skin["blackBord"] = "Frame/UI/ui_orthogon_black.png";
@@ -109,7 +57,7 @@
                 let Dec = new Laya.Label();
                 Hint_M.addChild(Dec);
                 Dec.width = Laya.stage.width;
-                Dec.text = HintContent[describe];
+                Dec.text = describe;
                 Dec.pivotX = Laya.stage.width / 2;
                 Dec.x = Laya.stage.width / 2;
                 Dec.height = 100;
@@ -267,84 +215,17 @@
             }
             Dialogue.createCommonDialog = createCommonDialog;
         })(Dialogue = lwg.Dialogue || (lwg.Dialogue = {}));
-        let Execution;
-        (function (Execution) {
-            Execution._execution = {
-                get value() {
-                    return Laya.LocalStorage.getItem('_execution') ? Number(Laya.LocalStorage.getItem('_execution')) : 15;
-                },
-                set value(val) {
-                    Laya.LocalStorage.setItem('_execution', val.toString());
-                }
-            };
-            function _createExecutionNum(parent) {
-                let sp;
-                Laya.loader.load('prefab/ExecutionNum.json', Laya.Handler.create(this, function (prefab) {
-                    let _prefab = new Laya.Prefab();
-                    _prefab.json = prefab;
-                    sp = Laya.Pool.getItemByCreateFun('prefab', _prefab.create, _prefab);
-                    parent.addChild(sp);
-                    let num = sp.getChildByName('Num');
-                    sp.pos(297, 90);
-                    sp.zOrder = 50;
-                    Execution.ExecutionNumNode = sp;
-                    Execution.ExecutionNumNode.name = 'ExecutionNumNode';
-                }));
-            }
-            Execution._createExecutionNum = _createExecutionNum;
-            function _createAddExecution(x, y, func) {
-                let sp;
-                Laya.loader.load('prefab/execution.json', Laya.Handler.create(this, function (prefab) {
-                    let _prefab = new Laya.Prefab();
-                    _prefab.json = prefab;
-                    sp = Laya.Pool.getItemByCreateFun('prefab', _prefab.create, _prefab);
-                    Laya.stage.addChild(sp);
-                    sp.x = Laya.stage.width / 2;
-                    sp.y = Laya.stage.height / 2;
-                    sp.zOrder = 50;
-                    if (Execution.ExecutionNumNode) {
-                        Animation2D.move_Simple(sp, sp.x, sp.y, Execution.ExecutionNumNode.x, Execution.ExecutionNumNode.y, 800, 100, f => {
-                            Animation2D.fadeOut(sp, 1, 0, 200, 0, f => {
-                                lwg.Animation2D.upDwon_Shake(Execution.ExecutionNumNode, 10, 80, 0, null);
-                                if (func) {
-                                    func();
-                                }
-                            });
-                        }, Laya.Ease.expoIn);
-                    }
-                }));
-            }
-            Execution._createAddExecution = _createAddExecution;
-            function createConsumeEx(subEx) {
-                let label = Laya.Pool.getItemByClass('label', Laya.Label);
-                label.name = 'label';
-                Laya.stage.addChild(label);
-                label.text = '-2';
-                label.fontSize = 40;
-                label.bold = true;
-                label.color = '#59245c';
-                label.x = Execution.ExecutionNumNode.x + 100;
-                label.y = Execution.ExecutionNumNode.y - label.height / 2 + 4;
-                label.zOrder = 100;
-                lwg.Animation2D.fadeOut(label, 0, 1, 200, 150, f => {
-                    lwg.Animation2D.leftRight_Shake(Execution.ExecutionNumNode, 15, 60, 0, null);
-                    lwg.Animation2D.fadeOut(label, 1, 0, 600, 400, f => {
-                    });
-                });
-            }
-            Execution.createConsumeEx = createConsumeEx;
-        })(Execution = lwg.Execution || (lwg.Execution = {}));
         let Gold;
         (function (Gold_1) {
             Gold_1._num = {
                 get value() {
-                    return Laya.LocalStorage.getItem('_goldNum') ? Number(Laya.LocalStorage.getItem('_goldNum')) : 0;
+                    return Laya.LocalStorage.getItem('GoldNum') ? Number(Laya.LocalStorage.getItem('GoldNum')) : 0;
                 },
                 set value(val) {
-                    Laya.LocalStorage.setItem('_goldNum', val.toString());
+                    Laya.LocalStorage.setItem('GoldNum', val.toString());
                 }
             };
-            function createGoldNode(x, y, parent) {
+            function _createGoldNode(x, y, parent) {
                 if (!parent) {
                     parent = Laya.stage;
                 }
@@ -357,30 +238,30 @@
                     _prefab.json = prefab;
                     sp = Laya.Pool.getItemByCreateFun('gold', _prefab.create, _prefab);
                     let Num = sp.getChildByName('Num');
-                    Num.text = Tools.format_FormatNumber(Gold_1._num.value);
+                    Num.text = Tools._Format.formatNumber(Gold_1._num.value);
                     parent.addChild(sp);
                     sp.pos(x, y);
                     sp.zOrder = 100;
                     Gold_1.GoldNode = sp;
                 }));
             }
-            Gold_1.createGoldNode = createGoldNode;
-            function _addGold(number) {
+            Gold_1._createGoldNode = _createGoldNode;
+            function _add(number) {
                 Gold_1._num.value += Number(number);
                 let Num = Gold_1.GoldNode.getChildByName('Num');
-                Num.text = Tools.format_FormatNumber(Gold_1._num.value);
+                Num.text = Tools._Format.formatNumber(Gold_1._num.value);
             }
-            Gold_1._addGold = _addGold;
-            function addGoldDisPlay(number) {
+            Gold_1._add = _add;
+            function _addDisPlay(number) {
                 let Num = Gold_1.GoldNode.getChildByName('Num');
                 Num.value = (Number(Num.value) + Number(number)).toString();
             }
-            Gold_1.addGoldDisPlay = addGoldDisPlay;
-            function addGoldNoDisPlay(number) {
+            Gold_1._addDisPlay = _addDisPlay;
+            function _addNoDisPlay(number) {
                 Gold_1._num.value += Number(number);
             }
-            Gold_1.addGoldNoDisPlay = addGoldNoDisPlay;
-            function goldAppear(delayed, x, y) {
+            Gold_1._addNoDisPlay = _addNoDisPlay;
+            function _nodeAppear(delayed, x, y) {
                 if (!Gold_1.GoldNode) {
                     return;
                 }
@@ -399,8 +280,8 @@
                     Gold_1.GoldNode.y = y;
                 }
             }
-            Gold_1.goldAppear = goldAppear;
-            function goldVinish(delayed) {
+            Gold_1._nodeAppear = _nodeAppear;
+            function _nodeVinish(delayed) {
                 if (!Gold_1.GoldNode) {
                     return;
                 }
@@ -413,12 +294,12 @@
                     Gold_1.GoldNode.visible = false;
                 }
             }
-            Gold_1.goldVinish = goldVinish;
+            Gold_1._nodeVinish = _nodeVinish;
             let SkinUrl;
             (function (SkinUrl) {
-                SkinUrl[SkinUrl["Frame/Effects/icon_gold.png"] = 0] = "Frame/Effects/icon_gold.png";
+                SkinUrl[SkinUrl["Frame/Effects/iconGold.png"] = 0] = "Frame/Effects/iconGold.png";
             })(SkinUrl || (SkinUrl = {}));
-            function createOneGold(width, height, url) {
+            function _createOne(width, height, url) {
                 let Gold = Laya.Pool.getItemByClass('addGold', Laya.Image);
                 Gold.name = 'addGold';
                 let num = Math.floor(Math.random() * 12);
@@ -439,14 +320,14 @@
                 }
                 return Gold;
             }
-            Gold_1.createOneGold = createOneGold;
-            function getGoldAni_Single(parent, number, width, height, url, firstPoint, targetPoint, func1, func2) {
+            Gold_1._createOne = _createOne;
+            function _getAni_Single(parent, number, width, height, url, firstPoint, targetPoint, func1, func2) {
                 for (let index = 0; index < number; index++) {
                     Laya.timer.once(index * 30, this, () => {
-                        let Gold = createOneGold(width, height, url);
+                        let Gold = _createOne(width, height, url);
                         parent.addChild(Gold);
                         Animation2D.move_Scale(Gold, 1, firstPoint.x, firstPoint.y, targetPoint.x, targetPoint.y, 1, 350, 0, null, () => {
-                            PalyAudio.playSound(PalyAudio.voiceUrl.huodejinbi);
+                            Audio._playSound(Audio._voiceUrl.huodejinbi);
                             if (index === number - 1) {
                                 Laya.timer.once(200, this, () => {
                                     if (func2) {
@@ -464,10 +345,10 @@
                     });
                 }
             }
-            Gold_1.getGoldAni_Single = getGoldAni_Single;
-            function _getGoldAni_Heap(parent, number, width, height, url, firstPoint, targetPoint, func1, func2) {
+            Gold_1._getAni_Single = _getAni_Single;
+            function _getAni_Heap(parent, number, width, height, url, firstPoint, targetPoint, func1, func2) {
                 for (let index = 0; index < number; index++) {
-                    let Gold = createOneGold(width ? width : 100, height ? height : 100, url ? url : SkinUrl[0]);
+                    let Gold = _createOne(width ? width : 100, height ? height : 100, url ? url : SkinUrl[0]);
                     parent = parent ? parent : Laya.stage;
                     parent.addChild(Gold);
                     firstPoint = firstPoint ? firstPoint : new Laya.Point(Laya.stage.width / 2, Laya.stage.height / 2);
@@ -476,7 +357,7 @@
                     let y = Math.floor(Math.random() * 2) == 1 ? firstPoint.y + Math.random() * 100 : firstPoint.y - Math.random() * 100;
                     Animation2D.move_Scale(Gold, 0.5, firstPoint.x, firstPoint.y, x, y, 1, 300, Math.random() * 100 + 100, Laya.Ease.expoIn, () => {
                         Animation2D.move_Scale(Gold, 1, Gold.x, Gold.y, targetPoint.x, targetPoint.y, 1, 400, Math.random() * 200 + 100, Laya.Ease.cubicOut, () => {
-                            PalyAudio.playSound(PalyAudio.voiceUrl.huodejinbi);
+                            Audio._playSound(Audio._voiceUrl.huodejinbi);
                             if (index === number - 1) {
                                 Laya.timer.once(200, this, () => {
                                     if (func2) {
@@ -494,77 +375,7 @@
                     });
                 }
             }
-            Gold_1._getGoldAni_Heap = _getGoldAni_Heap;
-            class GoldAniBase extends Laya.Script {
-                onAwake() {
-                    this.initProperty();
-                }
-                onEnable() {
-                    this.Owner = this.owner;
-                    this.selfScene = this.Owner.scene;
-                    let calssName = this['__proto__']['constructor'].name;
-                    this.Owner[calssName] = this;
-                    this.timer = 0;
-                    this.lwgInit();
-                    this.propertyAssign();
-                }
-                lwgInit() {
-                }
-                initProperty() {
-                }
-                propertyAssign() {
-                    if (this.startAlpha) {
-                        this.Owner.alpha = this.startAlpha;
-                    }
-                    if (this.startScale) {
-                        this.Owner.scale(this.startScale, this.startScale);
-                    }
-                    if (this.startRotat) {
-                        this.Owner.rotation = this.startRotat;
-                    }
-                }
-                commonSpeedXYByAngle(angle, speed) {
-                    this.Owner.x += Tools.Point.SpeedXYByAngle(angle, speed + this.accelerated).x;
-                    this.Owner.y += Tools.Point.SpeedXYByAngle(angle, speed + this.accelerated).y;
-                }
-                moveRules() {
-                }
-                onUpdate() {
-                    this.moveRules();
-                }
-                onDisable() {
-                    Laya.Pool.recover(this.Owner.name, this.Owner);
-                    this.destroy();
-                    Laya.Tween.clearAll(this);
-                    Laya.timer.clearAll(this);
-                }
-            }
-            Gold_1.GoldAniBase = GoldAniBase;
-            class AddGold extends GoldAniBase {
-                lwgInit() {
-                    this.Owner.width = 115;
-                    this.Owner.height = 111;
-                    this.Owner.pivotX = this.Owner.width / 2;
-                    this.Owner.pivotY = this.Owner.height / 2;
-                }
-                initProperty() {
-                }
-                moveRules() {
-                    if (this.moveSwitch) {
-                        this.timer++;
-                        if (this.timer > 0) {
-                            lwg.Animation2D.move_Scale(this.Owner, 1, this.Owner.x, this.Owner.y, this.targetX, this.targetY, 0.35, 250, 0, f => {
-                                this.Owner.removeSelf();
-                                if (this.func !== null) {
-                                    this.func();
-                                }
-                            });
-                            this.moveSwitch = false;
-                        }
-                    }
-                }
-            }
-            Gold_1.AddGold = AddGold;
+            Gold_1._getAni_Heap = _getAni_Heap;
         })(Gold = lwg.Gold || (lwg.Gold = {}));
         let EventAdmin;
         (function (EventAdmin) {
@@ -682,41 +493,58 @@
         })(DateAdmin = lwg.DateAdmin || (lwg.DateAdmin = {}));
         let TimerAdmin;
         (function (TimerAdmin) {
+            TimerAdmin._switch = true;
             function _frameLoop(delay, caller, method, immediately, args, coverBefore) {
                 if (immediately) {
-                    method();
+                    if (TimerAdmin._switch) {
+                        method();
+                    }
                 }
                 Laya.timer.frameLoop(delay, caller, () => {
-                    method();
+                    if (TimerAdmin._switch) {
+                        method();
+                    }
                 }, args, coverBefore);
             }
             TimerAdmin._frameLoop = _frameLoop;
             function _frameRandomLoop(delay1, delay2, caller, method, immediately, args, coverBefore) {
                 if (immediately) {
-                    method();
+                    if (TimerAdmin._switch) {
+                        method();
+                    }
                 }
                 var func = () => {
-                    let delay = Tools.randomOneInt(delay1, delay2);
+                    let delay = Tools._Number.randomOneInt(delay1, delay2);
                     Laya.timer.frameOnce(delay, caller, () => {
-                        method();
-                        func();
+                        if (TimerAdmin._switch) {
+                            method();
+                            func();
+                        }
                     }, args, coverBefore);
                 };
                 func();
             }
             TimerAdmin._frameRandomLoop = _frameRandomLoop;
-            function _frameNumLoop(delay, num, caller, method, immediately, args, coverBefore) {
+            function _frameNumLoop(delay, num, caller, method, compeletMethod, immediately, args, coverBefore) {
                 if (immediately) {
-                    method();
+                    if (TimerAdmin._switch) {
+                        method();
+                    }
                 }
                 let num0 = 0;
                 var func = () => {
-                    num0++;
-                    if (num0 > num) {
-                        Laya.timer.clear(caller, func);
-                    }
-                    else {
-                        method();
+                    if (TimerAdmin._switch) {
+                        num0++;
+                        if (num0 >= num) {
+                            method();
+                            if (compeletMethod) {
+                                compeletMethod();
+                            }
+                            Laya.timer.clear(caller, func);
+                        }
+                        else {
+                            method();
+                        }
                     }
                 };
                 Laya.timer.frameLoop(delay, caller, func, args, coverBefore);
@@ -733,39 +561,53 @@
             TimerAdmin._frameOnce = _frameOnce;
             function _loop(delay, caller, method, immediately, args, coverBefore) {
                 if (immediately) {
-                    method();
+                    if (TimerAdmin._switch) {
+                        method();
+                    }
                 }
                 Laya.timer.loop(delay, caller, () => {
-                    method();
+                    if (TimerAdmin._switch) {
+                        method();
+                    }
                 }, args, coverBefore);
             }
             TimerAdmin._loop = _loop;
             function _randomLoop(delay1, delay2, caller, method, immediately, args, coverBefore) {
                 if (immediately) {
-                    method();
+                    if (TimerAdmin._switch) {
+                        method();
+                    }
                 }
                 var func = () => {
-                    let delay = Tools.randomOneInt(delay1, delay2);
+                    let delay = Tools._Number.randomOneInt(delay1, delay2);
                     Laya.timer.once(delay, caller, () => {
-                        method();
-                        func();
+                        if (TimerAdmin._switch) {
+                            method();
+                            func();
+                        }
                     }, args, coverBefore);
                 };
                 func();
             }
             TimerAdmin._randomLoop = _randomLoop;
-            function _numLoop(delay, num, caller, method, immediately, args, coverBefore) {
+            function _numLoop(delay, num, caller, method, compeletMethod, immediately, args, coverBefore) {
                 if (immediately) {
                     method();
                 }
                 let num0 = 0;
                 var func = () => {
-                    num0++;
-                    if (num0 > num) {
-                        Laya.timer.clear(caller, func);
-                    }
-                    else {
-                        method();
+                    if (TimerAdmin._switch) {
+                        num0++;
+                        if (num0 > num) {
+                            method();
+                            if (compeletMethod) {
+                                compeletMethod();
+                            }
+                            Laya.timer.clear(caller, func);
+                        }
+                        else {
+                            method();
+                        }
                     }
                 };
                 Laya.timer.loop(delay, caller, func, args, coverBefore);
@@ -782,39 +624,222 @@
             }
             TimerAdmin._once = _once;
         })(TimerAdmin = lwg.TimerAdmin || (lwg.TimerAdmin = {}));
-        let Admin;
-        (function (Admin) {
-            Admin._platform = {
-                tpye: {
-                    Bytedance: 'Bytedance',
-                    WeChat: 'WeChat',
-                    OPPO: 'OPPO',
-                    OPPOTest: 'OPPOTest',
-                    VIVO: 'VIVO',
-                    General: 'General',
-                    Web: 'Web',
-                    WebTest: 'WebTest',
-                    Research: 'Research',
+        let Adaptive;
+        (function (Adaptive) {
+            Adaptive._Use = {
+                get value() {
+                    return this['Adaptive_value'] ? this['Adaptive_value'] : null;
                 },
-                get name() {
+                set value(val) {
+                    this['Adaptive_value'] = val;
+                }
+            };
+            function _stageWidth(arr) {
+                for (let index = 0; index < arr.length; index++) {
+                    const element = arr[index];
+                    if (element.pivotX == 0 && element.width) {
+                        element.x = element.x / Adaptive._Use.value[0] * Laya.stage.width + element.width / 2;
+                    }
+                    else {
+                        element.x = element.x / Adaptive._Use.value[0] * Laya.stage.width;
+                    }
+                }
+            }
+            Adaptive._stageWidth = _stageWidth;
+            function _stageHeight(arr) {
+                for (let index = 0; index < arr.length; index++) {
+                    const element = arr[index];
+                    if (element.pivotY == 0 && element.height) {
+                        element.y = element.y / Adaptive._Use.value[1] * element.scaleX * Laya.stage.height + element.height / 2;
+                    }
+                    else {
+                        element.y = element.y / Adaptive._Use.value[1] * element.scaleX * Laya.stage.height;
+                    }
+                }
+            }
+            Adaptive._stageHeight = _stageHeight;
+            function _center(arr, target) {
+                for (let index = 0; index < arr.length; index++) {
+                    const element = arr[index];
+                    if (element.width > 0) {
+                        element.x = target.width / 2 - (element.width / 2 - element.pivotX) * element.scaleX;
+                    }
+                    else {
+                        element.x = target.width / 2;
+                    }
+                    if (element.height > 0) {
+                        element.y = target.height / 2 - (element.height / 2 - element.pivotY) * element.scaleY;
+                    }
+                    else {
+                        element.y = target.height / 2;
+                    }
+                }
+            }
+            Adaptive._center = _center;
+        })(Adaptive = lwg.Adaptive || (lwg.Adaptive = {}));
+        let SceneAnimation;
+        (function (SceneAnimation) {
+            SceneAnimation._Type = {
+                fadeOut: 'fadeOut',
+                stickIn: {
+                    random: 'random',
+                    upLeftDownLeft: 'upLeftDownRight',
+                    upRightDownLeft: 'upRightDownLeft',
+                },
+                leftMove: 'leftMove',
+                rightMove: 'rightMove',
+                centerRotate: 'centerRotate',
+                drawUp: 'drawUp',
+            };
+            SceneAnimation._vanishSwitch = false;
+            SceneAnimation._openSwitch = true;
+            SceneAnimation._Use = {
+                get value() {
+                    return this['SceneAnimation_name'] ? this['SceneAnimation_name'] : null;
+                },
+                set value(val) {
+                    this['SceneAnimation_name'] = val;
+                }
+            };
+            function _commonVanishAni(CloseScene, closeFunc) {
+                CloseScene[CloseScene.name].lwgBeforeVanishAni();
+                let time;
+                let delay;
+                switch (SceneAnimation._Use.value) {
+                    case SceneAnimation._Type.fadeOut:
+                        time = 150;
+                        delay = 50;
+                        if (CloseScene['Background']) {
+                            Animation2D.fadeOut(CloseScene, 1, 0, time / 2);
+                        }
+                        Animation2D.fadeOut(CloseScene, 1, 0, time, delay, () => {
+                            closeFunc();
+                        });
+                        break;
+                    case SceneAnimation._Type.stickIn.random:
+                        closeFunc();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            SceneAnimation._commonVanishAni = _commonVanishAni;
+            function _commonOpenAni(Scene) {
+                let time;
+                let delay;
+                let sumDelay;
+                var afterAni = () => {
+                    Admin._clickLock.switch = false;
+                    if (Scene[Scene.name]) {
+                        Scene[Scene.name].lwgOpenAniAfter();
+                        Scene[Scene.name].lwgBtnRegister();
+                    }
+                };
+                switch (SceneAnimation._Use.value) {
+                    case SceneAnimation._Type.fadeOut:
+                        time = 400;
+                        delay = 300;
+                        if (Scene['Background']) {
+                            Animation2D.fadeOut(Scene, 0, 1, time / 2, delay);
+                        }
+                        Animation2D.fadeOut(Scene, 0, 1, time, 0);
+                        sumDelay = 400;
+                        break;
+                    case SceneAnimation._Type.stickIn.upLeftDownLeft:
+                        _stickIn(Scene, SceneAnimation._Type.stickIn.upLeftDownLeft);
+                        break;
+                    case SceneAnimation._Type.stickIn.upRightDownLeft:
+                        _stickIn(Scene, SceneAnimation._Type.stickIn.upRightDownLeft);
+                    case SceneAnimation._Type.stickIn.random:
+                        _stickIn(Scene, SceneAnimation._Type.stickIn.random);
+                    default:
+                        break;
+                }
+                Laya.timer.once(sumDelay, this, () => {
+                    afterAni();
+                });
+                return sumDelay;
+            }
+            SceneAnimation._commonOpenAni = _commonOpenAni;
+            function _stickIn(Scene, type) {
+                let sumDelay = 0;
+                let time = 700;
+                let delay = 100;
+                if (Scene.getChildByName('Background')) {
+                    Animation2D.fadeOut(Scene.getChildByName('Background'), 0, 1, time);
+                }
+                let stickInLeftArr = Tools._Node.zOrderByY(Scene, false);
+                for (let index = 0; index < stickInLeftArr.length; index++) {
+                    const element = stickInLeftArr[index];
+                    if (element.name !== 'Background' && element.name.substr(0, 5) !== 'NoAni') {
+                        let originalPovitX = element.pivotX;
+                        let originalPovitY = element.pivotY;
+                        switch (type) {
+                            case SceneAnimation._Type.stickIn.upLeftDownLeft:
+                                element.rotation = element.y > Laya.stage.height / 2 ? -180 : 180;
+                                Tools._Node.changePivot(element, 0, 0);
+                                break;
+                            case SceneAnimation._Type.stickIn.upRightDownLeft:
+                                element.rotation = element.y > Laya.stage.height / 2 ? -180 : 180;
+                                Tools._Node.changePivot(element, element.rotation == 180 ? element.width : 0, 0);
+                                break;
+                            case SceneAnimation._Type.stickIn.random:
+                                element.rotation = Tools._Number.randomOneHalf() == 1 ? 180 : -180;
+                                Tools._Node.changePivot(element, Tools._Number.randomOneHalf() == 1 ? 0 : element.width, Tools._Number.randomOneHalf() == 1 ? 0 : element.height);
+                                break;
+                            default:
+                                break;
+                        }
+                        let originalX = element.x;
+                        let originalY = element.y;
+                        element.x = element.pivotX > element.width / 2 ? 800 + element.width : -800 - element.width;
+                        element.y = element.rotation > 0 ? element.y + 200 : element.y - 200;
+                        Animation2D.simple_Rotate(element, element.rotation, 0, time, delay * index);
+                        Animation2D.move_Simple(element, element.x, element.y, originalX, originalY, time, delay * index, () => {
+                            Tools._Node.changePivot(element, originalPovitX, originalPovitY);
+                        });
+                    }
+                }
+                sumDelay = Scene.numChildren * delay + time + 200;
+                return sumDelay;
+            }
+        })(SceneAnimation = lwg.SceneAnimation || (lwg.SceneAnimation = {}));
+        let Platform;
+        (function (Platform) {
+            Platform._Tpye = {
+                Bytedance: 'Bytedance',
+                WeChat: 'WeChat',
+                OPPO: 'OPPO',
+                OPPOTest: 'OPPOTest',
+                VIVO: 'VIVO',
+                General: 'General',
+                Web: 'Web',
+                WebTest: 'WebTest',
+                Research: 'Research',
+            };
+            Platform._Ues = {
+                get value() {
                     return this['_platform_name'] ? this['_platform_name'] : null;
                 },
-                set name(val) {
+                set value(val) {
                     this['_platform_name'] = val;
                     switch (val) {
-                        case Admin._platform.tpye.WebTest:
+                        case Platform._Tpye.WebTest:
                             Laya.LocalStorage.clear();
-                            _Gold._num.value = 5000;
+                            Gold._num.value = 5000;
                             break;
-                        case Admin._platform.tpye.Research:
+                        case Platform._Tpye.Research:
                             Laya.Stat.show();
-                            _Gold._num.value = 50000000000000;
+                            Gold._num.value = 50000000000000;
                             break;
                         default:
                             break;
                     }
                 }
             };
+        })(Platform = lwg.Platform || (lwg.Platform = {}));
+        let Admin;
+        (function (Admin) {
             Admin._game = {
                 switch: true,
                 get level() {
@@ -885,7 +910,6 @@
                 set switch(bool) {
                     if (bool) {
                         if (!Laya.stage.getChildByName('__stageClickLock__')) {
-                            console.log('锁住点击！');
                             let __stageClickLock__ = new Laya.Sprite();
                             __stageClickLock__.name = '__stageClickLock__';
                             Laya.stage.addChild(__stageClickLock__);
@@ -893,7 +917,7 @@
                             __stageClickLock__.width = Laya.stage.width;
                             __stageClickLock__.height = Laya.stage.height;
                             __stageClickLock__.pos(0, 0);
-                            Click._on(Click._Type.noEffect, __stageClickLock__, this, null, null, (e) => {
+                            Click._on(Click._Type.no, __stageClickLock__, this, null, null, (e) => {
                                 console.log('舞台点击被锁住了！请用admin._clickLock=false解锁');
                                 e.stopPropagation();
                             });
@@ -917,7 +941,7 @@
                 __lockClick__.width = Laya.stage.width;
                 __lockClick__.height = Laya.stage.height;
                 __lockClick__.pos(0, 0);
-                Click._on(Click._Type.noEffect, __lockClick__, this, null, null, (e) => {
+                Click._on(Click._Type.no, __lockClick__, this, null, null, (e) => {
                     console.log('场景点击被锁住了！请用admin._unlockPreventClick（）解锁');
                     e.stopPropagation();
                 });
@@ -936,7 +960,7 @@
             let _SceneName;
             (function (_SceneName) {
                 _SceneName["PreLoad"] = "PreLoad";
-                _SceneName["PreLoadStep"] = "PreLoadStep";
+                _SceneName["PreLoadCutIn"] = "PreLoadCutIn";
                 _SceneName["Guide"] = "Guide";
                 _SceneName["Start"] = "Start";
                 _SceneName["Shop"] = "Shop";
@@ -970,39 +994,40 @@
                 _SceneName["SelectLevel"] = "SelectLevel";
                 _SceneName["Settle"] = "Settle";
                 _SceneName["Special"] = "Special";
+                _SceneName["Compound"] = "Compound";
             })(_SceneName = Admin._SceneName || (Admin._SceneName = {}));
-            function _preLoadOpenScene(openSceneName, cloesSceneName, func, zOrder) {
-                _openScene(_SceneName.PreLoadStep);
-                Admin._preLoadOpenSceneLater.openSceneName = openSceneName;
-                Admin._preLoadOpenSceneLater.cloesSceneName = cloesSceneName;
+            function _preLoadOpenScene(openName, cloesName, func, zOrder) {
+                _openScene(_SceneName.PreLoadCutIn);
+                Admin._preLoadOpenSceneLater.openName = openName;
+                Admin._preLoadOpenSceneLater.cloesName = cloesName;
                 Admin._preLoadOpenSceneLater.func = func;
                 Admin._preLoadOpenSceneLater.zOrder = zOrder;
             }
             Admin._preLoadOpenScene = _preLoadOpenScene;
             Admin._preLoadOpenSceneLater = {
-                openSceneName: null,
-                cloesSceneName: null,
+                openName: null,
+                cloesName: null,
                 func: null,
                 zOrder: null,
             };
-            function _openScene(openSceneName, cloesSceneName, func, zOrder) {
+            function _openScene(openName, cloesName, func, zOrder) {
                 Admin._clickLock.switch = true;
-                Laya.Scene.load('Scene/' + openSceneName + '.json', Laya.Handler.create(this, function (scene) {
-                    if (Admin._moudel['_' + openSceneName]) {
-                        if (Admin._moudel['_' + openSceneName][openSceneName]) {
-                            if (!scene.getComponent(Admin._moudel['_' + openSceneName][openSceneName])) {
-                                scene.addComponent(Admin._moudel['_' + openSceneName][openSceneName]);
+                Laya.Scene.load('Scene/' + openName + '.json', Laya.Handler.create(this, function (scene) {
+                    if (Admin._moudel['_' + openName]) {
+                        if (Admin._moudel['_' + openName][openName]) {
+                            if (!scene.getComponent(Admin._moudel['_' + openName][openName])) {
+                                scene.addComponent(Admin._moudel['_' + openName][openName]);
                             }
                         }
                     }
                     else {
-                        console.log(openSceneName, '场景没有同名脚本！');
+                        console.log(`${openName}场景没有同名脚本！,需在LwgInit脚本中导入该模块！`);
                     }
                     scene.width = Laya.stage.width;
                     scene.height = Laya.stage.height;
                     var openf = () => {
-                        if (Tools.Node.checkChildren(Laya.stage, openSceneName)) {
-                            console.log(openSceneName, '场景重复出现！请检查代码');
+                        if (Tools._Node.checkChildren(Laya.stage, openName)) {
+                            console.log(openName, '场景重复出现！请检查代码');
                             return;
                         }
                         if (zOrder) {
@@ -1015,15 +1040,15 @@
                             func();
                         }
                     };
-                    scene.name = openSceneName;
-                    Admin._sceneControl[openSceneName] = scene;
+                    scene.name = openName;
+                    Admin._sceneControl[openName] = scene;
                     let background = scene.getChildByName('Background');
                     if (background) {
                         background.width = Laya.stage.width;
                         background.height = Laya.stage.height;
                     }
-                    if (Admin._sceneControl[cloesSceneName]) {
-                        _closeScene(cloesSceneName, openf);
+                    if (Admin._sceneControl[cloesName]) {
+                        _closeScene(cloesName, openf);
                     }
                     else {
                         openf();
@@ -1043,7 +1068,7 @@
                         func();
                     }
                 };
-                if (!Admin._sceneAnimation.vanishSwitch) {
+                if (!SceneAnimation._vanishSwitch) {
                     closef();
                     return;
                 }
@@ -1060,129 +1085,12 @@
                             });
                         }
                         else {
-                            _commonVanishAni(Admin._sceneControl[closeName], closef);
+                            SceneAnimation._commonVanishAni(Admin._sceneControl[closeName], closef);
                         }
                     }
                 }
             }
             Admin._closeScene = _closeScene;
-            Admin._sceneAnimation = {
-                type: {
-                    fadeOut: 'fadeOut',
-                    stickIn: {
-                        random: 'random',
-                        upLeftDownLeft: 'upLeftDownRight',
-                        upRightDownLeft: 'upRightDownLeft',
-                    },
-                    leftMove: 'leftMove',
-                    rightMove: 'rightMove',
-                    centerRotate: 'centerRotate',
-                    drawUp: 'drawUp',
-                },
-                vanishSwitch: false,
-                openSwitch: true,
-                presentAni: 'fadeOut',
-            };
-            function _commonVanishAni(CloseScene, closeFunc) {
-                CloseScene[CloseScene.name].lwgBeforeVanishAni();
-                let time;
-                let delay;
-                switch (Admin._sceneAnimation.presentAni) {
-                    case Admin._sceneAnimation.type.fadeOut:
-                        time = 150;
-                        delay = 50;
-                        if (CloseScene['Background']) {
-                            Animation2D.fadeOut(CloseScene, 1, 0, time / 2);
-                        }
-                        Animation2D.fadeOut(CloseScene, 1, 0, time, delay, () => {
-                            closeFunc();
-                        });
-                        break;
-                    case Admin._sceneAnimation.type.stickIn.random:
-                        closeFunc();
-                        break;
-                    default:
-                        break;
-                }
-            }
-            function _commonOpenAni(Scene) {
-                let time;
-                let delay;
-                let sumDelay;
-                var afterAni = () => {
-                    Admin._clickLock.switch = false;
-                    if (Scene[Scene.name]) {
-                        Scene[Scene.name].lwgOpenAniAfter();
-                        Scene[Scene.name].lwgBtnClick();
-                    }
-                };
-                switch (Admin._sceneAnimation.presentAni) {
-                    case Admin._sceneAnimation.type.fadeOut:
-                        time = 400;
-                        delay = 300;
-                        if (Scene['Background']) {
-                            Animation2D.fadeOut(Scene, 0, 1, time / 2, delay);
-                        }
-                        Animation2D.fadeOut(Scene, 0, 1, time, 0);
-                        sumDelay = 400;
-                        break;
-                    case Admin._sceneAnimation.type.stickIn.upLeftDownLeft:
-                        _sceneAnimationTypeStickIn(Scene, Admin._sceneAnimation.type.stickIn.upLeftDownLeft);
-                        break;
-                    case Admin._sceneAnimation.type.stickIn.upRightDownLeft:
-                        _sceneAnimationTypeStickIn(Scene, Admin._sceneAnimation.type.stickIn.upRightDownLeft);
-                    case Admin._sceneAnimation.type.stickIn.random:
-                        _sceneAnimationTypeStickIn(Scene, Admin._sceneAnimation.type.stickIn.random);
-                    default:
-                        break;
-                }
-                Laya.timer.once(sumDelay, this, () => {
-                    afterAni();
-                });
-                return sumDelay;
-            }
-            function _sceneAnimationTypeStickIn(Scene, type) {
-                let sumDelay = 0;
-                let time = 700;
-                let delay = 100;
-                if (Scene.getChildByName('Background')) {
-                    Animation2D.fadeOut(Scene.getChildByName('Background'), 0, 1, time);
-                }
-                let stickInLeftArr = Tools.Node.zOrderByY(Scene, false);
-                for (let index = 0; index < stickInLeftArr.length; index++) {
-                    const element = stickInLeftArr[index];
-                    if (element.name !== 'Background' && element.name.substr(0, 5) !== 'NoAni') {
-                        let originalPovitX = element.pivotX;
-                        let originalPovitY = element.pivotY;
-                        switch (type) {
-                            case Admin._sceneAnimation.type.stickIn.upLeftDownLeft:
-                                element.rotation = element.y > Laya.stage.height / 2 ? -180 : 180;
-                                Tools.Node.changePovit(element, 0, 0);
-                                break;
-                            case Admin._sceneAnimation.type.stickIn.upRightDownLeft:
-                                element.rotation = element.y > Laya.stage.height / 2 ? -180 : 180;
-                                Tools.Node.changePovit(element, element.rotation == 180 ? element.width : 0, 0);
-                                break;
-                            case Admin._sceneAnimation.type.stickIn.random:
-                                element.rotation = Tools.randomOneHalf() == 1 ? 180 : -180;
-                                Tools.Node.changePovit(element, Tools.randomOneHalf() == 1 ? 0 : element.width, Tools.randomOneHalf() == 1 ? 0 : element.height);
-                                break;
-                            default:
-                                break;
-                        }
-                        let originalX = element.x;
-                        let originalY = element.y;
-                        element.x = element.pivotX > element.width / 2 ? 800 + element.width : -800 - element.width;
-                        element.y = element.rotation > 0 ? element.y + 200 : element.y - 200;
-                        Animation2D.simple_Rotate(element, element.rotation, 0, time, delay * index);
-                        Animation2D.move_Simple(element, element.x, element.y, originalX, originalY, time, delay * index, () => {
-                            Tools.Node.changePovit(element, originalPovitX, originalPovitY);
-                        });
-                    }
-                }
-                sumDelay = Scene.numChildren * delay + time + 200;
-                return sumDelay;
-            }
             Admin._gameState = {
                 type: {
                     Start: 'Start',
@@ -1192,8 +1100,8 @@
                     Defeated: 'defeated',
                 },
                 state: 'Start',
-                setState(calssName) {
-                    switch (calssName) {
+                setState(_calssName) {
+                    switch (_calssName) {
                         case _SceneName.Start:
                             Admin._gameState.state = Admin._gameState.type.Start;
                             break;
@@ -1211,81 +1119,145 @@
                     }
                 }
             };
-            class _SceneBase extends Laya.Script {
+            class _ScriptBase extends Laya.Script {
+                constructor() {
+                    super(...arguments);
+                    this.ownerSceneName = '';
+                }
+                lwgOnAwake() { }
+                ;
+                lwgAdaptive() { }
+                ;
+                lwgEventRegister() { }
+                ;
+                _EvReg(name, func) {
+                    EventAdmin._register(name, this, func);
+                }
+                _EvNotify(name, args) {
+                    EventAdmin._notify(name, args);
+                }
+                lwgOnEnable() { }
+                lwgOnStart() { }
+                lwgBtnRegister() { }
+                ;
+                _btnDown(target, down, effect) {
+                    Click._on(effect == undefined ? Click._Use.value : effect, target, this, (e) => {
+                        Click._switch && down && down(e);
+                    }, null, null, null);
+                }
+                _btnMove(target, move, effect) {
+                    Click._on(effect == undefined ? Click._Use.value : effect, target, this, null, (e) => {
+                        Click._switch && move && move(e);
+                    }, null, null);
+                }
+                _btnUp(target, up, effect) {
+                    Click._on(effect == undefined ? Click._Use.value : effect, target, this, null, null, (e) => {
+                        Click._switch && up && up(e);
+                    }, null);
+                }
+                _btnOut(target, out, effect) {
+                    Click._on(effect == undefined ? Click._Use.value : effect, target, this, null, null, null, (e) => { Click._switch && out && out(e); });
+                }
+                _btnFour(target, down, move, up, out, effect) {
+                    Click._on(effect == null ? effect : Click._Use.value, target, this, (e) => { Click._switch && down && down(e); }, (e) => { Click._switch && move && move(e); }, (e) => { Click._switch && up && up(e); }, (e) => { Click._switch && out && out(e); });
+                }
+                _openScene(openName, closeSelf, preLoadCutIn, func, zOrder) {
+                    let closeName;
+                    if (closeSelf == undefined || closeSelf == true) {
+                        closeName = this.ownerSceneName;
+                    }
+                    if (!preLoadCutIn) {
+                        Admin._openScene(openName, closeName, func, zOrder);
+                    }
+                    else {
+                        Admin._preLoadOpenScene(openName, closeName, func, zOrder);
+                    }
+                }
+                _closeScene(sceneName, func) {
+                    Admin._closeScene(sceneName ? sceneName : this.ownerSceneName, func);
+                }
+                lwgOnUpdate() { }
+                ;
+                lwgOnDisable() { }
+                ;
+                onStageMouseDown(e) { Click._switch && this.lwgOnStageDown(e); }
+                ;
+                onStageMouseMove(e) { Click._switch && this.lwgOnStageMove(e); }
+                ;
+                onStageMouseUp(e) { Click._switch && this.lwgOnStageUp(e); }
+                ;
+                lwgOnStageDown(e) { }
+                ;
+                lwgOnStageMove(e) { }
+                ;
+                lwgOnStageUp(e) { }
+                ;
+            }
+            class _SceneBase extends _ScriptBase {
                 constructor() {
                     super();
-                    this.calssName = _SceneName.PreLoad;
+                    this._calssName = _SceneName.PreLoad;
                 }
-                get Owner() {
+                get _Owner() {
                     return this.owner;
                 }
-                SpriteVar(str) {
-                    if (this.Owner[str]) {
-                        return this.Owner[str];
+                getVar(name, type) {
+                    if (!this[`_Scene${type}${name}`]) {
+                        if (this._Owner[name]) {
+                            return this[`_Scene${type}${name}`] = this._Owner[name];
+                        }
+                        else {
+                            console.log('场景内不存在var节点：', name);
+                            return undefined;
+                        }
                     }
                     else {
-                        console.log('场景内不存在全局节点：', str);
-                        return undefined;
+                        return this[`_Scene${type}${name}`];
                     }
                 }
-                AniVar(str) {
-                    if (this.Owner[str]) {
-                        return this.Owner[str];
-                    }
-                    else {
-                        console.log('场景内不存在动画：', str);
-                        return undefined;
-                    }
+                _SpriteVar(name) {
+                    return this.getVar(name, '_SpriteVar');
                 }
-                btnVar(str) {
-                    if (this.Owner[str]) {
-                        return this.Owner[str];
-                    }
-                    else {
-                        console.log('场景内不存在全局按钮：', str);
-                        return undefined;
-                    }
+                _AniVar(name) {
+                    return this.getVar(name, '_AniVar');
                 }
-                ImgVar(str) {
-                    if (this.Owner[str]) {
-                        return this.Owner[str];
-                    }
-                    else {
-                        console.log('场景内不存在全局节点：', str);
-                        return undefined;
-                    }
+                _BtnVar(name) {
+                    return this.getVar(name, '_BtnVar');
                 }
-                ListVar(str) {
-                    if (this.Owner[str]) {
-                        return this.Owner[str];
-                    }
-                    else {
-                        console.log('场景内不存在全局节点：', str);
-                    }
+                _ImgVar(name) {
+                    return this.getVar(name, '_ImgVar');
                 }
-                TapVar(str) {
-                    if (this.Owner[str]) {
-                        return this.Owner[str];
-                    }
-                    else {
-                        console.log('场景内不存在全局节点：', str);
-                    }
+                _LabelVar(name) {
+                    return this.getVar(name, '_LabelVar');
+                }
+                _ListVar(name) {
+                    return this.getVar(name, '_ListVar');
+                }
+                _TapVar(name) {
+                    return this.getVar(name, '_TapVar');
+                }
+                _TextVar(name) {
+                    return this.getVar(name, '_TextVar');
+                }
+                _FontClipVar(name) {
+                    return this.getVar(name, '_FontClipVar');
+                }
+                _FontBox(name) {
+                    return this.getVar(name, '_FontBox');
                 }
                 onAwake() {
-                    if (this.Owner.name == null) {
+                    if (this._Owner.name == null) {
                         console.log('场景名称失效，脚本赋值失败');
                     }
                     else {
-                        this.calssName = this.Owner.name;
-                        this.Owner[this.calssName] = this;
+                        this._calssName = this._Owner.name;
+                        this._Owner[this._calssName] = this;
                     }
-                    Admin._gameState.setState(this.calssName);
+                    this.ownerSceneName = this.owner.name;
                     this.moduleOnAwake();
                     this.lwgOnAwake();
                     this.lwgAdaptive();
                 }
-                lwgOnAwake() { }
-                ;
                 moduleOnAwake() { }
                 onEnable() {
                     this.moduleEventRegister();
@@ -1296,29 +1268,12 @@
                 }
                 moduleOnEnable() { }
                 ;
-                lwgEventRegister() { }
-                ;
                 moduleEventRegister() { }
                 ;
-                lwgOnEnable() { }
                 onStart() {
                     this.moduleOnStart();
                     this.lwgOnStart();
                 }
-                btnRig(effect, target, caller, down, move, up, out) {
-                    Click._on(effect, target, caller, down, move, up, out);
-                }
-                lwgOpenScene(openSceneName, closeSelf, func, zOrder) {
-                    let closeName;
-                    if (closeSelf == undefined || closeSelf == true) {
-                        closeName = this.Owner.name;
-                    }
-                    Admin._openScene(openSceneName, closeName, func, zOrder);
-                }
-                lwgCloseScene(sceneName, func) {
-                    Admin._closeScene(sceneName ? sceneName : this.Owner.name, func);
-                }
-                lwgOnStart() { }
                 moduleOnStart() { }
                 btnAndlwgOpenAni() {
                     let time = this.lwgOpenAni();
@@ -1326,47 +1281,44 @@
                         Laya.timer.once(time, this, () => {
                             Admin._clickLock.switch = false;
                             this.lwgOpenAniAfter();
-                            this.lwgBtnClick();
+                            this.lwgBtnRegister();
                         });
                     }
                     else {
-                        time = _commonOpenAni(this.Owner);
+                        time = SceneAnimation._commonOpenAni(this._Owner);
                     }
                 }
                 lwgOpenAni() { return null; }
                 ;
                 lwgOpenAniAfter() { }
                 ;
-                lwgBtnClick() { }
-                ;
-                lwgAdaptiveProportion(arr) {
-                    for (let index = 0; index < arr.length; index++) {
-                        const element = arr[index];
-                        element.y / GameConfig.height * Laya.stage.height;
-                    }
+                _adaHeight(arr) {
+                    Adaptive._stageHeight(arr);
                 }
                 ;
-                lwgAdaptive() { }
+                _adaWidth(arr) {
+                    Adaptive._stageWidth(arr);
+                }
+                ;
+                _adaptiveCenter(arr) {
+                    Adaptive._center(arr, Laya.stage);
+                }
                 ;
                 onUpdate() { this.lwgOnUpdate(); }
-                ;
-                lwgOnUpdate() { }
                 ;
                 lwgBeforeVanishAni() { }
                 lwgVanishAni() { return null; }
                 ;
                 onDisable() {
-                    Animation2D.fadeOut(this.Owner, 1, 0, 2000, 1);
+                    Animation2D.fadeOut(this._Owner, 1, 0, 2000, 1);
                     this.lwgOnDisable();
                     Laya.timer.clearAll(this);
                     Laya.Tween.clearAll(this);
                     EventAdmin._offCaller(this);
                 }
-                lwgOnDisable() { }
-                ;
             }
             Admin._SceneBase = _SceneBase;
-            class _Object extends Laya.Script {
+            class _ObjectBase extends _ScriptBase {
                 constructor() {
                     super();
                 }
@@ -1381,70 +1333,273 @@
                         return this.owner.parent;
                     }
                 }
-                _SceneImg(name) {
-                    if (this._Scene[name]) {
-                        return this._Scene[name];
+                get _RigidBody() {
+                    if (!this._Owner['_OwnerRigidBody']) {
+                        this._Owner['_OwnerRigidBody'] = this._Owner.getComponent(Laya.RigidBody);
+                    }
+                    return this._Owner['_OwnerRigidBody'];
+                }
+                get _BoxCollier() {
+                    if (!this._Owner['_OwnerBoxCollier']) {
+                        this._Owner['_OwnerBoxCollier'] = this._Owner.getComponent(Laya.BoxCollider);
+                    }
+                    return this._Owner['_OwnerBoxCollier'];
+                }
+                get _CilrcleCollier() {
+                    if (!this._Owner['_OwnerCilrcleCollier']) {
+                        return this._Owner['_OwnerCilrcleCollier'] = this._Owner.getComponent(Laya.BoxCollider);
+                    }
+                    return this._Owner['_OwnerCilrcleCollier'];
+                }
+                get _PolygonCollier() {
+                    if (!this._Owner['_OwnerPolygonCollier']) {
+                        return this._Owner['_OwnerPolygonCollier'] = this._Owner.getComponent(Laya.BoxCollider);
+                    }
+                    return this._Owner['_OwnerPolygonCollier'];
+                }
+                getSceneVar(name, type) {
+                    if (!this[`_Scene${type}${name}`]) {
+                        if (this._Scene[name]) {
+                            return this[`_Scene${type}${name}`] = this._Scene[name];
+                        }
+                        else {
+                            console.log(`场景内不存在var节点${name}`);
+                        }
                     }
                     else {
-                        console.log(`场景内不存在节点${name}`);
+                        return this[`_Scene${type}${name}`];
                     }
                 }
-                get OwnerRig() {
-                    if (this._Owner.getComponent(Laya.RigidBody)) {
-                        return this._Owner.getComponent(Laya.RigidBody);
+                _SceneSprite(name) {
+                    return this.getSceneVar(name, '_SceneSprite');
+                }
+                _SceneImg(name) {
+                    return this.getSceneVar(name, '_SceneImg');
+                }
+                _SceneLabel(name) {
+                    return this.getSceneVar(name, '_SceneLabel');
+                }
+                _SceneList(name) {
+                    return this.getSceneVar(name, '_SceneList');
+                }
+                _SceneTap(name) {
+                    return this.getSceneVar(name, '_SceneTap');
+                }
+                _SceneText(name) {
+                    return this.getSceneVar(name, '_SceneText');
+                }
+                _SceneFontClip(name) {
+                    return this.getSceneVar(name, '_SceneFontClip');
+                }
+                _SceneBox(name) {
+                    return this.getSceneVar(name, '_SceneBox');
+                }
+                getChild(name, type) {
+                    if (!this[`${type}${name}`]) {
+                        if (this._Owner.getChildByName(name)) {
+                            return this[`${type}${name}`] = this._Owner.getChildByName(name);
+                        }
+                        else {
+                            console.log('场景内不存在子节点：', name);
+                            return null;
+                        }
                     }
                     else {
-                        return null;
+                        return this[`${type}${name}`];
                     }
+                }
+                _ImgChild(name) {
+                    return this.getChild(name, '_ImgChild');
+                }
+                _SpriteChild(name) {
+                    return this.getChild(name, '_SpriteChild');
+                }
+                _LableChild(name) {
+                    return this.getChild(name, '_LableChild');
+                }
+                _ListChild(name) {
+                    return this.getChild(name, '_ListChild');
+                }
+                _TapChild(name) {
+                    return this.getChild(name, '_TapChild');
+                }
+                _TapBox(name) {
+                    return this.getChild(name, '_TapBox');
+                }
+                _TapFontClip(name) {
+                    return this.getChild(name, '_TapFontClip');
                 }
                 onAwake() {
+                    this._Owner[this['__proto__']['constructor'].name] = this;
+                    this.ownerSceneName = this._Scene.name;
                     this.lwgOnAwake();
+                    this.lwgAdaptive();
                 }
-                ImgChild(str) {
-                    if (this._Owner.getChildByName(str)) {
-                        return this._Owner.getChildByName(str);
-                    }
-                    else {
-                        console.log('场景内不存在子节点：', str);
-                        return undefined;
-                    }
-                }
-                lwgOpenScene(openSceneName, closeSelf, func, zOrder) {
-                    let closeName;
-                    if (closeSelf == undefined || closeSelf == true) {
-                        closeName = this._Scene.name;
-                    }
-                    Admin._openScene(openSceneName, closeName, func, zOrder);
-                }
-                lwgCloseScene(sceneName, func) {
-                    Admin._closeScene(sceneName ? sceneName : this._Owner.name, func);
-                }
-                lwgOnAwake() { }
                 onEnable() {
-                    this.lwgBtnClick();
+                    this.lwgBtnRegister();
                     this.lwgEventRegister();
                     this.lwgOnEnable();
                 }
-                lwgOnEnable() { }
-                lwgBtnClick() { }
-                lwgEventRegister() { }
                 onStart() {
                     this.lwgOnStart();
                 }
-                lwgOnStart() { }
                 onUpdate() {
                     this.lwgOnUpdate();
                 }
-                lwgOnUpdate() { }
                 onDisable() {
                     this.lwgOnDisable();
                     Laya.timer.clearAll(this);
                     EventAdmin._offCaller(this);
                 }
-                lwgOnDisable() { }
             }
-            Admin._Object = _Object;
+            Admin._ObjectBase = _ObjectBase;
         })(Admin = lwg.Admin || (lwg.Admin = {}));
+        let DataAdmin;
+        (function (DataAdmin) {
+            class _Store {
+                getVariables(name) {
+                }
+            }
+            DataAdmin._Store = _Store;
+            class _Table {
+                constructor(dataName, arrUrl, localStorage, proName) {
+                    this._property = {
+                        name: 'name',
+                        chName: 'chName',
+                        classify: 'classify',
+                        unlockWay: 'unlockWay',
+                        conditionNum: 'conditionNum',
+                        degreeNum: 'degreeNum',
+                        compelet: 'compelet',
+                        unlock: 'unlock',
+                        have: 'have',
+                        getAward: 'getAward',
+                    };
+                    this._arr = [];
+                    if (dataName) {
+                        if (localStorage) {
+                            this._arr = Tools.jsonCompare(arrUrl, dataName, proName ? proName : 'name');
+                        }
+                        else {
+                            if (Laya.Loader.getRes(arrUrl)) {
+                                this._arr = Laya.Loader.getRes(arrUrl);
+                            }
+                            else {
+                                console.log(arrUrl, '数据表不存在！');
+                            }
+                        }
+                    }
+                }
+                _getProperty(name, pro) {
+                    let value;
+                    for (const key in this._arr) {
+                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                            const element = this._arr[key];
+                            if (element[this._property.name] == name) {
+                                value = element[pro];
+                                break;
+                            }
+                        }
+                    }
+                    return value;
+                }
+                ;
+                _setProperty(name, pro, value) {
+                    for (const key in this._arr) {
+                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                            const element = this._arr[key];
+                            if (element[this._property.name] == name) {
+                                element[pro] = value;
+                                break;
+                            }
+                        }
+                    }
+                    return value;
+                }
+                ;
+                _randomOne(proName, value) {
+                    let data1;
+                    let arr = [];
+                    for (const key in this._arr) {
+                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                            const element = this._arr[key];
+                            if (element[proName]) {
+                                arr.push(element);
+                            }
+                        }
+                    }
+                    if (arr.length == 0) {
+                        return null;
+                    }
+                    else {
+                        let any = Tools._Array.randomGetOne(arr);
+                        return any;
+                    }
+                }
+                _getPropertyArr(proName, value) {
+                    let arr = [];
+                    for (const key in this._arr) {
+                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                            const element = this._arr[key];
+                            if (element[proName] && element[proName] == value) {
+                                arr.push(element);
+                            }
+                        }
+                    }
+                    return arr;
+                }
+                _setPropertyArr(proName, value) {
+                    let arr = [];
+                    for (const key in this._arr) {
+                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                            const element = this._arr[key];
+                            if (element[proName]) {
+                                element[proName] == value;
+                                arr.push(element);
+                            }
+                        }
+                    }
+                    return arr;
+                }
+                _checkCondition(name, number, func) {
+                    let chek = null;
+                    number = number == undefined ? 1 : number;
+                    let degreeNum = this._getProperty(name, this._property.degreeNum);
+                    let condition = this._getProperty(name, this._property.conditionNum);
+                    let compelet = this._getProperty(name, this._property.compelet);
+                    if (!compelet) {
+                        if (condition <= degreeNum + number) {
+                            this._setProperty(name, this._property.degreeNum, condition);
+                            this._setProperty(name, this._property.compelet, true);
+                            chek = true;
+                        }
+                        else {
+                            this._setProperty(name, this._property.degreeNum, degreeNum + number);
+                            chek = false;
+                        }
+                    }
+                    else {
+                        chek = -1;
+                    }
+                    if (func) {
+                        func();
+                    }
+                    return chek;
+                }
+                _checkAllCompelet() {
+                    let bool = true;
+                    for (let index = 0; index < this._arr.length; index++) {
+                        const element = this._arr[index];
+                        if (!element[this._property.compelet]) {
+                            bool = false;
+                            return bool;
+                        }
+                    }
+                    return bool;
+                }
+            }
+            DataAdmin._Table = _Table;
+        })(DataAdmin = lwg.DataAdmin || (lwg.DataAdmin = {}));
         let Color;
         (function (Color) {
             function RGBToHexString(r, g, b) {
@@ -1460,7 +1615,7 @@
                 let cf = new Laya.ColorFilter();
                 node.blendMode = 'null';
                 if (!RGBA) {
-                    cf.color(Tools.randomOneNumber(255, 100, true), Tools.randomOneNumber(255, 100, true), Tools.randomOneNumber(255, 100, true), 1);
+                    cf.color(Tools._Number.randomOneBySection(255, 100, true), Tools._Number.randomOneBySection(255, 100, true), Tools._Number.randomOneBySection(255, 100, true), 1);
                 }
                 else {
                     cf.color(RGBA[0], RGBA[1], RGBA[2], RGBA[3]);
@@ -1538,7 +1693,7 @@
                     cf = node.filters[0];
                     RGBA0 = [node.filters[0]['_alpha'][0], node.filters[0]['_alpha'][1], node.filters[0]['_alpha'][2], node.filters[0]['_alpha'][3] ? node.filters[0]['_alpha'][3] : 1];
                 }
-                let RGBA = [Tools.randomCountNumer(RGBA1[0], RGBA2[0])[0], Tools.randomCountNumer(RGBA1[1], RGBA2[1])[0], Tools.randomCountNumer(RGBA1[2], RGBA2[2])[0], Tools.randomCountNumer(RGBA1[3] ? RGBA1[3] : 1, RGBA2[3] ? RGBA2[3] : 1)[0]];
+                let RGBA = [Tools._Number.randomCountBySection(RGBA1[0], RGBA2[0])[0], Tools._Number.randomCountBySection(RGBA1[1], RGBA2[1])[0], Tools._Number.randomCountBySection(RGBA1[2], RGBA2[2])[0], Tools._Number.randomCountBySection(RGBA1[3] ? RGBA1[3] : 1, RGBA2[3] ? RGBA2[3] : 1)[0]];
                 let speedR = (RGBA[0] - RGBA0[0]) / frameTime;
                 let speedG = (RGBA[1] - RGBA0[1]) / frameTime;
                 let speedB = (RGBA[2] - RGBA0[2]) / frameTime;
@@ -1607,24 +1762,24 @@
                         this.height = height ? height : 100;
                         this.pivotX = this.width / 2;
                         this.pivotY = this.height / 2;
-                        this.rotation = rotation ? Tools.randomOneNumber(rotation[0], rotation[1]) : Tools.randomOneNumber(360);
-                        this.skin = urlArr ? Tools.arrayRandomGetOne(urlArr) : _SkinUrl.花3;
+                        this.rotation = rotation ? Tools._Number.randomOneBySection(rotation[0], rotation[1]) : Tools._Number.randomOneBySection(360);
+                        this.skin = urlArr ? Tools._Array.randomGetOne(urlArr) : _SkinUrl.花3;
                         this.zOrder = zOrder ? zOrder : 0;
                         this.alpha = 0;
                         let RGBA = [];
-                        RGBA[0] = colorRGBA ? Tools.randomOneNumber(colorRGBA[0][0], colorRGBA[1][0]) : Tools.randomOneNumber(0, 255);
-                        RGBA[1] = colorRGBA ? Tools.randomOneNumber(colorRGBA[0][1], colorRGBA[1][1]) : Tools.randomOneNumber(0, 255);
-                        RGBA[2] = colorRGBA ? Tools.randomOneNumber(colorRGBA[0][2], colorRGBA[1][2]) : Tools.randomOneNumber(0, 255);
-                        RGBA[3] = colorRGBA ? Tools.randomOneNumber(colorRGBA[0][3], colorRGBA[1][3]) : Tools.randomOneNumber(0, 255);
+                        RGBA[0] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][0], colorRGBA[1][0]) : Tools._Number.randomOneBySection(0, 255);
+                        RGBA[1] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][1], colorRGBA[1][1]) : Tools._Number.randomOneBySection(0, 255);
+                        RGBA[2] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][2], colorRGBA[1][2]) : Tools._Number.randomOneBySection(0, 255);
+                        RGBA[3] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][3], colorRGBA[1][3]) : Tools._Number.randomOneBySection(0, 255);
                         Color._colour(this, RGBA);
                     }
                 }
                 _Aperture._ApertureImage = _ApertureImage;
                 function _continuous(parent, centerPoint, width, height, rotation, urlArr, colorRGBA, zOrder, scale, speed, accelerated) {
                     let Img = new _ApertureImage(parent, centerPoint, width, height, rotation, urlArr, colorRGBA, zOrder);
-                    let _speed = speed ? Tools.randomOneNumber(speed[0], speed[1]) : 0.025;
-                    let _accelerated = accelerated ? Tools.randomOneNumber(accelerated[0], accelerated[1]) : 0.0005;
-                    let _scale = scale ? Tools.randomOneNumber(scale[0], scale[1]) : 2;
+                    let _speed = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : 0.025;
+                    let _accelerated = accelerated ? Tools._Number.randomOneBySection(accelerated[0], accelerated[1]) : 0.0005;
+                    let _scale = scale ? Tools._Number.randomOneBySection(scale[0], scale[1]) : 2;
                     let moveCaller = {
                         alpha: true,
                         scale: false,
@@ -1669,35 +1824,35 @@
                     constructor(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder) {
                         super();
                         parent.addChild(this);
-                        let sectionWidth = sectionWH ? Tools.randomOneNumber(sectionWH[0]) : Tools.randomOneNumber(200);
-                        let sectionHeight = sectionWH ? Tools.randomOneNumber(sectionWH[1]) : Tools.randomOneNumber(50);
-                        sectionWidth = Tools.randomOneHalf() == 0 ? sectionWidth : -sectionWidth;
-                        sectionHeight = Tools.randomOneHalf() == 0 ? sectionHeight : -sectionHeight;
+                        let sectionWidth = sectionWH ? Tools._Number.randomOneBySection(sectionWH[0]) : Tools._Number.randomOneBySection(200);
+                        let sectionHeight = sectionWH ? Tools._Number.randomOneBySection(sectionWH[1]) : Tools._Number.randomOneBySection(50);
+                        sectionWidth = Tools._Number.randomOneHalf() == 0 ? sectionWidth : -sectionWidth;
+                        sectionHeight = Tools._Number.randomOneHalf() == 0 ? sectionHeight : -sectionHeight;
                         this.x = centerPoint ? centerPoint.x + sectionWidth : sectionWidth;
                         this.y = centerPoint ? centerPoint.y + sectionHeight : sectionHeight;
-                        this.width = width ? Tools.randomOneNumber(width[0], width[1]) : Tools.randomOneNumber(20, 50);
-                        this.height = height ? Tools.randomOneNumber(height[0], height[1]) : this.width;
+                        this.width = width ? Tools._Number.randomOneBySection(width[0], width[1]) : Tools._Number.randomOneBySection(20, 50);
+                        this.height = height ? Tools._Number.randomOneBySection(height[0], height[1]) : this.width;
                         this.pivotX = this.width / 2;
                         this.pivotY = this.height / 2;
-                        this.skin = urlArr ? Tools.arrayRandomGetOne(urlArr) : _SkinUrl.圆形1;
-                        this.rotation = rotation ? Tools.randomOneNumber(rotation[0], rotation[1]) : 0;
+                        this.skin = urlArr ? Tools._Array.randomGetOne(urlArr) : _SkinUrl.圆形1;
+                        this.rotation = rotation ? Tools._Number.randomOneBySection(rotation[0], rotation[1]) : 0;
                         this.alpha = 0;
                         this.zOrder = zOrder ? zOrder : 0;
                         let RGBA = [];
-                        RGBA[0] = colorRGBA ? Tools.randomOneNumber(colorRGBA[0][0], colorRGBA[1][0]) : Tools.randomOneNumber(0, 255);
-                        RGBA[1] = colorRGBA ? Tools.randomOneNumber(colorRGBA[0][1], colorRGBA[1][1]) : Tools.randomOneNumber(0, 255);
-                        RGBA[2] = colorRGBA ? Tools.randomOneNumber(colorRGBA[0][2], colorRGBA[1][2]) : Tools.randomOneNumber(0, 255);
-                        RGBA[3] = colorRGBA ? Tools.randomOneNumber(colorRGBA[0][3], colorRGBA[1][3]) : Tools.randomOneNumber(0, 255);
+                        RGBA[0] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][0], colorRGBA[1][0]) : Tools._Number.randomOneBySection(0, 255);
+                        RGBA[1] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][1], colorRGBA[1][1]) : Tools._Number.randomOneBySection(0, 255);
+                        RGBA[2] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][2], colorRGBA[1][2]) : Tools._Number.randomOneBySection(0, 255);
+                        RGBA[3] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][3], colorRGBA[1][3]) : Tools._Number.randomOneBySection(0, 255);
                         Color._colour(this, RGBA);
                     }
                 }
                 _Particle._ParticleImgBase = _ParticleImgBase;
                 function _snow(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder, distance, rotationSpeed, speed, windX) {
                     let Img = new _ParticleImgBase(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder);
-                    let _rotationSpeed = rotationSpeed ? Tools.randomOneNumber(rotationSpeed[0], rotationSpeed[1]) : Tools.randomOneNumber(0, 1);
-                    _rotationSpeed = Tools.randomOneHalf() == 0 ? _rotationSpeed : -_rotationSpeed;
-                    let speed0 = speed ? Tools.randomOneNumber(speed[0], speed[1]) : Tools.randomOneNumber(1, 2.5);
-                    let _windX = windX ? Tools.randomOneNumber(windX[0], windX[1]) : 0;
+                    let _rotationSpeed = rotationSpeed ? Tools._Number.randomOneBySection(rotationSpeed[0], rotationSpeed[1]) : Tools._Number.randomOneBySection(0, 1);
+                    _rotationSpeed = Tools._Number.randomOneHalf() == 0 ? _rotationSpeed : -_rotationSpeed;
+                    let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(1, 2.5);
+                    let _windX = windX ? Tools._Number.randomOneBySection(windX[0], windX[1]) : 0;
                     let moveCaller = {
                         alpha: true,
                         move: false,
@@ -1705,7 +1860,7 @@
                     };
                     Img['moveCaller'] = moveCaller;
                     let distance0 = 0;
-                    let distance1 = distance ? Tools.randomOneNumber(distance[0], distance[1]) : Tools.randomOneNumber(100, 300);
+                    let distance1 = distance ? Tools._Number.randomOneBySection(distance[0], distance[1]) : Tools._Number.randomOneBySection(100, 300);
                     TimerAdmin._frameLoop(1, moveCaller, () => {
                         Img.x += _windX;
                         Img.rotation += _rotationSpeed;
@@ -1738,8 +1893,8 @@
                 _Particle._snow = _snow;
                 function _fallingVertical(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder, distance, speed, accelerated) {
                     let Img = new _ParticleImgBase(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder);
-                    let speed0 = speed ? Tools.randomOneNumber(speed[0], speed[1]) : Tools.randomOneNumber(4, 8);
-                    let accelerated0 = accelerated ? Tools.randomOneNumber(accelerated[0], accelerated[1]) : Tools.randomOneNumber(0.25, 0.45);
+                    let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(4, 8);
+                    let accelerated0 = accelerated ? Tools._Number.randomOneBySection(accelerated[0], accelerated[1]) : Tools._Number.randomOneBySection(0.25, 0.45);
                     let acc = 0;
                     let moveCaller = {
                         alpha: true,
@@ -1748,7 +1903,7 @@
                     };
                     Img['moveCaller'] = moveCaller;
                     let distance0 = 0;
-                    let distance1 = distance ? Tools.randomOneNumber(distance[0], distance[1]) : Tools.randomOneNumber(100, 300);
+                    let distance1 = distance ? Tools._Number.randomOneBySection(distance[0], distance[1]) : Tools._Number.randomOneBySection(100, 300);
                     TimerAdmin._frameLoop(1, moveCaller, () => {
                         if (Img.alpha < 1 && moveCaller.alpha) {
                             Img.alpha += 0.05;
@@ -1781,8 +1936,8 @@
                 _Particle._fallingVertical = _fallingVertical;
                 function _slowlyUp(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder, distance, speed, accelerated) {
                     let Img = new _ParticleImgBase(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder);
-                    let speed0 = speed ? Tools.randomOneNumber(speed[0], speed[1]) : Tools.randomOneNumber(1.5, 2);
-                    let accelerated0 = accelerated ? Tools.randomOneNumber(accelerated[0], accelerated[1]) : Tools.randomOneNumber(0.001, 0.005);
+                    let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(1.5, 2);
+                    let accelerated0 = accelerated ? Tools._Number.randomOneBySection(accelerated[0], accelerated[1]) : Tools._Number.randomOneBySection(0.001, 0.005);
                     let acc = 0;
                     let moveCaller = {
                         alpha: true,
@@ -1792,7 +1947,7 @@
                     Img['moveCaller'] = moveCaller;
                     let fy = Img.y;
                     let distance0 = 0;
-                    let distance1 = distance ? Tools.randomOneNumber(distance[0], distance[1]) : Tools.randomOneNumber(-250, -600);
+                    let distance1 = distance ? Tools._Number.randomOneBySection(distance[0], distance[1]) : Tools._Number.randomOneBySection(-250, -600);
                     TimerAdmin._frameLoop(1, moveCaller, () => {
                         if (Img.alpha < 1 && moveCaller.alpha) {
                             Img.alpha += 0.03;
@@ -1826,8 +1981,8 @@
                 function _spray(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder, moveAngle, distance, rotationSpeed, speed, accelerated) {
                     let Img = new _ParticleImgBase(parent, centerPoint, [0, 0], width, height, rotation, urlArr, colorRGBA, zOrder);
                     let centerPoint0 = centerPoint ? centerPoint : new Laya.Point(0, 0);
-                    let speed0 = speed ? Tools.randomOneNumber(speed[0], speed[1]) : Tools.randomOneNumber(3, 10);
-                    let accelerated0 = accelerated ? Tools.randomOneNumber(accelerated[0], accelerated[1]) : Tools.randomOneNumber(0.25, 0.45);
+                    let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(3, 10);
+                    let accelerated0 = accelerated ? Tools._Number.randomOneBySection(accelerated[0], accelerated[1]) : Tools._Number.randomOneBySection(0.25, 0.45);
                     let acc = 0;
                     let moveCaller = {
                         alpha: true,
@@ -1836,9 +1991,9 @@
                     };
                     Img['moveCaller'] = moveCaller;
                     let radius = 0;
-                    let distance1 = distance ? Tools.randomOneNumber(distance[0], distance[1]) : Tools.randomOneNumber(100, 200);
-                    let angle0 = moveAngle ? Tools.randomOneNumber(moveAngle[0], moveAngle[1]) : Tools.randomOneNumber(0, 360);
-                    let rotationSpeed0 = rotationSpeed ? Tools.randomOneNumber(rotationSpeed[0], rotationSpeed[1]) : Tools.randomOneNumber(0, 20);
+                    let distance1 = distance ? Tools._Number.randomOneBySection(distance[0], distance[1]) : Tools._Number.randomOneBySection(100, 200);
+                    let angle0 = moveAngle ? Tools._Number.randomOneBySection(moveAngle[0], moveAngle[1]) : Tools._Number.randomOneBySection(0, 360);
+                    let rotationSpeed0 = rotationSpeed ? Tools._Number.randomOneBySection(rotationSpeed[0], rotationSpeed[1]) : Tools._Number.randomOneBySection(0, 20);
                     TimerAdmin._frameLoop(1, moveCaller, () => {
                         Img.rotation += rotationSpeed0;
                         if (Img.alpha < 1 && moveCaller.alpha) {
@@ -1864,7 +2019,7 @@
                             }
                             acc += accelerated0;
                             radius += speed0 + acc;
-                            let point = Tools.Point.getRoundPos(angle0, radius, centerPoint0);
+                            let point = Tools._Point.getRoundPos(angle0, radius, centerPoint0);
                             Img.pos(point.x, point.y);
                         }
                     });
@@ -1875,36 +2030,36 @@
                     let Img = new _ParticleImgBase(parent, centerPoint, [0, 0], width, height, rotation, urlArr, colorRGBA, zOrder);
                     let _angle = 0;
                     sectionWH = sectionWH ? sectionWH : [100, 100];
-                    let fixedXY = Tools.randomOneHalf() == 0 ? 'x' : 'y';
+                    let fixedXY = Tools._Number.randomOneHalf() == 0 ? 'x' : 'y';
                     curtailAngle = curtailAngle ? curtailAngle : 60;
                     if (fixedXY == 'x') {
-                        if (Tools.randomOneHalf() == 0) {
+                        if (Tools._Number.randomOneHalf() == 0) {
                             Img.x += sectionWH[0];
-                            _angle = Tools.randomOneHalf() == 0 ? Tools.randomOneNumber(0, 90 - curtailAngle) : Tools.randomOneNumber(0, -90 + curtailAngle);
+                            _angle = Tools._Number.randomOneHalf() == 0 ? Tools._Number.randomOneBySection(0, 90 - curtailAngle) : Tools._Number.randomOneBySection(0, -90 + curtailAngle);
                         }
                         else {
                             Img.x -= sectionWH[0];
-                            _angle = Tools.randomOneNumber(90 + curtailAngle, 270 - curtailAngle);
+                            _angle = Tools._Number.randomOneBySection(90 + curtailAngle, 270 - curtailAngle);
                         }
-                        Img.y += Tools.randomOneNumber(-sectionWH[1], sectionWH[1]);
+                        Img.y += Tools._Number.randomOneBySection(-sectionWH[1], sectionWH[1]);
                     }
                     else {
-                        if (Tools.randomOneHalf() == 0) {
+                        if (Tools._Number.randomOneHalf() == 0) {
                             Img.y -= sectionWH[1];
-                            _angle = Tools.randomOneNumber(180 + curtailAngle, 360 - curtailAngle);
+                            _angle = Tools._Number.randomOneBySection(180 + curtailAngle, 360 - curtailAngle);
                         }
                         else {
                             Img.y += sectionWH[1];
-                            _angle = Tools.randomOneNumber(0 + curtailAngle, 180 - curtailAngle);
+                            _angle = Tools._Number.randomOneBySection(0 + curtailAngle, 180 - curtailAngle);
                         }
-                        Img.x += Tools.randomOneNumber(-sectionWH[0], sectionWH[0]);
+                        Img.x += Tools._Number.randomOneBySection(-sectionWH[0], sectionWH[0]);
                     }
-                    let p = Tools.d2_angle_Vector(_angle);
-                    let _distance = distance ? Tools.randomOneNumber(distance[0], distance[1]) : Tools.randomOneNumber(20, 50);
-                    let speed0 = speed ? Tools.randomOneNumber(speed[0], speed[1]) : Tools.randomOneNumber(0.5, 1);
-                    let accelerated0 = accelerated ? Tools.randomOneNumber(accelerated[0], accelerated[1]) : Tools.randomOneNumber(0.25, 0.45);
+                    let p = Tools._Point.angleByPoint(_angle);
+                    let _distance = distance ? Tools._Number.randomOneBySection(distance[0], distance[1]) : Tools._Number.randomOneBySection(20, 50);
+                    let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(0.5, 1);
+                    let accelerated0 = accelerated ? Tools._Number.randomOneBySection(accelerated[0], accelerated[1]) : Tools._Number.randomOneBySection(0.25, 0.45);
                     let acc = 0;
-                    let rotationSpeed0 = rotateSpeed ? Tools.randomOneNumber(rotateSpeed[0], rotateSpeed[1]) : Tools.randomOneNumber(0, 20);
+                    let rotationSpeed0 = rotateSpeed ? Tools._Number.randomOneBySection(rotateSpeed[0], rotateSpeed[1]) : Tools._Number.randomOneBySection(0, 20);
                     let firstP = new Laya.Point(Img.x, Img.y);
                     let moveCaller = {
                         alpha: true,
@@ -1946,8 +2101,8 @@
                 function _moveToTargetToMove(parent, centerPoint, width, height, rotation, angle, urlArr, colorRGBA, zOrder, distance1, distance2, rotationSpeed, speed, accelerated) {
                     let Img = new _ParticleImgBase(parent, centerPoint, [0, 0], width, height, rotation, urlArr, colorRGBA, zOrder);
                     let centerPoint0 = centerPoint ? centerPoint : new Laya.Point(0, 0);
-                    let speed0 = speed ? Tools.randomOneNumber(speed[0], speed[1]) : Tools.randomOneNumber(5, 6);
-                    let accelerated0 = accelerated ? Tools.randomOneNumber(accelerated[0], accelerated[1]) : Tools.randomOneNumber(0.25, 0.45);
+                    let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(5, 6);
+                    let accelerated0 = accelerated ? Tools._Number.randomOneBySection(accelerated[0], accelerated[1]) : Tools._Number.randomOneBySection(0.25, 0.45);
                     let acc = 0;
                     let moveCaller = {
                         alpha: true,
@@ -1958,11 +2113,11 @@
                     };
                     Img['moveCaller'] = moveCaller;
                     let radius = 0;
-                    let dis1 = distance1 ? Tools.randomOneNumber(distance1[0], distance1[1]) : Tools.randomOneNumber(100, 200);
-                    let dis2 = distance2 ? Tools.randomOneNumber(distance2[0], distance2[1]) : Tools.randomOneNumber(100, 200);
-                    let angle0 = angle ? Tools.randomOneNumber(angle[0], angle[1]) : Tools.randomOneNumber(0, 360);
+                    let dis1 = distance1 ? Tools._Number.randomOneBySection(distance1[0], distance1[1]) : Tools._Number.randomOneBySection(100, 200);
+                    let dis2 = distance2 ? Tools._Number.randomOneBySection(distance2[0], distance2[1]) : Tools._Number.randomOneBySection(100, 200);
+                    let angle0 = angle ? Tools._Number.randomOneBySection(angle[0], angle[1]) : Tools._Number.randomOneBySection(0, 360);
                     Img.rotation = angle0 - 90;
-                    let rotationSpeed0 = rotationSpeed ? Tools.randomOneNumber(rotationSpeed[0], rotationSpeed[1]) : Tools.randomOneNumber(0, 20);
+                    let rotationSpeed0 = rotationSpeed ? Tools._Number.randomOneBySection(rotationSpeed[0], rotationSpeed[1]) : Tools._Number.randomOneBySection(0, 20);
                     TimerAdmin._frameLoop(1, moveCaller, () => {
                         if (moveCaller.alpha) {
                             acc += accelerated0;
@@ -2005,7 +2160,7 @@
                                 Laya.timer.clearAll(moveCaller);
                             }
                         }
-                        let point = Tools.Point.getRoundPos(angle0, radius, centerPoint0);
+                        let point = Tools._Point.getRoundPos(angle0, radius, centerPoint0);
                         Img.pos(point.x, point.y);
                     });
                     return Img;
@@ -2015,15 +2170,15 @@
                     let Img = new Laya.Image();
                     parent.addChild(Img);
                     width = width ? width : [25, 50];
-                    Img.width = Tools.randomCountNumer(width[0], width[1])[0];
-                    Img.height = height ? Tools.randomCountNumer(height[0], height[1])[0] : Img.width;
+                    Img.width = Tools._Number.randomCountBySection(width[0], width[1])[0];
+                    Img.height = height ? Tools._Number.randomCountBySection(height[0], height[1])[0] : Img.width;
                     Img.pivotX = Img.width / 2;
                     Img.pivotY = Img.height / 2;
-                    Img.skin = urlArr ? Tools.arrayRandomGetOut(urlArr)[0] : _SkinUrl[Tools.randomCountNumer(0, 12)[0]];
-                    let radius0 = Tools.randomCountNumer(radius[0], radius[1])[0];
+                    Img.skin = urlArr ? Tools._Array.randomGetOut(urlArr)[0] : _SkinUrl[Tools._Number.randomCountBySection(0, 12)[0]];
+                    let radius0 = Tools._Number.randomCountBySection(radius[0], radius[1])[0];
                     Img.alpha = 0;
-                    let speed0 = speed ? Tools.randomCountNumer(speed[0], speed[1])[0] : Tools.randomCountNumer(5, 10)[0];
-                    let angle = rotation ? Tools.randomCountNumer(rotation[0], rotation[1])[0] : Tools.randomCountNumer(0, 360)[0];
+                    let speed0 = speed ? Tools._Number.randomCountBySection(speed[0], speed[1])[0] : Tools._Number.randomCountBySection(5, 10)[0];
+                    let angle = rotation ? Tools._Number.randomCountBySection(rotation[0], rotation[1])[0] : Tools._Number.randomCountBySection(0, 360)[0];
                     let caller = {};
                     let acc = 0;
                     accelerated = accelerated ? accelerated : 0.35;
@@ -2037,7 +2192,7 @@
                             acc += accelerated;
                             radius0 -= (speed0 + acc);
                         }
-                        let point = Tools.Point.getRoundPos(angle, radius0, centerPoint);
+                        let point = Tools._Point.getRoundPos(angle, radius0, centerPoint);
                         Img.pos(point.x, point.y);
                         if (point.distance(centerPoint.x, centerPoint.y) <= 20 || point.distance(centerPoint.x, centerPoint.y) >= 1000) {
                             Img.removeSelf();
@@ -2057,18 +2212,18 @@
                             return;
                         }
                         parent.addChild(this);
-                        this.skin = urlArr ? Tools.arrayRandomGetOne(urlArr) : _SkinUrl.星星1;
-                        this.width = width ? Tools.randomOneNumber(width[0], width[1]) : 80;
-                        this.height = height ? Tools.randomOneNumber(height[0], height[1]) : this.width;
+                        this.skin = urlArr ? Tools._Array.randomGetOne(urlArr) : _SkinUrl.星星1;
+                        this.width = width ? Tools._Number.randomOneBySection(width[0], width[1]) : 80;
+                        this.height = height ? Tools._Number.randomOneBySection(height[0], height[1]) : this.width;
                         this.pivotX = this.width / 2;
                         this.pivotY = this.height / 2;
-                        let p = radiusXY ? Tools.Point.randomPointByCenter(centerPos, radiusXY[0], radiusXY[1], 1) : Tools.Point.randomPointByCenter(centerPos, 100, 100, 1);
+                        let p = radiusXY ? Tools._Point.randomPointByCenter(centerPos, radiusXY[0], radiusXY[1], 1) : Tools._Point.randomPointByCenter(centerPos, 100, 100, 1);
                         this.pos(p[0].x, p[0].y);
                         let RGBA = [];
-                        RGBA[0] = colorRGBA ? Tools.randomOneNumber(colorRGBA[0][0], colorRGBA[1][0]) : Tools.randomOneNumber(0, 255);
-                        RGBA[1] = colorRGBA ? Tools.randomOneNumber(colorRGBA[0][1], colorRGBA[1][1]) : Tools.randomOneNumber(0, 255);
-                        RGBA[2] = colorRGBA ? Tools.randomOneNumber(colorRGBA[0][2], colorRGBA[1][2]) : Tools.randomOneNumber(0, 255);
-                        RGBA[3] = colorRGBA ? Tools.randomOneNumber(colorRGBA[0][3], colorRGBA[1][3]) : Tools.randomOneNumber(0, 255);
+                        RGBA[0] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][0], colorRGBA[1][0]) : Tools._Number.randomOneBySection(0, 255);
+                        RGBA[1] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][1], colorRGBA[1][1]) : Tools._Number.randomOneBySection(0, 255);
+                        RGBA[2] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][2], colorRGBA[1][2]) : Tools._Number.randomOneBySection(0, 255);
+                        RGBA[3] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][3], colorRGBA[1][3]) : Tools._Number.randomOneBySection(0, 255);
                         Color._colour(this, RGBA);
                         this.alpha = 0;
                     }
@@ -2078,10 +2233,10 @@
                     let Img = new _GlitterImage(parent, centerPos, radiusXY, urlArr, colorRGBA, width, height);
                     Img.scaleX = 0;
                     Img.scaleY = 0;
-                    let _scale = scale ? Tools.randomOneNumber(scale[0], scale[1]) : Tools.randomOneNumber(0.8, 1.2);
-                    let _speed = speed ? Tools.randomOneNumber(speed[0], speed[1]) : Tools.randomOneNumber(0.01, 0.02);
-                    let _rotateSpeed = rotateSpeed ? Tools.randomOneInt(rotateSpeed[0], rotateSpeed[1]) : Tools.randomOneInt(0, 5);
-                    _rotateSpeed = Tools.randomOneHalf() == 0 ? -_rotateSpeed : _rotateSpeed;
+                    let _scale = scale ? Tools._Number.randomOneBySection(scale[0], scale[1]) : Tools._Number.randomOneBySection(0.8, 1.2);
+                    let _speed = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(0.01, 0.02);
+                    let _rotateSpeed = rotateSpeed ? Tools._Number.randomOneInt(rotateSpeed[0], rotateSpeed[1]) : Tools._Number.randomOneInt(0, 5);
+                    _rotateSpeed = Tools._Number.randomOneHalf() == 0 ? -_rotateSpeed : _rotateSpeed;
                     let moveCaller = {
                         appear: true,
                         scale: false,
@@ -2164,16 +2319,16 @@
                     constructor(parent, urlArr, colorRGBA, width, height, zOrder) {
                         super();
                         parent.addChild(this);
-                        this.skin = urlArr ? Tools.arrayRandomGetOne(urlArr) : _SkinUrl.圆形发光1;
-                        this.width = width ? Tools.randomOneNumber(width[0], width[1]) : 80;
-                        this.height = height ? Tools.randomOneNumber(height[0], height[1]) : this.width;
+                        this.skin = urlArr ? Tools._Array.randomGetOne(urlArr) : _SkinUrl.圆形发光1;
+                        this.width = width ? Tools._Number.randomOneBySection(width[0], width[1]) : 80;
+                        this.height = height ? Tools._Number.randomOneBySection(height[0], height[1]) : this.width;
                         this.pivotX = this.width / 2;
                         this.pivotY = this.height / 2;
                         let RGBA = [];
-                        RGBA[0] = colorRGBA ? Tools.randomOneNumber(colorRGBA[0][0], colorRGBA[1][0]) : Tools.randomOneNumber(0, 255);
-                        RGBA[1] = colorRGBA ? Tools.randomOneNumber(colorRGBA[0][1], colorRGBA[1][1]) : Tools.randomOneNumber(0, 255);
-                        RGBA[2] = colorRGBA ? Tools.randomOneNumber(colorRGBA[0][2], colorRGBA[1][2]) : Tools.randomOneNumber(0, 255);
-                        RGBA[3] = colorRGBA ? Tools.randomOneNumber(colorRGBA[0][3], colorRGBA[1][3]) : Tools.randomOneNumber(0, 255);
+                        RGBA[0] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][0], colorRGBA[1][0]) : Tools._Number.randomOneBySection(0, 255);
+                        RGBA[1] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][1], colorRGBA[1][1]) : Tools._Number.randomOneBySection(0, 255);
+                        RGBA[2] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][2], colorRGBA[1][2]) : Tools._Number.randomOneBySection(0, 255);
+                        RGBA[3] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][3], colorRGBA[1][3]) : Tools._Number.randomOneBySection(0, 255);
                         Color._colour(this, RGBA);
                         this.zOrder = zOrder ? zOrder : 0;
                         this.alpha = 0;
@@ -2230,7 +2385,7 @@
                         let targetXY = [posArray[index][0], posArray[index][1]];
                         let distance = (new Laya.Point(Img.x, Img.y)).distance(targetXY[0], targetXY[1]);
                         if (parallel) {
-                            Img.rotation = Tools.d2_Vector_Angle(Img.x - targetXY[0], Img.y - targetXY[1]) + 180;
+                            Img.rotation = Tools._Point.pointByAngle(Img.x - targetXY[0], Img.y - targetXY[1]) + 180;
                         }
                         let time = speed * 100 + distance / 5;
                         if (index == posArray.length + 1) {
@@ -2252,36 +2407,44 @@
         })(Effects = lwg.Effects || (lwg.Effects = {}));
         let Click;
         (function (Click) {
+            Click._switch = true;
             function _createButton() {
                 let Btn = new Laya.Sprite();
                 let img = new Laya.Image();
                 let label = new Laya.Label();
             }
             Click._createButton = _createButton;
-            let _Type;
-            (function (_Type) {
-                _Type["noEffect"] = "noEffect";
-                _Type["largen"] = "largen";
-                _Type["balloon"] = "balloon";
-                _Type["beetle"] = "beetle";
-            })(_Type = Click._Type || (Click._Type = {}));
+            Click._Type = {
+                no: 'no',
+                largen: 'largen',
+                balloon: 'balloon',
+                beetle: 'beetle',
+            };
+            Click._Use = {
+                get value() {
+                    return this['Click_name'] ? this['Click_name'] : null;
+                },
+                set value(val) {
+                    this['Click_name'] = val;
+                }
+            };
             function _on(effect, target, caller, down, move, up, out) {
                 let btnEffect;
                 switch (effect) {
-                    case _Type.noEffect:
-                        btnEffect = new Btn_NoEffect();
+                    case Click._Type.no:
+                        btnEffect = new _NoEffect();
                         break;
-                    case _Type.largen:
-                        btnEffect = new Btn_LargenEffect();
+                    case Click._Type.largen:
+                        btnEffect = new _Largen();
                         break;
-                    case _Type.balloon:
-                        btnEffect = new Btn_Balloon();
+                    case Click._Type.balloon:
+                        btnEffect = new _Balloon();
                         break;
-                    case _Type.balloon:
-                        btnEffect = new Btn_Beetle();
+                    case Click._Type.balloon:
+                        btnEffect = new _Beetle();
                         break;
                     default:
-                        btnEffect = new Btn_LargenEffect();
+                        btnEffect = new _NoEffect();
                         break;
                 }
                 target.on(Laya.Event.MOUSE_DOWN, caller, down);
@@ -2297,20 +2460,20 @@
             function _off(effect, target, caller, down, move, up, out) {
                 let btnEffect;
                 switch (effect) {
-                    case _Type.noEffect:
-                        btnEffect = new Btn_NoEffect();
+                    case Click._Type.no:
+                        btnEffect = new _NoEffect();
                         break;
-                    case _Type.largen:
-                        btnEffect = new Btn_LargenEffect();
+                    case Click._Type.largen:
+                        btnEffect = new _Largen();
                         break;
-                    case _Type.balloon:
-                        btnEffect = new Btn_Balloon();
+                    case Click._Type.balloon:
+                        btnEffect = new _Balloon();
                         break;
-                    case _Type.balloon:
-                        btnEffect = new Btn_Beetle();
+                    case Click._Type.balloon:
+                        btnEffect = new _Beetle();
                         break;
                     default:
-                        btnEffect = new Btn_LargenEffect();
+                        btnEffect = new _Largen();
                         break;
                 }
                 target._off(Laya.Event.MOUSE_DOWN, caller, down);
@@ -2324,7 +2487,7 @@
             }
             Click._off = _off;
         })(Click = lwg.Click || (lwg.Click = {}));
-        class Btn_NoEffect {
+        class _NoEffect {
             constructor() {
             }
             down(event) {
@@ -2336,13 +2499,13 @@
             out(event) {
             }
         }
-        lwg.Btn_NoEffect = Btn_NoEffect;
-        class Btn_LargenEffect {
+        lwg._NoEffect = _NoEffect;
+        class _Largen {
             constructor() {
             }
             down(event) {
                 event.currentTarget.scale(1.1, 1.1);
-                PalyAudio.playSound(Click._audioUrl);
+                Audio._playSound(Click._audioUrl);
             }
             move(event) {
             }
@@ -2353,13 +2516,13 @@
                 event.currentTarget.scale(1, 1);
             }
         }
-        lwg.Btn_LargenEffect = Btn_LargenEffect;
-        class Btn_Balloon {
+        lwg._Largen = _Largen;
+        class _Balloon {
             constructor() {
             }
             down(event) {
                 event.currentTarget.scale(Click._balloonScale + 0.06, Click._balloonScale + 0.06);
-                PalyAudio.playSound(Click._audioUrl);
+                Audio._playSound(Click._audioUrl);
             }
             up(event) {
                 event.currentTarget.scale(Click._balloonScale, Click._balloonScale);
@@ -2371,13 +2534,13 @@
                 event.currentTarget.scale(Click._balloonScale, Click._balloonScale);
             }
         }
-        lwg.Btn_Balloon = Btn_Balloon;
-        class Btn_Beetle {
+        lwg._Balloon = _Balloon;
+        class _Beetle {
             constructor() {
             }
             down(event) {
                 event.currentTarget.scale(Click._beetleScale + 0.06, Click._beetleScale + 0.06);
-                PalyAudio.playSound(Click._audioUrl);
+                Audio._playSound(Click._audioUrl);
             }
             up(event) {
                 event.currentTarget.scale(Click._beetleScale, Click._beetleScale);
@@ -2389,7 +2552,7 @@
                 event.currentTarget.scale(Click._beetleScale, Click._beetleScale);
             }
         }
-        lwg.Btn_Beetle = Btn_Beetle;
+        lwg._Beetle = _Beetle;
         let Animation3D;
         (function (Animation3D) {
             Animation3D.tweenMap = {};
@@ -2682,6 +2845,14 @@
                 }), delayed ? delayed : 0);
             }
             Animation2D.move_Scale = move_Scale;
+            function move_rotate(Node, tRotate, tPoint, time, delayed, func) {
+                Laya.Tween.to(Node, { rotation: tRotate, x: tPoint.x, y: tPoint.y }, time, null, Laya.Handler.create(Node['move_rotate'], () => {
+                    if (func) {
+                        func();
+                    }
+                }), delayed ? delayed : 0);
+            }
+            Animation2D.move_rotate = move_rotate;
             function rotate_Scale(target, fRotate, fScaleX, fScaleY, eRotate, eScaleX, eScaleY, time, delayed, func) {
                 target.scaleX = fScaleX;
                 target.scaleY = fScaleY;
@@ -2742,13 +2913,13 @@
             Animation2D.goUp_Simple = goUp_Simple;
             function cardRotateX_TowFace(node, time, func1, delayed, func2) {
                 Laya.Tween.to(node, { scaleX: 0 }, time, null, Laya.Handler.create(this, function () {
-                    Tools.Node.childrenVisible2D(node, false);
+                    Tools._Node.childrenVisible2D(node, false);
                     if (func1) {
                         func1();
                     }
                     Laya.Tween.to(node, { scaleX: 1 }, time * 0.9, null, Laya.Handler.create(this, function () {
                         Laya.Tween.to(node, { scaleX: 0 }, time * 0.8, null, Laya.Handler.create(this, function () {
-                            Tools.Node.childrenVisible2D(node, true);
+                            Tools._Node.childrenVisible2D(node, true);
                             Laya.Tween.to(node, { scaleX: 1 }, time * 0.7, null, Laya.Handler.create(this, function () {
                                 if (func2) {
                                     func2();
@@ -2774,14 +2945,14 @@
             Animation2D.cardRotateX_OneFace = cardRotateX_OneFace;
             function cardRotateY_TowFace(node, time, func1, delayed, func2) {
                 Laya.Tween.to(node, { scaleY: 0 }, time, null, Laya.Handler.create(this, function () {
-                    Tools.Node.childrenVisible2D(node, false);
+                    Tools._Node.childrenVisible2D(node, false);
                     if (func1) {
                         func1();
                     }
                     Laya.Tween.to(node, { scaleY: 1 }, time, null, Laya.Handler.create(this, function () {
                         Laya.Tween.to(node, { scaleY: 0 }, time, null, Laya.Handler.create(this, function () {
                             Laya.Tween.to(node, { scaleY: 1 }, time * 1 / 2, null, Laya.Handler.create(this, function () {
-                                Tools.Node.childrenVisible2D(node, true);
+                                Tools._Node.childrenVisible2D(node, true);
                                 if (func2) {
                                     func2();
                                 }
@@ -3061,12 +3232,12 @@
                     if (value) {
                         val = 1;
                         Laya.LocalStorage.setItem('Setting_bgMusic', val.toString());
-                        PalyAudio.playMusic();
+                        Audio._playMusic();
                     }
                     else {
                         val = 0;
                         Laya.LocalStorage.setItem('Setting_bgMusic', val.toString());
-                        PalyAudio.stopMusic();
+                        Audio._stopMusic();
                     }
                 }
             };
@@ -3085,7 +3256,7 @@
                     Laya.LocalStorage.setItem('Setting_shake', val.toString());
                 }
             };
-            function createSetBtn(x, y, width, height, skin, parent, ZOder) {
+            function _createBtnSet(x, y, width, height, skin, parent, ZOder) {
                 let btn = new Laya.Image;
                 btn.width = width ? width : 100;
                 btn.height = width ? width : 100;
@@ -3106,59 +3277,59 @@
                     Admin._openScene(Admin._SceneName.Set);
                 };
                 Click._on(Click._Type.largen, btn, null, null, btnSetUp, null);
-                Setting.BtnSetNode = btn;
-                Setting.BtnSetNode.name = 'BtnSetNode';
+                Setting._BtnSet = btn;
+                Setting._BtnSet.name = 'BtnSetNode';
                 return btn;
             }
-            Setting.createSetBtn = createSetBtn;
-            function setBtnAppear(delayed, x, y) {
-                if (!Setting.BtnSetNode) {
+            Setting._createBtnSet = _createBtnSet;
+            function btnSetAppear(delayed, x, y) {
+                if (!Setting._BtnSet) {
                     return;
                 }
                 if (delayed) {
-                    Animation2D.scale_Alpha(Setting.BtnSetNode, 0, 1, 1, 1, 1, 1, delayed, 0, f => {
-                        Setting.BtnSetNode.visible = true;
+                    Animation2D.scale_Alpha(Setting._BtnSet, 0, 1, 1, 1, 1, 1, delayed, 0, f => {
+                        Setting._BtnSet.visible = true;
                     });
                 }
                 else {
-                    Setting.BtnSetNode.visible = true;
+                    Setting._BtnSet.visible = true;
                 }
                 if (x) {
-                    Setting.BtnSetNode.x = x;
+                    Setting._BtnSet.x = x;
                 }
                 if (y) {
-                    Setting.BtnSetNode.y = y;
+                    Setting._BtnSet.y = y;
                 }
             }
-            Setting.setBtnAppear = setBtnAppear;
-            function setBtnVinish(delayed) {
-                if (!Setting.BtnSetNode) {
+            Setting.btnSetAppear = btnSetAppear;
+            function btnSetVinish(delayed) {
+                if (!Setting._BtnSet) {
                     return;
                 }
                 if (delayed) {
-                    Animation2D.scale_Alpha(Setting.BtnSetNode, 1, 1, 1, 1, 1, 0, delayed, 0, f => {
-                        Setting.BtnSetNode.visible = false;
+                    Animation2D.scale_Alpha(Setting._BtnSet, 1, 1, 1, 1, 1, 0, delayed, 0, f => {
+                        Setting._BtnSet.visible = false;
                     });
                 }
                 else {
-                    Setting.BtnSetNode.visible = false;
+                    Setting._BtnSet.visible = false;
                 }
             }
-            Setting.setBtnVinish = setBtnVinish;
+            Setting.btnSetVinish = btnSetVinish;
         })(Setting = lwg.Setting || (lwg.Setting = {}));
-        let PalyAudio;
-        (function (PalyAudio) {
-            let voiceUrl;
-            (function (voiceUrl) {
-                voiceUrl["btn"] = "Frame/Voice/btn.wav";
-                voiceUrl["bgm"] = "Frame/Voice/bgm.mp3";
-                voiceUrl["victory"] = "Frame/Voice/guoguan.wav";
-                voiceUrl["defeated"] = "Frame/Voice/wancheng.wav";
-                voiceUrl["huodejinbi"] = "Frame/Voice/huodejinbi.wav";
-            })(voiceUrl = PalyAudio.voiceUrl || (PalyAudio.voiceUrl = {}));
-            function playSound(url, number, func) {
+        let Audio;
+        (function (Audio) {
+            let _voiceUrl;
+            (function (_voiceUrl) {
+                _voiceUrl["btn"] = "Lwg/Voice/btn.wav";
+                _voiceUrl["bgm"] = "Lwg/Voice/bgm.mp3";
+                _voiceUrl["victory"] = "Lwg/Voice/guoguan.wav";
+                _voiceUrl["defeated"] = "Lwg/Voice/wancheng.wav";
+                _voiceUrl["huodejinbi"] = "Lwg/Voice/huodejinbi.wav";
+            })(_voiceUrl = Audio._voiceUrl || (Audio._voiceUrl = {}));
+            function _playSound(url, number, func) {
                 if (!url) {
-                    url = voiceUrl.btn;
+                    url = _voiceUrl.btn;
                 }
                 if (!number) {
                     number = 1;
@@ -3171,10 +3342,10 @@
                     }));
                 }
             }
-            PalyAudio.playSound = playSound;
-            function playDefeatedSound(url, number, func) {
+            Audio._playSound = _playSound;
+            function _playDefeatedSound(url, number, func) {
                 if (!url) {
-                    url = voiceUrl.defeated;
+                    url = _voiceUrl.defeated;
                 }
                 if (!number) {
                     number = 1;
@@ -3187,10 +3358,10 @@
                     }));
                 }
             }
-            PalyAudio.playDefeatedSound = playDefeatedSound;
-            function playVictorySound(url, number, func) {
+            Audio._playDefeatedSound = _playDefeatedSound;
+            function _playVictorySound(url, number, func) {
                 if (!url) {
-                    url = voiceUrl.victory;
+                    url = _voiceUrl.victory;
                 }
                 if (!number) {
                     number = 1;
@@ -3203,10 +3374,10 @@
                     }));
                 }
             }
-            PalyAudio.playVictorySound = playVictorySound;
-            function playMusic(url, number, delayed) {
+            Audio._playVictorySound = _playVictorySound;
+            function _playMusic(url, number, delayed) {
                 if (!url) {
-                    url = voiceUrl.bgm;
+                    url = _voiceUrl.bgm;
                 }
                 if (!number) {
                     number = 0;
@@ -3218,63 +3389,81 @@
                     Laya.SoundManager.playMusic(url, number, Laya.Handler.create(this, function () { }), delayed);
                 }
             }
-            PalyAudio.playMusic = playMusic;
-            function stopMusic() {
+            Audio._playMusic = _playMusic;
+            function _stopMusic() {
                 Laya.SoundManager.stopMusic();
             }
-            PalyAudio.stopMusic = stopMusic;
-        })(PalyAudio = lwg.PalyAudio || (lwg.PalyAudio = {}));
+            Audio._stopMusic = _stopMusic;
+        })(Audio = lwg.Audio || (lwg.Audio = {}));
         let Tools;
         (function (Tools) {
             function color_RGBtoHexString(r, g, b) {
                 return '#' + ("00000" + (r << 16 | g << 8 | b).toString(16)).slice(-6);
             }
             Tools.color_RGBtoHexString = color_RGBtoHexString;
-            function format_FormatNumber(crc, fixNum = 0) {
-                let textTemp;
-                if (crc >= 1e27) {
-                    textTemp = (crc / 1e27).toFixed(fixNum) + "ae";
+            let _Format;
+            (function (_Format) {
+                function formatNumber(crc, fixNum = 0) {
+                    let textTemp;
+                    if (crc >= 1e27) {
+                        textTemp = (crc / 1e27).toFixed(fixNum) + "ae";
+                    }
+                    else if (crc >= 1e24) {
+                        textTemp = (crc / 1e24).toFixed(fixNum) + "ad";
+                    }
+                    else if (crc >= 1e21) {
+                        textTemp = (crc / 1e21).toFixed(fixNum) + "ac";
+                    }
+                    else if (crc >= 1e18) {
+                        textTemp = (crc / 1e18).toFixed(fixNum) + "ab";
+                    }
+                    else if (crc >= 1e15) {
+                        textTemp = (crc / 1e15).toFixed(fixNum) + "aa";
+                    }
+                    else if (crc >= 1e12) {
+                        textTemp = (crc / 1e12).toFixed(fixNum) + "t";
+                    }
+                    else if (crc >= 1e9) {
+                        textTemp = (crc / 1e9).toFixed(fixNum) + "b";
+                    }
+                    else if (crc >= 1e6) {
+                        textTemp = (crc / 1e6).toFixed(fixNum) + "m";
+                    }
+                    else if (crc >= 1e3) {
+                        textTemp = (crc / 1e3).toFixed(fixNum) + "k";
+                    }
+                    else {
+                        textTemp = Math.round(crc).toString();
+                    }
+                    return textTemp;
                 }
-                else if (crc >= 1e24) {
-                    textTemp = (crc / 1e24).toFixed(fixNum) + "ad";
+                _Format.formatNumber = formatNumber;
+                function strAddNum(str, num) {
+                    return (Number(str) + num).toString();
                 }
-                else if (crc >= 1e21) {
-                    textTemp = (crc / 1e21).toFixed(fixNum) + "ac";
+                _Format.strAddNum = strAddNum;
+                function NumAddStr(num, str) {
+                    return Number(str) + num;
                 }
-                else if (crc >= 1e18) {
-                    textTemp = (crc / 1e18).toFixed(fixNum) + "ab";
+                _Format.NumAddStr = NumAddStr;
+            })(_Format = Tools._Format || (Tools._Format = {}));
+            let _Node;
+            (function (_Node) {
+                function simpleCopyImg(Target) {
+                    let Img = new Laya.Image;
+                    Img.skin = Target.skin;
+                    Img.width = Target.width;
+                    Img.height = Target.height;
+                    Img.pivotX = Target.pivotX;
+                    Img.pivotY = Target.pivotY;
+                    Img.scaleX = Target.scaleX;
+                    Img.scaleY = Target.scaleY;
+                    Img.skewX = Target.skewX;
+                    Img.skewY = Target.skewY;
+                    Img.rotation = Target.rotation;
+                    return Img;
                 }
-                else if (crc >= 1e15) {
-                    textTemp = (crc / 1e15).toFixed(fixNum) + "aa";
-                }
-                else if (crc >= 1e12) {
-                    textTemp = (crc / 1e12).toFixed(fixNum) + "t";
-                }
-                else if (crc >= 1e9) {
-                    textTemp = (crc / 1e9).toFixed(fixNum) + "b";
-                }
-                else if (crc >= 1e6) {
-                    textTemp = (crc / 1e6).toFixed(fixNum) + "m";
-                }
-                else if (crc >= 1e3) {
-                    textTemp = (crc / 1e3).toFixed(fixNum) + "k";
-                }
-                else {
-                    textTemp = Math.round(crc).toString();
-                }
-                return textTemp;
-            }
-            Tools.format_FormatNumber = format_FormatNumber;
-            function format_StrAddNum(str, num) {
-                return (Number(str) + num).toString();
-            }
-            Tools.format_StrAddNum = format_StrAddNum;
-            function format_NumAddStr(num, str) {
-                return Number(str) + num;
-            }
-            Tools.format_NumAddStr = format_NumAddStr;
-            let Node;
-            (function (Node) {
+                _Node.simpleCopyImg = simpleCopyImg;
                 function leaveStage(_Sprite, func) {
                     let Parent = _Sprite.parent;
                     let gPoint = Parent.localToGlobal(new Laya.Point(_Sprite.x, _Sprite.y));
@@ -3290,7 +3479,7 @@
                     }
                     return new Laya.Point(gPoint.x, gPoint.y);
                 }
-                Node.leaveStage = leaveStage;
+                _Node.leaveStage = leaveStage;
                 function checkTwoDistance(_Sprite1, _Sprite2, distance, func) {
                     let Parent1 = _Sprite1.parent;
                     let gPoint1 = Parent1.localToGlobal(new Laya.Point(_Sprite1.x, _Sprite1.y));
@@ -3303,7 +3492,7 @@
                     }
                     return gPoint1.distance(gPoint2.x, gPoint2.y);
                 }
-                Node.checkTwoDistance = checkTwoDistance;
+                _Node.checkTwoDistance = checkTwoDistance;
                 function zOrderByY(sp, zOrder, along) {
                     let arr = [];
                     if (sp.numChildren == 0) {
@@ -3314,7 +3503,7 @@
                         const element = sp.getChildAt(index);
                         arr.push(element);
                     }
-                    Tools.objArrPropertySort(arr, 'y');
+                    _ObjArray.onPropertySort(arr, 'y');
                     if (zOrder) {
                         for (let index = 0; index < arr.length; index++) {
                             const element = arr[index];
@@ -3335,8 +3524,8 @@
                         return arr;
                     }
                 }
-                Node.zOrderByY = zOrderByY;
-                function changePovit(sp, _pivotX, _pivotY, int) {
+                _Node.zOrderByY = zOrderByY;
+                function changePivot(sp, _pivotX, _pivotY, int) {
                     let originalPovitX = sp.pivotX;
                     let originalPovitY = sp.pivotY;
                     if (int) {
@@ -3349,7 +3538,23 @@
                         sp.y += (sp.pivotY - originalPovitY);
                     }
                 }
-                Node.changePovit = changePovit;
+                _Node.changePivot = changePivot;
+                function changePivotCenter(sp, int) {
+                    let originalPovitX = sp.pivotX;
+                    let originalPovitY = sp.pivotY;
+                    let _pivotX;
+                    let _pivotY;
+                    if (int) {
+                        _pivotX = Math.round(sp.width / 2);
+                        _pivotY = Math.round(sp.height / 2);
+                    }
+                    if (sp.width) {
+                        sp.pivot(sp.width / 2, sp.height / 2);
+                        sp.x += (sp.pivotX - originalPovitX);
+                        sp.y += (sp.pivotY - originalPovitY);
+                    }
+                }
+                _Node.changePivotCenter = changePivotCenter;
                 function getChildArrByProperty(node, property, value) {
                     let childArr = [];
                     for (let index = 0; index < node.numChildren; index++) {
@@ -3360,26 +3565,26 @@
                     }
                     return childArr;
                 }
-                Node.getChildArrByProperty = getChildArrByProperty;
+                _Node.getChildArrByProperty = getChildArrByProperty;
                 function randomChildren(node, num) {
                     let childArr = [];
                     let indexArr = [];
                     for (let i = 0; i < node.numChildren; i++) {
                         indexArr.push(i);
                     }
-                    let randomIndex = Tools.arrayRandomGetOut(indexArr, num);
+                    let randomIndex = Tools._Array.randomGetOut(indexArr, num);
                     for (let j = 0; j < randomIndex.length; j++) {
                         childArr.push(node.getChildAt(randomIndex[j]));
                     }
                     return childArr;
                 }
-                Node.randomChildren = randomChildren;
+                _Node.randomChildren = randomChildren;
                 function removeAllChildren(node) {
                     if (node.numChildren > 0) {
                         node.removeChildren(0, node.numChildren - 1);
                     }
                 }
-                Node.removeAllChildren = removeAllChildren;
+                _Node.removeAllChildren = removeAllChildren;
                 function removeOneChildren(node, nodeName) {
                     for (let index = 0; index < node.numChildren; index++) {
                         const element = node.getChildAt(index);
@@ -3388,7 +3593,7 @@
                         }
                     }
                 }
-                Node.removeOneChildren = removeOneChildren;
+                _Node.removeOneChildren = removeOneChildren;
                 function checkChildren(node, nodeName) {
                     let bool = false;
                     for (let index = 0; index < node.numChildren; index++) {
@@ -3399,7 +3604,7 @@
                     }
                     return bool;
                 }
-                Node.checkChildren = checkChildren;
+                _Node.checkChildren = checkChildren;
                 function showExcludedChild2D(node, childNameArr, bool) {
                     for (let i = 0; i < node.numChildren; i++) {
                         let Child = node.getChildAt(i);
@@ -3423,7 +3628,7 @@
                         }
                     }
                 }
-                Node.showExcludedChild2D = showExcludedChild2D;
+                _Node.showExcludedChild2D = showExcludedChild2D;
                 function showExcludedChild3D(node, childNameArr, bool) {
                     for (let i = 0; i < node.numChildren; i++) {
                         let Child = node.getChildAt(i);
@@ -3447,12 +3652,12 @@
                         }
                     }
                 }
-                Node.showExcludedChild3D = showExcludedChild3D;
-                function prefabCreate(prefab, name) {
+                _Node.showExcludedChild3D = showExcludedChild3D;
+                function createPrefab(prefab, name) {
                     let sp = Laya.Pool.getItemByCreateFun(name ? name : prefab.json['props']['name'], prefab.create, prefab);
                     return sp;
                 }
-                Node.prefabCreate = prefabCreate;
+                _Node.createPrefab = createPrefab;
                 function childrenVisible2D(node, bool) {
                     for (let index = 0; index < node.numChildren; index++) {
                         const element = node.getChildAt(index);
@@ -3464,7 +3669,7 @@
                         }
                     }
                 }
-                Node.childrenVisible2D = childrenVisible2D;
+                _Node.childrenVisible2D = childrenVisible2D;
                 function childrenVisible3D(node, bool) {
                     for (let index = 0; index < node.numChildren; index++) {
                         const element = node.getChildAt(index);
@@ -3476,7 +3681,7 @@
                         }
                     }
                 }
-                Node.childrenVisible3D = childrenVisible3D;
+                _Node.childrenVisible3D = childrenVisible3D;
                 function findChild3D(parent, name) {
                     var item = null;
                     item = parent.getChildByName(name);
@@ -3490,7 +3695,7 @@
                     }
                     return null;
                 }
-                Node.findChild3D = findChild3D;
+                _Node.findChild3D = findChild3D;
                 function findChild2D(parent, name) {
                     var item = null;
                     item = parent.getChildByName(name);
@@ -3504,534 +3709,147 @@
                     }
                     return null;
                 }
-                Node.findChild2D = findChild2D;
+                _Node.findChild2D = findChild2D;
                 function findChildByName2D(parent, name) {
                     let arr = [];
                     return arr;
                 }
-                Node.findChildByName2D = findChildByName2D;
-            })(Node = Tools.Node || (Tools.Node = {}));
-            function randomOneHalf() {
-                let number;
-                number = Math.floor(Math.random() * 2);
-                return number;
-            }
-            Tools.randomOneHalf = randomOneHalf;
-            function randomOneInt(section1, section2) {
-                if (section2) {
-                    return Math.floor(Math.random() * (section2 - section1)) + section1;
+                _Node.findChildByName2D = findChildByName2D;
+            })(_Node = Tools._Node || (Tools._Node = {}));
+            let _Number;
+            (function (_Number) {
+                function randomOneHalf() {
+                    let number;
+                    number = Math.floor(Math.random() * 2);
+                    return number;
                 }
-                else {
-                    return Math.floor(Math.random() * section1);
+                _Number.randomOneHalf = randomOneHalf;
+                function randomOneInt(section1, section2) {
+                    if (section2) {
+                        return Math.floor(Math.random() * (section2 - section1)) + section1;
+                    }
+                    else {
+                        return Math.floor(Math.random() * section1);
+                    }
                 }
-            }
-            Tools.randomOneInt = randomOneInt;
-            function randomCountNumer(section1, section2, count, intSet) {
-                let arr = [];
-                if (!count) {
-                    count = 1;
+                _Number.randomOneInt = randomOneInt;
+                function randomCountBySection(section1, section2, count, intSet) {
+                    let arr = [];
+                    if (!count) {
+                        count = 1;
+                    }
+                    if (section2) {
+                        while (count > arr.length) {
+                            let num;
+                            if (intSet || intSet == undefined) {
+                                num = Math.floor(Math.random() * (section2 - section1)) + section1;
+                            }
+                            else {
+                                num = Math.random() * (section2 - section1) + section1;
+                            }
+                            arr.push(num);
+                            _Array.unique01(arr);
+                        }
+                        ;
+                        return arr;
+                    }
+                    else {
+                        while (count > arr.length) {
+                            let num;
+                            if (intSet || intSet == undefined) {
+                                num = Math.floor(Math.random() * section1);
+                            }
+                            else {
+                                num = Math.random() * section1;
+                            }
+                            arr.push(num);
+                            _Array.unique01(arr);
+                        }
+                        return arr;
+                    }
                 }
-                if (section2) {
-                    while (count > arr.length) {
+                _Number.randomCountBySection = randomCountBySection;
+                function randomOneBySection(section1, section2, intSet) {
+                    let chage;
+                    if (section1 > section2) {
+                        chage = section1;
+                        section1 = section2;
+                        section2 = chage;
+                    }
+                    if (section2) {
                         let num;
-                        if (intSet || intSet == undefined) {
+                        if (intSet) {
                             num = Math.floor(Math.random() * (section2 - section1)) + section1;
                         }
                         else {
                             num = Math.random() * (section2 - section1) + section1;
                         }
-                        arr.push(num);
-                        Tools.arrayUnique_01(arr);
+                        return num;
                     }
-                    ;
-                    return arr;
-                }
-                else {
-                    while (count > arr.length) {
+                    else {
                         let num;
-                        if (intSet || intSet == undefined) {
+                        if (intSet) {
                             num = Math.floor(Math.random() * section1);
                         }
                         else {
                             num = Math.random() * section1;
                         }
-                        arr.push(num);
-                        Tools.arrayUnique_01(arr);
+                        return num;
                     }
-                    return arr;
                 }
-            }
-            Tools.randomCountNumer = randomCountNumer;
-            function randomOneNumber(section1, section2, intSet) {
-                let chage;
-                if (section1 > section2) {
-                    chage = section1;
-                    section1 = section2;
-                    section2 = chage;
+                _Number.randomOneBySection = randomOneBySection;
+            })(_Number = Tools._Number || (Tools._Number = {}));
+            let _Point;
+            (function (_Point) {
+                function getOtherLocal(element, Other) {
+                    let Parent = element.parent;
+                    let gPoint = Parent.localToGlobal(new Laya.Point(element.x, element.y));
+                    return Other.globalToLocal(gPoint);
                 }
-                if (section2) {
-                    let num;
-                    if (intSet) {
-                        num = Math.floor(Math.random() * (section2 - section1)) + section1;
+                _Point.getOtherLocal = getOtherLocal;
+                function angleByRad(angle) {
+                    return angle / 180 * Math.PI;
+                }
+                _Point.angleByRad = angleByRad;
+                function twoNodeDistance(obj1, obj2) {
+                    let point = new Laya.Point(obj1.x, obj1.y);
+                    let len = point.distance(obj2.x, obj2.y);
+                    return len;
+                }
+                _Point.twoNodeDistance = twoNodeDistance;
+                function pointByAngle(x, y) {
+                    let radian = Math.atan2(x, y);
+                    let angle = 90 - radian * (180 / Math.PI);
+                    if (angle <= 0) {
+                        angle = 270 + (90 + angle);
                     }
-                    else {
-                        num = Math.random() * (section2 - section1) + section1;
-                    }
-                    return num;
+                    return angle - 90;
                 }
-                else {
-                    let num;
-                    if (intSet) {
-                        num = Math.floor(Math.random() * section1);
-                    }
-                    else {
-                        num = Math.random() * section1;
-                    }
-                    return num;
-                }
-            }
-            Tools.randomOneNumber = randomOneNumber;
-            function d2_twoObjectsLen(obj1, obj2) {
-                let point = new Laya.Point(obj1.x, obj1.y);
-                let len = point.distance(obj2.x, obj2.y);
-                return len;
-            }
-            Tools.d2_twoObjectsLen = d2_twoObjectsLen;
-            function d2_Vector_Angle(x, y) {
-                let radian = Math.atan2(x, y);
-                let angle = 90 - radian * (180 / Math.PI);
-                if (angle <= 0) {
-                    angle = 270 + (90 + angle);
-                }
-                return angle - 90;
-            }
-            Tools.d2_Vector_Angle = d2_Vector_Angle;
-            ;
-            function d2_angle_Vector(angle) {
-                let radian = (90 - angle) / (180 / Math.PI);
-                let p = new Laya.Point(Math.sin(radian), Math.cos(radian));
-                p.normalize();
-                return p;
-            }
-            Tools.d2_angle_Vector = d2_angle_Vector;
-            ;
-            function d3_twoObjectsLen(obj1, obj2) {
-                let obj1V3 = obj1.transform.position;
-                let obj2V3 = obj2.transform.position;
-                let p = new Laya.Vector3();
-                Laya.Vector3.subtract(obj1V3, obj2V3, p);
-                let lenp = Laya.Vector3.scalarLength(p);
-                return lenp;
-            }
-            Tools.d3_twoObjectsLen = d3_twoObjectsLen;
-            function d3_twoPositionLen(v1, v2) {
-                let p = d3_twoSubV3(v1, v2);
-                let lenp = Laya.Vector3.scalarLength(p);
-                return lenp;
-            }
-            Tools.d3_twoPositionLen = d3_twoPositionLen;
-            function d3_twoSubV3(V3_01, V3_02, normalizing) {
-                let p = new Laya.Vector3();
-                Laya.Vector3.subtract(V3_01, V3_02, p);
-                if (normalizing) {
-                    let p1 = new Laya.Vector3();
-                    Laya.Vector3.normalize(p, p1);
-                    return p1;
-                }
-                else {
+                _Point.pointByAngle = pointByAngle;
+                ;
+                function angleByPoint(angle) {
+                    let radian = (90 - angle) / (180 / Math.PI);
+                    let p = new Laya.Point(Math.sin(radian), Math.cos(radian));
+                    p.normalize();
                     return p;
                 }
-            }
-            Tools.d3_twoSubV3 = d3_twoSubV3;
-            function d3_maximumDistanceLimi(originV3, obj, length) {
-                let subP = new Laya.Vector3();
-                let objP = obj.transform.position;
-                Laya.Vector3.subtract(objP, originV3, subP);
-                let lenP = Laya.Vector3.scalarLength(subP);
-                if (lenP >= length) {
-                    let normalizP = new Laya.Vector3();
-                    Laya.Vector3.normalize(subP, normalizP);
-                    let x = originV3.x + normalizP.x * length;
-                    let y = originV3.y + normalizP.y * length;
-                    let z = originV3.z + normalizP.z * length;
-                    let p = new Laya.Vector3(x, y, z);
-                    obj.transform.position = p;
-                    return p;
-                }
-            }
-            Tools.d3_maximumDistanceLimi = d3_maximumDistanceLimi;
-            function d3_rayScanning(camera, scene3D, vector2, filtrateName) {
-                let _ray = new Laya.Ray(new Laya.Vector3(0, 0, 0), new Laya.Vector3(0, 0, 0));
-                let outs = new Array();
-                camera.viewportPointToRay(vector2, _ray);
-                scene3D.physicsSimulation.rayCastAll(_ray, outs);
-                if (outs.length != 0 && filtrateName) {
-                    let outsChaild = null;
-                    for (var i = 0; i < outs.length; i++) {
-                        let hitResult = outs[i].collider.owner;
-                        if (hitResult.name === filtrateName) {
-                            outsChaild = outs[i];
-                        }
-                    }
-                    return outsChaild;
-                }
-                else {
-                    return outs;
-                }
-            }
-            Tools.d3_rayScanning = d3_rayScanning;
-            function d3_TransitionScreenPointfor(v3, camera) {
-                let ScreenV4 = new Laya.Vector4();
-                camera.viewport.project(v3, camera.projectionViewMatrix, ScreenV4);
-                let point = new Laya.Vector2();
-                point.x = ScreenV4.x;
-                point.y = ScreenV4.y;
-                return point;
-            }
-            Tools.d3_TransitionScreenPointfor = d3_TransitionScreenPointfor;
-            function d3_animatorPlay(Sp3D, aniName, normalizedTime, layerIndex) {
-                let sp3DAni = Sp3D.getComponent(Laya.Animator);
-                if (!sp3DAni) {
-                    console.log(Sp3D.name, '没有动画组件');
-                    return;
-                }
-                if (!layerIndex) {
-                    layerIndex = 0;
-                }
-                sp3DAni.play(aniName, layerIndex, normalizedTime);
-                return sp3DAni;
-            }
-            Tools.d3_animatorPlay = d3_animatorPlay;
-            function dAll_reverseVector(type, Vecoter1, Vecoter2, normalizing) {
-                let p;
-                if (type === '2d') {
-                    p = new Laya.Point(Vecoter1.x - Vecoter2.x, Vecoter1.y - Vecoter2.y);
-                    if (normalizing) {
-                        p.normalize();
-                    }
-                    return p;
-                }
-                else if (type === '3d') {
-                    p = new Laya.Vector3(Vecoter1.x - Vecoter2.x, Vecoter1.y - Vecoter2.y, Vecoter1.z - Vecoter2.z);
-                    if (normalizing) {
-                        let returnP = new Laya.Vector3();
-                        Laya.Vector3.normalize(p, returnP);
-                        return returnP;
-                    }
-                    else {
-                        return p;
-                    }
-                }
-            }
-            Tools.dAll_reverseVector = dAll_reverseVector;
-            function sk_indexControl(sk, name) {
-                sk.play(name, true);
-                sk.player.currentTime = 15 * 1000 / sk.player.cacheFrameRate;
-            }
-            Tools.sk_indexControl = sk_indexControl;
-            let Draw;
-            (function (Draw) {
-                function drawPieMask(parent, startAngle, endAngle) {
-                    parent.cacheAs = "bitmap";
-                    let drawPieSpt = new Laya.Sprite();
-                    drawPieSpt.blendMode = "destination-out";
-                    parent.addChild(drawPieSpt);
-                    let drawPie = drawPieSpt.graphics.drawPie(parent.width / 2, parent.height / 2, parent.width / 2 + 10, startAngle, endAngle, "#000000");
-                    return drawPie;
-                }
-                Draw.drawPieMask = drawPieMask;
-                function reverseRoundMask(node, x, y, radius, eliminate) {
-                    if (eliminate == undefined || eliminate == true) {
-                        Node.removeAllChildren(node);
-                    }
-                    let interactionArea = new Laya.Sprite();
-                    interactionArea.name = 'reverseRoundMask';
-                    interactionArea.blendMode = "destination-out";
-                    node.cacheAs = "bitmap";
-                    node.addChild(interactionArea);
-                    interactionArea.graphics.drawCircle(0, 0, radius, "#000000");
-                    interactionArea.pos(x, y);
-                    return interactionArea;
-                }
-                Draw.reverseRoundMask = reverseRoundMask;
-                function reverseRoundrectMask(node, x, y, width, height, round, eliminate) {
-                    if (eliminate == undefined || eliminate == true) {
-                        Node.removeAllChildren(node);
-                    }
-                    let interactionArea = new Laya.Sprite();
-                    interactionArea.name = 'reverseRoundrectMask';
-                    interactionArea.blendMode = "destination-out";
-                    node.cacheAs = "bitmap";
-                    node.addChild(interactionArea);
-                    interactionArea.graphics.drawPath(0, 0, [["moveTo", 5, 0], ["lineTo", width - round, 0], ["arcTo", width, 0, width, round, round], ["lineTo", width, height - round], ["arcTo", width, height, width - round, height, round], ["lineTo", height - round, height], ["arcTo", 0, height, 0, height - round, round], ["lineTo", 0, round], ["arcTo", 0, 0, round, 0, round], ["closePath"]], { fillStyle: "#000000" });
-                    interactionArea.width = width;
-                    interactionArea.height = height;
-                    interactionArea.pivotX = width / 2;
-                    interactionArea.pivotY = height / 2;
-                    interactionArea.pos(x, y);
-                }
-                Draw.reverseRoundrectMask = reverseRoundrectMask;
-            })(Draw = Tools.Draw || (Tools.Draw = {}));
-            function objArrPropertySort(array, property) {
-                var compare = function (obj1, obj2) {
-                    var val1 = obj1[property];
-                    var val2 = obj2[property];
-                    if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
-                        val1 = Number(val1);
-                        val2 = Number(val2);
-                    }
-                    if (val1 < val2) {
-                        return -1;
-                    }
-                    else if (val1 > val2) {
-                        return 1;
-                    }
-                    else {
-                        return 0;
-                    }
-                };
-                array.sort(compare);
-                return array;
-            }
-            Tools.objArrPropertySort = objArrPropertySort;
-            function objArr2DifferentPropertyObjArr1(objArr1, objArr2, property) {
-                var result = [];
-                for (var i = 0; i < objArr1.length; i++) {
-                    var obj1 = objArr1[i];
-                    var obj1Name = obj1[property];
-                    var isExist = false;
-                    for (var j = 0; j < objArr2.length; j++) {
-                        var obj2 = objArr2[j];
-                        var obj2Name = obj2[property];
-                        if (obj2Name == obj1Name) {
-                            isExist = true;
-                            break;
-                        }
-                    }
-                    if (!isExist) {
-                        result.push(obj1);
-                    }
-                }
-                return result;
-            }
-            Tools.objArr2DifferentPropertyObjArr1 = objArr2DifferentPropertyObjArr1;
-            function objArr1IdenticalPropertyObjArr2(data1, data2, property) {
-                var result = [];
-                for (var i = 0; i < data1.length; i++) {
-                    var obj1 = data1[i];
-                    var obj1Name = obj1[property];
-                    var isExist = false;
-                    for (var j = 0; j < data2.length; j++) {
-                        var obj2 = data2[j];
-                        var obj2Name = obj2[property];
-                        if (obj2Name == name) {
-                            isExist = true;
-                            break;
-                        }
-                    }
-                    if (isExist) {
-                        result.push(obj1);
-                    }
-                }
-                return result;
-            }
-            Tools.objArr1IdenticalPropertyObjArr2 = objArr1IdenticalPropertyObjArr2;
-            function objArrUnique(arr, property) {
-                for (var i = 0, len = arr.length; i < len; i++) {
-                    for (var j = i + 1, len = arr.length; j < len; j++) {
-                        if (arr[i][property] === arr[j][property]) {
-                            arr.splice(j, 1);
-                            j--;
-                            len--;
-                        }
-                    }
-                }
-                return arr;
-            }
-            Tools.objArrUnique = objArrUnique;
-            function objArrGetValue(objArr, property) {
-                let arr = [];
-                for (let i = 0; i < objArr.length; i++) {
-                    if (objArr[i][property]) {
-                        arr.push(objArr[i][property]);
-                    }
-                }
-                return arr;
-            }
-            Tools.objArrGetValue = objArrGetValue;
-            function objArray_Copy(ObjArray) {
-                var sourceCopy = ObjArray instanceof Array ? [] : {};
-                for (var item in ObjArray) {
-                    sourceCopy[item] = typeof ObjArray[item] === 'object' ? obj_Copy(ObjArray[item]) : ObjArray[item];
-                }
-                return sourceCopy;
-            }
-            Tools.objArray_Copy = objArray_Copy;
-            function obj_Copy(obj) {
-                var objCopy = {};
-                for (const item in obj) {
-                    if (obj.hasOwnProperty(item)) {
-                        const element = obj[item];
-                        if (typeof element === 'object') {
-                            if (Array.isArray(element)) {
-                                let arr1 = array_Copy(element);
-                                objCopy[item] = arr1;
-                            }
-                            else {
-                                obj_Copy(element);
-                            }
-                        }
-                        else {
-                            objCopy[item] = element;
-                        }
-                    }
-                }
-                return objCopy;
-            }
-            Tools.obj_Copy = obj_Copy;
-            function arrayAddToarray(array1, array2) {
-                for (let index = 0; index < array2.length; index++) {
-                    const element = array2[index];
-                    array1.push(element);
-                }
-                return array1;
-            }
-            Tools.arrayAddToarray = arrayAddToarray;
-            function arrayRandomGetOut(arr, num) {
-                if (!num) {
-                    num = 1;
-                }
-                let arrCopy = Tools.array_Copy(arr);
-                let arr0 = [];
-                if (num > arrCopy.length) {
-                    return '数组长度小于取出的数！';
-                }
-                else {
-                    for (let index = 0; index < num; index++) {
-                        let ran = Math.round(Math.random() * (arrCopy.length - 1));
-                        let a1 = arrCopy[ran];
-                        arrCopy.splice(ran, 1);
-                        arr0.push(a1);
-                    }
-                    return arr0;
-                }
-            }
-            Tools.arrayRandomGetOut = arrayRandomGetOut;
-            function arrayRandomGetOne(arr) {
-                let arrCopy = Tools.array_Copy(arr);
-                let ran = Math.round(Math.random() * (arrCopy.length - 1));
-                return arrCopy[ran];
-            }
-            Tools.arrayRandomGetOne = arrayRandomGetOne;
-            function array_Copy(arr1) {
-                var arr = [];
-                for (var i = 0; i < arr1.length; i++) {
-                    arr.push(arr1[i]);
-                }
-                return arr;
-            }
-            Tools.array_Copy = array_Copy;
-            function arrayUnique_01(arr) {
-                for (var i = 0, len = arr.length; i < len; i++) {
-                    for (var j = i + 1, len = arr.length; j < len; j++) {
-                        if (arr[i] === arr[j]) {
-                            arr.splice(j, 1);
-                            j--;
-                            len--;
-                        }
-                    }
-                }
-                return arr;
-            }
-            Tools.arrayUnique_01 = arrayUnique_01;
-            function arrayUnique_02(arr) {
-                arr = arr.sort();
-                var arr1 = [arr[0]];
-                for (var i = 1, len = arr.length; i < len; i++) {
-                    if (arr[i] !== arr[i - 1]) {
-                        arr1.push(arr[i]);
-                    }
-                }
-                return arr1;
-            }
-            Tools.arrayUnique_02 = arrayUnique_02;
-            function arrayUnique_03(arr) {
-                return Array.from(new Set(arr));
-            }
-            Tools.arrayUnique_03 = arrayUnique_03;
-            function array1ExcludeArray2(arr1, arr2) {
-                let arr1Capy = array_Copy(arr1);
-                let arr2Capy = array_Copy(arr2);
-                for (let i = 0; i < arr1Capy.length; i++) {
-                    for (let j = 0; j < arr2Capy.length; j++) {
-                        if (arr1Capy[i] == arr2Capy[j]) {
-                            arr1Capy.splice(i, 1);
-                            i--;
-                        }
-                    }
-                }
-                return arr1Capy;
-            }
-            Tools.array1ExcludeArray2 = array1ExcludeArray2;
-            function array_ExcludeArrays(arrays, exclude) {
-                let arr0 = [];
-                for (let i = 0; i < arrays.length; i++) {
-                    for (let j = 0; j < arrays[i].length; j++) {
-                        arr0.push(arrays[i][j]);
-                    }
-                }
-                let arr1 = Tools.array_Copy(arr0);
-                let arr2 = Tools.arrayUnique_01(arr1);
-                let arrNum = [];
-                for (let k = 0; k < arr2.length; k++) {
-                    arrNum.push({
-                        name: arr2[k],
-                        num: 0,
-                    });
-                }
-                for (let l = 0; l < arr0.length; l++) {
-                    for (let m = 0; m < arrNum.length; m++) {
-                        if (arr0[l] == arrNum[m]['name']) {
-                            arrNum[m]['num']++;
-                        }
-                    }
-                }
-                let arrAllHave = [];
-                let arrDiffHave = [];
-                for (let n = 0; n < arrNum.length; n++) {
-                    const element = arrNum[n];
-                    if (arrNum[n]['num'] == arrays.length) {
-                        arrAllHave.push(arrNum[n]['name']);
-                    }
-                    else {
-                        arrDiffHave.push(arrNum[n]['name']);
-                    }
-                }
-                if (!exclude) {
-                    return arrAllHave;
-                }
-                else {
-                    return arrDiffHave;
-                }
-            }
-            Tools.array_ExcludeArrays = array_ExcludeArrays;
-            let Point;
-            (function (Point) {
+                _Point.angleByPoint = angleByPoint;
+                ;
                 function dotRotatePoint(x0, y0, x1, y1, angle) {
                     let x2 = x0 + (x1 - x0) * Math.cos(angle * Math.PI / 180) - (y1 - y0) * Math.sin(angle * Math.PI / 180);
                     let y2 = y0 + (x1 - x0) * Math.sin(angle * Math.PI / 180) + (y1 - y0) * Math.cos(angle * Math.PI / 180);
                     return new Laya.Point(x2, y2);
                 }
-                Point.dotRotatePoint = dotRotatePoint;
-                function SpeedXYByAngle(angle, speed) {
+                _Point.dotRotatePoint = dotRotatePoint;
+                function angleAndLenByPoint(angle, len) {
                     if (angle % 90 === 0 || !angle) {
                     }
                     const speedXY = { x: 0, y: 0 };
-                    speedXY.x = speed * Math.cos(angle * Math.PI / 180);
-                    speedXY.y = speed * Math.sin(angle * Math.PI / 180);
+                    speedXY.x = len * Math.cos(angle * Math.PI / 180);
+                    speedXY.y = len * Math.sin(angle * Math.PI / 180);
                     return new Laya.Point(speedXY.x, speedXY.y);
                 }
-                Point.SpeedXYByAngle = SpeedXYByAngle;
+                _Point.angleAndLenByPoint = angleAndLenByPoint;
                 function getRoundPos(angle, radius, centerPos) {
                     var center = centerPos;
                     var radius = radius;
@@ -4040,23 +3858,23 @@
                     var Y = center.y - Math.cos(hudu) * radius;
                     return new Laya.Point(X, Y);
                 }
-                Point.getRoundPos = getRoundPos;
+                _Point.getRoundPos = getRoundPos;
                 function randomPointByCenter(centerPos, radiusX, radiusY, count) {
                     if (!count) {
                         count = 1;
                     }
                     let arr = [];
                     for (let index = 0; index < count; index++) {
-                        let x0 = Tools.randomCountNumer(0, radiusX, 1, false);
-                        let y0 = Tools.randomCountNumer(0, radiusY, 1, false);
-                        let diffX = Tools.randomOneHalf() == 0 ? x0[0] : -x0[0];
-                        let diffY = Tools.randomOneHalf() == 0 ? y0[0] : -y0[0];
+                        let x0 = Tools._Number.randomCountBySection(0, radiusX, 1, false);
+                        let y0 = Tools._Number.randomCountBySection(0, radiusY, 1, false);
+                        let diffX = Tools._Number.randomOneHalf() == 0 ? x0[0] : -x0[0];
+                        let diffY = Tools._Number.randomOneHalf() == 0 ? y0[0] : -y0[0];
                         let p = new Laya.Point(centerPos.x + diffX, centerPos.y + diffY);
                         arr.push(p);
                     }
                     return arr;
                 }
-                Point.randomPointByCenter = randomPointByCenter;
+                _Point.randomPointByCenter = randomPointByCenter;
                 function getPArrBetweenTwoP(p1, p2, num) {
                     let arr = [];
                     let x0 = p2.x - p1.x;
@@ -4072,12 +3890,421 @@
                     }
                     return arr;
                 }
-                Point.getPArrBetweenTwoP = getPArrBetweenTwoP;
-            })(Point = Tools.Point || (Tools.Point = {}));
-            function angle_GetRad(angle) {
-                return angle / 180 * Math.PI;
-            }
-            Tools.angle_GetRad = angle_GetRad;
+                _Point.getPArrBetweenTwoP = getPArrBetweenTwoP;
+                function reverseVector(Vecoter1, Vecoter2, normalizing) {
+                    let p;
+                    p = new Laya.Point(Vecoter1.x - Vecoter2.x, Vecoter1.y - Vecoter2.y);
+                    if (normalizing) {
+                        p.normalize();
+                    }
+                    return p;
+                }
+                _Point.reverseVector = reverseVector;
+            })(_Point = Tools._Point || (Tools._Point = {}));
+            let _3D;
+            (function (_3D) {
+                function twoNodeDistance(obj1, obj2) {
+                    let obj1V3 = obj1.transform.position;
+                    let obj2V3 = obj2.transform.position;
+                    let p = new Laya.Vector3();
+                    Laya.Vector3.subtract(obj1V3, obj2V3, p);
+                    let lenp = Laya.Vector3.scalarLength(p);
+                    return lenp;
+                }
+                _3D.twoNodeDistance = twoNodeDistance;
+                function twoPositionDistance(v1, v2) {
+                    let p = twoSubV3(v1, v2);
+                    let lenp = Laya.Vector3.scalarLength(p);
+                    return lenp;
+                }
+                _3D.twoPositionDistance = twoPositionDistance;
+                function twoSubV3(V31, V32, normalizing) {
+                    let p = new Laya.Vector3();
+                    Laya.Vector3.subtract(V31, V32, p);
+                    if (normalizing) {
+                        let p1 = new Laya.Vector3();
+                        Laya.Vector3.normalize(p, p1);
+                        return p1;
+                    }
+                    else {
+                        return p;
+                    }
+                }
+                _3D.twoSubV3 = twoSubV3;
+                function maximumDistanceLimi(originV3, obj, length) {
+                    let subP = new Laya.Vector3();
+                    let objP = obj.transform.position;
+                    Laya.Vector3.subtract(objP, originV3, subP);
+                    let lenP = Laya.Vector3.scalarLength(subP);
+                    if (lenP >= length) {
+                        let normalizP = new Laya.Vector3();
+                        Laya.Vector3.normalize(subP, normalizP);
+                        let x = originV3.x + normalizP.x * length;
+                        let y = originV3.y + normalizP.y * length;
+                        let z = originV3.z + normalizP.z * length;
+                        let p = new Laya.Vector3(x, y, z);
+                        obj.transform.position = p;
+                        return p;
+                    }
+                }
+                _3D.maximumDistanceLimi = maximumDistanceLimi;
+                function posToScreen(v3, camera) {
+                    let ScreenV4 = new Laya.Vector4();
+                    camera.viewport.project(v3, camera.projectionViewMatrix, ScreenV4);
+                    let point = new Laya.Vector2();
+                    point.x = ScreenV4.x;
+                    point.y = ScreenV4.y;
+                    return point;
+                }
+                _3D.posToScreen = posToScreen;
+                function reverseVector(Vecoter1, Vecoter2, normalizing) {
+                    let p = new Laya.Vector3(Vecoter1.x - Vecoter2.x, Vecoter1.y - Vecoter2.y, Vecoter1.z - Vecoter2.z);
+                    if (normalizing) {
+                        let returnP = new Laya.Vector3();
+                        Laya.Vector3.normalize(p, returnP);
+                        return returnP;
+                    }
+                    else {
+                        return p;
+                    }
+                }
+                _3D.reverseVector = reverseVector;
+                function rayScanning(camera, scene3D, vector2, filtrateName) {
+                    let _ray = new Laya.Ray(new Laya.Vector3(0, 0, 0), new Laya.Vector3(0, 0, 0));
+                    let outs = new Array();
+                    camera.viewportPointToRay(vector2, _ray);
+                    scene3D.physicsSimulation.rayCastAll(_ray, outs);
+                    if (filtrateName) {
+                        let outsChaild = null;
+                        for (var i = 0; i < outs.length; i++) {
+                            let hitResult = outs[i].collider.owner;
+                            for (let index = 0; index < filtrateName.length; index++) {
+                                if (hitResult.name == filtrateName[index]) {
+                                    outsChaild = outs[i];
+                                }
+                            }
+                        }
+                        return outsChaild;
+                    }
+                    else {
+                        return outs;
+                    }
+                }
+                _3D.rayScanning = rayScanning;
+                function animatorPlay(Sp3D, aniName, normalizedTime, layerIndex) {
+                    let sp3DAni = Sp3D.getComponent(Laya.Animator);
+                    if (!sp3DAni) {
+                        console.log(Sp3D.name, '没有动画组件');
+                        return;
+                    }
+                    if (!layerIndex) {
+                        layerIndex = 0;
+                    }
+                    sp3DAni.play(aniName, layerIndex, normalizedTime);
+                    return sp3DAni;
+                }
+                _3D.animatorPlay = animatorPlay;
+            })(_3D = Tools._3D || (Tools._3D = {}));
+            let _Skeleton;
+            (function (_Skeleton) {
+                function sk_indexControl(sk, name) {
+                    sk.play(name, true);
+                    sk.player.currentTime = 15 * 1000 / sk.player.cacheFrameRate;
+                }
+                _Skeleton.sk_indexControl = sk_indexControl;
+            })(_Skeleton = Tools._Skeleton || (Tools._Skeleton = {}));
+            let _Draw;
+            (function (_Draw) {
+                function drawPieMask(parent, startAngle, endAngle) {
+                    parent.cacheAs = "bitmap";
+                    let drawPieSpt = new Laya.Sprite();
+                    drawPieSpt.blendMode = "destination-out";
+                    parent.addChild(drawPieSpt);
+                    let drawPie = drawPieSpt.graphics.drawPie(parent.width / 2, parent.height / 2, parent.width / 2 + 10, startAngle, endAngle, "#000000");
+                    return drawPie;
+                }
+                _Draw.drawPieMask = drawPieMask;
+                function reverseRoundMask(node, x, y, radius, eliminate) {
+                    if (eliminate == undefined || eliminate == true) {
+                        _Node.removeAllChildren(node);
+                    }
+                    let interactionArea = new Laya.Sprite();
+                    interactionArea.name = 'reverseRoundMask';
+                    interactionArea.blendMode = "destination-out";
+                    node.cacheAs = "bitmap";
+                    node.addChild(interactionArea);
+                    interactionArea.graphics.drawCircle(0, 0, radius, "#000000");
+                    interactionArea.pos(x, y);
+                    return interactionArea;
+                }
+                _Draw.reverseRoundMask = reverseRoundMask;
+                function reverseRoundrectMask(node, x, y, width, height, round, eliminate) {
+                    if (eliminate == undefined || eliminate == true) {
+                        _Node.removeAllChildren(node);
+                    }
+                    let interactionArea = new Laya.Sprite();
+                    interactionArea.name = 'reverseRoundrectMask';
+                    interactionArea.blendMode = "destination-out";
+                    node.cacheAs = "bitmap";
+                    node.addChild(interactionArea);
+                    interactionArea.graphics.drawPath(0, 0, [["moveTo", 5, 0], ["lineTo", width - round, 0], ["arcTo", width, 0, width, round, round], ["lineTo", width, height - round], ["arcTo", width, height, width - round, height, round], ["lineTo", height - round, height], ["arcTo", 0, height, 0, height - round, round], ["lineTo", 0, round], ["arcTo", 0, 0, round, 0, round], ["closePath"]], { fillStyle: "#000000" });
+                    interactionArea.width = width;
+                    interactionArea.height = height;
+                    interactionArea.pivotX = width / 2;
+                    interactionArea.pivotY = height / 2;
+                    interactionArea.pos(x, y);
+                }
+                _Draw.reverseRoundrectMask = reverseRoundrectMask;
+            })(_Draw = Tools._Draw || (Tools._Draw = {}));
+            let _ObjArray;
+            (function (_ObjArray) {
+                function onPropertySort(array, property) {
+                    var compare = function (obj1, obj2) {
+                        var val1 = obj1[property];
+                        var val2 = obj2[property];
+                        if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
+                            val1 = Number(val1);
+                            val2 = Number(val2);
+                        }
+                        if (val1 < val2) {
+                            return -1;
+                        }
+                        else if (val1 > val2) {
+                            return 1;
+                        }
+                        else {
+                            return 0;
+                        }
+                    };
+                    array.sort(compare);
+                    return array;
+                }
+                _ObjArray.onPropertySort = onPropertySort;
+                function differentPropertyTwo(objArr1, objArr2, property) {
+                    var result = [];
+                    for (var i = 0; i < objArr1.length; i++) {
+                        var obj1 = objArr1[i];
+                        var obj1Name = obj1[property];
+                        var isExist = false;
+                        for (var j = 0; j < objArr2.length; j++) {
+                            var obj2 = objArr2[j];
+                            var obj2Name = obj2[property];
+                            if (obj2Name == obj1Name) {
+                                isExist = true;
+                                break;
+                            }
+                        }
+                        if (!isExist) {
+                            result.push(obj1);
+                        }
+                    }
+                    return result;
+                }
+                _ObjArray.differentPropertyTwo = differentPropertyTwo;
+                function identicalPropertyObjArr(data1, data2, property) {
+                    var result = [];
+                    for (var i = 0; i < data1.length; i++) {
+                        var obj1 = data1[i];
+                        var obj1Name = obj1[property];
+                        var isExist = false;
+                        for (var j = 0; j < data2.length; j++) {
+                            var obj2 = data2[j];
+                            var obj2Name = obj2[property];
+                            if (obj2Name == name) {
+                                isExist = true;
+                                break;
+                            }
+                        }
+                        if (isExist) {
+                            result.push(obj1);
+                        }
+                    }
+                    return result;
+                }
+                _ObjArray.identicalPropertyObjArr = identicalPropertyObjArr;
+                function objArrUnique(arr, property) {
+                    for (var i = 0, len = arr.length; i < len; i++) {
+                        for (var j = i + 1, len = arr.length; j < len; j++) {
+                            if (arr[i][property] === arr[j][property]) {
+                                arr.splice(j, 1);
+                                j--;
+                                len--;
+                            }
+                        }
+                    }
+                    return arr;
+                }
+                _ObjArray.objArrUnique = objArrUnique;
+                function getArrByValue(objArr, property) {
+                    let arr = [];
+                    for (let i = 0; i < objArr.length; i++) {
+                        if (objArr[i][property]) {
+                            arr.push(objArr[i][property]);
+                        }
+                    }
+                    return arr;
+                }
+                _ObjArray.getArrByValue = getArrByValue;
+                function arrCopy(ObjArray) {
+                    var sourceCopy = ObjArray instanceof Array ? [] : {};
+                    for (var item in ObjArray) {
+                        sourceCopy[item] = typeof ObjArray[item] === 'object' ? objCopy(ObjArray[item]) : ObjArray[item];
+                    }
+                    return sourceCopy;
+                }
+                _ObjArray.arrCopy = arrCopy;
+                function objCopy(obj) {
+                    var copyObj = {};
+                    for (const item in obj) {
+                        if (obj.hasOwnProperty(item)) {
+                            const element = obj[item];
+                            if (typeof element === 'object') {
+                                if (Array.isArray(element)) {
+                                    let arr1 = _Array.copy(element);
+                                    copyObj[item] = arr1;
+                                }
+                                else {
+                                    objCopy(element);
+                                }
+                            }
+                            else {
+                                copyObj[item] = element;
+                            }
+                        }
+                    }
+                    return objCopy;
+                }
+                _ObjArray.objCopy = objCopy;
+            })(_ObjArray = Tools._ObjArray || (Tools._ObjArray = {}));
+            let _Array;
+            (function (_Array) {
+                function oneAddToarray(array1, array2) {
+                    for (let index = 0; index < array2.length; index++) {
+                        const element = array2[index];
+                        array1.push(element);
+                    }
+                    return array1;
+                }
+                _Array.oneAddToarray = oneAddToarray;
+                function randomGetOut(arr, num) {
+                    if (!num) {
+                        num = 1;
+                    }
+                    let arrCopy = _Array.copy(arr);
+                    let arr0 = [];
+                    if (num > arrCopy.length) {
+                        return '数组长度小于取出的数！';
+                    }
+                    else {
+                        for (let index = 0; index < num; index++) {
+                            let ran = Math.round(Math.random() * (arrCopy.length - 1));
+                            let a1 = arrCopy[ran];
+                            arrCopy.splice(ran, 1);
+                            arr0.push(a1);
+                        }
+                        return arr0;
+                    }
+                }
+                _Array.randomGetOut = randomGetOut;
+                function randomGetOne(arr) {
+                    let arrCopy = copy(arr);
+                    let ran = Math.round(Math.random() * (arrCopy.length - 1));
+                    return arrCopy[ran];
+                }
+                _Array.randomGetOne = randomGetOne;
+                function copy(arr1) {
+                    var arr = [];
+                    for (var i = 0; i < arr1.length; i++) {
+                        arr.push(arr1[i]);
+                    }
+                    return arr;
+                }
+                _Array.copy = copy;
+                function unique01(arr) {
+                    for (var i = 0, len = arr.length; i < len; i++) {
+                        for (var j = i + 1, len = arr.length; j < len; j++) {
+                            if (arr[i] === arr[j]) {
+                                arr.splice(j, 1);
+                                j--;
+                                len--;
+                            }
+                        }
+                    }
+                    return arr;
+                }
+                _Array.unique01 = unique01;
+                function unique02(arr) {
+                    arr = arr.sort();
+                    var arr1 = [arr[0]];
+                    for (var i = 1, len = arr.length; i < len; i++) {
+                        if (arr[i] !== arr[i - 1]) {
+                            arr1.push(arr[i]);
+                        }
+                    }
+                    return arr1;
+                }
+                _Array.unique02 = unique02;
+                function unique03(arr) {
+                    return Array.from(new Set(arr));
+                }
+                _Array.unique03 = unique03;
+                function oneExcludeOtherOne(arr1, arr2) {
+                    let arr1Capy = _Array.copy(arr1);
+                    let arr2Capy = _Array.copy(arr2);
+                    for (let i = 0; i < arr1Capy.length; i++) {
+                        for (let j = 0; j < arr2Capy.length; j++) {
+                            if (arr1Capy[i] == arr2Capy[j]) {
+                                arr1Capy.splice(i, 1);
+                                i--;
+                            }
+                        }
+                    }
+                    return arr1Capy;
+                }
+                _Array.oneExcludeOtherOne = oneExcludeOtherOne;
+                function moreExclude(arrays, exclude) {
+                    let arr0 = [];
+                    for (let i = 0; i < arrays.length; i++) {
+                        for (let j = 0; j < arrays[i].length; j++) {
+                            arr0.push(arrays[i][j]);
+                        }
+                    }
+                    let arr1 = copy(arr0);
+                    let arr2 = copy(arr1);
+                    let arrNum = [];
+                    for (let k = 0; k < arr2.length; k++) {
+                        arrNum.push({
+                            name: arr2[k],
+                            num: 0,
+                        });
+                    }
+                    for (let l = 0; l < arr0.length; l++) {
+                        for (let m = 0; m < arrNum.length; m++) {
+                            if (arr0[l] == arrNum[m]['name']) {
+                                arrNum[m]['num']++;
+                            }
+                        }
+                    }
+                    let arrAllHave = [];
+                    let arrDiffHave = [];
+                    for (let n = 0; n < arrNum.length; n++) {
+                        const element = arrNum[n];
+                        if (arrNum[n]['num'] == arrays.length) {
+                            arrAllHave.push(arrNum[n]['name']);
+                        }
+                        else {
+                            arrDiffHave.push(arrNum[n]['name']);
+                        }
+                    }
+                    if (!exclude) {
+                        return arrAllHave;
+                    }
+                    else {
+                        return arrDiffHave;
+                    }
+                }
+                _Array.moreExclude = moreExclude;
+            })(_Array = Tools._Array || (Tools._Array = {}));
             function jsonCompare(url, storageName, propertyName) {
                 let dataArr;
                 try {
@@ -4094,9 +4321,9 @@
                     try {
                         let dataArr_0 = Laya.loader.getRes(url)['RECORDS'];
                         if (dataArr_0.length >= dataArr.length) {
-                            let diffArray = Tools.objArr2DifferentPropertyObjArr1(dataArr_0, dataArr, propertyName);
+                            let diffArray = _ObjArray.differentPropertyTwo(dataArr_0, dataArr, propertyName);
                             console.log('两个数据的差值为：', diffArray);
-                            Tools.arrayAddToarray(dataArr, diffArray);
+                            _Array.oneAddToarray(dataArr, diffArray);
                         }
                         else {
                             console.log(storageName + '数据表填写有误，长度不能小于之前的长度');
@@ -4119,959 +4346,6 @@
             }
             Tools.jsonCompare = jsonCompare;
         })(Tools = lwg.Tools || (lwg.Tools = {}));
-        let Shop;
-        (function (Shop) {
-            Shop.goodsClassArr = [];
-            Shop.classWarehouse = [];
-            Shop._tryName = [];
-            Shop.allSkin = [];
-            Shop._currentSkin = {
-                get name() {
-                    return Laya.LocalStorage.getItem('Shop_currentSkin') ? Laya.LocalStorage.getItem('Shop_currentSkin') : null;
-                },
-                set name(name) {
-                    Laya.LocalStorage.setItem('Shop_currentSkin', name);
-                }
-            };
-            Shop.allProps = [];
-            Shop._currentProp = {
-                get name() {
-                    return Laya.LocalStorage.getItem('Shop_currentProp') ? Laya.LocalStorage.getItem('Shop_currentProp') : null;
-                },
-                set name(name) {
-                    Laya.LocalStorage.setItem('Shop_currentProp', name);
-                }
-            };
-            Shop.allOther = [];
-            Shop._currentOther = {
-                get name() {
-                    return Laya.LocalStorage.getItem('Shop_crrentOther') ? Laya.LocalStorage.getItem('Shop_crrentOther') : null;
-                },
-                set name(name) {
-                    Laya.LocalStorage.setItem('Shop_crrentOther', name);
-                }
-            };
-            Shop.useSkinType = [];
-            function setUseSkinType() {
-                let arr = [];
-                try {
-                    if (Laya.LocalStorage.getJSON('Shop_useSkinType')) {
-                        arr = JSON.parse(Laya.LocalStorage.getJSON('Shop_useSkinType'));
-                        Shop.useSkinType = arr !== null ? arr['Shop_useSkinType'] : [];
-                        Shop.useSkinType.push(Shop._currentOther.name, Shop._currentProp.name, Shop._currentSkin.name);
-                        Shop.useSkinType = Tools.arrayUnique_03(Shop.useSkinType);
-                    }
-                }
-                catch (error) {
-                }
-                let data = {
-                    Shop_useSkinType: Shop.useSkinType,
-                };
-                Laya.LocalStorage.setJSON('Shop_useSkinType', JSON.stringify(data));
-                return Shop.useSkinType.length;
-            }
-            Shop.setUseSkinType = setUseSkinType;
-            function getProperty(goodsClass, name, property) {
-                let pro = null;
-                let arr = getClassArr(goodsClass);
-                for (let index = 0; index < arr.length; index++) {
-                    const element = arr[index];
-                    if (element['name'] === name) {
-                        pro = element[property];
-                        break;
-                    }
-                }
-                if (pro !== null) {
-                    return pro;
-                }
-                else {
-                    console.log(name + '找不到属性:' + property, pro);
-                    return null;
-                }
-            }
-            Shop.getProperty = getProperty;
-            function setProperty(goodsClass, name, property, value) {
-                let arr = getClassArr(goodsClass);
-                for (let index = 0; index < arr.length; index++) {
-                    const element = arr[index];
-                    if (element['name'] === name) {
-                        element[property] = value;
-                        break;
-                    }
-                }
-                let data = {};
-                data[goodsClass] = arr;
-                Laya.LocalStorage.setJSON(goodsClass, JSON.stringify(data));
-                if (Shop._ShopList) {
-                    Shop._ShopList.refresh();
-                }
-            }
-            Shop.setProperty = setProperty;
-            function getHaveArr(goodsClass) {
-                let arr = getClassArr(goodsClass);
-                let arrHave = [];
-                for (let index = 0; index < arr.length; index++) {
-                    const element = arr[index];
-                    if (element[GoodsProperty.have]) {
-                        arrHave.push(element);
-                    }
-                }
-                return arrHave;
-            }
-            Shop.getHaveArr = getHaveArr;
-            function getwayGoldArr(goodsClass, have, excludeCurrent) {
-                let arr = getClassArr(goodsClass);
-                let arrNoHave = [];
-                for (let index = 0; index < arr.length; index++) {
-                    const element = arr[index];
-                    if (have && have !== undefined) {
-                        if (element[GoodsProperty.have] && element[GoodsProperty.getway] === Getway.gold) {
-                            arrNoHave.push(element);
-                        }
-                    }
-                    else if (!have && have !== undefined) {
-                        if (!element[GoodsProperty.have] && element[GoodsProperty.getway] === Getway.gold) {
-                            arrNoHave.push(element);
-                        }
-                    }
-                    else if (have == undefined) {
-                        if (element[GoodsProperty.getway] === Getway.gold) {
-                            arrNoHave.push(element);
-                        }
-                    }
-                }
-                if (excludeCurrent && excludeCurrent !== undefined) {
-                    for (let index = 0; index < arrNoHave.length; index++) {
-                        const element = arrNoHave[index];
-                        if (element[GoodsProperty.name] === get_Current(goodsClass)) {
-                            arrNoHave.splice(index, 1);
-                            break;
-                        }
-                    }
-                }
-                return arrNoHave;
-            }
-            Shop.getwayGoldArr = getwayGoldArr;
-            function getwayIneedwinArr(goodsClass, have) {
-                let arr = getClassArr(goodsClass);
-                let arrIneedwin = [];
-                for (let index = 0; index < arr.length; index++) {
-                    const element = arr[index];
-                    if (have && have !== undefined) {
-                        if (element[GoodsProperty.have] && element[GoodsProperty.getway] === Getway.ineedwin) {
-                            arrIneedwin.push(element);
-                        }
-                    }
-                    else if (!have && have !== undefined) {
-                        if (!element[GoodsProperty.have] && element[GoodsProperty.getway] === Getway.ineedwin) {
-                            arrIneedwin.push(element);
-                        }
-                    }
-                    else if (have == undefined) {
-                        if (element[GoodsProperty.getway] === Getway.ineedwin) {
-                            arrIneedwin.push(element);
-                        }
-                    }
-                }
-                return arrIneedwin;
-            }
-            Shop.getwayIneedwinArr = getwayIneedwinArr;
-            function get_Current(goodsClass) {
-                let _current = null;
-                switch (goodsClass) {
-                    case GoodsClass.Skin:
-                        _current = Shop._currentSkin.name;
-                        break;
-                    case GoodsClass.Props:
-                        _current = Shop._currentProp.name;
-                        break;
-                    case GoodsClass.Other:
-                        _current = Shop._currentOther.name;
-                        break;
-                    default:
-                        break;
-                }
-                return _current;
-            }
-            Shop.get_Current = get_Current;
-            function getClassArr(goodsClass) {
-                let arr = [];
-                switch (goodsClass) {
-                    case GoodsClass.Skin:
-                        arr = Shop.allSkin;
-                        break;
-                    case GoodsClass.Props:
-                        arr = Shop.allProps;
-                        break;
-                    case GoodsClass.Other:
-                        arr = Shop.allOther;
-                        break;
-                    default:
-                        break;
-                }
-                return arr;
-            }
-            Shop.getClassArr = getClassArr;
-            function buyGoods(calssName, name, number) {
-                if (!number) {
-                    number = 1;
-                }
-                let resCondition = getProperty(calssName, name, GoodsProperty.resCondition);
-                let condition = getProperty(calssName, name, GoodsProperty.condition);
-                let have = getProperty(calssName, name, GoodsProperty.have);
-                if (have !== true && have !== null) {
-                    if (condition <= resCondition + number) {
-                        setProperty(calssName, name, GoodsProperty.resCondition, condition);
-                        setProperty(calssName, name, GoodsProperty.have, true);
-                        if (Shop._ShopList) {
-                            Shop._ShopList.refresh();
-                        }
-                        return true;
-                    }
-                    else {
-                        setProperty(calssName, name, GoodsProperty.resCondition, resCondition + number);
-                        if (Shop._ShopList) {
-                            Shop._ShopList.refresh();
-                        }
-                        return false;
-                    }
-                }
-                else {
-                    return -1;
-                }
-            }
-            Shop.buyGoods = buyGoods;
-            function initShop() {
-                Shop.allSkin = Tools.jsonCompare('GameData/Shop/Skin.json', GoodsClass.Skin, GoodsProperty.name);
-                Shop.allProps = Tools.jsonCompare('GameData/Shop/Props.json', GoodsClass.Props, GoodsProperty.name);
-                Shop.allOther = Tools.jsonCompare('GameData/Shop/Other.json', GoodsClass.Other, GoodsProperty.name);
-            }
-            Shop.initShop = initShop;
-            let GoodsProperty;
-            (function (GoodsProperty) {
-                GoodsProperty["name"] = "name";
-                GoodsProperty["getway"] = "getway";
-                GoodsProperty["condition"] = "condition";
-                GoodsProperty["resCondition"] = "resCondition";
-                GoodsProperty["arrange"] = "arrange";
-                GoodsProperty["getOder"] = "getOder";
-                GoodsProperty["have"] = "have";
-            })(GoodsProperty = Shop.GoodsProperty || (Shop.GoodsProperty = {}));
-            let Getway;
-            (function (Getway) {
-                Getway["free"] = "free";
-                Getway["ads"] = "ads";
-                Getway["adsXD"] = "adsXD";
-                Getway["ineedwin"] = "ineedwin";
-                Getway["gold"] = "gold";
-                Getway["diamond"] = "diamond";
-                Getway["easte_registerg"] = "easte_registerg";
-                Getway["other"] = "other";
-            })(Getway = Shop.Getway || (Shop.Getway = {}));
-            let GoodsClass;
-            (function (GoodsClass) {
-                GoodsClass["Skin"] = "Shop_Skin";
-                GoodsClass["Props"] = "Shop_Props";
-                GoodsClass["Other"] = "Shop_Other";
-            })(GoodsClass = Shop.GoodsClass || (Shop.GoodsClass = {}));
-            let EventType;
-            (function (EventType) {
-                EventType["select"] = "select";
-            })(EventType = Shop.EventType || (Shop.EventType = {}));
-            class ShopScene extends Admin._SceneBase {
-                moduleOnAwake() {
-                    Shop._ShopTap = this.Owner['MyTap'];
-                    Shop._ShopList = this.Owner['MyList'];
-                    if (!Shop.allSkin) {
-                        Shop.allSkin = Tools.jsonCompare('GameData/Shop/Skin.json', GoodsClass.Skin, GoodsProperty.name);
-                    }
-                    if (!Shop.allProps) {
-                        Shop.allProps = Tools.jsonCompare('GameData/Shop/Props.json', GoodsClass.Props, GoodsProperty.name);
-                    }
-                    if (!Shop.allOther) {
-                        Shop.allOther = Tools.jsonCompare('GameData/Shop/Other.json', GoodsClass.Other, GoodsProperty.name);
-                    }
-                    Shop.goodsClassArr = [Shop.allSkin, Shop.allProps, Shop.allOther];
-                    Shop.classWarehouse = [GoodsClass.Skin, GoodsClass.Props, GoodsClass.Skin];
-                }
-                moduleOnEnable() {
-                    this.myList_Create();
-                    this.myTap_Create();
-                }
-                myTap_Create() {
-                    Shop._ShopTap.selectHandler = new Laya.Handler(this, this.myTap_Select);
-                }
-                myTap_Select(index) { }
-                myList_Create() {
-                    Shop._ShopList.selectEnable = true;
-                    Shop._ShopList.selectHandler = new Laya.Handler(this, this.myList_Scelet);
-                    Shop._ShopList.renderHandler = new Laya.Handler(this, this.myList_Update);
-                    this.myList_refresh();
-                }
-                myList_Scelet(index) { }
-                myList_Update(cell, index) { }
-                myList_refresh() {
-                    if (Shop._ShopList && Shop.goodsClassArr.length > 0) {
-                        Shop._ShopList.array = Shop.goodsClassArr[0];
-                        Shop._ShopList.refresh();
-                    }
-                }
-            }
-            Shop.ShopScene = ShopScene;
-        })(Shop = lwg.Shop || (lwg.Shop = {}));
-        let VictoryBox;
-        (function (VictoryBox) {
-            VictoryBox._BoxArray = [];
-            VictoryBox._canOpenNum = 3;
-            VictoryBox._alreadyOpenNum = 0;
-            VictoryBox._adsMaxOpenNum = 6;
-            VictoryBox._openVictoryBoxNum = 0;
-            function getProperty(name, property) {
-                let pro = null;
-                for (let index = 0; index < VictoryBox._BoxArray.length; index++) {
-                    const element = VictoryBox._BoxArray[index];
-                    if (element['name'] === name) {
-                        pro = element[property];
-                        break;
-                    }
-                }
-                if (pro !== null) {
-                    return pro;
-                }
-                else {
-                    console.log(name + '找不到属性:' + property, pro);
-                    return null;
-                }
-            }
-            VictoryBox.getProperty = getProperty;
-            function setProperty(name, property, value) {
-                for (let index = 0; index < VictoryBox._BoxArray.length; index++) {
-                    const element = VictoryBox._BoxArray[index];
-                    if (element['name'] === name) {
-                        element[property] = value;
-                        break;
-                    }
-                }
-                if (VictoryBox._BoxList) {
-                    VictoryBox._BoxList.refresh();
-                }
-            }
-            VictoryBox.setProperty = setProperty;
-            let BoxProperty;
-            (function (BoxProperty) {
-                BoxProperty["name"] = "name";
-                BoxProperty["rewardType"] = "rewardType";
-                BoxProperty["rewardNum"] = "rewardNum";
-                BoxProperty["openState"] = "openState";
-                BoxProperty["ads"] = "ads";
-                BoxProperty["select"] = "select";
-            })(BoxProperty = VictoryBox.BoxProperty || (VictoryBox.BoxProperty = {}));
-            let EventType;
-            (function (EventType) {
-                EventType["openBox"] = "openBox";
-            })(EventType = VictoryBox.EventType || (VictoryBox.EventType = {}));
-            class VictoryBoxScene extends Admin._SceneBase {
-                moduleOnAwake() {
-                    VictoryBox._BoxList = this.Owner['MyList'];
-                    VictoryBox._BoxArray = Tools.objArray_Copy(Laya.loader.getRes("GameData/VictoryBox/VictoryBox.json")['RECORDS']);
-                    VictoryBox._selectBox = null;
-                    VictoryBox._canOpenNum = 3;
-                    VictoryBox._openVictoryBoxNum++;
-                    VictoryBox._adsMaxOpenNum = 6;
-                    VictoryBox._alreadyOpenNum = 0;
-                }
-                moduleOnEnable() {
-                    this.boxList_Create();
-                }
-                boxList_Create() {
-                    VictoryBox._BoxList.selectEnable = true;
-                    VictoryBox._BoxList.selectHandler = new Laya.Handler(this, this.boxList_Scelet);
-                    VictoryBox._BoxList.renderHandler = new Laya.Handler(this, this.boxList_Update);
-                    this.boxList_refresh();
-                }
-                boxList_Scelet(index) { }
-                boxList_Update(cell, index) { }
-                boxList_refresh() {
-                    if (VictoryBox._BoxList) {
-                        VictoryBox._BoxList.array = VictoryBox._BoxArray;
-                        VictoryBox._BoxList.refresh();
-                    }
-                }
-            }
-            VictoryBox.VictoryBoxScene = VictoryBoxScene;
-        })(VictoryBox = lwg.VictoryBox || (lwg.VictoryBox = {}));
-        let CheckIn;
-        (function (CheckIn) {
-            CheckIn._fromWhich = Admin._SceneName.PreLoad;
-            CheckIn._lastCheckDate = {
-                get date() {
-                    return Laya.LocalStorage.getItem('Check_lastCheckDate') ? Number(Laya.LocalStorage.getItem('Check_lastCheckDate')) : -1;
-                },
-                set date(date) {
-                    Laya.LocalStorage.setItem('Check_lastCheckDate', date.toString());
-                }
-            };
-            CheckIn._checkInNum = {
-                get number() {
-                    return Laya.LocalStorage.getItem('Check_checkInNum') ? Number(Laya.LocalStorage.getItem('Check_checkInNum')) : 0;
-                },
-                set number(num) {
-                    Laya.LocalStorage.setItem('Check_checkInNum', num.toString());
-                }
-            };
-            CheckIn._todayCheckIn = {
-                get bool() {
-                    return CheckIn._lastCheckDate.date == DateAdmin._date.date ? true : false;
-                },
-            };
-            function getProperty(name, property) {
-                let pro = null;
-                for (let index = 0; index < CheckIn._checkArray.length; index++) {
-                    const element = CheckIn._checkArray[index];
-                    if (element['name'] === name) {
-                        pro = element[property];
-                        break;
-                    }
-                }
-                if (pro !== null) {
-                    return pro;
-                }
-                else {
-                    console.log(name + '找不到属性:' + property, pro);
-                    return null;
-                }
-            }
-            CheckIn.getProperty = getProperty;
-            function setProperty(className, name, property, value) {
-                for (let index = 0; index < CheckIn._checkArray.length; index++) {
-                    const element = CheckIn._checkArray[index];
-                    if (element['name'] === name) {
-                        element[property] = value;
-                        break;
-                    }
-                }
-                let data = {};
-                data[className] = CheckIn._checkArray;
-                Laya.LocalStorage.setJSON(className, JSON.stringify(data));
-                if (CheckIn._checkList) {
-                    CheckIn._checkList.refresh();
-                }
-            }
-            CheckIn.setProperty = setProperty;
-            function openCheckIn() {
-                if (!CheckIn._todayCheckIn.bool) {
-                    console.log('没有签到过，弹出签到页面！');
-                    Admin._openScene(Admin._SceneName.CheckIn);
-                }
-                else {
-                    if (SkinQualified._adsNum.value < 7) {
-                        Admin._openScene(Admin._SceneName.SkinQualified);
-                    }
-                    console.log('签到过了，今日不可以再签到');
-                }
-            }
-            CheckIn.openCheckIn = openCheckIn;
-            function todayCheckIn_7Days() {
-                CheckIn._lastCheckDate.date = DateAdmin._date.date;
-                CheckIn._checkInNum.number++;
-                setProperty(CheckClass.chek_7Days, 'day' + CheckIn._checkInNum.number, CheckProPerty.checkInState, true);
-                let rewardNum = getProperty('day' + CheckIn._checkInNum.number, CheckProPerty.rewardNum);
-                return rewardNum;
-            }
-            CheckIn.todayCheckIn_7Days = todayCheckIn_7Days;
-            function init() {
-                if (CheckIn._checkInNum.number === 7 && !CheckIn._todayCheckIn.bool) {
-                    CheckIn._checkInNum.number = 0;
-                    Laya.LocalStorage.removeItem(CheckClass.chek_7Days);
-                }
-            }
-            CheckIn.init = init;
-            let CheckClass;
-            (function (CheckClass) {
-                CheckClass["chek_7Days"] = "Chek_7Days";
-                CheckClass["chek_15Days"] = "Chek_15Days";
-                CheckClass["chek_30Days"] = "Chek_30Days";
-            })(CheckClass = CheckIn.CheckClass || (CheckIn.CheckClass = {}));
-            let CheckProPerty;
-            (function (CheckProPerty) {
-                CheckProPerty["name"] = "name";
-                CheckProPerty["rewardType"] = "rewardType";
-                CheckProPerty["rewardNum"] = "rewardNum";
-                CheckProPerty["checkInState"] = "checkInState";
-                CheckProPerty["arrange"] = "arrange";
-            })(CheckProPerty = CheckIn.CheckProPerty || (CheckIn.CheckProPerty = {}));
-            let EventType;
-            (function (EventType) {
-                EventType["removeCheckBtn"] = "removeCheckBtn";
-            })(EventType = CheckIn.EventType || (CheckIn.EventType = {}));
-            class CheckInScene extends Admin._SceneBase {
-                moduleOnAwake() {
-                    CheckIn._checkList = this.Owner['CheckList'];
-                    CheckIn._checkArray = Tools.jsonCompare('GameData/CheckIn/CheckIn.json', CheckClass.chek_7Days, CheckProPerty.name);
-                }
-                moduleOnEnable() {
-                    this.checkList_Create();
-                }
-                moduleEventRegister() {
-                }
-                checkList_Create() {
-                    CheckIn._checkList.selectEnable = true;
-                    CheckIn._checkList.selectHandler = new Laya.Handler(this, this.checkList_Scelet);
-                    CheckIn._checkList.renderHandler = new Laya.Handler(this, this.checkList_Update);
-                    this.checkList_refresh();
-                }
-                checkList_Scelet(index) { }
-                checkList_Update(cell, index) { }
-                checkList_refresh() {
-                    if (CheckIn._checkList) {
-                        CheckIn._checkList.array = CheckIn._checkArray;
-                        CheckIn._checkList.refresh();
-                    }
-                }
-            }
-            CheckIn.CheckInScene = CheckInScene;
-        })(CheckIn = lwg.CheckIn || (lwg.CheckIn = {}));
-        let SkinQualified;
-        (function (SkinQualified) {
-            SkinQualified._adsNum = {
-                get value() {
-                    return Laya.LocalStorage.getItem('SkinQualified_adsNum') ? Number(Laya.LocalStorage.getItem('SkinQualified_adsNum')) : 0;
-                },
-                set value(value) {
-                    Laya.LocalStorage.setItem('SkinQualified_adsNum', value.toString());
-                }
-            };
-            function openUISkinQualified(fromScene) {
-                if (SkinQualified._adsNum.value >= SkinQualified._needAdsNum) {
-                    return;
-                }
-                else {
-                    Admin._openScene(Admin._SceneName.SkinQualified);
-                    SkinQualified._fromScene = fromScene;
-                }
-            }
-            SkinQualified.openUISkinQualified = openUISkinQualified;
-            let EventType;
-            (function (EventType) {
-                EventType["acquisition"] = "acquisition";
-            })(EventType = SkinQualified.EventType || (SkinQualified.EventType = {}));
-            class SkinQualifiedScene extends Admin._SceneBase {
-                moduleOnEnable() {
-                    SkinQualified._needAdsNum = 3;
-                }
-            }
-            SkinQualified.SkinQualifiedScene = SkinQualifiedScene;
-        })(SkinQualified = lwg.SkinQualified || (lwg.SkinQualified = {}));
-        let Skin;
-        (function (Skin) {
-            Skin._skinClassArr = [];
-            Skin._headSkinArr = [];
-            Skin._currentHead = {
-                get name() {
-                    return Laya.LocalStorage.getItem('Skin_currentHead') ? Laya.LocalStorage.getItem('Skin_currentHead') : null;
-                },
-                set name(name) {
-                    Laya.LocalStorage.setItem('Skin_currentHead', name);
-                }
-            };
-            Skin._eyeSkinArr = [];
-            Skin._currentEye = {
-                get name() {
-                    return Laya.LocalStorage.getItem('Skin_currentEye') ? Laya.LocalStorage.getItem('Skin_currentEye') : null;
-                },
-                set name(name) {
-                    Laya.LocalStorage.setItem('Skin_currentEye', name);
-                }
-            };
-            let SkinClass;
-            (function (SkinClass) {
-                SkinClass["head"] = "head";
-                SkinClass["eye"] = "eye";
-                SkinClass["body"] = "body";
-                SkinClass["upperBody"] = "upperBody";
-                SkinClass["lowerBody"] = "lowerBody";
-            })(SkinClass = Skin.SkinClass || (Skin.SkinClass = {}));
-            let SkinProperty;
-            (function (SkinProperty) {
-                SkinProperty["name"] = "name";
-                SkinProperty["getway"] = "getway";
-                SkinProperty["condition"] = "condition";
-                SkinProperty["resCondition"] = "resCondition";
-                SkinProperty["arrange"] = "arrange";
-                SkinProperty["getOder"] = "getOder";
-                SkinProperty["classify"] = "classify";
-                SkinProperty["have"] = "have";
-            })(SkinProperty = Skin.SkinProperty || (Skin.SkinProperty = {}));
-            let EventType;
-            (function (EventType) {
-                EventType["purchase"] = "purchase";
-                EventType["select"] = "select";
-            })(EventType = Skin.EventType || (Skin.EventType = {}));
-            class SkinScene extends Admin._SceneBase {
-                moduleOnAwake() {
-                    Skin._SkinTap = this.Owner['SkinTap'];
-                    Skin._SkinList = this.Owner['SkinList'];
-                    Skin._skinClassArr = [Skin._eyeSkinArr, Skin._headSkinArr];
-                }
-                moduleOnEnable() {
-                    this.skinList_Create();
-                    this.skinTap_Create();
-                }
-                skinTap_Create() {
-                    Skin._SkinTap.selectHandler = new Laya.Handler(this, this.skinTap_Select);
-                }
-                skinTap_Select(index) { }
-                skinList_Create() {
-                    Skin._SkinList.selectEnable = true;
-                    Skin._SkinList.selectHandler = new Laya.Handler(this, this.skinList_Scelet);
-                    Skin._SkinList.renderHandler = new Laya.Handler(this, this.skinList_Update);
-                    this.skinList_refresh();
-                }
-                skinList_Scelet(index) { }
-                skinList_Update(cell, index) { }
-                skinList_refresh() {
-                    if (Skin._SkinList && Skin._skinClassArr.length > 1) {
-                        Skin._SkinList.array = Skin._skinClassArr[0];
-                        Skin._SkinList.refresh();
-                    }
-                }
-            }
-            Skin.SkinScene = SkinScene;
-        })(Skin = lwg.Skin || (lwg.Skin = {}));
-        let Easte_registerg;
-        (function (Easte_registerg) {
-            Easte_registerg._easte_registerg_1Arr = [];
-            Easte_registerg._easte_registerg_1 = {
-                get value() {
-                    if (!Laya.LocalStorage.getItem('_easte_registerg_01')) {
-                        return false;
-                    }
-                    else {
-                        return true;
-                    }
-                },
-                set value(val) {
-                    Laya.LocalStorage.setItem('_easte_registerg_01', val.toString());
-                }
-            };
-            function initEaste_registerg() {
-                Easte_registerg._easte_registerg_1Arr = Tools.jsonCompare("GameData/Easte_registerg/Easte_registerg.json", Classify.Easte_registerg_01, Property.name);
-                Laya.loader.getRes("GameData/Easte_registerg/Easte_registerg.json")['RECORDS'];
-            }
-            Easte_registerg.initEaste_registerg = initEaste_registerg;
-            function getProperty(classify, name, property) {
-                let pro = null;
-                let arr = getClassArr(classify);
-                for (let index = 0; index < arr.length; index++) {
-                    const element = arr[index];
-                    if (element['name'] === name) {
-                        pro = element[property];
-                        break;
-                    }
-                }
-                if (pro !== null) {
-                    return pro;
-                }
-                else {
-                    console.log(name + '找不到属性:' + property, pro);
-                    return null;
-                }
-            }
-            Easte_registerg.getProperty = getProperty;
-            function setProperty(classify, name, property, value) {
-                let arr = getClassArr(classify);
-                for (let index = 0; index < arr.length; index++) {
-                    const element = arr[index];
-                    if (element['name'] === name) {
-                        element[property] = value;
-                        break;
-                    }
-                }
-                let data = {};
-                data[classify] = arr;
-                Laya.LocalStorage.setJSON(classify, JSON.stringify(data));
-            }
-            Easte_registerg.setProperty = setProperty;
-            function getClassArr(classify) {
-                let arr = [];
-                switch (classify) {
-                    case Classify.Easte_registerg_01:
-                        arr = Easte_registerg._easte_registerg_1Arr;
-                        break;
-                    default:
-                        break;
-                }
-                return arr;
-            }
-            Easte_registerg.getClassArr = getClassArr;
-            function doDetection(classify, name, number) {
-                if (!number) {
-                    number = 0;
-                }
-                let resCondition = getProperty(classify, name, Property.resCondition);
-                let condition = getProperty(classify, name, Property.condition);
-                if (!getProperty(classify, name, Property.complete)) {
-                    if (condition <= resCondition + number) {
-                        setProperty(classify, name, Property.resCondition, condition);
-                        setProperty(classify, name, Property.complete, true);
-                        console.log(getProperty(classify, name, Property.complete));
-                        return true;
-                    }
-                    else {
-                        setProperty(classify, name, Property.resCondition, resCondition + number);
-                        return false;
-                    }
-                }
-                else {
-                    return true;
-                }
-            }
-            Easte_registerg.doDetection = doDetection;
-            function detectAllTasks(classify) {
-                let num = 1;
-                let arr = getClassArr(classify);
-                for (const key in arr) {
-                    if (arr.hasOwnProperty(key)) {
-                        const element = arr[key];
-                        let resCondition = getProperty(classify, element.name, Property.resCondition);
-                        let condition = getProperty(classify, element.name, Property.condition);
-                        if (condition > resCondition) {
-                            num = 0;
-                        }
-                    }
-                }
-                if (num == 1) {
-                    console.log(classify, '完成了！');
-                }
-                else {
-                    console.log(classify, '没有完成！');
-                }
-                return num;
-            }
-            Easte_registerg.detectAllTasks = detectAllTasks;
-            let rewardType;
-            (function (rewardType) {
-                rewardType["gold"] = "gold";
-                rewardType["diamond"] = "diamond";
-                rewardType["assembly"] = "assembly";
-            })(rewardType = Easte_registerg.rewardType || (Easte_registerg.rewardType = {}));
-            let Property;
-            (function (Property) {
-                Property["name"] = "name";
-                Property["explain"] = "explain";
-                Property["condition"] = "condition";
-                Property["resCondition"] = "resCondition";
-                Property["complete"] = "complete";
-            })(Property = Easte_registerg.Property || (Easte_registerg.Property = {}));
-            let Classify;
-            (function (Classify) {
-                Classify["Easte_registerg_01"] = "Easte_registerg_01";
-            })(Classify = Easte_registerg.Classify || (Easte_registerg.Classify = {}));
-            let Name;
-            (function (Name) {
-                Name["assembly_1"] = "assembly_1";
-                Name["assembly_2"] = "assembly_2";
-                Name["assembly_3"] = "assembly_3";
-                Name["assembly_4"] = "assembly_4";
-                Name["assembly_5"] = "assembly_5";
-            })(Name = Easte_registerg.Name || (Easte_registerg.Name = {}));
-            let EventType;
-            (function (EventType) {
-                EventType["trigger"] = "trigger";
-                EventType["easte_registergAds"] = "easte_registergAds";
-            })(EventType = Easte_registerg.EventType || (Easte_registerg.EventType = {}));
-            class Easte_registergScene extends Admin._SceneBase {
-                moduleOnAwake() {
-                }
-                moduleOnEnable() {
-                }
-                moduleEventRegister() {
-                }
-            }
-            Easte_registerg.Easte_registergScene = Easte_registergScene;
-        })(Easte_registerg = lwg.Easte_registerg || (lwg.Easte_registerg = {}));
-        let Victory;
-        (function (Victory) {
-            class VictoryScene extends Admin._SceneBase {
-                moduleOnAwake() {
-                }
-                ;
-                moduleEventRegister() {
-                }
-                ;
-                moduleOnEnable() {
-                }
-                ;
-            }
-            Victory.VictoryScene = VictoryScene;
-        })(Victory = lwg.Victory || (lwg.Victory = {}));
-        let Defeated;
-        (function (Defeated) {
-            class DefeatedScene extends Admin._SceneBase {
-                moduleOnAwake() {
-                }
-                ;
-                moduleEventRegister() {
-                }
-                ;
-                moduleOnEnable() {
-                }
-                ;
-            }
-            Defeated.DefeatedScene = DefeatedScene;
-        })(Defeated = lwg.Defeated || (lwg.Defeated = {}));
-        let DrawCard;
-        (function (DrawCard) {
-            DrawCard._freeAds = {
-                get num() {
-                    return Laya.LocalStorage.getItem('DrawCard_freeAdsNum') ? Number(Laya.LocalStorage.getItem('DrawCard_freeAdsNum')) : 0;
-                },
-                set num(val) {
-                    Laya.LocalStorage.setItem('DrawCard_freeAdsNum', val.toString());
-                }
-            };
-            DrawCard._residueDraw = {
-                get num() {
-                    return Laya.LocalStorage.getItem('DrawCard_residueDraw') ? Number(Laya.LocalStorage.getItem('DrawCard_residueDraw')) : 2;
-                },
-                set num(val) {
-                    Laya.LocalStorage.setItem('DrawCard_residueDraw', val.toString());
-                }
-            };
-            DrawCard._drawCount = {
-                get num() {
-                    return Laya.LocalStorage.getItem('DrawCard_drawCount') ? Number(Laya.LocalStorage.getItem('DrawCard_drawCount')) : 0;
-                },
-                set num(val) {
-                    Laya.LocalStorage.setItem('DrawCard_drawCount', val.toString());
-                }
-            };
-            class DrawCardScene extends Admin._SceneBase {
-                moduleOnAwake() {
-                }
-                ;
-                moduleEventRegister() {
-                }
-                ;
-                moduleOnEnable() {
-                }
-                ;
-            }
-            DrawCard.DrawCardScene = DrawCardScene;
-        })(DrawCard = lwg.DrawCard || (lwg.DrawCard = {}));
-        let Share;
-        (function (Share) {
-            Share._fromWhich = Admin._SceneName.Victory;
-            class ShareScene extends Admin._SceneBase {
-                moduleOnAwake() {
-                }
-                ;
-                moduleEventRegister() {
-                }
-                ;
-                moduleOnEnable() {
-                }
-                ;
-            }
-            Share.ShareScene = ShareScene;
-        })(Share = lwg.Share || (lwg.Share = {}));
-        let PropTry;
-        (function (PropTry) {
-            class PropTryScene extends Admin._SceneBase {
-                moduleOnAwake() {
-                }
-                ;
-                moduleEventRegister() {
-                }
-                ;
-                moduleOnEnable() {
-                }
-                ;
-            }
-            PropTry.PropTryScene = PropTryScene;
-        })(PropTry = lwg.PropTry || (lwg.PropTry = {}));
-        let Backpack;
-        (function (Backpack) {
-            Backpack._prop1 = {
-                get num() {
-                    return Laya.LocalStorage.getItem('Backpack_prop1') ? Number(Laya.LocalStorage.getItem('Backpack_prop1')) : 1;
-                },
-                set num(val) {
-                    Laya.LocalStorage.setItem('Backpack_prop1', val.toString());
-                }
-            };
-            Backpack._prop2 = {
-                get num() {
-                    return Laya.LocalStorage.getItem('Backpack_prop2') ? Number(Laya.LocalStorage.getItem('Backpack_prop2')) : 1;
-                },
-                set num(val) {
-                    Laya.LocalStorage.setItem('Backpack_prop2', val.toString());
-                }
-            };
-            Backpack._trophy = {
-                get num() {
-                    return Laya.LocalStorage.getItem('Backpack_trophy') ? Number(Laya.LocalStorage.getItem('Backpack_trophy')) : 0;
-                },
-                set num(val) {
-                    Laya.LocalStorage.setItem('Backpack_trophy', val.toString());
-                }
-            };
-            Backpack._haveCardArray = {
-                get arr() {
-                    try {
-                        let data = Laya.LocalStorage.getJSON('Backpack_haveCardArray');
-                        if (data) {
-                            return JSON.parse(data);
-                            ;
-                        }
-                        else {
-                            return [];
-                        }
-                    }
-                    catch (error) {
-                        return [];
-                    }
-                },
-                set arr(array) {
-                    Laya.LocalStorage.setJSON('Backpack_haveCardArray', JSON.stringify(array));
-                },
-                add(arr1) {
-                    let arr0 = Backpack._haveCardArray.arr;
-                    for (let index = 0; index < arr1.length; index++) {
-                        arr0.push(arr1[index]);
-                    }
-                    let arr00 = Tools.arrayUnique_01(arr0);
-                    Laya.LocalStorage.setJSON('Backpack_haveCardArray', JSON.stringify(arr00));
-                    return arr00;
-                },
-                sub(arr1) {
-                    let arr0 = Backpack._haveCardArray.arr;
-                    for (let i = 0; i < arr0.length; i++) {
-                        for (let j = 0; j < arr1.length; j++) {
-                            if (arr0[i] == arr1[j]) {
-                                arr0.splice(i, 1);
-                                i--;
-                            }
-                        }
-                    }
-                    Laya.LocalStorage.setJSON('Backpack_haveCardArray', JSON.stringify(arr0));
-                    return arr0;
-                }
-            };
-            Backpack._backpackArray = [];
-            class BackpackScene extends Admin._SceneBase {
-                moduleOnAwake() {
-                }
-                ;
-                moduleEventRegister() {
-                }
-                ;
-                moduleOnEnable() {
-                }
-                ;
-            }
-            Backpack.BackpackScene = BackpackScene;
-        })(Backpack = lwg.Backpack || (lwg.Backpack = {}));
         let LwgPreLoad;
         (function (LwgPreLoad) {
             let _scene3D = [];
@@ -5088,7 +4362,7 @@
             LwgPreLoad._sumProgress = 0;
             LwgPreLoad._loadOrder = [];
             LwgPreLoad._loadOrderIndex = 0;
-            LwgPreLoad._whereToLoad = Admin._SceneName.PreLoad;
+            LwgPreLoad._loadType = Admin._SceneName.PreLoad;
             let _ListName;
             (function (_ListName) {
                 _ListName["scene3D"] = "scene3D";
@@ -5114,7 +4388,6 @@
                             return;
                         }
                         console.log('当前进度条进度为:', LwgPreLoad._currentProgress.value / LwgPreLoad._sumProgress);
-                        console.log('进度条停止！');
                         console.log('所有资源加载完成！此时所有资源可通过例如 Laya.loader.getRes("url")获取');
                         EventAdmin._notify(LwgPreLoad._Event.complete);
                     }
@@ -5209,7 +4482,7 @@
                                 }
                             }
                         }
-                        LwgPreLoad._loadOrder = [_pic2D, _scene2D, _prefab2D, _scene3D, _prefab3D, _json, _texture, _texture2D, _mesh3D, _material, _skeleton];
+                        LwgPreLoad._loadOrder = [_pic2D, _scene2D, _prefab2D, _prefab3D, _json, _texture, _texture2D, _mesh3D, _material, _skeleton, _scene3D];
                         for (let index = 0; index < LwgPreLoad._loadOrder.length; index++) {
                             LwgPreLoad._sumProgress += LwgPreLoad._loadOrder[index].length;
                             if (LwgPreLoad._loadOrder[index].length <= 0) {
@@ -5229,13 +4502,13 @@
                     EventAdmin._register(_Event.complete, this, () => {
                         let time = this.lwgAllComplete();
                         Laya.timer.once(time, this, () => {
-                            this.Owner.name = LwgPreLoad._whereToLoad;
-                            Admin._sceneControl[LwgPreLoad._whereToLoad] = this.Owner;
-                            if (LwgPreLoad._whereToLoad !== Admin._SceneName.PreLoad) {
-                                if (Admin._preLoadOpenSceneLater.openSceneName) {
-                                    Admin._openScene(Admin._preLoadOpenSceneLater.openSceneName, Admin._preLoadOpenSceneLater.cloesSceneName, () => {
+                            this._Owner.name = LwgPreLoad._loadType;
+                            Admin._sceneControl[LwgPreLoad._loadType] = this._Owner;
+                            if (LwgPreLoad._loadType !== Admin._SceneName.PreLoad) {
+                                if (Admin._preLoadOpenSceneLater.openName) {
+                                    Admin._openScene(Admin._preLoadOpenSceneLater.openName, Admin._preLoadOpenSceneLater.cloesName, () => {
                                         Admin._preLoadOpenSceneLater.func;
-                                        Admin._closeScene(LwgPreLoad._whereToLoad);
+                                        Admin._closeScene(LwgPreLoad._loadType);
                                     }, Admin._preLoadOpenSceneLater.zOrder);
                                 }
                             }
@@ -5251,9 +4524,9 @@
                                         }
                                     }
                                 }
-                                PalyAudio.playMusic();
-                                Admin._closeScene(LwgPreLoad._whereToLoad, () => {
-                                    LwgPreLoad._whereToLoad = Admin._SceneName.PreLoadStep;
+                                Audio._playMusic();
+                                this._openScene(_SceneName.Guide, true, false, () => {
+                                    LwgPreLoad._loadType = Admin._SceneName.PreLoadCutIn;
                                 });
                             }
                         });
@@ -5309,7 +4582,7 @@
                                     console.log('XXXXXXXXXXX3D场景' + _scene3D[index]['url'] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
                                 }
                                 else {
-                                    _scene3D[index]['scene'] = Scene;
+                                    _scene3D[index]['Scene'] = Scene;
                                     console.log('3D场景' + _scene3D[index]['url'] + '加载完成！', '数组下标为：', index);
                                 }
                                 EventAdmin._notify(_Event.progress);
@@ -5321,7 +4594,7 @@
                                     console.log('XXXXXXXXXXX3D预设体' + _prefab3D[index]['url'] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
                                 }
                                 else {
-                                    _prefab3D[index]['prefab'] = Sp;
+                                    _prefab3D[index]['Prefab'] = Sp;
                                     console.log('3D预制体' + _prefab3D[index]['url'] + '加载完成！', '数组下标为：', index);
                                 }
                                 EventAdmin._notify(_Event.progress);
@@ -5351,13 +4624,13 @@
                             }));
                             break;
                         case _texture2D:
-                            Laya.Texture2D.load(_texture2D[index]['url'], Laya.Handler.create(this, (tex) => {
+                            Laya.Texture2D.load(_texture2D[index]['url'], Laya.Handler.create(this, function (tex) {
                                 if (tex == null) {
                                     console.log('XXXXXXXXXXX2D纹理' + _texture2D[index]['url'] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
                                 }
                                 else {
                                     _texture2D[index]['texture2D'] = tex;
-                                    console.log('2D纹理' + _texture2D[index]['url'] + '加载完成！', '数组下标为：', index);
+                                    console.log('3D纹理' + _texture2D[index]['url'] + '加载完成！', '数组下标为：', index);
                                 }
                                 EventAdmin._notify(_Event.progress);
                             }));
@@ -5435,11 +4708,11 @@
                 _Event["compelet"] = "_ResPrepare_compelet";
             })(_Event = _LwgInit._Event || (_LwgInit._Event = {}));
             function _init() {
-                switch (Admin._platform.name) {
-                    case Admin._platform.tpye.WeChat:
+                switch (Platform._Ues.value) {
+                    case Platform._Tpye.WeChat:
                         _loadPkg_Wechat();
                         break;
-                    case Admin._platform.tpye.OPPO || Admin._platform.tpye.VIVO:
+                    case Platform._Tpye.OPPO || Platform._Tpye.VIVO:
                         _loadPkg_VIVO();
                         break;
                     default:
@@ -5489,26 +4762,214 @@
             class _LwgInitScene extends Admin._SceneBase {
                 moduleOnStart() {
                     _init();
-                    this.lwgOpenScene(_SceneName.PreLoad, null, () => {
-                    });
+                    this._openScene(_SceneName.PreLoad);
                 }
                 ;
             }
             _LwgInit._LwgInitScene = _LwgInitScene;
         })(_LwgInit = lwg._LwgInit || (lwg._LwgInit = {}));
+        let Execution;
+        (function (Execution) {
+            Execution._execution = {
+                get value() {
+                    if (!this['_Execution_executionNum']) {
+                        return Laya.LocalStorage.getItem('_Execution_executionNum') ? Number(Laya.LocalStorage.getItem('_Execution_executionNum')) : 15;
+                    }
+                    return this['_Execution_executionNum'];
+                },
+                set value(val) {
+                    console.log(val);
+                    this['_Execution_executionNum'] = val;
+                    Laya.LocalStorage.setItem('_Execution_executionNum', val.toString());
+                }
+            };
+            Execution._addExDate = {
+                get value() {
+                    if (!this['_Execution_addExDate']) {
+                        return Laya.LocalStorage.getItem('_Execution_addExDate') ? Number(Laya.LocalStorage.getItem('_Execution_addExDate')) : (new Date()).getDay();
+                    }
+                    return this['_Execution_addExDate'];
+                },
+                set value(val) {
+                    this['_Execution_addExDate'] = val;
+                    Laya.LocalStorage.setItem('_Execution_addExDate', val.toString());
+                }
+            };
+            Execution._addExHours = {
+                get value() {
+                    if (!this['_Execution_addExHours']) {
+                        return Laya.LocalStorage.getItem('_Execution_addExHours') ? Number(Laya.LocalStorage.getItem('_Execution_addExHours')) : (new Date()).getHours();
+                    }
+                    return this['_Execution_addExHours'];
+                },
+                set value(val) {
+                    this['_Execution_addExHours'] = val;
+                    Laya.LocalStorage.setItem('_Execution_addExHours', val.toString());
+                }
+            };
+            Execution._addMinutes = {
+                get value() {
+                    if (!this['_Execution_addMinutes']) {
+                        return Laya.LocalStorage.getItem('_Execution_addMinutes') ? Number(Laya.LocalStorage.getItem('_Execution_addMinutes')) : (new Date()).getMinutes();
+                    }
+                    return this['_Execution_addMinutes'];
+                },
+                set value(val) {
+                    this['_Execution_addMinutes'] = val;
+                    Laya.LocalStorage.setItem('_Execution_addMinutes', val.toString());
+                }
+            };
+            function _createExecutionNode(parent) {
+                let sp;
+                Laya.loader.load('prefab/ExecutionNum.json', Laya.Handler.create(this, function (prefab) {
+                    let _prefab = new Laya.Prefab();
+                    _prefab.json = prefab;
+                    sp = Laya.Pool.getItemByCreateFun('prefab', _prefab.create, _prefab);
+                    parent.addChild(sp);
+                    let num = sp.getChildByName('Num');
+                    num.value = Execution._execution.value.toString();
+                    sp.pos(297, 90);
+                    sp.zOrder = 50;
+                    Execution._ExecutionNode = sp;
+                    Execution._ExecutionNode.name = '_ExecutionNode';
+                }));
+            }
+            Execution._createExecutionNode = _createExecutionNode;
+            function _addExecution(x, y, func) {
+                let sp;
+                Laya.loader.load('prefab/execution.json', Laya.Handler.create(this, function (prefab) {
+                    let _prefab = new Laya.Prefab();
+                    _prefab.json = prefab;
+                    sp = Laya.Pool.getItemByCreateFun('prefab', _prefab.create, _prefab);
+                    Laya.stage.addChild(sp);
+                    sp.x = Laya.stage.width / 2;
+                    sp.y = Laya.stage.height / 2;
+                    sp.zOrder = 50;
+                    if (Execution._ExecutionNode) {
+                        Animation2D.move_Simple(sp, sp.x, sp.y, Execution._ExecutionNode.x, Execution._ExecutionNode.y, 800, 100, f => {
+                            Animation2D.fadeOut(sp, 1, 0, 200, 0, f => {
+                                Animation2D.upDwon_Shake(Execution._ExecutionNode, 10, 80, 0, null);
+                                if (func) {
+                                    func();
+                                }
+                            });
+                        });
+                    }
+                }));
+            }
+            Execution._addExecution = _addExecution;
+            function createConsumeEx(subEx) {
+                let label = Laya.Pool.getItemByClass('label', Laya.Label);
+                label.name = 'label';
+                Laya.stage.addChild(label);
+                label.text = '-2';
+                label.fontSize = 40;
+                label.bold = true;
+                label.color = '#59245c';
+                label.x = Execution._ExecutionNode.x + 100;
+                label.y = Execution._ExecutionNode.y - label.height / 2 + 4;
+                label.zOrder = 100;
+                Animation2D.fadeOut(label, 0, 1, 200, 150, f => {
+                    Animation2D.leftRight_Shake(Execution._ExecutionNode, 15, 60, 0, null);
+                    Animation2D.fadeOut(label, 1, 0, 600, 400, f => {
+                    });
+                });
+            }
+            Execution.createConsumeEx = createConsumeEx;
+            class ExecutionNode extends Admin._ObjectBase {
+                constructor() {
+                    super(...arguments);
+                    this.time = 0;
+                    this.countNum = 59;
+                    this.timeSwitch = true;
+                }
+                lwgOnAwake() {
+                    this.Num = this._Owner.getChildByName('Num');
+                    this.CountDown = this._Owner.getChildByName('CountDown');
+                    this.CountDown_board = this._Owner.getChildByName('CountDown_board');
+                    this.countNum = 59;
+                    this.CountDown.text = '00:' + this.countNum;
+                    this.CountDown_board.text = this.CountDown.text;
+                    let d = new Date;
+                    if (d.getDate() !== Execution._addExDate.value) {
+                        Execution._execution.value = 15;
+                    }
+                    else {
+                        if (d.getHours() == Execution._addExHours.value) {
+                            console.log(d.getMinutes(), Execution._addMinutes.value);
+                            Execution._execution.value += (d.getMinutes() - Execution._addMinutes.value);
+                            if (Execution._execution.value > 15) {
+                                Execution._execution.value = 15;
+                            }
+                        }
+                        else {
+                            Execution._execution.value = 15;
+                        }
+                    }
+                    this.Num.value = Execution._execution.value.toString();
+                    Execution._addExDate.value = d.getDate();
+                    Execution._addExHours.value = d.getHours();
+                    Execution._addMinutes.value = d.getMinutes();
+                }
+                countDownAddEx() {
+                    this.time++;
+                    if (this.time % 60 == 0) {
+                        this.countNum--;
+                        if (this.countNum < 0) {
+                            this.countNum = 59;
+                            Execution._execution.value += 1;
+                            this.Num.value = Execution._execution.value.toString();
+                            let d = new Date;
+                            Execution._addExHours.value = d.getHours();
+                            Execution._addMinutes.value = d.getMinutes();
+                        }
+                        if (this.countNum >= 10 && this.countNum <= 59) {
+                            this.CountDown.text = '00:' + this.countNum;
+                            this.CountDown_board.text = this.CountDown.text;
+                        }
+                        else if (this.countNum >= 0 && this.countNum < 10) {
+                            this.CountDown.text = '00:0' + this.countNum;
+                            this.CountDown_board.text = this.CountDown.text;
+                        }
+                    }
+                }
+                lwgOnUpdate() {
+                    if (Number(this.Num.value) >= 15) {
+                        if (this.timeSwitch) {
+                            Execution._execution.value = 15;
+                            this.Num.value = Execution._execution.value.toString();
+                            this.CountDown.text = '00:00';
+                            this.CountDown_board.text = this.CountDown.text;
+                            this.countNum = 60;
+                            this.timeSwitch = false;
+                        }
+                    }
+                    else {
+                        this.timeSwitch = true;
+                        this.countDownAddEx();
+                    }
+                }
+            }
+            Execution.ExecutionNode = ExecutionNode;
+        })(Execution = lwg.Execution || (lwg.Execution = {}));
     })(lwg || (lwg = {}));
     var lwg$1 = lwg;
     let Admin = lwg.Admin;
     let _SceneBase = Admin._SceneBase;
+    let _ObjectBase = Admin._ObjectBase;
     let _SceneName = Admin._SceneName;
+    let Platform = lwg.Platform;
+    let SceneAnimation = lwg.SceneAnimation;
+    let Adaptive = lwg.Adaptive;
+    let DataAdmin = lwg.DataAdmin;
     let EventAdmin = lwg.EventAdmin;
     let DateAdmin = lwg.DateAdmin;
     let TimerAdmin = lwg.TimerAdmin;
     let Pause = lwg.Pause;
     let Execution = lwg.Execution;
-    let _Gold = lwg.Gold;
+    let Gold = lwg.Gold;
     let Setting = lwg.Setting;
-    let PalyAudio = lwg.PalyAudio;
+    let Audio = lwg.Audio;
     let Click = lwg.Click;
     let Color = lwg.Color;
     let Effects = lwg.Effects;
@@ -5516,38 +4977,14 @@
     let Animation2D = lwg.Animation2D;
     let Animation3D = lwg.Animation3D;
     let Tools = lwg.Tools;
-    let Elect = lwg.Elect;
     let _LwgPreLoad = lwg.LwgPreLoad;
     let _PreLoadScene = lwg.LwgPreLoad._PreLoadScene;
     let _LwgInit = lwg._LwgInit;
     let _LwgInitScene = lwg._LwgInit._LwgInitScene;
-    let Shop = lwg.Shop;
-    let ShopScene = lwg.Shop.ShopScene;
-    let VictoryBox = lwg.VictoryBox;
-    let VictoryBoxScene = lwg.VictoryBox.VictoryBoxScene;
-    let CheckIn = lwg.CheckIn;
-    let CheckInScene = lwg.CheckIn.CheckInScene;
-    let SkinQualified = lwg.SkinQualified;
-    let SkinXDScene = lwg.SkinQualified.SkinQualifiedScene;
-    let Skin = lwg.Skin;
-    let SkinScene = lwg.Skin.SkinScene;
-    let Easte_registerg = lwg.Easte_registerg;
-    let Victory = lwg.Victory;
-    let VictoryScene = lwg.Victory.VictoryScene;
-    let Defeated = lwg.Defeated;
-    let DefeatedScene = lwg.Defeated.DefeatedScene;
-    let DrawCard = lwg.DrawCard;
-    let DrawCardScene = lwg.DrawCard.DrawCardScene;
-    let Share = lwg.Share;
-    let ShareScene = lwg.Share.ShareScene;
-    let PropTry = lwg.PropTry;
-    let PropTryScene = lwg.PropTry.PropTryScene;
-    let Backpack = lwg.Backpack;
-    let BackpackScene = lwg.Backpack.BackpackScene;
 
-    var _PreloadUrl;
-    (function (_PreloadUrl) {
-        _PreloadUrl._list = {
+    var _Res;
+    (function (_Res) {
+        _Res._list = {
             prefab2D: {
                 LwgGold: {
                     url: 'Prefab/LwgGold.json',
@@ -5572,12 +5009,12 @@
             },
             json: {},
         };
-    })(_PreloadUrl || (_PreloadUrl = {}));
+    })(_Res || (_Res = {}));
     var _PreLoad;
     (function (_PreLoad) {
         class PreLoad extends _LwgPreLoad._PreLoadScene {
             lwgOnStart() {
-                EventAdmin._notify(_LwgPreLoad._Event.importList, (_PreloadUrl._list));
+                EventAdmin._notify(_LwgPreLoad._Event.importList, (_Res._list));
             }
             lwgOpenAni() { return 1; }
             lwgStepComplete() {
@@ -5671,7 +5108,7 @@
         function _init() {
         }
         _Game._init = _init;
-        class _EnemyBullet extends Admin._Object {
+        class _EnemyBullet extends Admin._ObjectBase {
             constructor() {
                 super(...arguments);
                 this.speed = 5;
@@ -5683,13 +5120,13 @@
                 TimerAdmin._frameLoop(1, this, () => {
                     this._Owner.x -= p.x * this.speed;
                     this._Owner.y -= p.y * this.speed;
-                    Tools.Node.leaveStage(this._Owner, () => {
+                    Tools._Node.leaveStage(this._Owner, () => {
                         this._Owner.removeSelf();
                         return;
                     });
                 });
                 TimerAdmin._frameLoop(1, this, () => {
-                    Tools.Node.checkTwoDistance(this._Owner, this._SceneImg('Hero'), 50, () => {
+                    Tools._Node.checkTwoDistance(this._Owner, this._SceneImg('Hero'), 50, () => {
                         this._Owner.removeSelf();
                         EventAdmin._notify(_Event.calculateBlood, (1));
                     });
@@ -5697,7 +5134,7 @@
             }
         }
         _Game._EnemyBullet = _EnemyBullet;
-        class _Enemy extends Admin._Object {
+        class _Enemy extends Admin._ObjectBase {
             constructor() {
                 super(...arguments);
                 this.time = 0;
@@ -5707,23 +5144,23 @@
                 this.state = _EnemySate.activity;
                 TimerAdmin._frameRandomLoop(60, 100, this, () => {
                     if (this.state == _EnemySate.activity) {
-                        let bullet = Tools.Node.prefabCreate(_PreloadUrl._list.prefab2D.EnemyBullet.prefab);
+                        let bullet = Tools._Node.createPrefab(_Res._list.prefab2D.EnemyBullet.prefab);
                         bullet.addComponent(_EnemyBullet);
                         let GPoint = this._Parent.localToGlobal(new Laya.Point(this._Owner.x, this._Owner.y));
                         this._Scene.addChild(bullet);
                         bullet.pos(GPoint.x, GPoint.y);
                     }
                 });
-                let rotate = Tools.randomOneHalf() == 1 ? -0.5 : 0.5;
+                let rotate = Tools._Number.randomOneHalf() == 1 ? -0.5 : 0.5;
                 TimerAdmin._frameLoop(1, this, () => {
-                    let point = Tools.Point.getRoundPos(this._Owner.rotation += rotate, this._SceneImg('MobileFrame').width / 2 + this._Owner.height / 2, new Laya.Point(this._SceneImg('LandContent').width / 2, this._SceneImg('LandContent').height / 2));
+                    let point = Tools._Point.getRoundPos(this._Owner.rotation += rotate, this._SceneImg('MobileFrame').width / 2 + this._Owner.height / 2, new Laya.Point(this._SceneImg('LandContent').width / 2, this._SceneImg('LandContent').height / 2));
                     this._Owner.x = point.x;
                     this._Owner.y = point.y;
                 });
             }
         }
         _Game._Enemy = _Enemy;
-        class _Weapon extends Admin._Object {
+        class _Weapon extends Admin._ObjectBase {
             constructor() {
                 super(...arguments);
                 this.distance = 0;
@@ -5765,7 +5202,7 @@
                     }
                 };
                 var move = (rSpeed, radius) => {
-                    let point = Tools.Point.getRoundPos(rSpeed ? this._Owner.rotation += rSpeed : this._Owner.rotation, radius, new Laya.Point(this._Parent.width / 2, this._Parent.height / 2));
+                    let point = Tools._Point.getRoundPos(rSpeed ? this._Owner.rotation += rSpeed : this._Owner.rotation, radius, new Laya.Point(this._Parent.width / 2, this._Parent.height / 2));
                     this._Owner.x = point.x;
                     this._Owner.y = point.y;
                 };
@@ -5836,9 +5273,9 @@
             }
             lwgOnEnable() {
                 for (let index = 0; index < _Data._arr.length; index++) {
-                    let Weapon = Tools.Node.prefabCreate(_PreloadUrl._list.prefab2D.Weapon.prefab);
-                    this.ImgVar('WeaponParent').addChild(Weapon);
-                    let point = Tools.Point.getRoundPos(index / _Data._arr.length * 360, this.ImgVar('WeaponParent').width / 2 - 50, new Laya.Point(this.ImgVar('WeaponParent').width / 2, this.ImgVar('WeaponParent').height / 2));
+                    let Weapon = Tools._Node.createPrefab(_Res._list.prefab2D.Weapon.prefab);
+                    this._ImgVar('WeaponParent').addChild(Weapon);
+                    let point = Tools._Point.getRoundPos(index / _Data._arr.length * 360, this._ImgVar('WeaponParent').width / 2 - 50, new Laya.Point(this._ImgVar('WeaponParent').width / 2, this._ImgVar('WeaponParent').height / 2));
                     Weapon.x = point.x;
                     Weapon.y = point.y;
                     Weapon.rotation = index / _Data._arr.length * 360;
@@ -5852,45 +5289,45 @@
                 let bloodNum = 20;
                 let _width = 100;
                 EventAdmin._register(_Event.calculateBlood, this, (number) => {
-                    let Blood = this.ImgVar('Blood').getChildAt(0);
+                    let Blood = this._ImgVar('Blood').getChildAt(0);
                     Blood.width = Blood.width - _width / 20;
                     bloodNum -= number;
                     if (!this['bloodNumSwitch']) {
                         if (bloodNum <= 0) {
                             this['bloodNumSwitch'] = true;
-                            this.lwgOpenScene(_SceneName.Defeated, false);
+                            this._openScene(_SceneName.Defeated, false);
                         }
                     }
                 });
-                let enemyNum = this.ImgVar('EnemyParent').numChildren;
+                let enemyNum = this._ImgVar('EnemyParent').numChildren;
                 EventAdmin._register(_Event.destroyEnemy, this, () => {
                     enemyNum -= 1;
                     if (!this['EnemyNumSwitch']) {
                         if (enemyNum <= 0) {
                             this['EnemyNumSwitch'] = true;
-                            this.lwgOpenScene(_SceneName.Victory, false);
+                            this._openScene(_SceneName.Victory, false);
                         }
                     }
                 });
                 EventAdmin._register(_Event.closeScene, this, () => {
-                    this.lwgCloseScene();
+                    this._closeScene();
                 });
             }
             lwgOnStart() {
                 TimerAdmin._frameLoop(1, this, () => {
-                    this.ImgVar('LandContent').rotation += 0.1;
+                    this._ImgVar('LandContent').rotation += 0.1;
                 });
-                _Game._fireControl.EnemyParent = this.ImgVar('EnemyParent');
-                _Game._fireControl.Aim = this.ImgVar('Aim');
-                for (let index = 0; index < this.ImgVar('EnemyParent').numChildren; index++) {
-                    const element = this.ImgVar('EnemyParent').getChildAt(index);
-                    Tools.Node.changePovit(element, element.width / 2, element.height / 2);
+                _Game._fireControl.EnemyParent = this._ImgVar('EnemyParent');
+                _Game._fireControl.Aim = this._ImgVar('Aim');
+                for (let index = 0; index < this._ImgVar('EnemyParent').numChildren; index++) {
+                    const element = this._ImgVar('EnemyParent').getChildAt(index);
+                    Tools._Node.changePivot(element, element.width / 2, element.height / 2);
                     element.addComponent(_Enemy);
                 }
             }
-            lwgBtnClick() {
-                this.ImgVar('AimOperation').height = this.ImgVar('WeaponOperation').height = Laya.stage.height;
-                Click._on(Click._Type.noEffect, this.ImgVar('WeaponOperation'), this, (e) => {
+            lwgBtnRegister() {
+                this._ImgVar('AimOperation').height = this._ImgVar('WeaponOperation').height = Laya.stage.height;
+                this._btnFour(this._ImgVar('WeaponOperation'), (e) => {
                     _Game._fireControl.rotateSwitch = false;
                     _Game._fireControl.moveDownY = e.stageY;
                 }, (e) => {
@@ -5912,21 +5349,21 @@
                     _Game._fireControl.rotateSwitch = true;
                     _Game._fireControl.moveDownY = 0;
                 });
-                Click._on(Click._Type.noEffect, this.ImgVar('AimOperation'), this, (e) => {
+                this._btnFour(this._ImgVar('AimOperation'), (e) => {
                     this.aimControl.moveDownY = e.stageY;
                 }, (e) => {
                     if (this.aimControl.moveDownY && Math.abs(this.aimControl.moveDownY - e.stageY) > 5) {
                         if (this.aimControl.moveDownY - e.stageY > 0) {
-                            this.ImgVar('Aim').rotation += 2.5;
+                            this._ImgVar('Aim').rotation += 2.5;
                         }
                         else {
-                            this.ImgVar('Aim').rotation -= 2.5;
+                            this._ImgVar('Aim').rotation -= 2.5;
                         }
-                        if (this.ImgVar('Aim').rotation < -45) {
-                            this.ImgVar('Aim').rotation = -45;
+                        if (this._ImgVar('Aim').rotation < -45) {
+                            this._ImgVar('Aim').rotation = -45;
                         }
-                        if (45 < this.ImgVar('Aim').rotation) {
-                            this.ImgVar('Aim').rotation = 45;
+                        if (45 < this._ImgVar('Aim').rotation) {
+                            this._ImgVar('Aim').rotation = 45;
                         }
                         this.aimControl.moveDownY = e.stageY;
                     }
@@ -5935,18 +5372,17 @@
                 }, (e) => {
                     this.aimControl.moveDownY = null;
                 });
-                Click._on(Click._Type.noEffect, this.ImgVar('Hero'), this, () => {
+                this._btnFour(this._ImgVar('Hero'), () => {
                     this['HeroMove'] = true;
-                }, (e) => {
-                    if (this['HeroMove']) {
-                        this.ImgVar('HeroContent').x = e.stageX;
-                        this.ImgVar('HeroContent').y = e.stageY;
-                    }
-                }, () => {
+                }, null, () => {
                     this['HeroMove'] = false;
-                }, () => {
-                    this['HeroMove'] = false;
-                });
+                }, null);
+            }
+            lwgOnStageMove(e) {
+                if (this['HeroMove']) {
+                    this._ImgVar('HeroContent').x = e.stageX;
+                    this._ImgVar('HeroContent').y = e.stageY;
+                }
             }
         }
         _Game.Game = Game;
@@ -5962,9 +5398,9 @@
         }
         _Defeated._init = _init;
         class Defeated extends Admin._SceneBase {
-            lwgBtnClick() {
-                Click._on(Click._Type.largen, this.ImgVar('BtnBack'), this, null, null, () => {
-                    this.lwgOpenScene(_SceneName.Start);
+            lwgBtnRegister() {
+                this._btnUp(this._ImgVar('BtnBack'), () => {
+                    this._openScene(_SceneName.Start);
                     EventAdmin._notify(_Game._Event.closeScene);
                 });
             }
@@ -6014,157 +5450,55 @@
             _Event["complete"] = "_Guide_complete";
         })(_Event = _Guide._Event || (_Guide._Event = {}));
         function _init() {
-            console.log('开始进行新手引导！');
-            Admin._openScene(_SceneName.Start, null, () => {
-                console.log('新手引导完成！');
-            });
         }
         _Guide._init = _init;
-        class _GuideBase extends Admin._SceneBase {
-            moduleOnAwake() { }
-            moduleOnEnable() { }
-            moduleEventRegister() { }
-        }
-        _Guide._GuideBase = _GuideBase;
-        class Guide extends _Guide._GuideBase {
-            lwgOnEnable() {
-                this.Owner['Background'].alpha = 0;
-                this.Owner['Hand'].alpha = 0;
-                EventAdmin._notify(_Guide._Event.onStep);
-                this.Owner["Draw"].on(Laya.Event.LABEL, this, (labal) => {
-                    if (labal === 'start') {
-                        let DrawCanvas = this.Owner['Hand'].getChildByName('DrawCanvas');
-                        if (!DrawCanvas) {
-                            let DrawCanvas = new Laya.Sprite();
-                            DrawCanvas.name = 'DrawCanvas';
-                            this.Owner['Hand'].addChild(DrawCanvas);
-                            this.Owner['Handpic'].pos(0, 0);
-                            this.Owner['Handpic'].pivotX = 0;
-                            this.Owner['Handpic'].pivotY = 0;
-                            this['drawLinePos'] = new Laya.Point(this.Owner['Handpic'].x, this.Owner['Handpic'].y);
-                        }
-                    }
-                    else if (labal === 'end') {
-                        let DrawCanvas = this.Owner['Hand'].getChildByName('DrawCanvas');
-                        if (this.Owner['Hand'].getChildByName('DrawCanvas')) {
-                            this['drawLinePos'] == false;
-                            DrawCanvas.removeSelf();
-                        }
-                    }
-                });
-                TimerAdmin._frameLoop(1, this, () => {
-                    let DrawCanvas = this.Owner['Hand'].getChildByName('DrawCanvas');
-                    if (DrawCanvas) {
-                        if (this['drawLinePos']) {
-                            DrawCanvas.graphics.drawLine(this['drawLinePos'].x, this['drawLinePos'].y, this.Owner['Handpic'].x, this.Owner['Handpic'].y, "#000000", 8);
-                            DrawCanvas.graphics.drawCircle(this.Owner['Handpic'].x, this.Owner['Handpic'].y, 4, "#000000");
-                            this['drawLinePos'] = new Laya.Point(this.Owner['Handpic'].x, this.Owner['Handpic'].y);
-                        }
-                    }
-                });
+        class Guide extends Admin._SceneBase {
+            lwgOnStart() {
+                this._openScene('Start');
             }
-            lwgEventRegister() {
-                var step1 = () => {
-                    this.Owner["Draw"].play(0, true);
-                    EventAdmin._notify(_Guide._Event.appear);
-                    this.Owner['Hand'].pos(198, 523);
-                    Tools.Draw.reverseRoundMask(this.Owner['Background'], 360, 598, 350, true);
-                };
-                var step2 = () => {
-                    EventAdmin._notify(_Guide._Event.appear);
-                    this.Owner['Hand'].pos(360, 1161);
-                    this.Owner["Click"].play(0, true);
-                    Tools.Draw.reverseRoundrectMask(this.Owner['Background'], 360, 1161, 320, 150, 40, true);
-                };
-                var step3 = () => {
-                    step1();
-                };
-                var step4 = () => {
-                    step2();
-                };
-                var step5 = () => {
-                    EventAdmin._notify(_Guide._Event.appear);
-                    this.Owner['Hand'].pos(75, 102);
-                    this.Owner["Click"].play(0, true);
-                    Tools.Draw.reverseRoundMask(this.Owner['Background'], 72, 105, 60);
-                };
-                var step6 = () => {
-                    EventAdmin._notify(_Guide._Event.appear);
-                    this.Owner['Hand'].pos(630, 790);
-                    this.Owner["Click"].play(0, true);
-                    Tools.Draw.reverseRoundrectMask(this.Owner['Background'], 653, 758, 130, 150, 20, true);
-                };
-                var step7 = () => {
-                    step5();
-                };
-                var step8 = () => {
-                    EventAdmin._notify(_Guide._Event.appear);
-                    this.Owner['Hand'].pos(360, Laya.stage.height * 0.779);
-                    this.Owner["Click"].play(0, true);
-                    Tools.Draw.reverseRoundrectMask(this.Owner['Background'], 360, Laya.stage.height * 0.779, 450, 180, 20, true);
-                };
-                EventAdmin._register(_Guide._Event.onStep, this, () => {
-                    Laya.timer.once(500, this, () => {
-                        console.log('新手引导到了第：', _Guide._whichStepNum + '步了');
-                        switch (_Guide._whichStepNum) {
-                            case 1:
-                                step1();
-                                break;
-                            case 2:
-                                step2();
-                                break;
-                            case 3:
-                                step3();
-                                break;
-                            case 4:
-                                step4();
-                                break;
-                            case 5:
-                                step5();
-                                break;
-                            case 6:
-                                step6();
-                                break;
-                            case 7:
-                                step7();
-                                break;
-                            case 8:
-                                step8();
-                                break;
-                            default:
-                                break;
-                        }
-                    });
-                });
-                EventAdmin._register(_Guide._Event.appear, this, (func) => {
-                    Animation2D.fadeOut(this.Owner['Hand'], 0, 1, 150);
-                    Animation2D.fadeOut(this.Owner['Background'], 0, 0.5, 300);
-                });
-                EventAdmin._register(_Guide._Event.stepComplete, this, () => {
-                    _Guide._whichStepNum++;
-                    let DrawCanvas = this.Owner['Hand'].getChildByName('DrawCanvas');
-                    if (this.Owner['Hand'].getChildByName('DrawCanvas')) {
-                        this['drawLinePos'] == false;
-                        DrawCanvas.removeSelf();
-                    }
-                    Animation2D.fadeOut(this.Owner['Hand'], 1, 0, 150);
-                    Animation2D.fadeOut(this.Owner['Background'], 0.5, 0, 300, 0, () => {
-                        this.Owner["Draw"].stop();
-                        this.Owner["Click"].stop();
-                    });
-                });
-                EventAdmin._register(_Guide._Event.complete, this, () => {
-                    Animation2D.fadeOut(this.Owner['Hand'], 1, 0, 150);
-                    Animation2D.fadeOut(this.Owner['Background'], 0.5, 0, 300, 0, () => {
-                        _Guide._complete.bool = true;
-                        Admin._closeScene(this.Owner.name);
-                    });
-                });
+            lwgOnEnable() {
             }
         }
         _Guide.Guide = Guide;
     })(_Guide || (_Guide = {}));
     var _Guide$1 = _Guide.Guide;
+
+    var _PreLoadCutIn;
+    (function (_PreLoadCutIn) {
+        let _Event;
+        (function (_Event) {
+            _Event["animation1"] = "_PreLoadCutIn_animation1";
+            _Event["preLoad"] = "_PreLoadCutIn_preLoad";
+            _Event["animation2"] = "_PreLoadCutIn_animation2";
+        })(_Event = _PreLoadCutIn._Event || (_PreLoadCutIn._Event = {}));
+        class PreLoadCutIn extends _LwgPreLoad._PreLoadScene {
+            lwgOnStart() {
+                EventAdmin._notify(_Event.animation1);
+            }
+            lwgEventRegister() {
+                EventAdmin._register(_Event.animation1, this, () => {
+                    let time = 0;
+                    TimerAdmin._frameNumLoop(1, 30, this, () => {
+                        time++;
+                        this._LabelVar('Schedule').text = `${time}`;
+                    }, () => {
+                        EventAdmin._notify(_LwgPreLoad._Event.importList, ({}));
+                    });
+                });
+            }
+            lwgOpenAni() {
+                return 100;
+            }
+            lwgStepComplete() {
+            }
+            lwgAllComplete() {
+                return 1000;
+            }
+        }
+        _PreLoadCutIn.PreLoadCutIn = PreLoadCutIn;
+    })(_PreLoadCutIn || (_PreLoadCutIn = {}));
+    ;
+    var _PreLoadCutIn$1 = _PreLoadCutIn.PreLoadCutIn;
 
     var _Start;
     (function (_Start) {
@@ -6179,10 +5513,10 @@
         class Start extends _StartScene {
             lwgOnAwake() {
             }
-            lwgBtnClick() {
-                Click._on(Click._Type.largen, this.btnVar('BtnStart'), this, null, null, () => {
+            lwgBtnRegister() {
+                this._btnUp(this._ImgVar('BtnStart'), () => {
                     let levelName = _SceneName.Game + 1;
-                    this.lwgOpenScene(levelName, true, () => {
+                    this._openScene(levelName, true, false, () => {
                         if (!Admin._sceneControl[levelName].getComponent(_Game.Game)) {
                             Admin._sceneControl[levelName].addComponent(_Game.Game);
                         }
@@ -6191,7 +5525,7 @@
             }
         }
         _Start.Start = Start;
-        class StartItem extends Admin._Object {
+        class StartItem extends Admin._ObjectBase {
         }
         _Start.StartItem = StartItem;
     })(_Start || (_Start = {}));
@@ -6206,9 +5540,9 @@
         }
         _Victory._init = _init;
         class Victory extends Admin._SceneBase {
-            lwgBtnClick() {
-                Click._on(Click._Type.largen, this.ImgVar('BtnGet'), this, null, null, () => {
-                    this.lwgOpenScene(_SceneName.Start);
+            lwgBtnRegister() {
+                this._btnUp(this._ImgVar('BtnGet'), () => {
+                    this._openScene(_SceneName.Start);
                     EventAdmin._notify(_Game._Event.closeScene);
                 });
             }
@@ -6217,16 +5551,16 @@
     })(_Victory || (_Victory = {}));
     var _Victory$1 = _Victory.Victory;
 
-    var SceneName;
-    (function (SceneName) {
-    })(SceneName || (SceneName = {}));
     class LwgInit extends _LwgInitScene {
         lwgOnAwake() {
             _LwgInit._pkgInfo = [];
-            Admin._platform.name = Admin._platform.tpye.Research;
-            Admin._sceneAnimation.presentAni = Admin._sceneAnimation.type.stickIn.random;
+            Platform._Ues.value = Platform._Tpye.Research;
+            SceneAnimation._Use.value = SceneAnimation._Type.stickIn.random;
+            Click._Use.value = Click._Type.largen;
+            Adaptive._Use.value = [720, 1280];
             Admin._moudel = {
                 _PreLoad: _PreLoad,
+                _PreLoadCutIn: _PreLoadCutIn,
                 _Guide: _Guide,
                 _Start: _Start,
                 _Game: _Game,

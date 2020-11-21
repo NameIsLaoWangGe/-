@@ -18,7 +18,7 @@
             "x":15,
             "type":"Image",
             "searchKey":"Image,Background,Background",
-            "props":{"var":"Background","top":0,"skin":"Frame/UI/ui_orthogon_black_0.7.png","sizeGrid":"10,10,10,9","right":0,"name":"Background","left":0,"bottom":0,"alpha":1},
+            "props":{"var":"Background","top":0,"skin":"Lwg/UI/ui_orthogon_black_0.7.png","sizeGrid":"10,10,10,9","right":0,"name":"Background","left":0,"bottom":0,"alpha":1},
             "nodeParent":2,
             "label":"Background",
             "isDirectory":false,

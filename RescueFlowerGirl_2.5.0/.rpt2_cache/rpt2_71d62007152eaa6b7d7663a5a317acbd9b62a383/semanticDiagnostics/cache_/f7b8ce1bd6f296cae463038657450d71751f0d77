@@ -1,0 +1,18 @@
+[
+  {
+    "flatMessage": "Cannot find module './_MakeClothes'.",
+    "formatted": "\u001b[96mF:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Frame/_PreLoadCutIn.ts\u001b[0m:\u001b[93m2\u001b[0m:\u001b[93m30\u001b[0m - \u001b[91merror\u001b[0m\u001b[90m TS2307: \u001b[0mCannot find module './_MakeClothes'.\r\n\r\n\u001b[7m2\u001b[0m import { _MakeClothes } from \"./_MakeClothes\";\r\n\u001b[7m \u001b[0m \u001b[91m                             ~~~~~~~~~~~~~~~~\u001b[0m\r\n\u001b[96mF:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Frame/_PreLoadCutIn.ts\u001b[0m:\u001b[93m3\u001b[0m:\u001b[93m10\u001b[0m - \u001b[91merror\u001b[0m\u001b[90m TS2305: \u001b[0mModule '\"../../../../../../../../Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Frame/_PreLoad\"' has no exported member '_Res'.\r\n\r\n\u001b[7m3\u001b[0m import { _Res } from \"./_PreLoad\";\r\n\u001b[7m \u001b[0m \u001b[91m         ~~~~\u001b[0m\r\n",
+    "category": 1,
+    "code": 2307,
+    "type": "semantic",
+    "fileLine": "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Frame/_PreLoadCutIn.ts(2,30)"
+  },
+  {
+    "flatMessage": "Module '\"../../../../../../../../Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Frame/_PreLoad\"' has no exported member '_Res'.",
+    "formatted": "\u001b[96mF:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Frame/_PreLoadCutIn.ts\u001b[0m:\u001b[93m2\u001b[0m:\u001b[93m30\u001b[0m - \u001b[91merror\u001b[0m\u001b[90m TS2307: \u001b[0mCannot find module './_MakeClothes'.\r\n\r\n\u001b[7m2\u001b[0m import { _MakeClothes } from \"./_MakeClothes\";\r\n\u001b[7m \u001b[0m \u001b[91m                             ~~~~~~~~~~~~~~~~\u001b[0m\r\n\u001b[96mF:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Frame/_PreLoadCutIn.ts\u001b[0m:\u001b[93m3\u001b[0m:\u001b[93m10\u001b[0m - \u001b[91merror\u001b[0m\u001b[90m TS2305: \u001b[0mModule '\"../../../../../../../../Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Frame/_PreLoad\"' has no exported member '_Res'.\r\n\r\n\u001b[7m3\u001b[0m import { _Res } from \"./_PreLoad\";\r\n\u001b[7m \u001b[0m \u001b[91m         ~~~~\u001b[0m\r\n",
+    "category": 1,
+    "code": 2305,
+    "type": "semantic",
+    "fileLine": "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Frame/_PreLoadCutIn.ts(3,10)"
+  }
+]

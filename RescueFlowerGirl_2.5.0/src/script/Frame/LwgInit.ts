@@ -1,22 +1,11 @@
-
-import ZJADMgr from "../TJ/ZJADMgr";
-import { Admin, DateAdmin, EventAdmin, _LwgInit, _LwgInitScene, _SceneName } from "./Lwg";
+import { Adaptive, Admin, Click, Platform, SceneAnimation, _LwgInit, _LwgInitScene } from "./Lwg";
 import { _Defeated } from "./_Defeated";
 import { _Game } from "./_Game";
 import { _Guide } from "./_Guide";
 import { _PreLoad } from "./_PreLoad";
-import { _PreLoadStep } from "./_PreLoadStep";
-import { _PropTry } from "./_PropTry";
-import { _SelectLevel } from "./_SelectLevel";
-import { _Settle } from "./_Settle";
-import { _Share } from "./_Share";
-import { _Special } from "./_Special";
+import { _PreLoadCutIn } from "./_PreLoadCutIn";
 import { _Start } from "./_Start";
-import { _Task } from "./_Task";
 import { _Victory } from "./_Victory";
-
-export enum SceneName {
-}
 export default class LwgInit extends _LwgInitScene {
     lwgOnAwake(): void {
         _LwgInit._pkgInfo = [
@@ -24,24 +13,27 @@ export default class LwgInit extends _LwgInitScene {
             // { name: "sp2", root: "3DScene" },
             // { name: "sp3", root: "3DPrefab" },
         ];
-        Admin._platform.name = Admin._platform.tpye.Research;
-        Admin._sceneAnimation.presentAni = Admin._sceneAnimation.type.stickIn.random;
+        Platform._Ues.value = Platform._Tpye.Research;
+        SceneAnimation._Use.value = SceneAnimation._Type.stickIn.random;
+        Click._Use.value = Click._Type.largen;
+        Adaptive._Use.value = [720, 1280];
         Admin._moudel = {
             _PreLoad: _PreLoad,
+            _PreLoadCutIn: _PreLoadCutIn,
             _Guide: _Guide,
             _Start: _Start,
             _Game: _Game,
-            // _Task: _Task,
-            // _PreLoadStep: _PreLoadStep,
-            // _SelectLevel: _SelectLevel,
             // _Settle: _Settle,
             _Victory: _Victory,
             _Defeated: _Defeated,
             // _Share: _Share,
             // _Special: _Special,
             // _PropTry: _PropTry,
+            // _AdsHint: _AdsHint,
+            // _Compound: _Compound,
         };
         // new ZJADMgr();
     }
 }
+
 

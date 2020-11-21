@@ -135,19 +135,8 @@ export module _Example {
     export function _init(): void {
 
     }
-    /**通用类，进行通用初始化，这里有两个作用，第一个是不同游戏通用，另一个是同一个游戏中拥有相同部分的基类*/
-    export class ExampleBase extends Admin._SceneBase {
-        moduleOnAwake(): void {
-        }
-        moduleOnEnable(): void {
-        }
-        moduleEventRegister(): void {
-        }
-        moduleOnStart(): void {
-        }
-    }
     /**可以手动挂在脚本中的类，全脚本唯一的默认导出，也可动态添加，动态添加写在模块内更方便*/
-    export class Example extends _Example.ExampleBase {
+    export class Example extends Admin._SceneBase {
         lwgOnAwake(): void {
             // 模块中临时变量赋值方法,这种赋值必须只用在当前脚本，否则必须枚举
             _Example['name'] = '大王哥';
@@ -169,7 +158,7 @@ export module _Example {
         lwgOnUpdate(): void { }
         lwgOnDisable(): void { }
     }
-    export class UIExampleItem extends Admin._Object {
+    export class UIExampleItem extends Admin._ObjectBase {
 
     }
 }

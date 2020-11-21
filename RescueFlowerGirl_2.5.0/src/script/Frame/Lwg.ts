@@ -511,7 +511,7 @@ export module lwg {
          * @param type 事件类型或者名称
          * @param args 注册事件中的回调函数中的参数
          */
-        export function _notify(type: any, args?: any) {
+        export function _notify(type: any, args?: Array<any>) {
             dispatcher.event(type.toString(), args);
         }
         /**
@@ -1422,10 +1422,13 @@ export module lwg {
             lwgAdaptive(): void { };
             /**场景中的一些事件，在lwgOnEnable中注册,lwgOnStart以后可以发送这些事件*/
             lwgEventRegister(): void { };
-            _EvReg(name: string, func: Function): void {
+            _evReg(name: string, func: Function): void {
                 EventAdmin._register(name, this, func);
             }
-            _EvNotify(name: string, args?: Array<any>): void {
+            _evRegOne(name: string, func: Function): void {
+                EventAdmin._registerOnce(name, this, func);
+            }
+            _evNotify(name: string, args?: Array<any>): void {
                 EventAdmin._notify(name, args);
             }
             /**初始化，在onEnable中执行，重写即可覆盖*/
@@ -1813,10 +1816,65 @@ export module lwg {
 
     /**数据管理*/
     export module DataAdmin {
-        export class _Store {
-            getVariables(name: string): void {
+        // export let _Store1 = {
+        //     /**本地存储变量格式*/
+        //     get value(): string {
+        //         return Laya.LocalStorage.getItem('name') ? Number(Laya.LocalStorage.getItem('name')) : null;
+        //     };
+        //     set value(date: string) {
+        //         Laya.LocalStorage.setItem('name', date.toString());
+        //     }
+        // }
 
-            }
+        export let variableObj = {
+
+        }
+        export class _Store {
+            // val;
+            // get value(): any {
+            //     if (!this[name]) {
+            //         this[name] = {
+            //             get val(): any {
+            //                 return Laya.LocalStorage.getItem(name) ? Laya.LocalStorage.getItem(name) : null;
+            //             },
+            //             set val(data:any) {
+            //                 Laya.LocalStorage.setItem(name, data.toString());
+            //             }
+            //         }
+            //         return this[name];
+            //     } else {
+            //         return this[name];
+            //     }
+            // };
+            // set value(data:any) {
+            //     Laya.LocalStorage.setItem(name, data.toString());
+            // }
+
+            // value(name: string): any {
+            //     if (!this[name]) {
+            //         this[name] = {
+            //             get val(): any {
+            //                 return Laya.LocalStorage.getItem(name) ? Laya.LocalStorage.getItem(name) : null;
+            //             },
+            //             set val(data:any) {
+            //                 Laya.LocalStorage.setItem(name, data.toString());
+            //             }
+            //         }
+            //         return this[name];
+            //     } else {
+            //         return this[name];
+            //     }
+            // }
+            // /**本地存储变量格式*/
+            // variable = {
+            //     get value(): number | any {
+            //         return Laya.LocalStorage.getItem('_Example_variable') ? Number(Laya.LocalStorage.getItem('_Example_variable')) : null;
+            //     },
+            //     set value(date: number | any) {
+            //         Laya.LocalStorage.setItem('_Example_variable', date.toString());
+            //     }
+            // }
+
         }
         /**new出一个通用数据表管理对象，如果不通用，则可以继承使用*/
         export class _Table {

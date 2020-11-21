@@ -82,7 +82,7 @@ export module _Res {
 export module _PreLoad {
     export class PreLoad extends _LwgPreLoad._PreLoadScene {
         lwgOnStart(): void {
-            EventAdmin._notify(_LwgPreLoad._Event.importList, (_Res._list));
+            EventAdmin._notify(_LwgPreLoad._Event.importList, [_Res._list]);
         }
         lwgOpenAni(): number { return 1; }
         lwgStepComplete(): void {

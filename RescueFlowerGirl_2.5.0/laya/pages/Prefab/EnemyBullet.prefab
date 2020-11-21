@@ -1,1 +1,25 @@
-{"type":"Image","props":{"x":0,"y":0,"width":30,"height":30,"pivotX":15,"pivotY":15,"skin":"Lwg/UI/ui_circle_c_004.png","name":"EnemyBullet","var":"EnemyBullet","preset":"laya/pages/prefab/EnemyBullet.prefab","presetID":1,"isPresetRoot":true},"compId":75,"child":[],"isAniNode":true,"nodeParent":2,"searchKey":"Image,EnemyBullet,EnemyBullet","label":"EnemyBullet","isDirectory":false,"hasChild":false,"x":15}
+{
+    "x":0,
+    "type":"Image",
+    "selectedBox":75,
+    "searchKey":"Image,EnemyBullet,EnemyBullet",
+    "props":{"y":0,"x":0,"width":30,"var":"EnemyBullet","skin":"Lwg/UI/ui_circle_c_004.png","presetID":1,"preset":"laya/pages/Prefab/EnemyBullet.prefab","pivotY":15,"pivotX":15,"name":"EnemyBullet","isPresetRoot":true,"height":30},
+    "nodeParent":-1,
+    "maxID":76,
+    "label":"EnemyBullet",
+    "isDirectory":false,
+    "isAniNode":true,
+    "hasChild":false,
+    "compId":75,
+    "child":[
+        ],
+    "animations":[
+        {
+            "nodes":[
+                ],
+            "name":"ani1",
+            "id":1,
+            "frameRate":24,
+            "action":0
+        }]
+}

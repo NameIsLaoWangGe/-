@@ -203,55 +203,11 @@ export module _Task {
         // }
     }
 
-    /**对任务场景进行初始化*/
-    export class _TaskBase extends Admin._SceneBase {
-        moduleOnAwake(): void {
-            _allClassifyArr = [_Task._everydayTask];
-            _Task._TaskTap = this.Owner['TaskTap'];
-            _Task._TaskList = this.Owner['TaskList'];
-        }
-        moduleOnEnable(): void {
-            this.lwgTapCreate();
-            this.lwgListCreate();
-        }
-        /**Tap初始化*/
-        lwgTapCreate(): void {
-            _Task._TaskList.selectHandler = new Laya.Handler(this, this.lwgTapSelect);
-        }
-        /**taskTap的触摸监听,重写覆盖*/
-        lwgTapSelect(index: number): void { }
-        /**初始化list*/
-        lwgListCreate(): void {
-            _Task._TaskList.selectEnable = true;
-            _Task._TaskList.vScrollBarSkin = "";
-            // this._ShopList.scrollBar.elasticBackTime = 0;//设置橡皮筋回弹时间。单位为毫秒。
-            // this._ShopList.scrollBar.elasticDistance = 500;//设置橡皮筋极限距离。
-            _Task._TaskList.selectHandler = new Laya.Handler(this, this.lwgListScelet);
-            _Task._TaskList.renderHandler = new Laya.Handler(this, this.lwgListUpdate);
-            if (_allClassifyArr[0]) {
-                _Task._TaskList.array = _allClassifyArr[0];
-                this.lwgAddItemComponent();
-            }
-        }
-        /**list选中监听,重写覆盖*/
-        lwgListScelet(index: number): void { }
-        /**list列表刷新,重写覆盖*/
-        lwgListUpdate(cell: Laya.Box, index: number): void { }
-        lwgAddItemComponent(): void {
-            for (let index = 0; index < _Task._TaskList.cells.length; index++) {
-                const element = _Task._TaskList.cells[index];
-                if (!element.getComponent(TaskItem)) {
-                    element.addComponent(TaskItem);
-                }
-            }
-        }
-    }
     /**可以手动挂在脚本中的类，全脚本唯一的默认导出，也可动态添加，动态添加写在模块内更方便*/
-    export  class Task extends _Task._TaskBase {
+    export  class Task extends Admin._SceneBase {
     }
-
     /**列表脚本*/
-    export class TaskItem extends Admin._Object {
+    export class TaskItem extends Admin._ObjectBase {
 
     }
 }

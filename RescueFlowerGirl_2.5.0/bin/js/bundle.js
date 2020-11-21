@@ -1130,10 +1130,13 @@
                 ;
                 lwgEventRegister() { }
                 ;
-                _EvReg(name, func) {
+                _evReg(name, func) {
                     EventAdmin._register(name, this, func);
                 }
-                _EvNotify(name, args) {
+                _evRegOne(name, func) {
+                    EventAdmin._registerOnce(name, this, func);
+                }
+                _evNotify(name, args) {
                     EventAdmin._notify(name, args);
                 }
                 lwgOnEnable() { }
@@ -1456,9 +1459,8 @@
         })(Admin = lwg.Admin || (lwg.Admin = {}));
         let DataAdmin;
         (function (DataAdmin) {
+            DataAdmin.variableObj = {};
             class _Store {
-                getVariables(name) {
-                }
             }
             DataAdmin._Store = _Store;
             class _Table {
@@ -5014,7 +5016,7 @@
     (function (_PreLoad) {
         class PreLoad extends _LwgPreLoad._PreLoadScene {
             lwgOnStart() {
-                EventAdmin._notify(_LwgPreLoad._Event.importList, (_Res._list));
+                EventAdmin._notify(_LwgPreLoad._Event.importList, [_Res._list]);
             }
             lwgOpenAni() { return 1; }
             lwgStepComplete() {
@@ -5033,34 +5035,43 @@
         _Data._property = {
             name: 'name',
             index: 'index',
+            color: 'color',
         };
         _Data._arr = [
             {
                 index: 1,
                 name: 'blue',
+                color: 'blue',
             },
             {
                 index: 2,
                 name: 'red',
+                color: 'red',
             },
             {
                 index: 3,
                 name: 'yellow',
+                color: 'yellow',
             }, {
                 index: 4,
                 name: 'red',
+                color: 'red',
             }, {
                 index: 5,
                 name: 'yellow',
+                color: 'yellow',
             }, {
                 index: 6,
                 name: 'red',
+                color: 'red',
             }, {
                 index: 7,
                 name: 'blue',
+                color: 'blue',
             }, {
                 index: 8,
                 name: 'yellow',
+                color: 'yellow',
             },
         ];
         _Game._Data = _Data;
@@ -5092,6 +5103,8 @@
             _Event["calculateBlood"] = "_Game_calculateBlood";
             _Event["destroyEnemy"] = "_Game_destroyEnemy";
             _Event["closeScene"] = "_Game_closeScene";
+            _Event["aimAddColor"] = "_Game_aimAddColor";
+            _Event["aimSubColor"] = "_Game_aimSubColor";
         })(_Event = _Game._Event || (_Game._Event = {}));
         let _WeaponSateType;
         (function (_WeaponSateType) {
@@ -5111,7 +5124,7 @@
         class _EnemyBullet extends Admin._ObjectBase {
             constructor() {
                 super(...arguments);
-                this.speed = 5;
+                this.speed = 1;
             }
             lwgOnStart() {
                 let GPoint = this._SceneImg('HeroContent').localToGlobal(new Laya.Point(this._SceneImg('Hero').x, this._SceneImg('Hero').y));
@@ -5128,7 +5141,7 @@
                 TimerAdmin._frameLoop(1, this, () => {
                     Tools._Node.checkTwoDistance(this._Owner, this._SceneImg('Hero'), 50, () => {
                         this._Owner.removeSelf();
-                        EventAdmin._notify(_Event.calculateBlood, (1));
+                        this._evNotify(_Event.calculateBlood, [1]);
                     });
                 });
             }
@@ -5142,7 +5155,7 @@
             }
             lwgOnStart() {
                 this.state = _EnemySate.activity;
-                TimerAdmin._frameRandomLoop(60, 100, this, () => {
+                TimerAdmin._frameRandomLoop(100, 1000, this, () => {
                     if (this.state == _EnemySate.activity) {
                         let bullet = Tools._Node.createPrefab(_Res._list.prefab2D.EnemyBullet.prefab);
                         bullet.addComponent(_EnemyBullet);
@@ -5163,7 +5176,6 @@
         class _Weapon extends Admin._ObjectBase {
             constructor() {
                 super(...arguments);
-                this.distance = 0;
                 this.baseSpeed = 60;
                 this.accelerated = 1;
             }
@@ -5186,19 +5198,20 @@
             }
             lwgOnAwake() {
                 this.distance = this._Parent.width / 2;
-            }
-            lwgOnStart() {
+                this.rotateRadius = this._Parent.width / 2;
             }
             lwgEventRegister() {
                 var getAim = () => {
-                    let Fulcrum = _Game._fireControl.Aim.getChildAt(0);
+                    let Fulcrum = this._SceneImg('Fulcrum');
                     let point = _Game._fireControl.Aim.localToGlobal(new Laya.Point(Fulcrum.x, Fulcrum.y));
                     let g_OwnerXY = this._Parent.localToGlobal(new Laya.Point(this._Owner.x, this._Owner.y));
-                    if (point.distance(g_OwnerXY.x, g_OwnerXY.y) < 30) {
+                    if (point.distance(g_OwnerXY.x, g_OwnerXY.y) < 50) {
                         this._Owner.scale(1.2, 1.2);
+                        this._evNotify(_Event.aimAddColor, [this._Owner]);
                     }
                     else {
                         this._Owner.scale(1, 1);
+                        this._evNotify(_Event.aimSubColor, [this._Owner]);
                     }
                 };
                 var move = (rSpeed, radius) => {
@@ -5206,19 +5219,19 @@
                     this._Owner.x = point.x;
                     this._Owner.y = point.y;
                 };
-                EventAdmin._register(_Event.WeaponSate, this, (type) => {
+                this._evReg(_Event.WeaponSate, (type) => {
                     if (this.state == _WeaponSateType.launch || this.state == _WeaponSateType.free) {
                         return;
                     }
                     Laya.timer.clearAll(this);
                     if (type == _WeaponSateType.rotate) {
                         TimerAdmin._frameLoop(1, this, () => {
-                            move(_Game._fireControl.moveRotateSpeed > 0 ? 0.1 : -0.1, this._Parent.width / 2 - 50);
+                            move(_Game._fireControl.moveRotateSpeed > 0 ? 0.1 : -0.1, this.rotateRadius);
                             getAim();
                         });
                     }
                     else if (type == _WeaponSateType.mouseMove) {
-                        move(_Game._fireControl.moveRotateSpeed, this._Parent.width / 2 - 50);
+                        move(_Game._fireControl.moveRotateSpeed, this.rotateRadius);
                         getAim();
                     }
                     else if (type == _WeaponSateType.launch) {
@@ -5234,8 +5247,8 @@
                                     if (point.distance(g_OwnerXY.x, g_OwnerXY.y) < 50) {
                                         this.state = _WeaponSateType.free;
                                         Laya.timer.clearAll(this);
-                                        if (this._Owner.name == element.name.substr(5)) {
-                                            EventAdmin._notify(_Event.destroyEnemy, (1));
+                                        if (this._Owner['_data']['color'] == element.name.substr(5)) {
+                                            this._evNotify(_Event.destroyEnemy, [1]);
                                             element.removeSelf();
                                             this._Owner.removeSelf();
                                         }
@@ -5255,7 +5268,7 @@
                         }
                         else {
                             TimerAdmin._frameLoop(1, this, () => {
-                                move(_Game._fireControl.moveRotateSpeed > 0 ? 0.1 : -0.1, this._Parent.width / 2 - 50);
+                                move(_Game._fireControl.moveRotateSpeed > 0 ? 0.1 : -0.1, this.rotateRadius);
                                 getAim();
                             });
                         }
@@ -5275,43 +5288,17 @@
                 for (let index = 0; index < _Data._arr.length; index++) {
                     let Weapon = Tools._Node.createPrefab(_Res._list.prefab2D.Weapon.prefab);
                     this._ImgVar('WeaponParent').addChild(Weapon);
-                    let point = Tools._Point.getRoundPos(index / _Data._arr.length * 360, this._ImgVar('WeaponParent').width / 2 - 50, new Laya.Point(this._ImgVar('WeaponParent').width / 2, this._ImgVar('WeaponParent').height / 2));
+                    let Pic = Weapon.getChildByName('Pic');
+                    let point = Tools._Point.getRoundPos(index / _Data._arr.length * 360, 500, new Laya.Point(this._ImgVar('WeaponParent').width / 2, this._ImgVar('WeaponParent').height / 2));
                     Weapon.x = point.x;
                     Weapon.y = point.y;
                     Weapon.rotation = index / _Data._arr.length * 360;
-                    Weapon.skin = `Game/UI/Game/Hero/Hero_01_weapon_${_Data._arr[index]['name']}.png`;
+                    Pic.skin = `Game/UI/Game/Hero/Hero_01_weapon_${_Data._arr[index]['name']}.png`;
                     Weapon.addComponent(_Weapon);
-                    Weapon.name = _Data._arr[index][_Data._property.name];
+                    Weapon.name = _Data._arr[index][_Data._property.color] + index;
+                    Weapon['_data'] = _Data._arr[index];
                 }
-                EventAdmin._notify(_Event.WeaponSate, [_WeaponSateType.rotate]);
-            }
-            lwgEventRegister() {
-                let bloodNum = 20;
-                let _width = 100;
-                EventAdmin._register(_Event.calculateBlood, this, (number) => {
-                    let Blood = this._ImgVar('Blood').getChildAt(0);
-                    Blood.width = Blood.width - _width / 20;
-                    bloodNum -= number;
-                    if (!this['bloodNumSwitch']) {
-                        if (bloodNum <= 0) {
-                            this['bloodNumSwitch'] = true;
-                            this._openScene(_SceneName.Defeated, false);
-                        }
-                    }
-                });
-                let enemyNum = this._ImgVar('EnemyParent').numChildren;
-                EventAdmin._register(_Event.destroyEnemy, this, () => {
-                    enemyNum -= 1;
-                    if (!this['EnemyNumSwitch']) {
-                        if (enemyNum <= 0) {
-                            this['EnemyNumSwitch'] = true;
-                            this._openScene(_SceneName.Victory, false);
-                        }
-                    }
-                });
-                EventAdmin._register(_Event.closeScene, this, () => {
-                    this._closeScene();
-                });
+                this._evNotify(_Event.WeaponSate, [_WeaponSateType.rotate]);
             }
             lwgOnStart() {
                 TimerAdmin._frameLoop(1, this, () => {
@@ -5324,6 +5311,46 @@
                     Tools._Node.changePivot(element, element.width / 2, element.height / 2);
                     element.addComponent(_Enemy);
                 }
+            }
+            lwgEventRegister() {
+                this._evReg(_Event.aimAddColor, (Weapon) => {
+                    if (this._ImgVar('Bow')['launch'] !== Weapon) {
+                        this._ImgVar('Bow')['launch'] = Weapon;
+                        this._ImgVar('Bow').skin = `Game/UI/Game/Hero/Hero_01_bow_${Weapon['_data'][_Data._property.color]}.png`;
+                    }
+                });
+                this._evReg(_Event.aimSubColor, (Weapon) => {
+                    if (this._ImgVar('Bow')['launch'] == Weapon) {
+                        this._ImgVar('Bow').skin = `Game/UI/Game/Hero/Hero_01_bow_normalc.png`;
+                        this._ImgVar('Bow')['launch'] = null;
+                    }
+                });
+                let bloodNum = 20;
+                let _width = 100;
+                this._evReg(_Event.calculateBlood, (number) => {
+                    let Blood = this._ImgVar('Blood').getChildAt(0);
+                    Blood.width = Blood.width - _width / 20;
+                    bloodNum -= number;
+                    if (!this['bloodNumSwitch']) {
+                        if (bloodNum <= 0) {
+                            this['bloodNumSwitch'] = true;
+                            this._openScene(_SceneName.Defeated, false);
+                        }
+                    }
+                });
+                let enemyNum = this._ImgVar('EnemyParent').numChildren;
+                this._evReg(_Event.destroyEnemy, () => {
+                    enemyNum -= 1;
+                    if (!this['EnemyNumSwitch']) {
+                        if (enemyNum <= 0) {
+                            this['EnemyNumSwitch'] = true;
+                            this._openScene(_SceneName.Victory, false);
+                        }
+                    }
+                });
+                this._evReg(_Event.closeScene, () => {
+                    this._closeScene();
+                });
             }
             lwgBtnRegister() {
                 this._ImgVar('AimOperation').height = this._ImgVar('WeaponOperation').height = Laya.stage.height;
@@ -5339,12 +5366,12 @@
                             _Game._fireControl.moveRotateSpeed = 2;
                         }
                         _Game._fireControl.moveDownY = e.stageY;
-                        EventAdmin._notify(_Event.WeaponSate, [_WeaponSateType.mouseMove]);
+                        this._evNotify(_Event.WeaponSate, [_WeaponSateType.mouseMove]);
                     }
                 }, (e) => {
                     _Game._fireControl.rotateSwitch = true;
                     _Game._fireControl.moveDownY = 0;
-                    EventAdmin._notify(_Event.WeaponSate, [_WeaponSateType.launch]);
+                    this._evNotify(_Event.WeaponSate, [_WeaponSateType.launch]);
                 }, (e) => {
                     _Game._fireControl.rotateSwitch = true;
                     _Game._fireControl.moveDownY = 0;
@@ -5482,7 +5509,7 @@
                         time++;
                         this._LabelVar('Schedule').text = `${time}`;
                     }, () => {
-                        EventAdmin._notify(_LwgPreLoad._Event.importList, ({}));
+                        EventAdmin._notify(_LwgPreLoad._Event.importList, [{}]);
                     });
                 });
             }

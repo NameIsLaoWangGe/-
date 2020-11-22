@@ -13,26 +13,26 @@ export module _Game {
         static _arr = [
             {
                 index: 1,
-                name: 'blue',
-                color: 'blue',
+                name: 'yellow',
+                color: 'yellow',
             },
             {
                 index: 2,
-                name: 'red',
-                color: 'red',
+                name: 'yellow',
+                color: 'yellow',
             },
             {
                 index: 3,
-                name: 'yellow',
-                color: 'yellow',
+                name: 'blue',
+                color: 'blue',
             }, {
                 index: 4,
-                name: 'red',
-                color: 'red',
+                name: 'blue',
+                color: 'blue',
             }, {
                 index: 5,
-                name: 'yellow',
-                color: 'yellow',
+                name: 'red',
+                color: 'red',
             }, {
                 index: 6,
                 name: 'red',
@@ -43,6 +43,26 @@ export module _Game {
                 color: 'blue',
             }, {
                 index: 8,
+                name: 'blue',
+                color: 'blue',
+            },
+            {
+                index: 9,
+                name: 'blue',
+                color: 'blue',
+            },
+            {
+                index: 10,
+                name: 'blue',
+                color: 'blue',
+            },
+            {
+                index: 11,
+                name: 'red',
+                color: 'red',
+            },
+            {
+                index: 12,
                 name: 'yellow',
                 color: 'yellow',
             },
@@ -72,7 +92,7 @@ export module _Game {
         WeaponSate = '_Game_WeaponSate',
         EnemyMove = '_Game_EnemyMove',
         calculateBlood = '_Game_calculateBlood',
-        destroyEnemy = '_Game_destroyEnemy',
+        skillEnemy = '_Game_skillEnemy',
         closeScene = '_Game_closeScene',
         aimAddColor = '_Game_aimAddColor',
         aimSubColor = '_Game_aimSubColor',
@@ -82,6 +102,8 @@ export module _Game {
         mouseMove = '_WeaponSateType_mouseMove',
         launch = '_WeaponSateType_launch',
         free = '_WeaponSateType_free',
+        // 障碍物等作废状态，此时无害
+        Invalid = '_WeaponSateType_Invalid ',
     }
     export enum _EnemySate {
         activity = '_EnemySate_activity',
@@ -89,8 +111,19 @@ export module _Game {
     }
     export function _init(): void {
     }
+    export class _Shell extends Admin._ObjectBase {
+        lwgOnStart(): void {
+            TimerAdmin._frameLoop(1, this, () => {
+                // let point = Tools._Point.getRoundPos(this._Owner.rotation += rotate, this._SceneImg('MobileFrame').width / 2 + this._Owner.height / 2, new Laya.Point(this._SceneImg('LandContent').width / 2, this._SceneImg('LandContent').height / 2))
+                // this._Owner.x = point.x;
+                // this._Owner.y = point.y;
+            })
+        }
+    }
+    export class _Stone extends _Shell {
+    }
     export class _EnemyBullet extends Admin._ObjectBase {
-        speed = 1;
+        speed = 2;
         lwgOnStart(): void {
             let GPoint = this._SceneImg('HeroContent').localToGlobal(new Laya.Point(this._SceneImg('Hero').x, this._SceneImg('Hero').y));
             let p = new Laya.Point(this._Owner.x - GPoint.x, this._Owner.y - GPoint.y);
@@ -161,8 +194,8 @@ export module _Game {
             var getAim = () => {
                 let Fulcrum = this._SceneImg('Fulcrum') as Laya.Image;
                 let point = _fireControl.Aim.localToGlobal(new Laya.Point(Fulcrum.x, Fulcrum.y));
-                let g_OwnerXY = this._Parent.localToGlobal(new Laya.Point(this._Owner.x, this._Owner.y));
-                if (point.distance(g_OwnerXY.x, g_OwnerXY.y) < 50) {
+                let gPOwner = this._Parent.localToGlobal(new Laya.Point(this._Owner.x, this._Owner.y));
+                if (point.distance(gPOwner.x, gPOwner.y) < 50) {
                     this._Owner.scale(1.2, 1.2);
                     this._evNotify(_Event.aimAddColor, [this._Owner]);
                 } else {
@@ -174,6 +207,21 @@ export module _Game {
                 let point = Tools._Point.getRoundPos(rSpeed ? this._Owner.rotation += rSpeed : this._Owner.rotation, radius, new Laya.Point(this._Parent.width / 2, this._Parent.height / 2))
                 this._Owner.x = point.x;
                 this._Owner.y = point.y;
+            }
+            var drop = () => {
+                Laya.timer.clearAll(this);
+                TimerAdmin._frameLoop(1, this, () => {
+                    this._Owner.y += 40;
+                    this._Owner.rotation += 10;
+                    Tools._Node.leaveStage(this._Owner, () => {
+                        this._Owner.removeSelf();
+                    });
+                })
+            }
+            var skill = (Enemy: Laya.Image) => {
+                this._evNotify(_Event.skillEnemy, [1]);
+                Enemy.removeSelf();
+                this._Owner.removeSelf();
             }
             this._evReg(_Event.WeaponSate, (type: string) => {
                 if (this.state == _WeaponSateType.launch || this.state == _WeaponSateType.free) {
@@ -194,25 +242,39 @@ export module _Game {
                         TimerAdmin._frameLoop(1, this, () => {
                             this.state = _WeaponSateType.launch;
                             move(null, this.speed());
+                            let gPOwner = this._Parent.localToGlobal(new Laya.Point(this._Owner.x, this._Owner.y));
+                            // 先判断有没有石头，然后再for循环，减少内存开销
+                            if (this._SceneImg('FrontScenery').getChildByName('Stone')) {
+                                for (let index = 0; index < this._SceneImg('FrontScenery').numChildren; index++) {
+                                    const element = this._SceneImg('FrontScenery').getChildAt(index) as Laya.Image;
+                                    if (element.name == 'Stone') {
+                                        let gPStone = this._SceneImg('FrontScenery').localToGlobal(new Laya.Point(element.x, element.y))
+                                        if (gPStone.distance(gPOwner.x, gPOwner.y) < 50) {
+                                            drop();
+                                            return;
+                                        }
+                                    }
+                                }
+                            }
                             for (let index = 0; index < _fireControl.EnemyParent.numChildren; index++) {
-                                const element = _fireControl.EnemyParent.getChildAt(index) as Laya.Image;
-                                let point = _fireControl.EnemyParent.localToGlobal(new Laya.Point(element.x, element.y));
-                                let g_OwnerXY = this._Parent.localToGlobal(new Laya.Point(this._Owner.x, this._Owner.y));
-                                if (point.distance(g_OwnerXY.x, g_OwnerXY.y) < 50) {
-                                    this.state = _WeaponSateType.free;
-                                    Laya.timer.clearAll(this);
-                                    if (this._Owner['_data']['color'] == element.name.substr(5)) {
-                                        this._evNotify(_Event.destroyEnemy, [1]);
-                                        element.removeSelf();
-                                        this._Owner.removeSelf();
-                                    } else {
-                                        TimerAdmin._frameLoop(1, this, () => {
-                                            this._Owner.y += 40;
-                                            this._Owner.rotation += 10;
-                                            if (this._Owner.y > Laya.stage.height) {
-                                                this._Owner.removeSelf();
+                                const Enemy = _fireControl.EnemyParent.getChildAt(index) as Laya.Image;
+                                let gPEnemy = this._SceneImg('EnemyParent').localToGlobal(new Laya.Point(Enemy.x, Enemy.y));
+                                if (gPEnemy.distance(gPOwner.x, gPOwner.y) < 50) {
+                                    if (this._Owner['_data']['color'] == Enemy.name.substr(5)) {
+                                        // 判断有没有头盔,有可能当前帧位置恰好在头盔和敌人之间，那么需要判断，只要头盔位置大于一个高度或者一个角度，则射击有效，反之，则无效
+                                        let Shell = Enemy.getChildByName('Shell') as Laya.Image;
+                                        if (Shell) {
+                                            let gPShell = Enemy.localToGlobal(new Laya.Point(Shell.x, Shell.y));
+                                            if (gPShell.distance(gPOwner.x, gPOwner.y) < 30 || gPShell.y > gPEnemy.y) {
+                                                drop();
+                                            } else {
+                                                skill(Enemy);
                                             }
-                                        })
+                                        } else {
+                                            skill(Enemy);
+                                        }
+                                    } else {
+                                        drop();
                                     }
                                     return;
                                 }
@@ -257,6 +319,7 @@ export module _Game {
                 Tools._Node.changePivot(element, element.width / 2, element.height / 2);
                 element.addComponent(_Enemy);
             }
+
         }
 
         lwgEventRegister(): void {
@@ -288,7 +351,7 @@ export module _Game {
             });
 
             let enemyNum = this._ImgVar('EnemyParent').numChildren;
-            this._evReg(_Event.destroyEnemy, () => {
+            this._evReg(_Event.skillEnemy, () => {
                 enemyNum -= 1;
                 if (!this['EnemyNumSwitch']) {
                     if (enemyNum <= 0) {
@@ -367,18 +430,22 @@ export module _Game {
                 () => {
                     this['HeroMove'] = true;
                 },
-                null,
+                (e: Laya.Event) => {
+                    if (this['HeroMove']) {
+                        this._ImgVar('HeroContent').x = e.stageX;
+                        this._ImgVar('HeroContent').y = e.stageY;
+                        this._ImgVar('AimOperation').width = this._ImgVar('HeroContent').x;
+                        this._ImgVar('WeaponOperation').width = Laya.stage.width - this._ImgVar('HeroContent').x;
+                        this._ImgVar('WeaponOperation').x = this._ImgVar('HeroContent').x;
+                    }
+                },
                 () => {
                     this['HeroMove'] = false;
                 },
-                null,
+                () => {
+                    this['HeroMove'] = false;
+                },
             )
-        }
-        lwgOnStageMove(e: Laya.Event): void {
-            if (this['HeroMove']) {
-                this._ImgVar('HeroContent').x = e.stageX;
-                this._ImgVar('HeroContent').y = e.stageY;
-            }
         }
 
     }

@@ -271,13 +271,13 @@ P CB64019F enemy_01_yellow.png
 P BC084FE5 shell.png
 D Game/UI/Game/Hero
 P 1A862E8E Hero_01.png
-P 10088DB6 Hero_01_bow_blue.png
-P 59116F8C Hero_01_bow_normalc.png
-P B619F291 Hero_01_bow_red.png
-P 1204CC09 Hero_01_bow_yellow.png
-P DA1F0D39 Hero_01_weapon_blue.png
-P BA6B5FC1 Hero_01_weapon_red.png
-P 6AAD91FA Hero_01_weapon_yellow.png
+P 966ABEE0 Hero_01_bow_blue.png
+P FDAD67A1 Hero_01_bow_normalc.png
+P EF054BF2 Hero_01_bow_red.png
+P BAE88F48 Hero_01_bow_yellow.png
+P 7B3B66DC Hero_01_weapon_blue.png
+P 3ABED63E Hero_01_weapon_red.png
+P 4D028ADF Hero_01_weapon_yellow.png
 D Game/UI/Game/Heroine
 P 01D78A36 heroine_01.png
 D Game/UI/Game/SceneStyle_01

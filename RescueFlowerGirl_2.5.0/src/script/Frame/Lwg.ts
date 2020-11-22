@@ -1,33 +1,33 @@
 /**综合模板*/
 export module lwg {
-    /**暂停模块，控制游戏的暂停和开启*/
-    export module Pause {
-        /**指代当前暂停游戏节点*/
-        export let BtnPauseNode: Laya.Sprite;
-        /**
-         * 创建通用剩余体力数量prefab
-         * @param parent 父节点
-         */
-        export function _createBtnPause(parent: Laya.Sprite): void {
-            let sp: Laya.Sprite;
-            Laya.loader.load('prefab/BtnPause.json', Laya.Handler.create(this, function (prefab: Laya.Prefab) {
-                let _prefab = new Laya.Prefab();
-                _prefab.json = prefab;
-                sp = Laya.Pool.getItemByCreateFun('prefab', _prefab.create, _prefab);
-                parent.addChild(sp);
-                sp.pos(645, 167);
-                sp.zOrder = 0;
-                BtnPauseNode = sp;
-                BtnPauseNode.name = 'BtnPauseNode';
-                Click._on(Click._Type.largen, sp, null, null, btnPauseUp, null);
-            }));
-        }
-        export function btnPauseUp(event) {
-            event.stopPropagation();
-            event.currentTarget.scale(1, 1);
-            lwg.Admin._openScene('UIPause', null, null, null);
-        }
-    }
+    // /**暂停模块，控制游戏的暂停和开启*/
+    // export module Pause {
+    //     /**指代当前暂停游戏节点*/
+    //     export let BtnPauseNode: Laya.Sprite;
+    //     /**
+    //      * 创建通用剩余体力数量prefab
+    //      * @param parent 父节点
+    //      */
+    //     export function _createBtnPause(parent: Laya.Sprite): void {
+    //         let sp: Laya.Sprite;
+    //         Laya.loader.load('prefab/BtnPause.json', Laya.Handler.create(this, function (prefab: Laya.Prefab) {
+    //             let _prefab = new Laya.Prefab();
+    //             _prefab.json = prefab;
+    //             sp = Laya.Pool.getItemByCreateFun('prefab', _prefab.create, _prefab);
+    //             parent.addChild(sp);
+    //             sp.pos(645, 167);
+    //             sp.zOrder = 0;
+    //             BtnPauseNode = sp;
+    //             BtnPauseNode.name = 'BtnPauseNode';
+    //             Click._on(Click._Type.largen, sp, null, null, btnPauseUp, null);
+    //         }));
+    //     }
+    //     export function btnPauseUp(event) {
+    //         event.stopPropagation();
+    //         event.currentTarget.scale(1, 1);
+    //         lwg.Admin._openScene('UIPause', null, null, null);
+    //     }
+    // }
     /**提示模块*/
     export module Dialogue {
         enum Skin {
@@ -1416,6 +1416,18 @@ export module lwg {
          * 脚本通用类
          * */
         class _ScriptBase extends Laya.Script {
+            _storeNum(name: string, initial?: number): StorageAdmin._NumVariable {
+                return StorageAdmin._mum(`${this.owner.name}/${name}`, initial);
+            }
+            _storeStr(name: string, initial?: string): StorageAdmin._StrVariable {
+                return StorageAdmin._str(`${this.owner.name}/${name}`, initial);
+            }
+            _storeBool(name: string, initial?: boolean): StorageAdmin._BoolVariable {
+                return StorageAdmin._bool(`${this.owner.name}/${name}`, initial);
+            }
+            _storeArray(name: string, initial?: Array<any>): StorageAdmin._ArrayVariable {
+                return StorageAdmin._array(`${this.owner.name}/${name}`, initial);
+            }
             /**游戏开始前执行一次，重写覆盖*/
             lwgOnAwake(): void { };
             /**适配位置*/
@@ -1489,10 +1501,10 @@ export module lwg {
               * 通用事件注册,可以用(e)=>{}简写传递的函数参数
               * @param effect 效果类型输入null则没有效果
               * @param target 节点
-              * @param down 按下
-              * @param move 移动
-              * @param up 抬起
-              * @param out 按下
+              * @param down 按下回调
+              * @param move 移动回调
+              * @param up 抬起回调
+              * @param out 移出回调
               * 以上4个只是函数名，不可传递函数，如果没有特殊执行，那么就用此模块定义的4个函数，包括通用效果。
              */
             _btnFour(target: Laya.Node, down?: Function, move?: Function, up?: Function, out?: Function, effect?: string): void {
@@ -1511,7 +1523,7 @@ export module lwg {
               * @param func 完成回调，默认为null
               * @param zOrder 指定层级
              */
-            _openScene(openName: string, closeSelf?: boolean, preLoadCutIn?: boolean, func?: Function, zOrder?: number): void {
+            _openScene(openName: string, closeSelf?: boolean, func?: Function, preLoadCutIn?: boolean, zOrder?: number): void {
                 let closeName: string;
                 if (closeSelf == undefined || closeSelf == true) {
                     closeName = this.ownerSceneName;
@@ -1549,7 +1561,6 @@ export module lwg {
             constructor() {
                 super();
             }
-
             /**挂载当前脚本的节点*/
             get _Owner(): Laya.Scene {
                 return this.owner as Laya.Scene;
@@ -1814,68 +1825,128 @@ export module lwg {
         }
     }
 
+    export module StorageAdmin {
+        export class _NumVariable {
+            get value(): number { return };
+            set value(val: number) { this['_numVariable'] = val }
+        }
+        export class _StrVariable {
+            get value(): string { return }
+            set value(val: string) { this['_strVariable'] = val }
+        }
+        export class _BoolVariable {
+            get value(): boolean { return }
+            set value(val: boolean) { this['_boolVariable'] = val }
+        }
+        export class _ArrayVariable {
+            get value(): Array<any> { return }
+            set value(val: Array<any>) { this['_arrayVariable'] = val }
+        }
+        /**
+        * @param name 名称
+        * @param initial 初始值，如果有值了则无效,默认为0
+        * */
+        export function _mum(name: string, initial?: number): _NumVariable {
+            let _variable = new _NumVariable();
+            _variable = this[`_mum${name}`] = {
+                get value(): any {
+                    if (Laya.LocalStorage.getItem(name)) {
+                        return Laya.LocalStorage.getItem(name);
+                    } else {
+                        initial = initial ? initial : 0;
+                        Laya.LocalStorage.setItem(name, initial.toString());
+                        return initial;
+                    }
+                },
+                set value(data: any) {
+                    Laya.LocalStorage.setItem(name, data.toString());
+                }
+            }
+            return _variable;
+        }
+
+        /**
+         * @param name 名称
+         * @param initial 初始值，如果有值了则无效，默认为null
+         * */
+        export function _str(name: string, initial?: string): _StrVariable {
+            let _variable = new _StrVariable();
+            _variable = this[`_str${name}`] = {
+                get value(): string {
+                    if (Laya.LocalStorage.getItem(name)) {
+                        return Laya.LocalStorage.getItem(name);
+                    } else {
+                        initial = initial ? initial : null;
+                        Laya.LocalStorage.setItem(name, initial.toString());
+                        return initial;
+                    }
+                },
+                set value(data: string) {
+                    Laya.LocalStorage.setItem(name, data.toString());
+                }
+            }
+            return _variable;
+        }
+        /**
+         * @param name 名称
+         * @param initial 初始值，如果有值了则无效，默认为false
+         * */
+        export function _bool(name: string, initial?: boolean): _BoolVariable {
+            let _variable = new _BoolVariable();
+            _variable = this[`_bool${name}`] = {
+                get value(): any {
+                    if (Laya.LocalStorage.getItem(name)) {
+                        if (Laya.LocalStorage.getItem(name) == "false") {
+                            return false;
+                        } else if (Laya.LocalStorage.getItem(name) == "true") {
+                            return true;
+                        }
+                    } else {
+                        if (initial) {
+                            Laya.LocalStorage.setItem(name, "true");
+                        } else {
+                            Laya.LocalStorage.setItem(name, "false");
+                        }
+                        return initial;
+                    }
+                },
+                set value(bool: any) {
+                    bool = bool ? "true" : "false";
+                    Laya.LocalStorage.setItem(name, bool.toString());
+                }
+            }
+            return _variable;
+        }
+        /**
+        * @param name 名称
+        * @param initial 初始值，如果有值了则无效，默认为[]
+        * */
+        export function _array(name: string, initial?: Array<any>): _ArrayVariable {
+            let _variable = new _ArrayVariable();
+            _variable = this[`_array${name}`] = {
+                get value(): Array<any> {
+                    try {
+                        let data = Laya.LocalStorage.getJSON(name)
+                        if (data) {
+                            return JSON.parse(data);;
+                        } else {
+                            initial = initial ? initial : [];
+                            Laya.LocalStorage.setItem(name, initial.toString());
+                            return initial;
+                        }
+                    } catch (error) {
+                        return [];
+                    }
+                },
+                set value(array: Array<any>) {
+                    Laya.LocalStorage.setJSON(name, JSON.stringify(array));
+                },
+            }
+            return _variable;
+        }
+    }
     /**数据管理*/
     export module DataAdmin {
-        // export let _Store1 = {
-        //     /**本地存储变量格式*/
-        //     get value(): string {
-        //         return Laya.LocalStorage.getItem('name') ? Number(Laya.LocalStorage.getItem('name')) : null;
-        //     };
-        //     set value(date: string) {
-        //         Laya.LocalStorage.setItem('name', date.toString());
-        //     }
-        // }
-
-        export let variableObj = {
-
-        }
-        export class _Store {
-            // val;
-            // get value(): any {
-            //     if (!this[name]) {
-            //         this[name] = {
-            //             get val(): any {
-            //                 return Laya.LocalStorage.getItem(name) ? Laya.LocalStorage.getItem(name) : null;
-            //             },
-            //             set val(data:any) {
-            //                 Laya.LocalStorage.setItem(name, data.toString());
-            //             }
-            //         }
-            //         return this[name];
-            //     } else {
-            //         return this[name];
-            //     }
-            // };
-            // set value(data:any) {
-            //     Laya.LocalStorage.setItem(name, data.toString());
-            // }
-
-            // value(name: string): any {
-            //     if (!this[name]) {
-            //         this[name] = {
-            //             get val(): any {
-            //                 return Laya.LocalStorage.getItem(name) ? Laya.LocalStorage.getItem(name) : null;
-            //             },
-            //             set val(data:any) {
-            //                 Laya.LocalStorage.setItem(name, data.toString());
-            //             }
-            //         }
-            //         return this[name];
-            //     } else {
-            //         return this[name];
-            //     }
-            // }
-            // /**本地存储变量格式*/
-            // variable = {
-            //     get value(): number | any {
-            //         return Laya.LocalStorage.getItem('_Example_variable') ? Number(Laya.LocalStorage.getItem('_Example_variable')) : null;
-            //     },
-            //     set value(date: number | any) {
-            //         Laya.LocalStorage.setItem('_Example_variable', date.toString());
-            //     }
-            // }
-
-        }
         /**new出一个通用数据表管理对象，如果不通用，则可以继承使用*/
         export class _Table {
             /**一些通用的属性名称*/
@@ -5960,7 +6031,6 @@ export module lwg {
         }
     }
 
-
     export module LwgPreLoad {
         /**3D场景的加载，其他3D物体，贴图，Mesh详见：  https://ldc2.layabox.com/doc/?nav=zh-ts-4-3-1   */
         let _scene3D: Array<string> = [];
@@ -6163,7 +6233,7 @@ export module lwg {
                                 }
                             }
                             Audio._playMusic();
-                            this._openScene(_SceneName.Guide, true, false, () => {
+                            this._openScene(_SceneName.Guide, true, () => {
                                 _loadType = Admin._SceneName.PreLoadCutIn;
                             })
                         }
@@ -6478,7 +6548,7 @@ export module lwg {
          * 创建通用剩余体力数量prefab
          * @param parent 父节点
          */
-        export function _createExecutionNode(parent): void {
+        export function _createExecutionNode(parent: Laya.Sprite): void {
             let sp: Laya.Sprite;
             Laya.loader.load('prefab/ExecutionNum.json', Laya.Handler.create(this, function (prefab: Laya.Prefab) {
                 let _prefab = new Laya.Prefab();
@@ -6632,11 +6702,12 @@ export let _SceneName = Admin._SceneName;
 export let Platform = lwg.Platform;
 export let SceneAnimation = lwg.SceneAnimation;
 export let Adaptive = lwg.Adaptive;
+export let StorageAdmin = lwg.StorageAdmin;
 export let DataAdmin = lwg.DataAdmin;
 export let EventAdmin = lwg.EventAdmin;
 export let DateAdmin = lwg.DateAdmin;
 export let TimerAdmin = lwg.TimerAdmin;
-export let Pause = lwg.Pause;
+// export let Pause = lwg.Pause;
 export let Execution = lwg.Execution;
 export let Gold = lwg.Gold;
 export let Setting = lwg.Setting;

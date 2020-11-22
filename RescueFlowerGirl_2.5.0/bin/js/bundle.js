@@ -3,30 +3,6 @@
 
     var lwg;
     (function (lwg) {
-        let Pause;
-        (function (Pause) {
-            function _createBtnPause(parent) {
-                let sp;
-                Laya.loader.load('prefab/BtnPause.json', Laya.Handler.create(this, function (prefab) {
-                    let _prefab = new Laya.Prefab();
-                    _prefab.json = prefab;
-                    sp = Laya.Pool.getItemByCreateFun('prefab', _prefab.create, _prefab);
-                    parent.addChild(sp);
-                    sp.pos(645, 167);
-                    sp.zOrder = 0;
-                    Pause.BtnPauseNode = sp;
-                    Pause.BtnPauseNode.name = 'BtnPauseNode';
-                    Click._on(Click._Type.largen, sp, null, null, btnPauseUp, null);
-                }));
-            }
-            Pause._createBtnPause = _createBtnPause;
-            function btnPauseUp(event) {
-                event.stopPropagation();
-                event.currentTarget.scale(1, 1);
-                lwg.Admin._openScene('UIPause', null, null, null);
-            }
-            Pause.btnPauseUp = btnPauseUp;
-        })(Pause = lwg.Pause || (lwg.Pause = {}));
         let Dialogue;
         (function (Dialogue) {
             let Skin;
@@ -1124,6 +1100,18 @@
                     super(...arguments);
                     this.ownerSceneName = '';
                 }
+                _storeNum(name, initial) {
+                    return StorageAdmin._mum(`${this.owner.name}/${name}`, initial);
+                }
+                _storeStr(name, initial) {
+                    return StorageAdmin._str(`${this.owner.name}/${name}`, initial);
+                }
+                _storeBool(name, initial) {
+                    return StorageAdmin._bool(`${this.owner.name}/${name}`, initial);
+                }
+                _storeArray(name, initial) {
+                    return StorageAdmin._array(`${this.owner.name}/${name}`, initial);
+                }
                 lwgOnAwake() { }
                 ;
                 lwgAdaptive() { }
@@ -1164,7 +1152,7 @@
                 _btnFour(target, down, move, up, out, effect) {
                     Click._on(effect == null ? effect : Click._Use.value, target, this, (e) => { Click._switch && down && down(e); }, (e) => { Click._switch && move && move(e); }, (e) => { Click._switch && up && up(e); }, (e) => { Click._switch && out && out(e); });
                 }
-                _openScene(openName, closeSelf, preLoadCutIn, func, zOrder) {
+                _openScene(openName, closeSelf, func, preLoadCutIn, zOrder) {
                     let closeName;
                     if (closeSelf == undefined || closeSelf == true) {
                         closeName = this.ownerSceneName;
@@ -1457,12 +1445,129 @@
             }
             Admin._ObjectBase = _ObjectBase;
         })(Admin = lwg.Admin || (lwg.Admin = {}));
+        let StorageAdmin;
+        (function (StorageAdmin) {
+            class _NumVariable {
+                get value() { return; }
+                ;
+                set value(val) { this['_numVariable'] = val; }
+            }
+            StorageAdmin._NumVariable = _NumVariable;
+            class _StrVariable {
+                get value() { return; }
+                set value(val) { this['_strVariable'] = val; }
+            }
+            StorageAdmin._StrVariable = _StrVariable;
+            class _BoolVariable {
+                get value() { return; }
+                set value(val) { this['_boolVariable'] = val; }
+            }
+            StorageAdmin._BoolVariable = _BoolVariable;
+            class _ArrayVariable {
+                get value() { return; }
+                set value(val) { this['_arrayVariable'] = val; }
+            }
+            StorageAdmin._ArrayVariable = _ArrayVariable;
+            function _mum(name, initial) {
+                let _variable = new _NumVariable();
+                _variable = this[`_mum${name}`] = {
+                    get value() {
+                        if (Laya.LocalStorage.getItem(name)) {
+                            return Laya.LocalStorage.getItem(name);
+                        }
+                        else {
+                            initial = initial ? initial : 0;
+                            Laya.LocalStorage.setItem(name, initial.toString());
+                            return initial;
+                        }
+                    },
+                    set value(data) {
+                        Laya.LocalStorage.setItem(name, data.toString());
+                    }
+                };
+                return _variable;
+            }
+            StorageAdmin._mum = _mum;
+            function _str(name, initial) {
+                let _variable = new _StrVariable();
+                _variable = this[`_str${name}`] = {
+                    get value() {
+                        if (Laya.LocalStorage.getItem(name)) {
+                            return Laya.LocalStorage.getItem(name);
+                        }
+                        else {
+                            initial = initial ? initial : null;
+                            Laya.LocalStorage.setItem(name, initial.toString());
+                            return initial;
+                        }
+                    },
+                    set value(data) {
+                        Laya.LocalStorage.setItem(name, data.toString());
+                    }
+                };
+                return _variable;
+            }
+            StorageAdmin._str = _str;
+            function _bool(name, initial) {
+                let _variable = new _BoolVariable();
+                _variable = this[`_bool${name}`] = {
+                    get value() {
+                        if (Laya.LocalStorage.getItem(name)) {
+                            if (Laya.LocalStorage.getItem(name) == "false") {
+                                return false;
+                            }
+                            else if (Laya.LocalStorage.getItem(name) == "true") {
+                                return true;
+                            }
+                        }
+                        else {
+                            if (initial) {
+                                Laya.LocalStorage.setItem(name, "true");
+                            }
+                            else {
+                                Laya.LocalStorage.setItem(name, "false");
+                            }
+                            return initial;
+                        }
+                    },
+                    set value(bool) {
+                        bool = bool ? "true" : "false";
+                        Laya.LocalStorage.setItem(name, bool.toString());
+                    }
+                };
+                return _variable;
+            }
+            StorageAdmin._bool = _bool;
+            function _array(name, initial) {
+                let _variable = new _ArrayVariable();
+                _variable = this[`_array${name}`] = {
+                    get value() {
+                        try {
+                            let data = Laya.LocalStorage.getJSON(name);
+                            if (data) {
+                                return JSON.parse(data);
+                                ;
+                            }
+                            else {
+                                initial = initial ? initial : [];
+                                Laya.LocalStorage.setItem(name, initial.toString());
+                                return initial;
+                            }
+                        }
+                        catch (error) {
+                            return [];
+                        }
+                    },
+                    set value(array) {
+                        Laya.LocalStorage.setJSON(name, JSON.stringify(array));
+                    },
+                };
+                return _variable;
+            }
+            StorageAdmin._array = _array;
+        })(StorageAdmin = lwg.StorageAdmin || (lwg.StorageAdmin = {}));
         let DataAdmin;
         (function (DataAdmin) {
-            DataAdmin.variableObj = {};
-            class _Store {
-            }
-            DataAdmin._Store = _Store;
             class _Table {
                 constructor(dataName, arrUrl, localStorage, proName) {
                     this._property = {
@@ -4527,7 +4632,7 @@
                                     }
                                 }
                                 Audio._playMusic();
-                                this._openScene(_SceneName.Guide, true, false, () => {
+                                this._openScene(_SceneName.Guide, true, () => {
                                     LwgPreLoad._loadType = Admin._SceneName.PreLoadCutIn;
                                 });
                             }
@@ -4963,11 +5068,11 @@
     let Platform = lwg.Platform;
     let SceneAnimation = lwg.SceneAnimation;
     let Adaptive = lwg.Adaptive;
+    let StorageAdmin = lwg.StorageAdmin;
     let DataAdmin = lwg.DataAdmin;
     let EventAdmin = lwg.EventAdmin;
     let DateAdmin = lwg.DateAdmin;
     let TimerAdmin = lwg.TimerAdmin;
-    let Pause = lwg.Pause;
     let Execution = lwg.Execution;
     let Gold = lwg.Gold;
     let Setting = lwg.Setting;
@@ -5040,26 +5145,26 @@
         _Data._arr = [
             {
                 index: 1,
-                name: 'blue',
-                color: 'blue',
+                name: 'yellow',
+                color: 'yellow',
             },
             {
                 index: 2,
-                name: 'red',
-                color: 'red',
+                name: 'yellow',
+                color: 'yellow',
             },
             {
                 index: 3,
-                name: 'yellow',
-                color: 'yellow',
+                name: 'blue',
+                color: 'blue',
             }, {
                 index: 4,
-                name: 'red',
-                color: 'red',
+                name: 'blue',
+                color: 'blue',
             }, {
                 index: 5,
-                name: 'yellow',
-                color: 'yellow',
+                name: 'red',
+                color: 'red',
             }, {
                 index: 6,
                 name: 'red',
@@ -5070,6 +5175,26 @@
                 color: 'blue',
             }, {
                 index: 8,
+                name: 'blue',
+                color: 'blue',
+            },
+            {
+                index: 9,
+                name: 'blue',
+                color: 'blue',
+            },
+            {
+                index: 10,
+                name: 'blue',
+                color: 'blue',
+            },
+            {
+                index: 11,
+                name: 'red',
+                color: 'red',
+            },
+            {
+                index: 12,
                 name: 'yellow',
                 color: 'yellow',
             },
@@ -5101,7 +5226,7 @@
             _Event["WeaponSate"] = "_Game_WeaponSate";
             _Event["EnemyMove"] = "_Game_EnemyMove";
             _Event["calculateBlood"] = "_Game_calculateBlood";
-            _Event["destroyEnemy"] = "_Game_destroyEnemy";
+            _Event["skillEnemy"] = "_Game_skillEnemy";
             _Event["closeScene"] = "_Game_closeScene";
             _Event["aimAddColor"] = "_Game_aimAddColor";
             _Event["aimSubColor"] = "_Game_aimSubColor";
@@ -5112,6 +5237,7 @@
             _WeaponSateType["mouseMove"] = "_WeaponSateType_mouseMove";
             _WeaponSateType["launch"] = "_WeaponSateType_launch";
             _WeaponSateType["free"] = "_WeaponSateType_free";
+            _WeaponSateType["Invalid"] = "_WeaponSateType_Invalid ";
         })(_WeaponSateType = _Game._WeaponSateType || (_Game._WeaponSateType = {}));
         let _EnemySate;
         (function (_EnemySate) {
@@ -5121,10 +5247,20 @@
         function _init() {
         }
         _Game._init = _init;
+        class _Shell extends Admin._ObjectBase {
+            lwgOnStart() {
+                TimerAdmin._frameLoop(1, this, () => {
+                });
+            }
+        }
+        _Game._Shell = _Shell;
+        class _Stone extends _Shell {
+        }
+        _Game._Stone = _Stone;
         class _EnemyBullet extends Admin._ObjectBase {
             constructor() {
                 super(...arguments);
-                this.speed = 1;
+                this.speed = 2;
             }
             lwgOnStart() {
                 let GPoint = this._SceneImg('HeroContent').localToGlobal(new Laya.Point(this._SceneImg('Hero').x, this._SceneImg('Hero').y));
@@ -5204,8 +5340,8 @@
                 var getAim = () => {
                     let Fulcrum = this._SceneImg('Fulcrum');
                     let point = _Game._fireControl.Aim.localToGlobal(new Laya.Point(Fulcrum.x, Fulcrum.y));
-                    let g_OwnerXY = this._Parent.localToGlobal(new Laya.Point(this._Owner.x, this._Owner.y));
-                    if (point.distance(g_OwnerXY.x, g_OwnerXY.y) < 50) {
+                    let gPOwner = this._Parent.localToGlobal(new Laya.Point(this._Owner.x, this._Owner.y));
+                    if (point.distance(gPOwner.x, gPOwner.y) < 50) {
                         this._Owner.scale(1.2, 1.2);
                         this._evNotify(_Event.aimAddColor, [this._Owner]);
                     }
@@ -5218,6 +5354,21 @@
                     let point = Tools._Point.getRoundPos(rSpeed ? this._Owner.rotation += rSpeed : this._Owner.rotation, radius, new Laya.Point(this._Parent.width / 2, this._Parent.height / 2));
                     this._Owner.x = point.x;
                     this._Owner.y = point.y;
+                };
+                var drop = () => {
+                    Laya.timer.clearAll(this);
+                    TimerAdmin._frameLoop(1, this, () => {
+                        this._Owner.y += 40;
+                        this._Owner.rotation += 10;
+                        Tools._Node.leaveStage(this._Owner, () => {
+                            this._Owner.removeSelf();
+                        });
+                    });
+                };
+                var skill = (Enemy) => {
+                    this._evNotify(_Event.skillEnemy, [1]);
+                    Enemy.removeSelf();
+                    this._Owner.removeSelf();
                 };
                 this._evReg(_Event.WeaponSate, (type) => {
                     if (this.state == _WeaponSateType.launch || this.state == _WeaponSateType.free) {
@@ -5240,26 +5391,40 @@
                             TimerAdmin._frameLoop(1, this, () => {
                                 this.state = _WeaponSateType.launch;
                                 move(null, this.speed());
+                                let gPOwner = this._Parent.localToGlobal(new Laya.Point(this._Owner.x, this._Owner.y));
+                                if (this._SceneImg('FrontScenery').getChildByName('Stone')) {
+                                    for (let index = 0; index < this._SceneImg('FrontScenery').numChildren; index++) {
+                                        const element = this._SceneImg('FrontScenery').getChildAt(index);
+                                        if (element.name == 'Stone') {
+                                            let gPStone = this._SceneImg('FrontScenery').localToGlobal(new Laya.Point(element.x, element.y));
+                                            if (gPStone.distance(gPOwner.x, gPOwner.y) < 50) {
+                                                drop();
+                                                return;
+                                            }
+                                        }
+                                    }
+                                }
                                 for (let index = 0; index < _Game._fireControl.EnemyParent.numChildren; index++) {
-                                    const element = _Game._fireControl.EnemyParent.getChildAt(index);
-                                    let point = _Game._fireControl.EnemyParent.localToGlobal(new Laya.Point(element.x, element.y));
-                                    let g_OwnerXY = this._Parent.localToGlobal(new Laya.Point(this._Owner.x, this._Owner.y));
-                                    if (point.distance(g_OwnerXY.x, g_OwnerXY.y) < 50) {
-                                        this.state = _WeaponSateType.free;
-                                        Laya.timer.clearAll(this);
-                                        if (this._Owner['_data']['color'] == element.name.substr(5)) {
-                                            this._evNotify(_Event.destroyEnemy, [1]);
-                                            element.removeSelf();
-                                            this._Owner.removeSelf();
+                                    const Enemy = _Game._fireControl.EnemyParent.getChildAt(index);
+                                    let gPEnemy = this._SceneImg('EnemyParent').localToGlobal(new Laya.Point(Enemy.x, Enemy.y));
+                                    if (gPEnemy.distance(gPOwner.x, gPOwner.y) < 50) {
+                                        if (this._Owner['_data']['color'] == Enemy.name.substr(5)) {
+                                            let Shell = Enemy.getChildByName('Shell');
+                                            if (Shell) {
+                                                let gPShell = Enemy.localToGlobal(new Laya.Point(Shell.x, Shell.y));
+                                                if (gPShell.distance(gPOwner.x, gPOwner.y) < 30 || gPShell.y > gPEnemy.y) {
+                                                    drop();
+                                                }
+                                                else {
+                                                    skill(Enemy);
+                                                }
+                                            }
+                                            else {
+                                                skill(Enemy);
+                                            }
                                         }
                                         else {
-                                            TimerAdmin._frameLoop(1, this, () => {
-                                                this._Owner.y += 40;
-                                                this._Owner.rotation += 10;
-                                                if (this._Owner.y > Laya.stage.height) {
-                                                    this._Owner.removeSelf();
-                                                }
-                                            });
+                                            drop();
                                         }
                                         return;
                                     }
@@ -5339,7 +5504,7 @@
                     }
                 });
                 let enemyNum = this._ImgVar('EnemyParent').numChildren;
-                this._evReg(_Event.destroyEnemy, () => {
+                this._evReg(_Event.skillEnemy, () => {
                     enemyNum -= 1;
                     if (!this['EnemyNumSwitch']) {
                         if (enemyNum <= 0) {
@@ -5401,15 +5566,19 @@
                 });
                 this._btnFour(this._ImgVar('Hero'), () => {
                     this['HeroMove'] = true;
-                }, null, () => {
+                }, (e) => {
+                    if (this['HeroMove']) {
+                        this._ImgVar('HeroContent').x = e.stageX;
+                        this._ImgVar('HeroContent').y = e.stageY;
+                        this._ImgVar('AimOperation').width = this._ImgVar('HeroContent').x;
+                        this._ImgVar('WeaponOperation').width = Laya.stage.width - this._ImgVar('HeroContent').x;
+                        this._ImgVar('WeaponOperation').x = this._ImgVar('HeroContent').x;
+                    }
+                }, () => {
                     this['HeroMove'] = false;
-                }, null);
-            }
-            lwgOnStageMove(e) {
-                if (this['HeroMove']) {
-                    this._ImgVar('HeroContent').x = e.stageX;
-                    this._ImgVar('HeroContent').y = e.stageY;
-                }
+                }, () => {
+                    this['HeroMove'] = false;
+                });
             }
         }
         _Game.Game = Game;
@@ -5530,20 +5699,16 @@
     var _Start;
     (function (_Start) {
         function _init() {
+            console.log(_Start);
         }
         _Start._init = _init;
-        class _StartScene extends Admin._SceneBase {
-            moduleOnAwake() {
-            }
-        }
-        _Start._StartScene = _StartScene;
-        class Start extends _StartScene {
+        class Start extends Admin._SceneBase {
             lwgOnAwake() {
             }
             lwgBtnRegister() {
                 this._btnUp(this._ImgVar('BtnStart'), () => {
                     let levelName = _SceneName.Game + 1;
-                    this._openScene(levelName, true, false, () => {
+                    this._openScene(levelName, true, () => {
                         if (!Admin._sceneControl[levelName].getComponent(_Game.Game)) {
                             Admin._sceneControl[levelName].addComponent(_Game.Game);
                         }

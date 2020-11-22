@@ -1,6 +1,6 @@
 import ADManager, { TaT } from "../TJ/Admanager";
 import ZJADMgr from "../TJ/ZJADMgr";
-import { Admin, Click, EventAdmin, Tools, _SceneName } from "./Lwg";
+import { Admin, Click, EventAdmin, Platform, Tools, _SceneName } from "./Lwg";
 import { _Game } from "./_Game";
 import { _SelectLevel } from "./_SelectLevel";
 
@@ -13,64 +13,60 @@ export module _PropTry {
     export class PropTry extends PropTryBase {
         lwgOnAwake(): void {
             ADManager.TAPoint(TaT.BtnShow, 'UIPropTry_BtnGet');
-            Tools.Node.showExcludedChild2D(this.ImgVar('Platform'), [Admin._platform.tpye.Bytedance], true);
-            Tools.Node.showExcludedChild2D(this.ImgVar(Admin._platform.tpye.Bytedance), ['High'], true);
+            Tools._Node.showExcludedChild2D(this._ImgVar('Platform'), [Platform._Ues.value], true);
+            Tools._Node.showExcludedChild2D(this._ImgVar(Platform._Ues.value), ['High'], true);
             // if (Admin._platform.name == Admin._platform.tpye.Bytedance) {
-            //     Tools.Node.showExcludedChild2D(this.ImgVar(Admin._platform.tpye.Bytedance), [ZJADMgr.ins.shieldLevel], true);
+            //     Tools._Node.showExcludedChild2D(this._ImgVar(Admin._platform.tpye.Bytedance), [ZJADMgr.ins.shieldLevel], true);
             // }
         }
 
         lwgOnEnable(): void {
-            this.ImgVar('BtnClose').visible = false;
+            this._ImgVar('BtnClose').visible = false;
             Laya.timer.once(2000, this, () => {
-                this.ImgVar('BtnClose').visible = true;
+                this._ImgVar('BtnClose').visible = true;
             })
         }
 
-        lwgBtnClick(): void {
-
-            Click._on(Click._Type.noEffect, this.ImgVar('Bytedance_Low_Select'), this, null, null, this.bytedanceSelectUp);
-            Click._on(Click._Type.largen, this.ImgVar('Bytedance_Low_BtnGet'), this, null, null, this.bytedanceGetUp);
-
-            Click._on(Click._Type.noEffect, this.ImgVar('Bytedance_Mid_Select'), this, null, null, this.bytedanceSelectUp);
-            Click._on(Click._Type.largen, this.ImgVar('Bytedance_Mid_BtnGet'), this, null, null, this.bytedanceGetUp);
-
-            Click._on(Click._Type.noEffect, this.ImgVar('ClickBg'), this, null, null, this.clickBgtUp);
-            Click._on(Click._Type.largen, this.ImgVar('Bytedance_High_BtnGet'), this, null, null, this.bytedanceGetUp);
-
+        lwgBtnRegister(): void {
+            this._btnUp(this._ImgVar('Bytedance_Low_Select'), this.bytedanceSelectUp);
+            this._btnUp(this._ImgVar('Bytedance_Low_BtnGet'), this.bytedanceGetUp);
+            this._btnUp(this._ImgVar('Bytedance_Mid_Select'), this.bytedanceGetUp);
+            this._btnUp(this._ImgVar('Bytedance_Mid_BtnGet'), this.bytedanceGetUp);
+            this._btnUp(this._ImgVar('ClickBg'), this.clickBgtUp);
+            this._btnUp(this._ImgVar('Bytedance_High_BtnGet'), this.bytedanceGetUp);
             var close = () => {
                 let levelName = _SceneName.Game + '_' + _SelectLevel._data._pich.customs;
-                this.lwgOpenScene(levelName, true, () => {
+                this._openScene(levelName, true, () => {
                     if (!Admin._sceneControl[levelName].getComponent(_Game.Game)) {
                         Admin._sceneControl[levelName].addComponent(_Game.Game);
                     }
                 });
                 EventAdmin._notify(_SelectLevel._Event._SelectLevel_Close);
             }
-            Click._on(Click._Type.largen, this.ImgVar('Bytedance_High_BtnNo'), this, null, null, () => {
+            Click._on(Click._Type.largen, this._ImgVar('Bytedance_High_BtnNo'), this, null, null, () => {
                 close();
             });
-            Click._on(Click._Type.largen, this.ImgVar('OPPO_BtnNo'), this, null, null, () => {
+            Click._on(Click._Type.largen, this._ImgVar('OPPO_BtnNo'), this, null, null, () => {
                 close();
 
             });
-            Click._on(Click._Type.largen, this.ImgVar('OPPO_BtnGet'), this, null, null, () => {
+            Click._on(Click._Type.largen, this._ImgVar('OPPO_BtnGet'), this, null, null, () => {
                 this.advFunc();
             });
 
-            Click._on(Click._Type.largen, this.ImgVar('BtnClose'), this, null, null, () => {
+            Click._on(Click._Type.largen, this._ImgVar('BtnClose'), this, null, null, () => {
                 close();
             });
         }
         clickBgtUp(): void {
-            if (Admin._platform.name !== Admin._platform.tpye.Bytedance) {
+            if (Platform._Ues.value !== Platform._Ues.value) {
                 return;
             }
             let Dot: Laya.Image;
-            if (this.ImgVar('Low').visible) {
-                Dot = this.ImgVar('Bytedance_Low_Dot');
-            } else if (this.ImgVar('Mid').visible) {
-                Dot = this.ImgVar('Bytedance_Mid_Dot');
+            if (this._ImgVar('Low').visible) {
+                Dot = this._ImgVar('Bytedance_Low_Dot');
+            } else if (this._ImgVar('Mid').visible) {
+                Dot = this._ImgVar('Bytedance_Mid_Dot');
             }
             if (!Dot) {
                 return;
@@ -78,7 +74,7 @@ export module _PropTry {
             if (Dot.visible) {
                 this.advFunc();
             } else {
-                this.lwgOpenScene(_SceneName.Game);
+                this._openScene(_SceneName.Game);
             }
         }
 
@@ -89,31 +85,31 @@ export module _PropTry {
 
         bytedanceSelectUp(e: Laya.Event): void {
             e.stopPropagation();
-            if (this.ImgVar('Low').visible) {
-                if (!this.ImgVar('Low')['count']) {
-                    this.ImgVar('Low')['count'] = 0;
+            if (this._ImgVar('Low').visible) {
+                if (!this._ImgVar('Low')['count']) {
+                    this._ImgVar('Low')['count'] = 0;
                 }
-                this.ImgVar('Low')['count']++;
-                if (this.ImgVar('Low')['count'] >= 4) {
-                    if (this.ImgVar('Bytedance_Low_Dot').visible) {
-                        this.ImgVar('Bytedance_Low_Dot').visible = false;
+                this._ImgVar('Low')['count']++;
+                if (this._ImgVar('Low')['count'] >= 4) {
+                    if (this._ImgVar('Bytedance_Low_Dot').visible) {
+                        this._ImgVar('Bytedance_Low_Dot').visible = false;
                     } else {
-                        this.ImgVar('Bytedance_Low_Dot').visible = true;
+                        this._ImgVar('Bytedance_Low_Dot').visible = true;
                     }
                 }
                 if (ZJADMgr.ins.CheckPlayVideo()) {
                     ADManager.ShowReward(null);
                 }
-            } else if (this.ImgVar('Mid').visible) {
-                if (!this.ImgVar('Mid')['count']) {
-                    this.ImgVar('Mid')['count'] = 0;
+            } else if (this._ImgVar('Mid').visible) {
+                if (!this._ImgVar('Mid')['count']) {
+                    this._ImgVar('Mid')['count'] = 0;
                 }
-                this.ImgVar('Mid')['count']++;
-                if (this.ImgVar('Mid')['count'] >= 4) {
-                    if (this.ImgVar('Bytedance_Mid_Dot').visible) {
-                        this.ImgVar('Bytedance_Mid_Dot').visible = false;
+                this._ImgVar('Mid')['count']++;
+                if (this._ImgVar('Mid')['count'] >= 4) {
+                    if (this._ImgVar('Bytedance_Mid_Dot').visible) {
+                        this._ImgVar('Bytedance_Mid_Dot').visible = false;
                     } else {
-                        this.ImgVar('Bytedance_Mid_Dot').visible = true;
+                        this._ImgVar('Bytedance_Mid_Dot').visible = true;
                     }
                 }
             }

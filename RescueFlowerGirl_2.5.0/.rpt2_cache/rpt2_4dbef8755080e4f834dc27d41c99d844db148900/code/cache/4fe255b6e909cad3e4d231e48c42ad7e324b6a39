@@ -1,0 +1,8 @@
+{
+  "code": "import { Admin, _SceneName } from \"./Lwg\";\r\nimport { _Game } from \"./_Game\";\r\nexport var _Start;\r\n(function (_Start) {\r\n    function _init() {\r\n        console.log(_Start);\r\n    }\r\n    _Start._init = _init;\r\n    class Start extends Admin._SceneBase {\r\n        lwgOnAwake() {\r\n        }\r\n        lwgBtnRegister() {\r\n            this._btnUp(this._ImgVar('BtnStart'), () => {\r\n                let levelName = _SceneName.Game + 1;\r\n                this._openScene(levelName, true, () => {\r\n                    if (!Admin._sceneControl[levelName].getComponent(_Game.Game)) {\r\n                        Admin._sceneControl[levelName].addComponent(_Game.Game);\r\n                    }\r\n                });\r\n            });\r\n        }\r\n    }\r\n    _Start.Start = Start;\r\n    class StartItem extends Admin._ObjectBase {\r\n    }\r\n    _Start.StartItem = StartItem;\r\n})(_Start || (_Start = {}));\r\nexport default _Start.Start;\r\n",
+  "references": [
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Frame/Lwg.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Frame/_Defeated.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Frame/_Game.ts"
+  ]
+}

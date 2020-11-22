@@ -2,11 +2,11 @@
     "x":0,
     "type":"View",
     "selectedBox":2,
-    "selecteID":32,
+    "selecteID":30,
     "searchKey":"View",
     "props":{"width":720,"sceneColor":"#000000","height":1280},
     "nodeParent":-1,
-    "maxID":82,
+    "maxID":100,
     "label":"View",
     "isOpen":true,
     "isDirectory":true,
@@ -142,16 +142,57 @@
                             "x":45,
                             "type":"Image",
                             "searchKey":"Image,Enemyblue",
-                            "props":{"y":18,"x":241,"width":74,"presetID":1,"preset":"laya/pages/prefab/Enemy.prefab","pivotY":37,"pivotX":37,"name":"Enemyblue","height":74},
+                            "props":{"y":55,"x":107,"width":74,"skin":"Game/UI/Game/Enemy/enemy_01_blue.png","rotation":-32,"pivotY":37,"pivotX":37,"name":"Enemyblue","height":74},
                             "nodeParent":41,
                             "label":"Enemyblue",
                             "isOpen":true,
-                            "isDirectory":false,
+                            "isDirectory":true,
                             "isAniNode":true,
-                            "hasChild":false,
+                            "hasChild":true,
+                            "compId":84,
+                            "child":[
+                                {
+                                    "x":60,
+                                    "type":"Image",
+                                    "searchKey":"Image,Shell",
+                                    "props":{"y":6,"x":38,"width":79,"skin":"Game/UI/Game/Enemy/shell.png","pivotY":22,"pivotX":40,"name":"Shell","height":43},
+                                    "nodeParent":84,
+                                    "label":"Shell",
+                                    "isDirectory":false,
+                                    "isAniNode":true,
+                                    "hasChild":false,
+                                    "compId":88,
+                                    "child":[
+                                        ]
+                                }]
+                        },
+                        {
+                            "x":45,
+                            "type":"Image",
+                            "searchKey":"Image,Enemyblue",
+                            "props":{"y":18,"x":241,"width":74,"skin":"Game/UI/Game/Enemy/enemy_01_blue.png","rotation":0,"pivotY":37,"pivotX":37,"name":"Enemyblue","height":74},
+                            "nodeParent":41,
+                            "label":"Enemyblue",
+                            "isOpen":true,
+                            "isDirectory":true,
+                            "isAniNode":true,
+                            "hasChild":true,
                             "compId":42,
                             "child":[
-                                ]
+                                {
+                                    "x":60,
+                                    "type":"Image",
+                                    "searchKey":"Image,Shell",
+                                    "props":{"y":6,"x":38,"width":79,"skin":"Game/UI/Game/Enemy/shell.png","pivotY":22,"pivotX":40,"name":"Shell","height":43},
+                                    "nodeParent":42,
+                                    "label":"Shell",
+                                    "isDirectory":false,
+                                    "isAniNode":true,
+                                    "hasChild":false,
+                                    "compId":90,
+                                    "child":[
+                                        ]
+                                }]
                         },
                         {
                             "x":45,
@@ -180,6 +221,36 @@
                             "isAniNode":true,
                             "hasChild":false,
                             "compId":44,
+                            "child":[
+                                ]
+                        },
+                        {
+                            "x":45,
+                            "type":"Image",
+                            "searchKey":"Image,Enemyyellow",
+                            "props":{"y":362,"x":378,"width":74,"skin":"Game/UI/Game/Enemy/enemy_01_yellow.png","rotation":134,"pivotY":37,"pivotX":37,"name":"Enemyyellow","height":74},
+                            "nodeParent":41,
+                            "label":"Enemyyellow",
+                            "isOpen":true,
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":85,
+                            "child":[
+                                ]
+                        },
+                        {
+                            "x":45,
+                            "type":"Image",
+                            "searchKey":"Image,Enemyred",
+                            "props":{"y":288,"x":49,"width":74,"skin":"Game/UI/Game/Enemy/enemy_01_red.png","rotation":-108,"pivotY":37,"pivotX":37,"name":"Enemyred","height":74},
+                            "nodeParent":41,
+                            "label":"Enemyred",
+                            "isOpen":true,
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":86,
                             "child":[
                                 ]
                         }]
@@ -272,8 +343,8 @@
                 {
                     "x":30,
                     "type":"Image",
-                    "searchKey":"Image,FrontScenery",
-                    "props":{"y":23,"x":23,"width":427,"name":"FrontScenery","height":449},
+                    "searchKey":"Image,FrontScenery,FrontScenery",
+                    "props":{"y":23,"x":23,"width":427,"var":"FrontScenery","name":"FrontScenery","height":449},
                     "nodeParent":30,
                     "label":"FrontScenery",
                     "isOpen":true,
@@ -285,10 +356,10 @@
                         {
                             "x":45,
                             "type":"Image",
-                            "searchKey":"Image",
-                            "props":{"y":154,"x":53,"width":61,"skin":"Game/UI/Game/SceneStyle_01/stone_01.png","rotation":-77,"pivotY":42,"pivotX":31,"height":42},
+                            "searchKey":"Image,Stone",
+                            "props":{"y":157,"x":28,"width":61,"skin":"Game/UI/Game/SceneStyle_01/stone_01.png","rotation":-77,"pivotY":21,"pivotX":31,"name":"Stone","height":50},
                             "nodeParent":46,
-                            "label":"Image",
+                            "label":"Stone",
                             "isDirectory":false,
                             "isAniNode":true,
                             "hasChild":false,
@@ -301,7 +372,7 @@
                     "x":30,
                     "type":"Image",
                     "searchKey":"Image,MobileFrame,MobileFrame",
-                    "props":{"y":50,"x":49,"width":351,"var":"MobileFrame","name":"MobileFrame","height":351},
+                    "props":{"y":50,"x":47,"width":351,"var":"MobileFrame","name":"MobileFrame","height":351},
                     "nodeParent":30,
                     "label":"MobileFrame",
                     "isDirectory":false,
@@ -330,7 +401,7 @@
             "x":15,
             "type":"Image",
             "searchKey":"Image,WeaponOperation,WeaponOperation",
-            "props":{"y":0,"x":360,"width":360,"var":"WeaponOperation","name":"WeaponOperation","height":1280},
+            "props":{"y":0,"x":360,"width":360,"var":"WeaponOperation","sizeGrid":"10,8,14,8","name":"WeaponOperation","height":1280,"alpha":1},
             "nodeParent":2,
             "label":"WeaponOperation",
             "isDirectory":false,
@@ -344,7 +415,7 @@
             "x":15,
             "type":"Image",
             "searchKey":"Image,AimOperation,AimOperation",
-            "props":{"y":0,"x":0,"width":360,"var":"AimOperation","name":"AimOperation","height":1280},
+            "props":{"y":0,"x":0,"width":360,"var":"AimOperation","sizeGrid":"8,11,16,8","name":"AimOperation","height":1280,"alpha":1},
             "nodeParent":2,
             "label":"AimOperation",
             "isDirectory":false,
@@ -358,7 +429,7 @@
             "x":15,
             "type":"Image",
             "searchKey":"Image,HeroContent,HeroContent",
-            "props":{"y":1053,"x":360,"width":129,"var":"HeroContent","pivotY":62,"pivotX":65,"name":"HeroContent","height":124},
+            "props":{"y":1062,"x":368,"width":145,"var":"HeroContent","pivotY":71,"pivotX":73,"name":"HeroContent","height":142},
             "nodeParent":2,
             "label":"HeroContent",
             "isOpen":true,
@@ -371,20 +442,19 @@
                     "x":30,
                     "type":"Image",
                     "searchKey":"Image,Aim,Aim",
-                    "props":{"y":46,"x":64,"width":241,"var":"Aim","pivotY":139,"pivotX":121,"name":"Aim","height":85},
+                    "props":{"y":50,"x":73.5,"width":241,"var":"Aim","pivotY":139,"pivotX":121,"name":"Aim","height":85},
                     "nodeParent":32,
                     "label":"Aim",
-                    "isOpen":true,
+                    "isOpen":false,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
                     "compId":62,
                     "child":[
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,Bow,Bow",
-                            "props":{"width":235,"var":"Bow","skin":"Game/UI/Game/Hero/Hero_01_bow_normalc.png","name":"Bow","height":105,"centerY":0,"centerX":0},
+                            "props":{"var":"Bow","skin":"Game/UI/Game/Hero/Hero_01_bow_normalc.png","name":"Bow","centerY":17,"centerX":0},
                             "nodeParent":62,
                             "label":"Bow",
                             "isDirectory":false,
@@ -395,7 +465,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,Fulcrum,Fulcrum",
                             "props":{"y":28,"x":120.5,"width":90,"var":"Fulcrum","pivotY":35,"pivotX":45,"name":"Fulcrum","height":70},
@@ -413,7 +482,7 @@
                     "x":30,
                     "type":"Image",
                     "searchKey":"Image,Hero,Hero",
-                    "props":{"y":62,"x":64.5,"width":118,"var":"Hero","skin":"Game/UI/Game/Hero/Hero_01.png","pivotY":62,"pivotX":59,"name":"Hero","height":123},
+                    "props":{"y":66,"x":74,"width":118,"var":"Hero","skin":"Game/UI/Game/Hero/Hero_01.png","pivotY":62,"pivotX":59,"name":"Hero","height":123},
                     "nodeParent":32,
                     "label":"Hero",
                     "isDirectory":false,
@@ -427,7 +496,7 @@
                     "x":30,
                     "type":"Image",
                     "searchKey":"Image,WeaponParent,WeaponParent",
-                    "props":{"y":-110,"x":-115,"width":360,"var":"WeaponParent","name":"WeaponParent","height":369},
+                    "props":{"y":-106,"x":-105,"width":360,"var":"WeaponParent","name":"WeaponParent","height":369},
                     "nodeParent":32,
                     "label":"WeaponParent",
                     "isOpen":true,
@@ -442,7 +511,7 @@
                     "x":30,
                     "type":"Image",
                     "searchKey":"Image,Blood,Blood",
-                    "props":{"y":-8,"x":13,"width":104,"var":"Blood","skin":"Lwg/UI/ui_l_orthogon_white.png","sizeGrid":"10,20,12,16","name":"Blood","height":16},
+                    "props":{"y":-4,"x":23,"width":104,"var":"Blood","skin":"Lwg/UI/ui_l_orthogon_white.png","sizeGrid":"10,20,12,16","name":"Blood","height":16},
                     "nodeParent":32,
                     "label":"Blood",
                     "isOpen":false,
@@ -464,6 +533,34 @@
                             "child":[
                                 ]
                         }]
+                }]
+        },
+        {
+            "x":15,
+            "type":"Image",
+            "searchKey":"Image,BtnCancel,BtnCancel",
+            "props":{"y":880,"x":650,"width":109,"var":"BtnCancel","skin":"Lwg/UI/ui_circle_c_007.png","pivotY":56,"pivotX":55,"name":"BtnCancel","height":111,"alpha":0.52},
+            "nodeParent":2,
+            "label":"BtnCancel",
+            "isOpen":true,
+            "isDirectory":true,
+            "isAniNode":true,
+            "hasChild":true,
+            "compId":91,
+            "child":[
+                {
+                    "x":30,
+                    "type":"Label",
+                    "searchKey":"Label",
+                    "props":{"width":59,"valign":"middle","text":"取消","height":32,"fontSize":30,"centerY":0,"centerX":0,"bold":true,"align":"center"},
+                    "nodeParent":91,
+                    "label":"Label",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":92,
+                    "child":[
+                        ]
                 }]
         }],
     "animations":[

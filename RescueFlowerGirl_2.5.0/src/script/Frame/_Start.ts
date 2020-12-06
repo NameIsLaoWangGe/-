@@ -1,4 +1,4 @@
-import lwg, { Admin, Click, DataAdmin, _SceneName } from "./Lwg";
+import lwg, { Admin, Click, DataAdmin, Setting, _SceneName } from "./Lwg";
 import { _Defeated } from "./_Defeated";
 import { _Game } from "./_Game";
 
@@ -10,13 +10,14 @@ export module _Start {
     }
     export class Start extends Admin._SceneBase {
         lwgOnAwake(): void {
+            Setting._bgMusic.switch = false;
         }
-        lwgBtnRegister(): void {
+        lwgButton(): void {
             this._btnUp(this._ImgVar('BtnStart'), () => {
                 let levelName = _SceneName.Game + 1;
-                this._openScene(levelName, true, () => {
-                    if (!Admin._sceneControl[levelName].getComponent(_Game.Game)) {
-                        Admin._sceneControl[levelName].addComponent(_Game.Game);
+                this._openScene(levelName, true, false, () => {
+                    if (!Admin._SceneControl[levelName].getComponent(_Game.Game)) {
+                        Admin._SceneControl[levelName].addComponent(_Game.Game);
                     }
                 });
             })

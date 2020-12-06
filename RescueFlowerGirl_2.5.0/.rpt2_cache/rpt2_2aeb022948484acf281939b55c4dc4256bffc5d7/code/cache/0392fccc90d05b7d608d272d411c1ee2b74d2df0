@@ -1,0 +1,13 @@
+{
+  "code": "import { Adaptive, Admin, Click, Platform, SceneAnimation, _LwgInit, _LwgInitScene } from \"./Lwg\";\r\nimport { _Defeated } from \"./_Defeated\";\r\nimport { _Game } from \"./_Game\";\r\nimport { _Guide } from \"./_Guide\";\r\nimport { _PreLoad } from \"./_PreLoad\";\r\nimport { _PreLoadCutIn } from \"./_PreLoadCutIn\";\r\nimport { _Start } from \"./_Start\";\r\nimport { _Victory } from \"./_Victory\";\r\nexport default class LwgInit extends _LwgInitScene {\r\n    lwgOnAwake() {\r\n        _LwgInit._pkgInfo = [];\r\n        Platform._Ues.value = Platform._Tpye.Research;\r\n        SceneAnimation._Use.value = SceneAnimation._Type.fadeOut;\r\n        Click._Use.value = Click._Type.largen;\r\n        Adaptive._Use.value = [720, 1280];\r\n        Admin._Moudel = {\r\n            _PreLoad: _PreLoad,\r\n            _PreLoadCutIn: _PreLoadCutIn,\r\n            _Guide: _Guide,\r\n            _Start: _Start,\r\n            _Game: _Game,\r\n            _Victory: _Victory,\r\n            _Defeated: _Defeated,\r\n        };\r\n    }\r\n}\r\n",
+  "references": [
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Frame/Lwg.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Frame/_Defeated.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Frame/_Game.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Frame/_Guide.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Frame/_PreLoad.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Frame/_PreLoadCutIn.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Frame/_Start.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Frame/_Victory.ts"
+  ]
+}

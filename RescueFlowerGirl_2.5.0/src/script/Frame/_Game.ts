@@ -148,7 +148,7 @@ export module _Game {
         time = 0;
         state = '';
         lwgOnStart(): void {
-            this.state = _EnemySate.activity
+            this.state = _EnemySate.activity;
             TimerAdmin._frameRandomLoop(100, 1000, this, () => {
                 if (this.state == _EnemySate.activity) {
                     let bullet = Tools._Node.createPrefab(_Res._list.prefab2D.EnemyBullet.prefab)
@@ -190,23 +190,14 @@ export module _Game {
             this.distance = this._Parent.width / 2;
             this.rotateRadius = this._Parent.width / 2;
         }
-        lwgEventRegister(): void {
-            var getAim = () => {
-                let Fulcrum = this._SceneImg('Fulcrum') as Laya.Image;
-                let point = _fireControl.Aim.localToGlobal(new Laya.Point(Fulcrum.x, Fulcrum.y));
-                let gPOwner = this._Parent.localToGlobal(new Laya.Point(this._Owner.x, this._Owner.y));
-                if (point.distance(gPOwner.x, gPOwner.y) < 50) {
-                    this._Owner.scale(1.2, 1.2);
-                    this._evNotify(_Event.aimAddColor, [this._Owner]);
-                } else {
-                    this._Owner.scale(1, 1);
-                    this._evNotify(_Event.aimSubColor, [this._Owner]);
-                }
-            }
-            var move = (rSpeed: number, radius: number) => {
-                let point = Tools._Point.getRoundPos(rSpeed ? this._Owner.rotation += rSpeed : this._Owner.rotation, radius, new Laya.Point(this._Parent.width / 2, this._Parent.height / 2))
-                this._Owner.x = point.x;
-                this._Owner.y = point.y;
+        lwgEvent(): void {
+            var move = () => {
+                let p = Tools._Point.angleAndLenByPoint(this._Owner.rotation - 90, this.baseSpeed);
+                this._Owner.x += p.x;
+                this._Owner.y += p.y;
+                !Tools._Node.leaveStage(this._Owner, () => {
+                    this._Owner.removeSelf();
+                }) && checkEnemy();
             }
             var drop = () => {
                 Laya.timer.clearAll(this);
@@ -223,67 +214,52 @@ export module _Game {
                 Enemy.removeSelf();
                 this._Owner.removeSelf();
             }
-            this._evReg(_Event.WeaponSate, (type: string) => {
-                if (this.state == _WeaponSateType.launch || this.state == _WeaponSateType.free) {
-                    return;
+            var checkEnemy = () => {
+                // 先判断有没有石头，然后再for循环，减少内存开销
+                if (this._SceneImg('FrontScenery').getChildByName('Stone')) {
+                    for (let index = 0; index < this._SceneImg('FrontScenery').numChildren; index++) {
+                        const element = this._SceneImg('FrontScenery').getChildAt(index) as Laya.Image;
+                        if (element.name == 'Stone') {
+                            let gPStone = this._SceneImg('FrontScenery').localToGlobal(new Laya.Point(element.x, element.y))
+                            if (gPStone.distance(this._gPoint.x, this._gPoint.y) < 50) {
+                                drop();
+                                return;
+                            }
+                        }
+                    }
                 }
-                Laya.timer.clearAll(this);
-                if (type == _WeaponSateType.rotate) {
-                    TimerAdmin._frameLoop(1, this, () => {
-                        move(_fireControl.moveRotateSpeed > 0 ? 0.1 : -0.1, this.rotateRadius);
-                        getAim();
-                    })
-                } else if (type == _WeaponSateType.mouseMove) {
-                    move(_fireControl.moveRotateSpeed, this.rotateRadius);
-                    getAim();
-                } else if (type == _WeaponSateType.launch) {
-                    if (this._Owner.scaleX == 1.2) {
-                        this.state = _WeaponSateType.free;
-                        TimerAdmin._frameLoop(1, this, () => {
-                            this.state = _WeaponSateType.launch;
-                            move(null, this.speed());
-                            let gPOwner = this._Parent.localToGlobal(new Laya.Point(this._Owner.x, this._Owner.y));
-                            // 先判断有没有石头，然后再for循环，减少内存开销
-                            if (this._SceneImg('FrontScenery').getChildByName('Stone')) {
-                                for (let index = 0; index < this._SceneImg('FrontScenery').numChildren; index++) {
-                                    const element = this._SceneImg('FrontScenery').getChildAt(index) as Laya.Image;
-                                    if (element.name == 'Stone') {
-                                        let gPStone = this._SceneImg('FrontScenery').localToGlobal(new Laya.Point(element.x, element.y))
-                                        if (gPStone.distance(gPOwner.x, gPOwner.y) < 50) {
-                                            drop();
-                                            return;
-                                        }
-                                    }
+                for (let index = 0; index < _fireControl.EnemyParent.numChildren; index++) {
+                    const Enemy = _fireControl.EnemyParent.getChildAt(index) as Laya.Image;
+                    let gPEnemy = this._SceneImg('EnemyParent').localToGlobal(new Laya.Point(Enemy.x, Enemy.y));
+                    if (gPEnemy.distance(this._gPoint.x, this._gPoint.y) < 50) {
+                        if (this._Owner.name === Enemy.name.substr(5)) {
+                            // 判断有没有头盔,有可能当前帧位置恰好在头盔和敌人之间，那么需要判断，只要头盔位置大于一个高度或者一个角度，则射击有效，反之，则无效
+                            let Shell = Enemy.getChildByName('Shell') as Laya.Image;
+                            if (Shell) {
+                                let gPShell = Enemy.localToGlobal(new Laya.Point(Shell.x, Shell.y));
+                                if (gPShell.distance(this._gPoint.x, this._gPoint.y) < 30 || gPShell.y > gPEnemy.y) {
+                                    drop();
+                                } else {
+                                    skill(Enemy);
                                 }
+                            } else {
+                                skill(Enemy);
                             }
-                            for (let index = 0; index < _fireControl.EnemyParent.numChildren; index++) {
-                                const Enemy = _fireControl.EnemyParent.getChildAt(index) as Laya.Image;
-                                let gPEnemy = this._SceneImg('EnemyParent').localToGlobal(new Laya.Point(Enemy.x, Enemy.y));
-                                if (gPEnemy.distance(gPOwner.x, gPOwner.y) < 50) {
-                                    if (this._Owner['_data']['color'] == Enemy.name.substr(5)) {
-                                        // 判断有没有头盔,有可能当前帧位置恰好在头盔和敌人之间，那么需要判断，只要头盔位置大于一个高度或者一个角度，则射击有效，反之，则无效
-                                        let Shell = Enemy.getChildByName('Shell') as Laya.Image;
-                                        if (Shell) {
-                                            let gPShell = Enemy.localToGlobal(new Laya.Point(Shell.x, Shell.y));
-                                            if (gPShell.distance(gPOwner.x, gPOwner.y) < 30 || gPShell.y > gPEnemy.y) {
-                                                drop();
-                                            } else {
-                                                skill(Enemy);
-                                            }
-                                        } else {
-                                            skill(Enemy);
-                                        }
-                                    } else {
-                                        drop();
-                                    }
-                                    return;
-                                }
-                            }
-                        })
-                    } else {
+                        } else {
+                            drop();
+                        }
+                        return;
+                    }
+                }
+            }
+            this._evReg(_Event.WeaponSate, (type: string) => {
+                if (type === _WeaponSateType.free) {
+                    return;
+                } else {
+                    if (type === _WeaponSateType.launch) {
+                        this.state === _WeaponSateType.free;
                         TimerAdmin._frameLoop(1, this, () => {
-                            move(_fireControl.moveRotateSpeed > 0 ? 0.1 : -0.1, this.rotateRadius);
-                            getAim();
+                            move();
                         })
                     }
                 }
@@ -292,22 +268,8 @@ export module _Game {
     }
     export class Game extends Admin._SceneBase {
         lwgOnEnable(): void {
-            for (let index = 0; index < _Data._arr.length; index++) {
-                let Weapon = Tools._Node.createPrefab(_Res._list.prefab2D.Weapon.prefab) as Laya.Image;
-                this._ImgVar('WeaponParent').addChild(Weapon);
-                let Pic = Weapon.getChildByName('Pic') as Laya.Image;
-                let point = Tools._Point.getRoundPos(index / _Data._arr.length * 360, 500, new Laya.Point(this._ImgVar('WeaponParent').width / 2, this._ImgVar('WeaponParent').height / 2))
-                Weapon.x = point.x;
-                Weapon.y = point.y;
-                Weapon.rotation = index / _Data._arr.length * 360;
-                Pic.skin = `Game/UI/Game/Hero/Hero_01_weapon_${_Data._arr[index]['name']}.png`;
-                Weapon.addComponent(_Weapon);
-                Weapon.name = _Data._arr[index][_Data._property.color] + index;
-                Weapon['_data'] = _Data._arr[index];
-            }
-            this._evNotify(_Event.WeaponSate, [_WeaponSateType.rotate]);
+            console.log('11');
         }
-
         lwgOnStart(): void {
             TimerAdmin._frameLoop(1, this, () => {
                 this._ImgVar('LandContent').rotation += 0.1;
@@ -321,8 +283,7 @@ export module _Game {
             }
 
         }
-
-        lwgEventRegister(): void {
+        lwgEvent(): void {
             this._evReg(_Event.aimAddColor, (Weapon: Laya.Image) => {
                 if (this._ImgVar('Bow')['launch'] !== Weapon) {
                     this._ImgVar('Bow')['launch'] = Weapon;
@@ -369,85 +330,136 @@ export module _Game {
             moveDownY: 0 as number,
         }
 
-        lwgBtnRegister(): void {
-            this._ImgVar('AimOperation').height = this._ImgVar('WeaponOperation').height = Laya.stage.height;
-            this._btnFour(this._ImgVar('WeaponOperation'),
-                (e: Laya.Event) => {
-                    _fireControl.rotateSwitch = false;
-                    _fireControl.moveDownY = e.stageY;
-                },
-                (e: Laya.Event) => {
-                    if (!_fireControl.rotateSwitch && Math.abs(_fireControl.moveDownY - e.stageY) > 10) {
-                        if (_fireControl.moveDownY - e.stageY > 10) {
-                            _fireControl.moveRotateSpeed = -2;
-                        } else {
-                            _fireControl.moveRotateSpeed = 2;
+        presentWeapon: Laya.Image;
+        lwgButton(): void {
+            var createWeapon = (color: string): Laya.Image => {
+                let Weapon = Tools._Node.createPrefab(_Res._list.prefab2D.Weapon.prefab) as Laya.Image;
+                this._ImgVar('WeaponParent').addChild(Weapon);
+                let Pic = Weapon.getChildByName('Pic') as Laya.Image;
+                Pic.skin = `Game/UI/Game/Hero/Hero_01_weapon_${color}.png`;
+                Weapon.name = color;
+                Weapon.addComponent(_Weapon);
+                return Weapon;
+            }
+            let QuiverArr = [this._ImgVar('Quiver_blue'), this._ImgVar('Quiver_yellow'), this._ImgVar('Quiver_red')]
+            for (let index = 0; index < QuiverArr.length; index++) {
+                const element = QuiverArr[index] as Laya.Image;
+                this._btnFour(element,
+                    (e: Laya.Event) => {
+                        e.stopPropagation();
+                        this[`${element.name}click`] = true;
+                        this[`${element.name}time`] = 0;
+                        this.heroFp = null;
+                    },
+                    (e: Laya.Event) => {
+                        if (this[`${element.name}click`]) {
+                            this[`${element.name}time`]++;
+                            if (this[`${element.name}time`] >= 2) {
+                                this.luanch = false;
+                                this.presentWeapon = createWeapon(element.name.substr(7)) as Laya.Image;
+                                this[`${element.name}click`] = false;
+                            }
                         }
-                        _fireControl.moveDownY = e.stageY;
-                        this._evNotify(_Event.WeaponSate, [_WeaponSateType.mouseMove]);
-                    }
-                },
+                    },
+                    () => {
+                        this[`${element.name}click`] = false;
+                    },
+                    () => {
+                        this[`${element.name}click`] = false;
+                    }, 'null');
+            }
+            this._btnFour(this._ImgVar('AimL'),
                 (e: Laya.Event) => {
-                    _fireControl.rotateSwitch = true;
-                    _fireControl.moveDownY = 0;
-                    this._evNotify(_Event.WeaponSate, [_WeaponSateType.launch]);
+                    e.stopPropagation();
+                    Animation2D._clearAll([this._ImgVar('Aim')])
+                    TimerAdmin._frameLoop(1, this._ImgVar('AimL'), () => {
+                        if (this._ImgVar('Aim').rotation > -30) {
+                            this._ImgVar('Aim').rotation -= 2;
+                        }
+                    })
                 },
-                (e: Laya.Event) => {
-                    _fireControl.rotateSwitch = true;
-                    _fireControl.moveDownY = 0;
+                null,
+                () => {
+                    TimerAdmin._clearAll([this._ImgVar('AimL')]);
                 },
-            );
+                () => {
+                    TimerAdmin._clearAll([this._ImgVar('AimL')]);
+                })
 
-            this._btnFour(this._ImgVar('AimOperation'),
+            this._btnFour(this._ImgVar('AimR'),
                 (e: Laya.Event) => {
-                    this.aimControl.moveDownY = e.stageY;
-                },
-                (e: Laya.Event) => {
-                    if (this.aimControl.moveDownY && Math.abs(this.aimControl.moveDownY - e.stageY) > 5) {
-                        if (this.aimControl.moveDownY - e.stageY > 0) {
-                            this._ImgVar('Aim').rotation += 2.5;
-                        } else {
-                            this._ImgVar('Aim').rotation -= 2.5;
+                    e.stopPropagation();
+                    Animation2D._clearAll([this._ImgVar('Aim')])
+                    TimerAdmin._frameLoop(1, this._ImgVar('AimR'), () => {
+                        if (this._ImgVar('Aim').rotation < 30) {
+                            this._ImgVar('Aim').rotation += 2;
                         }
-                        if (this._ImgVar('Aim').rotation < -45) {
-                            this._ImgVar('Aim').rotation = -45;
-                        }
-                        if (45 < this._ImgVar('Aim').rotation) {
-                            this._ImgVar('Aim').rotation = 45;
-                        }
-                        this.aimControl.moveDownY = e.stageY;
-                    }
+                    })
                 },
-                (e: Laya.Event) => {
-                    this.aimControl.moveDownY = null;
+                null,
+                () => {
+                    TimerAdmin._clearAll([this._ImgVar('AimR')]);
                 },
-                (e: Laya.Event) => {
-                    this.aimControl.moveDownY = null;
-                },
-            );
+                () => {
+                    TimerAdmin._clearAll([this._ImgVar('AimR')]);
+                })
 
-            this._btnFour(this._ImgVar('Hero'),
-                () => {
-                    this['HeroMove'] = true;
-                },
-                (e: Laya.Event) => {
-                    if (this['HeroMove']) {
-                        this._ImgVar('HeroContent').x = e.stageX;
-                        this._ImgVar('HeroContent').y = e.stageY;
-                        this._ImgVar('AimOperation').width = this._ImgVar('HeroContent').x;
-                        this._ImgVar('WeaponOperation').width = Laya.stage.width - this._ImgVar('HeroContent').x;
-                        this._ImgVar('WeaponOperation').x = this._ImgVar('HeroContent').x;
-                    }
-                },
-                () => {
-                    this['HeroMove'] = false;
-                },
-                () => {
-                    this['HeroMove'] = false;
-                },
-            )
         }
 
+        /**检测是否在弓箭上*/
+        checkinAim(): boolean {
+            if (!this.presentWeapon) {
+                return;
+            }
+            let gPoint = this._ImgVar('Aim').localToGlobal(new Laya.Point(this._ImgVar('Fulcrum').x, this._ImgVar('Fulcrum').y));
+            let dis = gPoint.distance(this.presentWeapon.x, this.presentWeapon.y);
+            if (dis < 100) {
+                this._ImgVar('Bow').skin = `Game/UI/Game/Hero/Hero_01_bow_${this.presentWeapon.name}.png`;
+                this.presentWeapon.rotation = this._ImgVar('Aim').rotation;
+                return true;
+            } else {
+                this._ImgVar('Bow').skin = `Game/UI/Game/Hero/Hero_01_bow_normalc.png`;
+                this.presentWeapon.rotation = 0;
+                return false;
+            }
+        }
+        luanch = false;
+        heroFp: Laya.Point = null;
+        lwgOnStageDown(e: Laya.Event): void {
+            this.heroFp = new Laya.Point(e.stageX, e.stageY);
+        }
+        lwgOnStageMove(e: Laya.Event) {
+            if (this.presentWeapon && !this.luanch) {
+                this.checkinAim();
+                this.presentWeapon.pos(e.stageX, e.stageY);
+            } else {
+                if (this.heroFp) {
+                    let diffX = e.stageX - this.heroFp.x;
+                    let diffY = e.stageY - this.heroFp.y;
+                    this._ImgVar('HeroContent').x += diffX;
+                    this._ImgVar('HeroContent').y += diffY;
+                    this.heroFp = new Laya.Point(e.stageX, e.stageY);
+                }
+            }
+        }
+        lwgOnStageUp(): void {
+            if (this.checkinAim()) {
+                if (this.presentWeapon) {
+                    this._evNotify(_Event.WeaponSate, [_WeaponSateType.launch]);
+                    this.luanch = true;
+                    this._ImgVar('Bow').skin = `Game/UI/Game/Hero/Hero_01_bow_normalc.png`;
+
+                    Animation2D._clearAll([this._ImgVar('Aim')])
+                    Animation2D.rotate(this._ImgVar('Aim'), 0, 100);
+                }
+            } else {
+                if (this.presentWeapon) {
+                    this.presentWeapon.removeSelf();
+                }
+            }
+            this.presentWeapon = null;
+            this.heroFp = null;
+        }
     }
 }
 export default _Game.Game;

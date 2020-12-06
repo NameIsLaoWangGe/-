@@ -10,7 +10,7 @@ export module _Victory {
     }
     export class Victory extends Admin._SceneBase {
 
-        lwgBtnRegister(): void {
+        lwgButton(): void {
             this._btnUp(this._ImgVar('BtnGet'), () => {
                 this._openScene(_SceneName.Start);
                 EventAdmin._notify(_Game._Event.closeScene);

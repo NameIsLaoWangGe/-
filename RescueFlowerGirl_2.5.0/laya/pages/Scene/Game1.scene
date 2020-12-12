@@ -1,12 +1,12 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":62,
-    "selecteID":74,
+    "selectedBox":2,
+    "selecteID":112,
     "searchKey":"View",
     "props":{"width":720,"sceneColor":"#000000","height":1280},
     "nodeParent":-1,
-    "maxID":112,
+    "maxID":120,
     "label":"View",
     "isOpen":true,
     "isDirectory":true,
@@ -392,7 +392,7 @@
                     "x":30,
                     "type":"Image",
                     "searchKey":"Image,Aim,Aim",
-                    "props":{"y":73,"x":73,"width":241,"var":"Aim","pivotY":162,"pivotX":121,"name":"Aim","height":85},
+                    "props":{"y":65,"width":241,"var":"Aim","rotation":0,"pivotY":154,"pivotX":121,"name":"Aim","height":85,"centerX":0},
                     "nodeParent":32,
                     "label":"Aim",
                     "isOpen":true,
@@ -405,7 +405,7 @@
                             "x":45,
                             "type":"Image",
                             "searchKey":"Image,Bow,Bow",
-                            "props":{"var":"Bow","skin":"Game/UI/Game/Hero/Hero_01_bow_normalc.png","name":"Bow","centerY":17,"centerX":0},
+                            "props":{"width":206,"var":"Bow","skin":"Game/UI/Game/Hero/Hero_01_bow_normalc.png","pivotY":131,"pivotX":103,"name":"Bow","height":76,"centerY":17,"centerX":0},
                             "nodeParent":62,
                             "label":"Bow",
                             "isDirectory":false,
@@ -428,47 +428,74 @@
                             "compId":74,
                             "child":[
                                 ]
-                        }]
-                },
-                {
-                    "x":30,
-                    "type":"Image",
-                    "searchKey":"Image,Hero,Hero",
-                    "props":{"y":66,"x":74,"width":118,"var":"Hero","skin":"Game/UI/Game/Hero/Hero_01.png","pivotY":62,"pivotX":59,"name":"Hero","height":123},
-                    "nodeParent":32,
-                    "label":"Hero",
-                    "isDirectory":false,
-                    "isAniNode":true,
-                    "hasChild":false,
-                    "compId":48,
-                    "child":[
-                        ]
-                },
-                {
-                    "x":30,
-                    "type":"Image",
-                    "searchKey":"Image,Blood,Blood",
-                    "props":{"y":-4,"x":23,"width":104,"var":"Blood","skin":"Lwg/UI/ui_l_orthogon_white.png","sizeGrid":"10,20,12,16","name":"Blood","height":16},
-                    "nodeParent":32,
-                    "label":"Blood",
-                    "isOpen":false,
-                    "isDirectory":true,
-                    "isAniNode":true,
-                    "hasChild":true,
-                    "compId":76,
-                    "child":[
+                        },
                         {
+                            "x":45,
                             "type":"Image",
-                            "searchKey":"Image",
-                            "props":{"y":2,"x":2,"width":100,"skin":"Lwg/UI/ui_orthogon_green.png","sizeGrid":"1,1,1,1","height":12},
-                            "nodeParent":76,
-                            "label":"Image",
+                            "searchKey":"Image,LBowstring,LBowstring",
+                            "props":{"y":68,"x":28,"width":90,"var":"LBowstring","skin":"Lwg/UI/ui_l_orthogon_white.png","sizeGrid":"0,9,0,6","name":"LBowstring","height":10},
+                            "nodeParent":62,
+                            "label":"LBowstring",
                             "isDirectory":false,
                             "isAniNode":true,
                             "hasChild":false,
-                            "compId":77,
+                            "compId":118,
                             "child":[
                                 ]
+                        },
+                        {
+                            "x":45,
+                            "type":"Image",
+                            "searchKey":"Image,RBowstring,RBowstring",
+                            "props":{"y":67.5,"x":208.5,"width":90,"var":"RBowstring","skin":"Lwg/UI/ui_l_orthogon_white.png","sizeGrid":"0,5,0,7","scaleX":-1,"name":"RBowstring","height":10},
+                            "nodeParent":62,
+                            "label":"RBowstring",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":119,
+                            "child":[
+                                ]
+                        },
+                        {
+                            "x":45,
+                            "type":"Image",
+                            "searchKey":"Image,Hero,Hero",
+                            "props":{"y":155,"x":122,"width":118,"var":"Hero","skin":"Game/UI/Game/Hero/Hero_01.png","pivotY":62,"pivotX":59,"name":"Hero","height":123},
+                            "nodeParent":62,
+                            "label":"Hero",
+                            "isOpen":false,
+                            "isDirectory":true,
+                            "isAniNode":true,
+                            "hasChild":true,
+                            "compId":48,
+                            "child":[
+                                {
+                                    "type":"Image",
+                                    "searchKey":"Image,Blood,Blood",
+                                    "props":{"y":-8,"x":8,"width":104,"var":"Blood","skin":"Lwg/UI/ui_l_orthogon_white.png","sizeGrid":"10,20,12,16","name":"Blood","height":16},
+                                    "nodeParent":48,
+                                    "label":"Blood",
+                                    "isOpen":false,
+                                    "isDirectory":true,
+                                    "isAniNode":true,
+                                    "hasChild":true,
+                                    "compId":76,
+                                    "child":[
+                                        {
+                                            "type":"Image",
+                                            "searchKey":"Image",
+                                            "props":{"y":2,"x":2,"width":100,"skin":"Lwg/UI/ui_orthogon_green.png","sizeGrid":"1,1,1,1","height":12},
+                                            "nodeParent":76,
+                                            "label":"Image",
+                                            "isDirectory":false,
+                                            "isAniNode":true,
+                                            "hasChild":false,
+                                            "compId":77,
+                                            "child":[
+                                                ]
+                                        }]
+                                }]
                         }]
                 }]
         },
@@ -490,7 +517,7 @@
             "x":15,
             "type":"Image",
             "searchKey":"Image,Quiver_yellow,Quiver_yellow",
-            "props":{"y":894,"x":617,"width":80,"var":"Quiver_yellow","skin":"Lwg/UI/ui_square_c_011.png","sizeGrid":"25,28,17,27","name":"Quiver_yellow","height":90},
+            "props":{"y":894,"x":617,"width":80,"var":"Quiver_yellow","skin":"Lwg/UI/ui_square_c_011.png","sizeGrid":"25,28,17,27","rotation":0,"name":"Quiver_yellow","height":90},
             "nodeParent":2,
             "label":"Quiver_yellow",
             "isDirectory":false,
@@ -532,55 +559,42 @@
         {
             "x":15,
             "type":"Image",
-            "searchKey":"Image,AimR,AimR",
-            "props":{"y":957,"x":79,"width":98,"var":"AimR","skin":"Lwg/UI/ui_l_orthogon_green.png","pivotY":49,"pivotX":49,"name":"AimR","height":97},
+            "searchKey":"Image,Dynamics,Dynamics",
+            "props":{"y":779,"x":34,"width":26,"var":"Dynamics","skin":"Lwg/UI/ui_l_orthogon_white.png","sizeGrid":"20,6,21,6","name":"Dynamics","height":313},
             "nodeParent":2,
-            "label":"AimR",
+            "label":"Dynamics",
             "isOpen":true,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
-            "compId":108,
+            "compId":112,
             "child":[
                 {
                     "x":30,
                     "type":"Image",
-                    "searchKey":"Image",
-                    "props":{"y":16,"x":77,"skin":"Lwg/UI/icon_cusp.png","rotation":90},
-                    "nodeParent":108,
-                    "label":"Image",
+                    "searchKey":"Image,DynamicsBar,DynamicsBar",
+                    "props":{"y":313,"x":2,"width":22,"var":"DynamicsBar","skin":"Lwg/UI/ui_orthogon_green.png","sizeGrid":"6,4,4,4","name":"DynamicsBar","height":309},
+                    "nodeParent":112,
+                    "label":"DynamicsBar",
                     "isDirectory":false,
                     "isAniNode":true,
                     "hasChild":false,
-                    "compId":109,
+                    "compId":115,
                     "child":[
                         ]
-                }]
-        },
-        {
-            "x":15,
-            "type":"Image",
-            "searchKey":"Image,AimL,AimL",
-            "props":{"y":824,"x":79,"width":98,"var":"AimL","skin":"Lwg/UI/ui_l_orthogon_green.png","pivotY":49,"pivotX":49,"name":"AimL","height":97},
-            "nodeParent":2,
-            "label":"AimL",
-            "isOpen":true,
-            "isDirectory":true,
-            "isAniNode":true,
-            "hasChild":true,
-            "compId":110,
-            "child":[
+                },
                 {
                     "x":30,
                     "type":"Image",
                     "searchKey":"Image",
-                    "props":{"y":83,"x":21,"skin":"Lwg/UI/icon_cusp.png","rotation":-90},
-                    "nodeParent":110,
+                    "props":{"y":0,"x":0,"width":26,"skin":"Lwg/UI/ui_l_orthogon_white.png","sizeGrid":"20,6,21,6","renderType":"mask","height":313},
+                    "nodeParent":112,
                     "label":"Image",
+                    "isOpen":true,
                     "isDirectory":false,
                     "isAniNode":true,
                     "hasChild":false,
-                    "compId":111,
+                    "compId":116,
                     "child":[
                         ]
                 }]

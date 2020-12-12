@@ -2014,6 +2014,8 @@ export module lwg {
                     return this.owner.parent as Laya.Image | Laya.Sprite;
                 }
             }
+            _fPoint: Laya.Point;
+            _fGPoint: Laya.Point;
             get _gPoint(): Laya.Point {
                 return this._Parent.localToGlobal(new Laya.Point(this._Owner.x, this._Owner.y));
             }
@@ -2129,6 +2131,8 @@ export module lwg {
                 this.lwgOnEnable();
             }
             onStart(): void {
+                this._fPoint = new Laya.Point(this._Owner.x, this._Owner.y);
+                this._fGPoint = this._gPoint;
                 this.lwgOnStart();
             }
             onUpdate(): void {
@@ -3297,7 +3301,7 @@ export module lwg {
                     }
                     Img.x += Tools._Number.randomOneBySection(-sectionWH[0], sectionWH[0]);
                 }
-                let p = Tools._Point.angleByPoint(_angle);
+                let p = Tools._Point.pointByAngle(_angle);
                 let _distance = distance ? Tools._Number.randomOneBySection(distance[0], distance[1]) : Tools._Number.randomOneBySection(20, 50);
                 let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(0.5, 1);
                 let accelerated0 = accelerated ? Tools._Number.randomOneBySection(accelerated[0], accelerated[1]) : Tools._Number.randomOneBySection(0.25, 0.45);
@@ -3691,7 +3695,7 @@ export module lwg {
                     let targetXY = [posArray[index][0], posArray[index][1]];
                     let distance = (new Laya.Point(Img.x, Img.y)).distance(targetXY[0], targetXY[1]);
                     if (parallel) {
-                        Img.rotation = Tools._Point.pointByAngle(Img.x - targetXY[0], Img.y - targetXY[1]) + 180;
+                        Img.rotation = Tools._Point.angleByPoint(Img.x - targetXY[0], Img.y - targetXY[1]) + 180;
                     }
                     let time = speed * 100 + distance / 5;
                     if (index == posArray.length + 1) {
@@ -5803,8 +5807,11 @@ export module lwg {
              * @return {*}  {number}
              */
             export function twoNodeDistance(obj1: Laya.Sprite, obj2: Laya.Sprite): number {
-                let point = new Laya.Point(obj1.x, obj1.y);
-                let len = point.distance(obj2.x, obj2.y);
+                const Parnet1 = obj1.parent as Laya.Sprite;
+                const Parnet2 = obj2.parent as Laya.Sprite;
+                const p1 = Parnet1.localToGlobal(new Laya.Point(obj1.x, obj1.y));
+                const p2 = Parnet2.localToGlobal(new Laya.Point(obj2.x, obj2.y));
+                let len = p1.distance(p2.x, p2.y);
                 return len;
             }
             /**
@@ -5813,7 +5820,7 @@ export module lwg {
               * @param x 坐标x
               * @param y 坐标y
               * */
-            export function pointByAngle(x: number, y: number): number {
+            export function angleByPoint(x: number, y: number): number {
                 let radian: number = Math.atan2(x, y) //弧度  0.6435011087932844
                 let angle: number = 90 - radian * (180 / Math.PI); //角度  36.86989764584402;
                 if (angle <= 0) {
@@ -5828,7 +5835,7 @@ export module lwg {
               * @param x 坐标x
               * @param y 坐标y
               * */
-            export function angleByPoint(angle): Laya.Point {
+            export function pointByAngle(angle): Laya.Point {
                 let radian = (90 - angle) / (180 / Math.PI);
                 let p = new Laya.Point(Math.sin(radian), Math.cos(radian));
                 p.normalize();

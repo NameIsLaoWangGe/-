@@ -2,11 +2,11 @@
     "x":0,
     "type":"View",
     "selectedBox":2,
-    "selecteID":112,
+    "selecteID":30,
     "searchKey":"View",
     "props":{"width":720,"sceneColor":"#000000","height":1280},
     "nodeParent":-1,
-    "maxID":120,
+    "maxID":123,
     "label":"View",
     "isOpen":true,
     "isDirectory":true,
@@ -63,13 +63,14 @@
             "props":{"y":370,"x":360,"width":450,"var":"LandContent","rotation":0,"pivotY":225,"pivotX":225,"name":"LandContent","height":450},
             "nodeParent":2,
             "label":"LandContent",
-            "isOpen":false,
+            "isOpen":true,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":30,
             "child":[
                 {
+                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,BehindScenery,BehindScenery",
                     "props":{"y":0,"x":0,"width":427,"var":"BehindScenery","name":"BehindScenery","height":449},
@@ -82,6 +83,7 @@
                     "compId":33,
                     "child":[
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image",
                             "props":{"y":67,"x":220,"width":101,"skin":"Game/UI/Game/SceneStyle_01/botany_01.png","scaleY":0.7,"scaleX":0.7,"rotation":-4,"pivotY":117,"pivotX":51,"height":117},
@@ -95,6 +97,7 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image",
                             "props":{"y":352,"x":119,"width":101,"skin":"Game/UI/Game/SceneStyle_01/botany_01.png","scaleY":0.9,"scaleX":0.9,"rotation":216,"pivotY":117,"pivotX":51,"height":117},
@@ -108,6 +111,7 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image",
                             "props":{"y":210,"x":387,"width":101,"skin":"Game/UI/Game/SceneStyle_01/botany_01.png","scaleY":0.7,"scaleX":0.7,"rotation":94,"pivotY":117,"pivotX":51,"height":117},
@@ -122,6 +126,7 @@
                         }]
                 },
                 {
+                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,EnemyParent,EnemyParent",
                     "props":{"y":0,"x":0,"width":415,"var":"EnemyParent","name":"EnemyParent","height":428},
@@ -134,9 +139,10 @@
                     "compId":41,
                     "child":[
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,Enemyblue",
-                            "props":{"y":55,"x":107,"width":74,"skin":"Game/UI/Game/Enemy/enemy_01_blue.png","rotation":-32,"pivotY":37,"pivotX":37,"name":"Enemyblue","height":74},
+                            "props":{"y":72,"x":110,"width":60,"skin":"Game/UI/Game/Enemy/enemy_01_blue.png","rotation":-32,"pivotY":30,"pivotX":30,"name":"Enemyblue","height":60},
                             "nodeParent":41,
                             "label":"Enemyblue",
                             "isOpen":true,
@@ -146,9 +152,10 @@
                             "compId":84,
                             "child":[
                                 {
+                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,Shell",
-                                    "props":{"y":6,"x":38,"width":79,"skin":"Game/UI/Game/Enemy/shell.png","pivotY":22,"pivotX":40,"name":"Shell","height":43},
+                                    "props":{"y":6.5,"x":29,"width":64,"skin":"Game/UI/Game/Enemy/shell.png","pivotY":18,"pivotX":32,"name":"Shell","height":35},
                                     "nodeParent":84,
                                     "label":"Shell",
                                     "isDirectory":false,
@@ -160,9 +167,10 @@
                                 }]
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,Enemyblue",
-                            "props":{"y":18,"x":241,"width":74,"skin":"Game/UI/Game/Enemy/enemy_01_blue.png","rotation":0,"pivotY":37,"pivotX":37,"name":"Enemyblue","height":74},
+                            "props":{"y":35,"x":251,"width":60,"skin":"Game/UI/Game/Enemy/enemy_01_blue.png","rotation":0,"pivotY":30,"pivotX":30,"name":"Enemyblue","height":60},
                             "nodeParent":41,
                             "label":"Enemyblue",
                             "isOpen":true,
@@ -172,9 +180,10 @@
                             "compId":42,
                             "child":[
                                 {
+                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,Shell",
-                                    "props":{"y":6,"x":38,"width":79,"skin":"Game/UI/Game/Enemy/shell.png","pivotY":22,"pivotX":40,"name":"Shell","height":43},
+                                    "props":{"y":7,"width":63,"skin":"Game/UI/Game/Enemy/shell.png","pivotY":18,"pivotX":32,"name":"Shell","height":36,"centerX":0},
                                     "nodeParent":42,
                                     "label":"Shell",
                                     "isDirectory":false,
@@ -186,9 +195,10 @@
                                 }]
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,Enemyyellow",
-                            "props":{"y":194,"x":432,"width":74,"skin":"Game/UI/Game/Enemy/enemy_01_yellow.png","rotation":80,"pivotY":37,"pivotX":37,"name":"Enemyyellow","height":74},
+                            "props":{"y":187,"x":425,"width":60,"skin":"Game/UI/Game/Enemy/enemy_01_yellow.png","rotation":80,"pivotY":30,"pivotX":30,"name":"Enemyyellow","height":60},
                             "nodeParent":41,
                             "label":"Enemyyellow",
                             "isOpen":true,
@@ -200,9 +210,10 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,Enemyred",
-                            "props":{"y":436,"x":207.5,"width":74,"skin":"Game/UI/Game/Enemy/enemy_01_red.png","rotation":-177,"pivotY":37,"pivotX":37,"name":"Enemyred","height":74},
+                            "props":{"y":429,"x":201,"width":60,"skin":"Game/UI/Game/Enemy/enemy_01_red.png","rotation":-177,"pivotY":30,"pivotX":30,"name":"Enemyred","height":60},
                             "nodeParent":41,
                             "label":"Enemyred",
                             "isOpen":true,
@@ -214,9 +225,10 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,Enemyyellow",
-                            "props":{"y":362,"x":378,"width":74,"skin":"Game/UI/Game/Enemy/enemy_01_yellow.png","rotation":134,"pivotY":37,"pivotX":37,"name":"Enemyyellow","height":74},
+                            "props":{"y":355,"x":371,"width":60,"skin":"Game/UI/Game/Enemy/enemy_01_yellow.png","rotation":134,"pivotY":30,"pivotX":30,"name":"Enemyyellow","height":60},
                             "nodeParent":41,
                             "label":"Enemyyellow",
                             "isOpen":true,
@@ -228,9 +240,10 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,Enemyred",
-                            "props":{"y":288,"x":49,"width":74,"skin":"Game/UI/Game/Enemy/enemy_01_red.png","rotation":-108,"pivotY":37,"pivotX":37,"name":"Enemyred","height":74},
+                            "props":{"y":281,"x":42,"width":60,"skin":"Game/UI/Game/Enemy/enemy_01_red.png","rotation":-108,"pivotY":30,"pivotX":30,"name":"Enemyred","height":60},
                             "nodeParent":41,
                             "label":"Enemyred",
                             "isOpen":true,
@@ -243,6 +256,7 @@
                         }]
                 },
                 {
+                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,MiddleScenery,MiddleScenery",
                     "props":{"y":0,"x":0,"width":427,"var":"MiddleScenery","name":"MiddleScenery","height":449},
@@ -255,6 +269,7 @@
                     "compId":53,
                     "child":[
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image",
                             "props":{"y":114,"x":112,"width":101,"skin":"Game/UI/Game/SceneStyle_01/botany_02.png","scaleY":0.8,"scaleX":0.8,"rotation":-45,"pivotY":140,"pivotX":51,"height":140},
@@ -268,6 +283,7 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image",
                             "props":{"y":306,"x":92,"width":105,"skin":"Game/UI/Game/SceneStyle_01/botany_03.png","scaleY":0.9,"scaleX":0.9,"rotation":-122,"pivotY":163,"pivotX":53,"height":163},
@@ -281,6 +297,7 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image",
                             "props":{"y":163.5,"x":375.5,"width":101,"skin":"Game/UI/Game/SceneStyle_01/botany_02.png","scaleY":0.8,"scaleX":0.8,"rotation":71,"pivotY":140,"pivotX":51,"height":140},
@@ -294,6 +311,7 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image",
                             "props":{"y":352,"x":322,"width":105,"skin":"Game/UI/Game/SceneStyle_01/botany_03.png","scaleY":0.8,"scaleX":0.8,"rotation":141,"pivotY":163,"pivotX":53,"height":163},
@@ -308,6 +326,7 @@
                         }]
                 },
                 {
+                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,Land",
                     "props":{"y":225,"x":225,"width":403,"skin":"Game/UI/Game/SceneStyle_01/land.png","pivotY":202,"pivotX":202,"name":"Land","height":404},
@@ -322,6 +341,7 @@
                         ]
                 },
                 {
+                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,FrontScenery,FrontScenery",
                     "props":{"y":23,"x":23,"width":427,"var":"FrontScenery","name":"FrontScenery","height":449},
@@ -334,6 +354,7 @@
                     "compId":46,
                     "child":[
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,Stone",
                             "props":{"y":157,"x":28,"width":61,"skin":"Game/UI/Game/SceneStyle_01/stone_01.png","rotation":-77,"pivotY":21,"pivotX":31,"name":"Stone","height":50},
@@ -348,6 +369,7 @@
                         }]
                 },
                 {
+                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,MobileFrame,MobileFrame",
                     "props":{"y":50,"x":47,"width":351,"var":"MobileFrame","name":"MobileFrame","height":351},
@@ -365,7 +387,7 @@
             "x":15,
             "type":"Image",
             "searchKey":"Image,Heroine,Heroine",
-            "props":{"y":358,"x":360,"width":94,"var":"Heroine","skin":"Game/UI/Game/Heroine/heroine_01.png","pivotY":42,"pivotX":47,"name":"Heroine","height":84},
+            "props":{"y":362,"x":360,"width":80,"var":"Heroine","skin":"Game/UI/Game/Heroine/heroine_01.png","pivotY":37,"pivotX":40,"name":"Heroine","height":73},
             "nodeParent":2,
             "label":"Heroine",
             "isDirectory":false,
@@ -379,7 +401,7 @@
             "x":15,
             "type":"Image",
             "searchKey":"Image,HeroContent,HeroContent",
-            "props":{"y":1073,"x":369,"width":145,"var":"HeroContent","pivotY":71,"pivotX":73,"name":"HeroContent","height":142},
+            "props":{"y":1061,"x":371,"width":109,"var":"HeroContent","pivotY":54,"pivotX":53,"name":"HeroContent","height":108},
             "nodeParent":2,
             "label":"HeroContent",
             "isOpen":true,
@@ -405,7 +427,7 @@
                             "x":45,
                             "type":"Image",
                             "searchKey":"Image,Bow,Bow",
-                            "props":{"width":206,"var":"Bow","skin":"Game/UI/Game/Hero/Hero_01_bow_normalc.png","pivotY":131,"pivotX":103,"name":"Bow","height":76,"centerY":17,"centerX":0},
+                            "props":{"width":371,"var":"Bow","skin":"Game/UI/Game/Hero/Hero_01_bow_normalc.png","pivotY":120,"pivotX":186,"name":"Bow","height":76,"centerY":17,"centerX":0},
                             "nodeParent":62,
                             "label":"Bow",
                             "isDirectory":false,
@@ -433,7 +455,7 @@
                             "x":45,
                             "type":"Image",
                             "searchKey":"Image,LBowstring,LBowstring",
-                            "props":{"y":68,"x":28,"width":90,"var":"LBowstring","skin":"Lwg/UI/ui_l_orthogon_white.png","sizeGrid":"0,9,0,6","name":"LBowstring","height":10},
+                            "props":{"y":67.5,"x":-45,"width":170,"var":"LBowstring","skin":"Lwg/UI/ui_l_orthogon_white.png","sizeGrid":"0,9,0,6","name":"LBowstring","height":10},
                             "nodeParent":62,
                             "label":"LBowstring",
                             "isDirectory":false,
@@ -447,7 +469,7 @@
                             "x":45,
                             "type":"Image",
                             "searchKey":"Image,RBowstring,RBowstring",
-                            "props":{"y":67.5,"x":208.5,"width":90,"var":"RBowstring","skin":"Lwg/UI/ui_l_orthogon_white.png","sizeGrid":"0,5,0,7","scaleX":-1,"name":"RBowstring","height":10},
+                            "props":{"y":67.5,"x":280,"width":170,"var":"RBowstring","skin":"Lwg/UI/ui_l_orthogon_white.png","sizeGrid":"0,5,0,7","scaleX":-1,"name":"RBowstring","height":10},
                             "nodeParent":62,
                             "label":"RBowstring",
                             "isDirectory":false,
@@ -461,19 +483,20 @@
                             "x":45,
                             "type":"Image",
                             "searchKey":"Image,Hero,Hero",
-                            "props":{"y":155,"x":122,"width":118,"var":"Hero","skin":"Game/UI/Game/Hero/Hero_01.png","pivotY":62,"pivotX":59,"name":"Hero","height":123},
+                            "props":{"y":142,"width":82,"var":"Hero","skin":"Game/UI/Game/Hero/Hero_01.png","pivotY":39,"pivotX":36,"name":"Hero","height":89,"centerX":0},
                             "nodeParent":62,
                             "label":"Hero",
-                            "isOpen":false,
+                            "isOpen":true,
                             "isDirectory":true,
                             "isAniNode":true,
                             "hasChild":true,
                             "compId":48,
                             "child":[
                                 {
+                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,Blood,Blood",
-                                    "props":{"y":-8,"x":8,"width":104,"var":"Blood","skin":"Lwg/UI/ui_l_orthogon_white.png","sizeGrid":"10,20,12,16","name":"Blood","height":16},
+                                    "props":{"y":-16,"width":104,"var":"Blood","skin":"Lwg/UI/ui_l_orthogon_white.png","sizeGrid":"10,20,12,16","name":"Blood","height":16,"centerX":0},
                                     "nodeParent":48,
                                     "label":"Blood",
                                     "isOpen":false,
@@ -502,48 +525,6 @@
         {
             "x":15,
             "type":"Image",
-            "searchKey":"Image,Quiver_blue,Quiver_blue",
-            "props":{"y":779,"x":617,"width":80,"var":"Quiver_blue","skin":"Lwg/UI/ui_square_c_010.png","sizeGrid":"25,28,17,27","name":"Quiver_blue","height":90},
-            "nodeParent":2,
-            "label":"Quiver_blue",
-            "isDirectory":false,
-            "isAniNode":true,
-            "hasChild":false,
-            "compId":105,
-            "child":[
-                ]
-        },
-        {
-            "x":15,
-            "type":"Image",
-            "searchKey":"Image,Quiver_yellow,Quiver_yellow",
-            "props":{"y":894,"x":617,"width":80,"var":"Quiver_yellow","skin":"Lwg/UI/ui_square_c_011.png","sizeGrid":"25,28,17,27","rotation":0,"name":"Quiver_yellow","height":90},
-            "nodeParent":2,
-            "label":"Quiver_yellow",
-            "isDirectory":false,
-            "isAniNode":true,
-            "hasChild":false,
-            "compId":106,
-            "child":[
-                ]
-        },
-        {
-            "x":15,
-            "type":"Image",
-            "searchKey":"Image,Quiver_red,Quiver_red",
-            "props":{"y":1010,"x":616,"width":80,"var":"Quiver_red","skin":"Lwg/UI/ui_square_c_008.png","sizeGrid":"25,28,17,27","name":"Quiver_red","height":90},
-            "nodeParent":2,
-            "label":"Quiver_red",
-            "isDirectory":false,
-            "isAniNode":true,
-            "hasChild":false,
-            "compId":107,
-            "child":[
-                ]
-        },
-        {
-            "x":15,
-            "type":"Image",
             "searchKey":"Image,WeaponParent,WeaponParent",
             "props":{"y":0,"x":0,"width":120,"var":"WeaponParent","name":"WeaponParent","height":131},
             "nodeParent":2,
@@ -560,7 +541,7 @@
             "x":15,
             "type":"Image",
             "searchKey":"Image,Dynamics,Dynamics",
-            "props":{"y":779,"x":34,"width":26,"var":"Dynamics","skin":"Lwg/UI/ui_l_orthogon_white.png","sizeGrid":"20,6,21,6","name":"Dynamics","height":313},
+            "props":{"y":901,"x":34,"width":26,"var":"Dynamics","skin":"Lwg/UI/ui_l_orthogon_white.png","sizeGrid":"20,6,21,6","name":"Dynamics","height":200},
             "nodeParent":2,
             "label":"Dynamics",
             "isOpen":true,
@@ -573,28 +554,109 @@
                     "x":30,
                     "type":"Image",
                     "searchKey":"Image,DynamicsBar,DynamicsBar",
-                    "props":{"y":313,"x":2,"width":22,"var":"DynamicsBar","skin":"Lwg/UI/ui_orthogon_green.png","sizeGrid":"6,4,4,4","name":"DynamicsBar","height":309},
+                    "props":{"y":0,"x":2,"width":22,"var":"DynamicsBar","skin":"Lwg/UI/ui_orthogon_green.png","sizeGrid":"6,4,4,4","name":"DynamicsBar","height":200},
                     "nodeParent":112,
                     "label":"DynamicsBar",
+                    "isOpen":true,
+                    "isDirectory":true,
+                    "isAniNode":true,
+                    "hasChild":true,
+                    "compId":115,
+                    "child":[
+                        {
+                            "x":45,
+                            "type":"Image",
+                            "searchKey":"Image",
+                            "props":{"y":0,"x":0,"width":24,"skin":"Lwg/UI/ui_l_orthogon_white.png","sizeGrid":"20,6,21,6","renderType":"mask","height":200},
+                            "nodeParent":115,
+                            "label":"Image",
+                            "isOpen":true,
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":116,
+                            "child":[
+                                ]
+                        }]
+                }]
+        },
+        {
+            "x":15,
+            "type":"Image",
+            "searchKey":"Image,Quiver,Quiver",
+            "props":{"y":769,"x":605,"width":104,"var":"Quiver","name":"Quiver","height":340},
+            "nodeParent":2,
+            "label":"Quiver",
+            "isOpen":false,
+            "isDirectory":true,
+            "isAniNode":true,
+            "hasChild":true,
+            "compId":120,
+            "child":[
+                {
+                    "type":"Image",
+                    "searchKey":"Image,Quiver_blue,Quiver_blue",
+                    "props":{"y":10,"x":12,"width":90,"var":"Quiver_blue","skin":"Lwg/UI/ui_square_c_010.png","sizeGrid":"25,28,17,27","name":"Quiver_blue","height":90,"centerX":0},
+                    "nodeParent":120,
+                    "label":"Quiver_blue",
                     "isDirectory":false,
                     "isAniNode":true,
                     "hasChild":false,
-                    "compId":115,
+                    "compId":105,
                     "child":[
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Image",
-                    "searchKey":"Image",
-                    "props":{"y":0,"x":0,"width":26,"skin":"Lwg/UI/ui_l_orthogon_white.png","sizeGrid":"20,6,21,6","renderType":"mask","height":313},
-                    "nodeParent":112,
-                    "label":"Image",
-                    "isOpen":true,
+                    "searchKey":"Image,Quiver_yellow,Quiver_yellow",
+                    "props":{"y":125,"x":12,"width":90,"var":"Quiver_yellow","skin":"Lwg/UI/ui_square_c_011.png","sizeGrid":"25,28,17,27","rotation":0,"name":"Quiver_yellow","height":90,"centerX":0},
+                    "nodeParent":120,
+                    "label":"Quiver_yellow",
                     "isDirectory":false,
                     "isAniNode":true,
                     "hasChild":false,
-                    "compId":116,
+                    "compId":106,
+                    "child":[
+                        ]
+                },
+                {
+                    "type":"Image",
+                    "searchKey":"Image,Quiver_red,Quiver_red",
+                    "props":{"y":241,"x":11,"width":90,"var":"Quiver_red","skin":"Lwg/UI/ui_square_c_008.png","sizeGrid":"25,28,17,27","name":"Quiver_red","height":90,"centerX":0},
+                    "nodeParent":120,
+                    "label":"Quiver_red",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":107,
+                    "child":[
+                        ]
+                }]
+        },
+        {
+            "x":15,
+            "type":"Image",
+            "searchKey":"Image,Cancel,Cancel",
+            "props":{"y":790,"x":657,"width":120,"visible":false,"var":"Cancel","skin":"Lwg/UI/ui_circle_c_007.png","pivotY":60,"pivotX":60,"name":"Cancel","height":120},
+            "nodeParent":2,
+            "label":"Cancel",
+            "isOpen":true,
+            "isDirectory":true,
+            "isAniNode":true,
+            "hasChild":true,
+            "compId":121,
+            "child":[
+                {
+                    "x":30,
+                    "type":"Label",
+                    "searchKey":"Label",
+                    "props":{"text":"取消","fontSize":30,"centerY":0,"centerX":0,"bold":true},
+                    "nodeParent":121,
+                    "label":"Label",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":122,
                     "child":[
                         ]
                 }]

@@ -5868,6 +5868,9 @@
                 };
                 var skill = (Enemy) => {
                     this._evNotify(_Event.skillEnemy, [1]);
+                    for (let index = 0; index < 20; index++) {
+                        Effects._Particle._spray(Laya.stage, this._gPoint, [0, 0], [10, 35], null, null, null, null, null, null, [30, 100], null, [5, 20]);
+                    }
                     Enemy.removeSelf();
                     this._Owner.removeSelf();
                 };
@@ -5891,8 +5894,8 @@
                             if (this._Owner.name === Enemy.name.substr(5)) {
                                 let Shell = Enemy.getChildByName('Shell');
                                 if (Shell) {
-                                    let gPShell = Enemy.localToGlobal(new Laya.Point(Shell.x, Shell.y));
-                                    if (gPShell.distance(this._gPoint.x, this._gPoint.y) < 30 || gPShell.y > gPEnemy.y) {
+                                    let angle = Tools._Point.angleByPoint(this._SceneImg('LandContent').x - this._gPoint.x, this._SceneImg('LandContent').y - this._gPoint.y) + 90;
+                                    if (210 < angle && angle < 330) {
                                         drop();
                                     }
                                     else {

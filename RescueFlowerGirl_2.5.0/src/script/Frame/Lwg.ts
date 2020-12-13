@@ -5835,7 +5835,7 @@ export module lwg {
               * @param x 坐标x
               * @param y 坐标y
               * */
-            export function pointByAngle(angle): Laya.Point {
+            export function pointByAngle(angle: number): Laya.Point {
                 let radian = (90 - angle) / (180 / Math.PI);
                 let p = new Laya.Point(Math.sin(radian), Math.cos(radian));
                 p.normalize();

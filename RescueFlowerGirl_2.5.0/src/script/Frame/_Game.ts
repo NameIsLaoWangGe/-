@@ -1,4 +1,4 @@
-import { Admin, Animation2D, Click, EventAdmin, TimerAdmin, Tools, _SceneName } from "./Lwg";
+import { Admin, Animation2D, Click, Effects, EventAdmin, TimerAdmin, Tools, _SceneName } from "./Lwg";
 import { _Res } from "./_PreLoad";
 import { _PropTry } from "./_PropTry";
 
@@ -163,6 +163,19 @@ export module _Game {
                 let point = Tools._Point.getRoundPos(this._Owner.rotation += rotate, this._SceneImg('MobileFrame').width / 2 + this._Owner.height / 2, new Laya.Point(this._SceneImg('LandContent').width / 2, this._SceneImg('LandContent').height / 2))
                 this._Owner.x = point.x;
                 this._Owner.y = point.y;
+
+                // let Shell = this._Owner.getChildByName('Shell') as Laya.Image;
+                // if (Shell) {
+                //     const gPShell = this._Owner.localToGlobal(new Laya.Point(Shell.x, Shell.y));
+                //     console.log(Tools._Point.angleByPoint(this._SceneImg('LandContent').x - this._gPoint.x, this._SceneImg('LandContent').y - this._gPoint.y) + 90);
+                //     // if (gPShell.distance(this._gPoint.x, this._gPoint.y) < 30 || gPShell.y > gPEnemy.y) {
+                //     //     drop();
+                //     // } else {
+                //     //     skill(Enemy);
+                //     // }
+                // } else {
+                //     // skill(Enemy);
+                // }
             })
         }
     }
@@ -214,6 +227,9 @@ export module _Game {
             }
             var skill = (Enemy: Laya.Image) => {
                 this._evNotify(_Event.skillEnemy, [1]);
+                for (let index = 0; index < 20; index++) {
+                    Effects._Particle._spray(Laya.stage, this._gPoint, [0, 0], [10, 35], null, null, null, null, null, null, [30, 100], null, [5, 20])
+                }
                 Enemy.removeSelf();
                 this._Owner.removeSelf();
             }
@@ -236,11 +252,11 @@ export module _Game {
                     let gPEnemy = this._SceneImg('EnemyParent').localToGlobal(new Laya.Point(Enemy.x, Enemy.y));
                     if (gPEnemy.distance(this._gPoint.x, this._gPoint.y) < 50) {
                         if (this._Owner.name === Enemy.name.substr(5)) {
-                            // 判断有没有头盔,有可能当前帧位置恰好在头盔和敌人之间，那么需要判断，只要头盔位置大于一个高度或者一个角度，则射击有效，反之，则无效
+                            // 通过倾斜角度计算是否可以打到，有头盔的在头向下的时候打不到
                             let Shell = Enemy.getChildByName('Shell') as Laya.Image;
                             if (Shell) {
-                                let gPShell = Enemy.localToGlobal(new Laya.Point(Shell.x, Shell.y));
-                                if (gPShell.distance(this._gPoint.x, this._gPoint.y) < 30 || gPShell.y > gPEnemy.y) {
+                                let angle = Tools._Point.angleByPoint(this._SceneImg('LandContent').x - this._gPoint.x, this._SceneImg('LandContent').y - this._gPoint.y) + 90;
+                                if (210 < angle && angle < 330) {
                                     drop();
                                 } else {
                                     skill(Enemy);

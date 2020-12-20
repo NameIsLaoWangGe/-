@@ -2,7 +2,7 @@
     "x":0,
     "type":"View",
     "selectedBox":2,
-    "selecteID":27,
+    "selecteID":31,
     "searchKey":"View",
     "props":{"width":720,"sceneColor":"#000000","height":1280},
     "nodeParent":-1,
@@ -60,7 +60,7 @@
             "x":15,
             "type":"Image",
             "searchKey":"Image,LandContent,LandContent",
-            "props":{"y":370,"x":360,"width":450,"var":"LandContent","rotation":0,"pivotY":225,"pivotX":225,"name":"LandContent","height":450},
+            "props":{"y":279,"x":360,"width":450,"var":"LandContent","rotation":0,"pivotY":225,"pivotX":225,"name":"LandContent","height":450},
             "nodeParent":2,
             "label":"LandContent",
             "isOpen":true,
@@ -371,7 +371,7 @@
             "x":15,
             "type":"Image",
             "searchKey":"Image,Heroine,Heroine",
-            "props":{"y":362,"x":360,"width":80,"var":"Heroine","skin":"Game/UI/Game/Heroine/heroine_01.png","pivotY":37,"pivotX":40,"name":"Heroine","height":73},
+            "props":{"y":272,"x":360,"width":80,"var":"Heroine","skin":"Game/UI/Game/Heroine/heroine_01.png","pivotY":37,"pivotX":40,"name":"Heroine","height":73},
             "nodeParent":2,
             "label":"Heroine",
             "isDirectory":false,
@@ -525,7 +525,7 @@
             "x":15,
             "type":"Image",
             "searchKey":"Image,Dynamics,Dynamics",
-            "props":{"y":901,"x":34,"width":26,"var":"Dynamics","skin":"Lwg/UI/ui_l_orthogon_white.png","sizeGrid":"20,6,21,6","name":"Dynamics","height":200},
+            "props":{"y":909,"x":-206,"width":26,"visible":false,"var":"Dynamics","skin":"Lwg/UI/ui_l_orthogon_white.png","sizeGrid":"20,6,21,6","name":"Dynamics","height":200},
             "nodeParent":2,
             "label":"Dynamics",
             "isOpen":true,
@@ -613,34 +613,6 @@
                     "isAniNode":true,
                     "hasChild":false,
                     "compId":107,
-                    "child":[
-                        ]
-                }]
-        },
-        {
-            "x":15,
-            "type":"Image",
-            "searchKey":"Image,Cancel,Cancel",
-            "props":{"y":790,"x":657,"width":120,"visible":false,"var":"Cancel","skin":"Lwg/UI/ui_circle_c_007.png","pivotY":60,"pivotX":60,"name":"Cancel","height":120},
-            "nodeParent":2,
-            "label":"Cancel",
-            "isOpen":true,
-            "isDirectory":true,
-            "isAniNode":true,
-            "hasChild":true,
-            "compId":121,
-            "child":[
-                {
-                    "x":30,
-                    "type":"Label",
-                    "searchKey":"Label",
-                    "props":{"text":"取消","fontSize":30,"centerY":0,"centerX":0,"bold":true},
-                    "nodeParent":121,
-                    "label":"Label",
-                    "isDirectory":false,
-                    "isAniNode":true,
-                    "hasChild":false,
-                    "compId":122,
                     "child":[
                         ]
                 }]

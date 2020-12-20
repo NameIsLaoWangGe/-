@@ -5991,6 +5991,7 @@
                             this.Weapon.ins.pivotY = this.Weapon.ins.height / 2;
                             this.Weapon.ins.pos(this.Weapon.getAimGP().x, this.Weapon.getAimGP().y);
                             this._ImgVar('Bow').skin = `Game/UI/Game/Hero/Hero_01_bow_${this.Weapon.ins.name}.png`;
+                            this.Weapon.directionType = 'weapon';
                             this.Weapon.direction(e);
                         }
                         else {
@@ -6000,13 +6001,26 @@
                             this._ImgVar('Bow').skin = `Game/UI/Game/Hero/Hero_01_bow_normalc.png`;
                         }
                     },
+                    getAimStageDis: (e) => {
+                        return this.Weapon.getAimGP().distance(e.stageX, e.stageY);
+                    },
+                    directionType: 'weapon',
                     direction: (e) => {
                         if (e.stageY < this.Weapon.getAimGP().y) {
                             this.Weapon.state = this.Weapon.stateType.checkinAim;
                             this.Weapon.checkinAim(e);
                         }
                         else {
-                            let angle = Tools._Point.angleByPoint(e.stageX - this.Weapon.ins.x, e.stageY - this.Weapon.ins.y);
+                            let angle = 0;
+                            if (this.Weapon.directionType === 'weapon') {
+                                angle = Tools._Point.angleByPoint(this.Weapon.getAimGP().x - this.Weapon.ins.x, this.Weapon.getAimGP().y - this.Weapon.ins.y);
+                                if (Math.abs(this.Weapon.getAimGP().x - e.stageX) < 10) {
+                                    this.Weapon.directionType = 'stage';
+                                }
+                            }
+                            else if (this.Weapon.directionType === 'stage') {
+                                angle = Tools._Point.angleByPoint(e.stageX - this.Weapon.ins.x, e.stageY - this.Weapon.ins.y);
+                            }
                             this.Weapon.ins.rotation = this._ImgVar('Aim').rotation = angle;
                             this.Weapon.ins.pos(this.Weapon.getAimGP().x, this.Weapon.getAimGP().y);
                             this.Weapon.pullDes = this.Weapon.getWeaponGP().distance(e.stageX, e.stageY);
@@ -6045,13 +6059,13 @@
                             if (this.Weapon.state === this.Weapon.stateType.direction) {
                                 this._evNotify(_Event.launch, [this.Weapon.dynamics]);
                                 Tools._Node.changePivot(this.Weapon.ins, this.Weapon.ins.pivotX + this.Weapon.Pic.x, this.Weapon.ins.pivotY);
-                                this.Weapon.ins = null;
                             }
                             else {
                                 this.Weapon.ins.removeSelf();
                             }
                             this._ImgVar('Quiver').visible = true;
                             this.Weapon.restore();
+                            this.Weapon.ins = null;
                             this.Weapon.state = this.Weapon.stateType.checkinAim;
                         }
                     },

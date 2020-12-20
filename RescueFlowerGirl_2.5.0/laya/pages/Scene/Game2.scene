@@ -1,8 +1,7 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":32,
-    "selecteID":62,
+    "selectedBox":2,
     "searchKey":"View",
     "props":{"width":720,"sceneColor":"#000000","height":1280},
     "nodeParent":-1,
@@ -410,14 +409,13 @@
             "props":{"y":1062,"x":368,"width":145,"var":"HeroContent","pivotY":71,"pivotX":73,"name":"HeroContent","height":142},
             "nodeParent":2,
             "label":"HeroContent",
-            "isOpen":true,
+            "isOpen":false,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":32,
             "child":[
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,Aim,Aim",
                     "props":{"y":-46,"x":73,"width":241,"var":"Aim","rotation":0,"pivotY":43,"pivotX":121,"name":"Aim","height":85},
@@ -430,7 +428,6 @@
                     "compId":62,
                     "child":[
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,Bow,Bow",
                             "props":{"var":"Bow","skin":"Game/UI/Game/Hero/Hero_01_bow_normalc.png","name":"Bow","centerY":17,"centerX":0},
@@ -444,7 +441,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,Fulcrum,Fulcrum",
                             "props":{"y":28,"x":120.5,"width":90,"var":"Fulcrum","pivotY":35,"pivotX":45,"name":"Fulcrum","height":70},
@@ -458,7 +454,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,LBowstring,LBowstring",
                             "props":{"y":68,"x":28,"width":90,"var":"LBowstring","skin":"Lwg/UI/ui_l_orthogon_white.png","sizeGrid":"0,9,0,6","name":"LBowstring","height":10},
@@ -472,7 +467,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,RBowstring",
                             "props":{"y":68,"x":209,"width":90,"skin":"Lwg/UI/ui_l_orthogon_white.png","sizeGrid":"0,5,0,7","pivotX":90,"name":"RBowstring","height":10},
@@ -487,7 +481,6 @@
                         }]
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,Hero,Hero",
                     "props":{"y":66,"x":74,"width":118,"var":"Hero","skin":"Game/UI/Game/Hero/Hero_01.png","pivotY":62,"pivotX":59,"name":"Hero","height":123},
@@ -501,7 +494,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,WeaponParent,WeaponParent",
                     "props":{"y":-106,"x":-105,"width":360,"var":"WeaponParent","name":"WeaponParent","height":369},
@@ -516,7 +508,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,Blood,Blood",
                     "props":{"y":-4,"x":23,"width":104,"var":"Blood","skin":"Lwg/UI/ui_l_orthogon_white.png","sizeGrid":"10,20,12,16","name":"Blood","height":16},
@@ -543,7 +534,6 @@
                         }]
                 },
                 {
-                    "x":30,
                     "type":"RigidBody",
                     "switchAble":true,
                     "searchKey":"RigidBody",

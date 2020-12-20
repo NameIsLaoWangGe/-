@@ -78,15 +78,15 @@ export module _Game {
         EnemyParent: null as Laya.Image,
         rotateSwitch: true,
         moveDownY: 0 as number,
-        get moveRotateSpeed(): number {
-            return this['_rotateSpeed'] ? this['_rotateSpeed'] : 0;
-        },
-        set moveRotateSpeed(speed: number) {
-            if (!_fireControl.rotateSwitch) {
-                this['_rotateSpeed'] = speed;
-                EventAdmin._notify(_Event.WeaponSate, [_WeaponSateType.mouseMove]);
-            }
-        },
+        // get moveRotateSpeed(): number {
+        //     return this['_rotateSpeed'] ? this['_rotateSpeed'] : 0;
+        // },
+        // set moveRotateSpeed(speed: number) {
+        //     if (!_fireControl.rotateSwitch) {
+        //         this['_rotateSpeed'] = speed;
+        //         EventAdmin._notify(_Event.WeaponSate, [_WeaponSateType.mouseMove]);
+        //     }
+        // },
     }
     export enum _Event {
         WeaponSate = '_Game_WeaponSate',
@@ -96,14 +96,7 @@ export module _Game {
         closeScene = '_Game_closeScene',
         aimAddColor = '_Game_aimAddColor',
         aimSubColor = '_Game_aimSubColor',
-    }
-    export enum _WeaponSateType {
-        rotate = '_WeaponSateType_rotate',
-        mouseMove = '_WeaponSateType_mouseMove',
         launch = '_WeaponSateType_launch',
-        free = '_WeaponSateType_free',
-        // 障碍物等作废状态，此时无害
-        Invalid = '_WeaponSateType_Invalid ',
     }
     export enum _EnemySate {
         activity = '_EnemySate_activity',
@@ -185,11 +178,15 @@ export module _Game {
         dropAcc: number = 0;
         fGP: Laya.Point;
         get state(): string {
-            return this['Statevalue'];
+            return this['Statevalue'] ? this['Statevalue'] : 'launch';
         };
         set state(_state: string) {
             this['Statevalue'] = _state;
         };
+        stateType = {
+            launch: 'launch',
+            free: 'free',
+        }
         getSpeed(): number {
             const acc = (1 - this.dynamics) * 5;
             this.launchAcc -= acc;
@@ -216,6 +213,7 @@ export module _Game {
                 }) && checkEnemy();
             }
             var drop = () => {
+                this.state = this.stateType.free;
                 Laya.timer.clearAll(this);
                 TimerAdmin._frameLoop(1, this, () => {
                     this._Owner.y += 40;
@@ -234,6 +232,9 @@ export module _Game {
                 this._Owner.removeSelf();
             }
             var checkEnemy = () => {
+                if (this.state === this.stateType.free) {
+                    return;
+                }
                 // 先判断有没有石头，然后再for循环，减少内存开销
                 if (this._SceneImg('FrontScenery').getChildByName('Stone')) {
                     for (let index = 0; index < this._SceneImg('FrontScenery').numChildren; index++) {
@@ -270,18 +271,28 @@ export module _Game {
                         return;
                     }
                 }
+                //什么都没有打中时，会停在地面上，不会穿透地面
+                const pos = new Laya.Point(this._SceneImg('LandContent').x, this._SceneImg('LandContent').y);
+                if (pos.distance(this._gPoint.x, this._gPoint.y) < 150) {
+                    Laya.timer.clearAll(this);
+                    this.state = this.stateType.free;
+                    const lP = this._SceneImg('LandContent').globalToLocal(this._gPoint);
+                    this._SceneImg('LandContent').addChild(this._Owner);
+                    this._Owner.pos(lP.x, lP.y);
+                    this._Owner.rotation -= this._SceneImg('LandContent').rotation;
+                    const mask = new Laya.Sprite;
+                    mask.size(200, 300);
+                    mask.pos(0, 80);
+                    mask.loadImage('Lwg/UI/ui_l_orthogon_white.png');
+                    this._Owner.mask = mask;
+                }
             }
-            this._evReg(_Event.WeaponSate, (type: string, dynamics: number) => {
-                if (type === _WeaponSateType.free) {
-                    return;
-                } else {
-                    if (type === _WeaponSateType.launch) {
-                        this.state === _WeaponSateType.free;
-                        TimerAdmin._frameLoop(1, this, () => {
-                            this.dynamics = dynamics;
-                            move();
-                        })
-                    }
+            this._evReg(_Event.launch, (dynamics: number) => {
+                if (this.state !== this.stateType.free) {
+                    TimerAdmin._frameLoop(1, this, () => {
+                        this.dynamics = dynamics;
+                        move();
+                    })
                 }
             })
         }
@@ -311,7 +322,7 @@ export module _Game {
             });
             this._evReg(_Event.aimSubColor, (Weapon: Laya.Image) => {
                 if (this._ImgVar('Bow')['launch'] == Weapon) {
-                    this._ImgVar('Bow').skin = `Game/UI/Game/Hero/Hero_01_bow_normalc.png`
+                    this._ImgVar('Bow').skin = `Game/UI/Game/Hero/Hero_01_bow_normalc.png`;
                     this._ImgVar('Bow')['launch'] = null;
                 }
             });
@@ -356,21 +367,19 @@ export module _Game {
                     },
                     null,
                     () => {
-                        this.Weapon.remove()
+                        this.Weapon.remove();
                     },
                     () => {
                     }, 'null');
             }
-
-            this._btnUp(this._ImgVar('Cancel'),
-                (e: Laya.Event) => {
-                    e.stopPropagation();
-                    this.Weapon.cancal();
-                })
         }
 
         Weapon = {
-            state: null as string,
+            state: 'checkinAim',
+            stateType: {
+                checkinAim: 'checkinAim',
+                direction: 'direction',
+            },
             ins: null as Laya.Image,
             Tail: null as Laya.Image,
             Pic: null as Laya.Image,
@@ -402,18 +411,19 @@ export module _Game {
                 this.Weapon.rBowstringW = this._ImgVar('RBowstring').width;
                 this.Weapon.heroFP = new Laya.Point(this._ImgVar('Hero').x, this._ImgVar('Hero').y);
                 this.Weapon.minPullDes = this.Weapon.ins.height - 20;
-                this.Weapon.maxPullDes = this.Weapon.minPullDes + 40;
+                this.Weapon.maxPullDes = this.Weapon.minPullDes + 50;
                 this.Weapon.pullDes = 0;
                 this.Weapon.Tail = this.Weapon.ins.getChildByName('Tail') as Laya.Image;
+                this._ImgVar('Quiver').visible = false;
             },
             remove: () => {
                 if (this.Weapon.ins) {
                     this.Weapon.ins.removeSelf();
                     this.Weapon.ins = null;
-                    this.Weapon.state = null;
+                    this.Weapon.state = this.Weapon.stateType.checkinAim;
                 }
             },
-            /**获取弓箭的世界坐标*/
+            /**获取弓的世界坐标*/
             getAimGP: (): Laya.Point => {
                 return this._ImgVar('Aim').localToGlobal(new Laya.Point(this._ImgVar('Fulcrum').x, this._ImgVar('Fulcrum').y));
             },
@@ -425,43 +435,46 @@ export module _Game {
             },
             /**检测是否在弓箭上*/
             checkinAim: (e: Laya.Event): void => {
-                const dis = this.Weapon.getAimGP().distance(this.Weapon.ins.x, this.Weapon.ins.y);
-                if (dis < 150) {
-                    this._ImgVar('Quiver').visible = false;
-                    this._ImgVar('Cancel').visible = true;
-                    this.Weapon.state = 'direction';
-                    Tools._Node.changePivot(this.Weapon.ins, this.Weapon.ins.width / 2, this.Weapon.ins.height / 2);
+                const dis = this.Weapon.getAimGP().distance(e.stageX, e.stageY);
+                if (dis < 150 && e.stageY >= this.Weapon.getAimGP().y) {
+                    this.Weapon.state = this.Weapon.stateType.direction;
+                    this.Weapon.ins.pivotX = this.Weapon.ins.width / 2;
+                    this.Weapon.ins.pivotY = this.Weapon.ins.height / 2;
                     this.Weapon.ins.pos(this.Weapon.getAimGP().x, this.Weapon.getAimGP().y);
                     this._ImgVar('Bow').skin = `Game/UI/Game/Hero/Hero_01_bow_${this.Weapon.ins.name}.png`;
+                    this.Weapon.direction(e);
                 } else {
+                    this.Weapon.restore();
+                    this.Weapon.ins.rotation = 0;
                     this.Weapon.ins.pos(e.stageX, e.stageY + this.Weapon.diffY);
                     this._ImgVar('Bow').skin = `Game/UI/Game/Hero/Hero_01_bow_normalc.png`;
                 }
             },
             /**调整方向*/
             direction: (e: Laya.Event): number => {
-                if (e.stageY < this.Weapon.ins.y + 20) {
+                if (e.stageY < this.Weapon.getAimGP().y) {
+                    this.Weapon.state = this.Weapon.stateType.checkinAim;
+                    this.Weapon.checkinAim(e);
+                } else {
+                    // 弓箭的方位
+                    let angle = Tools._Point.angleByPoint(e.stageX - this.Weapon.ins.x, e.stageY - this.Weapon.ins.y);
+                    this.Weapon.ins.rotation = this._ImgVar('Aim').rotation = angle;
+                    this.Weapon.ins.pos(this.Weapon.getAimGP().x, this.Weapon.getAimGP().y);
+                    // 拉力表现
+                    this.Weapon.pullDes = this.Weapon.getWeaponGP().distance(e.stageX, e.stageY);
+                    if (this.Weapon.pullDes >= this.Weapon.minPullDes && this.Weapon.pullDes <= this.Weapon.maxPullDes) {
+                        this.Weapon.Tail.y = this.Weapon.pullDes;
+                        this.Weapon.Pic.y = this.Weapon.pullDes - this.Weapon.minPullDes;//这个恰好是拉了多少距离
+                        // 拉力进度条代表发射力度
+                        const ratio = this.Weapon.Pic.y / (this.Weapon.maxPullDes - this.Weapon.minPullDes);
+                        this._ImgVar('DynamicsBar').mask.y = this._ImgVar('DynamicsBar').height * (1 - ratio);
+                        this.Weapon.dynamics = ratio;
+                        // 英雄也会移动
+                        this._ImgVar('Hero').y = this.Weapon.heroFP.y + this.Weapon.Pic.y;
+                    }
                     this.Weapon.bowstring();
-                    return;
+                    return angle;
                 }
-                // 弓箭的方位
-                let angle = Tools._Point.angleByPoint(e.stageX - this.Weapon.ins.x, e.stageY - this.Weapon.ins.y);
-                this.Weapon.ins.rotation = this._ImgVar('Aim').rotation = angle;
-                this.Weapon.ins.pos(this.Weapon.getAimGP().x, this.Weapon.getAimGP().y);
-                // 拉力表现
-                this.Weapon.pullDes = this.Weapon.getWeaponGP().distance(e.stageX, e.stageY);
-                if (this.Weapon.pullDes >= this.Weapon.minPullDes && this.Weapon.pullDes <= this.Weapon.maxPullDes) {
-                    this.Weapon.Tail.y = this.Weapon.pullDes;
-                    this.Weapon.Pic.y = this.Weapon.pullDes - this.Weapon.minPullDes;//这个恰好是拉了多少距离
-                    // 拉力进度条代表发射力度
-                    const ratio = this.Weapon.Pic.y / (this.Weapon.maxPullDes - this.Weapon.minPullDes);
-                    this._ImgVar('DynamicsBar').mask.y = this._ImgVar('DynamicsBar').height * (1 - ratio);
-                    this.Weapon.dynamics = ratio;
-                    // 英雄也会移动
-                    this._ImgVar('Hero').y = this.Weapon.heroFP.y + this.Weapon.Pic.y;
-                    this.Weapon.bowstring();
-                }
-                return angle;
             },
             /**弓弦拉伸*/
             bowstring: () => {
@@ -476,42 +489,30 @@ export module _Game {
                 this._ImgVar('RBowstring').rotation = rBowstringAngle + 90 - angle;
                 this._ImgVar('RBowstring').width = this.Weapon.getTailGP().distance(rBowstringGP.x, rBowstringGP.y);
             },
-            recover: () => {
-                if (this.Weapon.ins) {
-                    this._ImgVar('LBowstring').width = this.Weapon.lBowstringW;
-                    this._ImgVar('RBowstring').width = this.Weapon.rBowstringW;
-                    this._ImgVar('RBowstring').rotation = this._ImgVar('LBowstring').rotation = 0;
-                    this._ImgVar('Aim').rotation = 0;
-                    this._ImgVar('Hero').y = this.Weapon.heroFP.y;
-                    this._ImgVar('Quiver').visible = true;
-                    this._ImgVar('Cancel').visible = false;
-                }
+            // 还原弓箭样式
+            restore: () => {
+                this._ImgVar('LBowstring').width = this.Weapon.lBowstringW;
+                this._ImgVar('RBowstring').width = this.Weapon.rBowstringW;
+                this._ImgVar('RBowstring').rotation = this._ImgVar('LBowstring').rotation = 0;
+                this._ImgVar('Aim').rotation = 0;
+                this._ImgVar('Hero').y = this.Weapon.heroFP.y;
             },
-            cancal: () => {
-                this.Weapon.ins.removeSelf();
-                this.Weapon.recover();
-                this.Weapon.ins = null;
-                this.Weapon.state = null;
-            },
-            luanch: () => {
+            checkLuanch: () => {
                 if (this.Weapon.ins) {
-                    if (this.Weapon.state) {
-                        this._evNotify(_Event.WeaponSate, [_WeaponSateType.launch, this.Weapon.dynamics]);
+                    if (this.Weapon.state === this.Weapon.stateType.direction) {
+                        this._evNotify(_Event.launch, [this.Weapon.dynamics]);
                         Tools._Node.changePivot(this.Weapon.ins, this.Weapon.ins.pivotX + this.Weapon.Pic.x, this.Weapon.ins.pivotY);
+                        this.Weapon.ins = null;
                     } else {
                         this.Weapon.ins.removeSelf();
                     }
+                    this._ImgVar('Quiver').visible = true;
+                    this.Weapon.restore();
+                    this.Weapon.state = this.Weapon.stateType.checkinAim;
                 }
-                this.Weapon.recover();
-                this.Weapon.ins = null;
-                this.Weapon.state = null;
             },
             move: (e: Laya.Event) => {
-                if (this.Weapon.state) {
-                    this.Weapon.direction(e);
-                } else {
-                    this.Weapon.checkinAim(e);
-                }
+                this.Weapon[this.Weapon.state](e);
             }
         }
 
@@ -545,7 +546,7 @@ export module _Game {
             }
         }
         lwgOnStageUp(): void {
-            this.Weapon.luanch();
+            this.Weapon.checkLuanch();
             this.heroContentFP = null;
         }
     }

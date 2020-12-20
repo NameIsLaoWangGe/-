@@ -5991,7 +5991,7 @@
                             this.Weapon.ins.pivotY = this.Weapon.ins.height / 2;
                             this.Weapon.ins.pos(this.Weapon.getAimGP().x, this.Weapon.getAimGP().y);
                             this._ImgVar('Bow').skin = `Game/UI/Game/Hero/Hero_01_bow_${this.Weapon.ins.name}.png`;
-                            this.Weapon.directionType = 'weapon';
+                            this.Weapon.dirBy = this.Weapon.dirByType.weapon;
                             this.Weapon.direction(e);
                         }
                         else {
@@ -6004,7 +6004,11 @@
                     getAimStageDis: (e) => {
                         return this.Weapon.getAimGP().distance(e.stageX, e.stageY);
                     },
-                    directionType: 'weapon',
+                    dirBy: 'weapon',
+                    dirByType: {
+                        weapon: 'weapon',
+                        stage: 'stage',
+                    },
                     direction: (e) => {
                         if (e.stageY < this.Weapon.getAimGP().y) {
                             this.Weapon.state = this.Weapon.stateType.checkinAim;
@@ -6012,13 +6016,13 @@
                         }
                         else {
                             let angle = 0;
-                            if (this.Weapon.directionType === 'weapon') {
-                                angle = Tools._Point.angleByPoint(this.Weapon.getAimGP().x - this.Weapon.ins.x, this.Weapon.getAimGP().y - this.Weapon.ins.y);
-                                if (Math.abs(this.Weapon.getAimGP().x - e.stageX) < 10) {
-                                    this.Weapon.directionType = 'stage';
+                            if (this.Weapon.dirBy === this.Weapon.dirByType.weapon) {
+                                if (e.stageY - this.Weapon.getAimGP().y > 80) {
+                                    this.Weapon.dirBy = this.Weapon.dirByType.stage;
                                 }
+                                angle = Tools._Point.angleByPoint(this.Weapon.getAimGP().x - this.Weapon.ins.x, this.Weapon.getAimGP().y - this.Weapon.ins.y);
                             }
-                            else if (this.Weapon.directionType === 'stage') {
+                            else if (this.Weapon.dirBy === this.Weapon.dirByType.stage) {
                                 angle = Tools._Point.angleByPoint(e.stageX - this.Weapon.ins.x, e.stageY - this.Weapon.ins.y);
                             }
                             this.Weapon.ins.rotation = this._ImgVar('Aim').rotation = angle;

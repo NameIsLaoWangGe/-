@@ -1,5 +1,5 @@
 import ADManager from "../TJ/Admanager";
-import lwg, { Admin, Click, Tools, Dialogue, _SceneName, EventAdmin, DateAdmin } from "./Lwg";
+import { Admin, EventAdmin, _SceneName } from "./Lwg";
 import { _Game } from "./_Game";
 import { _Share } from "./_Share";
 import { _Special } from "./_Special";

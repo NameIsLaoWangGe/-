@@ -1,72 +1,15 @@
-import { Admin, Animation2D, Click, Effects, EventAdmin, TimerAdmin, Tools, _SceneName } from "./Lwg";
+import { Admin, DataAdmin, Effects2D, TimerAdmin, Tools, _SceneBase, _SceneName } from "./Lwg";
 import { _Res } from "./_PreLoad";
 import { _PropTry } from "./_PropTry";
 
 /**游戏场景模块*/
 export module _Game {
-    export class _Data {
+    export class _Data extends DataAdmin._Table {
         static _property = {
             name: 'name',
             index: 'index',
             color: 'color',
         }
-        static _arr = [
-            {
-                index: 1,
-                name: 'yellow',
-                color: 'yellow',
-            },
-            {
-                index: 2,
-                name: 'yellow',
-                color: 'yellow',
-            },
-            {
-                index: 3,
-                name: 'blue',
-                color: 'blue',
-            }, {
-                index: 4,
-                name: 'blue',
-                color: 'blue',
-            }, {
-                index: 5,
-                name: 'red',
-                color: 'red',
-            }, {
-                index: 6,
-                name: 'red',
-                color: 'red',
-            }, {
-                index: 7,
-                name: 'blue',
-                color: 'blue',
-            }, {
-                index: 8,
-                name: 'blue',
-                color: 'blue',
-            },
-            {
-                index: 9,
-                name: 'blue',
-                color: 'blue',
-            },
-            {
-                index: 10,
-                name: 'blue',
-                color: 'blue',
-            },
-            {
-                index: 11,
-                name: 'red',
-                color: 'red',
-            },
-            {
-                index: 12,
-                name: 'yellow',
-                color: 'yellow',
-            },
-        ]
     }
     export enum _Label {
         trigger = 'trigger',
@@ -119,7 +62,7 @@ export module _Game {
         speed = 2;
         lwgOnStart(): void {
             let GPoint = this._SceneImg('Aim').localToGlobal(new Laya.Point(this._SceneImg('Hero').x, this._SceneImg('Hero').y));
-            let p = new Laya.Point(this._Owner.x - GPoint.x, this._Owner.y - GPoint.y);
+            let p = new Laya.Point(this._gPoint.x - GPoint.x, this._gPoint.y - GPoint.y);
             p.normalize();
             TimerAdmin._frameLoop(1, this, () => {
                 this._Owner.x -= p.x * this.speed;
@@ -226,12 +169,13 @@ export module _Game {
             var skill = (Enemy: Laya.Image) => {
                 this._evNotify(_Event.skillEnemy, [1]);
                 for (let index = 0; index < 20; index++) {
-                    Effects._Particle._spray(Laya.stage, this._gPoint, [0, 0], [10, 35], null, null, null, null, null, null, [30, 100], null, [5, 20])
+                    Effects2D._Particle._spray(Laya.stage, this._gPoint, [0, 0], [10, 35], null, null, null, null, null, null, [30, 100], [5, 20])
                 }
                 Enemy.removeSelf();
                 this._Owner.removeSelf();
             }
             var checkEnemy = () => {
+                console.log('11')
                 if (this.state === this.stateType.free) {
                     return;
                 }
@@ -257,7 +201,7 @@ export module _Game {
                             let Shell = Enemy.getChildByName('Shell') as Laya.Image;
                             if (Shell) {
                                 const landContentGP = this._SceneImg('Content').localToGlobal(new Laya.Point(this._SceneImg('LandContent').x, this._SceneImg('LandContent').y));
-                                let angle = Tools._Point.angleByPoint(landContentGP.x - this._gPoint.x, landContentGP.y - this._gPoint.y) + 90;
+                                let angle = Tools._Point.pointByAngle(landContentGP.x - this._gPoint.x, landContentGP.y - this._gPoint.y) + 90;
                                 if (210 < angle && angle < 330) {
                                     drop();
                                 } else {
@@ -301,8 +245,6 @@ export module _Game {
     export class Game extends Admin._SceneBase {
 
         lwgOnAwake(): void {
-            // this._Owner.width = Laya.stage.width + 400;
-            // this._Owner.height = Laya.stage.height + 400;
             this.Hero.init();
         }
         lwgOnStart(): void {
@@ -476,9 +418,9 @@ export module _Game {
                         if (e.stageY - this.Weapon.getAimGP().y > 80) {//缓冲防止至二级转向
                             this.Weapon.dirBy = this.Weapon.dirByType.stage;//根据舞台进行转向
                         }
-                        angle = Tools._Point.angleByPoint(this.Weapon.getAimGP().x - this.Weapon.ins.x, this.Weapon.getAimGP().y - this.Weapon.ins.y);
+                        angle = Tools._Point.pointByAngle(this.Weapon.getAimGP().x - this.Weapon.ins.x, this.Weapon.getAimGP().y - this.Weapon.ins.y);
                     } else if (this.Weapon.dirBy === this.Weapon.dirByType.stage) {
-                        angle = Tools._Point.angleByPoint(e.stageX - this.Weapon.ins.x, e.stageY - this.Weapon.ins.y);
+                        angle = Tools._Point.pointByAngle(e.stageX - this.Weapon.ins.x, e.stageY - this.Weapon.ins.y);
                     }
                     this.Weapon.ins.rotation = this._ImgVar('Aim').rotation = angle;
                     this.Weapon.ins.pos(this.Weapon.getAimGP().x, this.Weapon.getAimGP().y);
@@ -500,14 +442,14 @@ export module _Game {
             },
             /**弓弦拉伸*/
             bowstring: () => {
-                const angle = Tools._Point.angleByPoint(this.Weapon.getTailGP().x - this.Weapon.ins.x, this.Weapon.getTailGP().y - this.Weapon.ins.y);
+                const angle = Tools._Point.pointByAngle(this.Weapon.getTailGP().x - this.Weapon.ins.x, this.Weapon.getTailGP().y - this.Weapon.ins.y);
                 const lBowstringGP = this._ImgVar('Aim').localToGlobal(new Laya.Point(this._ImgVar('LBowstring').x, this._ImgVar('LBowstring').y));
-                const lBowstringAngle = Tools._Point.angleByPoint(lBowstringGP.x - this.Weapon.getTailGP().x, lBowstringGP.y - this.Weapon.getTailGP().y);
+                const lBowstringAngle = Tools._Point.pointByAngle(lBowstringGP.x - this.Weapon.getTailGP().x, lBowstringGP.y - this.Weapon.getTailGP().y);
                 this._ImgVar('LBowstring').rotation = lBowstringAngle - 90 - angle;
                 this._ImgVar('LBowstring').width = this.Weapon.getTailGP().distance(lBowstringGP.x, lBowstringGP.y);
 
                 const rBowstringGP = this._ImgVar('Aim').localToGlobal(new Laya.Point(this._ImgVar('RBowstring').x, this._ImgVar('RBowstring').y));
-                const rBowstringAngle = Tools._Point.angleByPoint(rBowstringGP.x - this.Weapon.getTailGP().x, rBowstringGP.y - this.Weapon.getTailGP().y);
+                const rBowstringAngle = Tools._Point.pointByAngle(rBowstringGP.x - this.Weapon.getTailGP().x, rBowstringGP.y - this.Weapon.getTailGP().y);
                 this._ImgVar('RBowstring').rotation = rBowstringAngle + 90 - angle;
                 this._ImgVar('RBowstring').width = this.Weapon.getTailGP().distance(rBowstringGP.x, rBowstringGP.y);
             },

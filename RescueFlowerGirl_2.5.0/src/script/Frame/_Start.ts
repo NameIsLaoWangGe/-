@@ -1,4 +1,4 @@
-import lwg, { Admin, Click, DataAdmin, Setting, _SceneName } from "./Lwg";
+import { Admin, Setting, _SceneName } from "./Lwg";
 import { _Defeated } from "./_Defeated";
 import { _Game } from "./_Game";
 

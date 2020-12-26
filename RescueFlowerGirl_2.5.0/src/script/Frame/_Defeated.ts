@@ -1,4 +1,4 @@
-import { Admin, Click, EventAdmin, _SceneName } from "./Lwg";
+import { Admin, EventAdmin, _SceneName } from "./Lwg";
 import { _Game } from "./_Game";
 
 export module _Defeated {

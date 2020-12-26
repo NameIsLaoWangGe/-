@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":2,
-    "selecteID":123,
+    "selectedBox":62,
+    "selecteID":48,
     "searchKey":"View",
     "props":{"y":0,"x":0,"width":720,"sceneColor":"#000000","height":1280},
     "nodeParent":-1,
@@ -63,13 +63,14 @@
             "props":{"y":1061,"x":371,"width":109,"var":"HeroContent","pivotY":54,"pivotX":53,"name":"HeroContent","height":108},
             "nodeParent":2,
             "label":"HeroContent",
-            "isOpen":false,
+            "isOpen":true,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":32,
             "child":[
                 {
+                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,Aim,Aim",
                     "props":{"y":65,"width":241,"var":"Aim","rotation":0,"pivotY":154,"pivotX":121,"name":"Aim","height":85,"centerX":0},
@@ -82,6 +83,7 @@
                     "compId":62,
                     "child":[
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,Bow,Bow",
                             "props":{"width":371,"var":"Bow","skin":"Game/UI/Game/Hero/Hero_01_bow_normalc.png","pivotY":120,"pivotX":186,"name":"Bow","height":76,"centerY":17,"centerX":0},
@@ -95,6 +97,7 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,Fulcrum,Fulcrum",
                             "props":{"y":40.5,"x":118.5,"width":90,"var":"Fulcrum","pivotY":35,"pivotX":45,"name":"Fulcrum","height":70},
@@ -108,6 +111,7 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,LBowstring,LBowstring",
                             "props":{"y":67.5,"x":-45,"width":170,"var":"LBowstring","skin":"Lwg/UI/ui_l_orthogon_white.png","sizeGrid":"0,9,0,6","name":"LBowstring","height":10},
@@ -121,6 +125,7 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,RBowstring,RBowstring",
                             "props":{"y":67.5,"x":280,"width":170,"var":"RBowstring","skin":"Lwg/UI/ui_l_orthogon_white.png","sizeGrid":"0,5,0,7","scaleX":-1,"name":"RBowstring","height":10},
@@ -134,9 +139,10 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,Hero,Hero",
-                            "props":{"y":142,"width":82,"var":"Hero","skin":"Game/UI/Game/Hero/Hero_01.png","pivotY":39,"pivotX":36,"name":"Hero","height":89,"centerX":0},
+                            "props":{"y":154,"x":120.5,"width":82,"var":"Hero","skin":"Game/UI/Game/Hero/Hero_01.png","pivotY":45,"pivotX":41,"name":"Hero","height":89},
                             "nodeParent":62,
                             "label":"Hero",
                             "isOpen":true,
@@ -146,6 +152,7 @@
                             "compId":48,
                             "child":[
                                 {
+                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,Blood,Blood",
                                     "props":{"y":-16,"width":104,"var":"Blood","skin":"Lwg/UI/ui_l_orthogon_white.png","sizeGrid":"10,20,12,16","name":"Blood","height":16,"centerX":0},
@@ -196,14 +203,13 @@
             "props":{"y":907,"x":-386,"width":26,"visible":false,"var":"Dynamics","skin":"Lwg/UI/ui_l_orthogon_white.png","sizeGrid":"20,6,21,6","name":"Dynamics","height":200},
             "nodeParent":2,
             "label":"Dynamics",
-            "isOpen":true,
+            "isOpen":false,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":112,
             "child":[
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,DynamicsBar,DynamicsBar",
                     "props":{"y":0,"x":2,"width":22,"var":"DynamicsBar","skin":"Lwg/UI/ui_orthogon_green.png","sizeGrid":"6,4,4,4","name":"DynamicsBar","height":200},
@@ -216,7 +222,6 @@
                     "compId":115,
                     "child":[
                         {
-                            "x":45,
                             "type":"Image",
                             "searchKey":"Image",
                             "props":{"y":0,"x":0,"width":24,"skin":"Lwg/UI/ui_l_orthogon_white.png","sizeGrid":"20,6,21,6","renderType":"mask","height":200},

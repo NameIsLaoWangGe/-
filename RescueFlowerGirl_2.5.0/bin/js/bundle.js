@@ -303,7 +303,7 @@
                         let Gold = _createOne(width, height, url);
                         parent.addChild(Gold);
                         Animation2D.move_Scale(Gold, 1, firstPoint.x, firstPoint.y, targetPoint.x, targetPoint.y, 1, 350, 0, null, () => {
-                            Audio._playSound(Audio._voiceUrl.huodejinbi);
+                            AudioAdmin._playSound(AudioAdmin._voiceUrl.huodejinbi);
                             if (index === number - 1) {
                                 Laya.timer.once(200, this, () => {
                                     if (func2) {
@@ -333,7 +333,7 @@
                     let y = Math.floor(Math.random() * 2) == 1 ? firstPoint.y + Math.random() * 100 : firstPoint.y - Math.random() * 100;
                     Animation2D.move_Scale(Gold, 0.5, firstPoint.x, firstPoint.y, x, y, 1, 300, Math.random() * 100 + 100, Laya.Ease.expoIn, () => {
                         Animation2D.move_Scale(Gold, 1, Gold.x, Gold.y, targetPoint.x, targetPoint.y, 1, 400, Math.random() * 200 + 100, Laya.Ease.cubicOut, () => {
-                            Audio._playSound(Audio._voiceUrl.huodejinbi);
+                            AudioAdmin._playSound(AudioAdmin._voiceUrl.huodejinbi);
                             if (index === number - 1) {
                                 Laya.timer.once(200, this, () => {
                                     if (func2) {
@@ -524,11 +524,7 @@
             }
             TimerAdmin._frameNumLoop = _frameNumLoop;
             function _numRandomLoop(delay1, delay2, num, caller, method, compeletMethod, immediately, args, coverBefore) {
-                if (immediately) {
-                    if (TimerAdmin._switch) {
-                        method();
-                    }
-                }
+                immediately && TimerAdmin._switch && method();
                 let num0 = 0;
                 var func = () => {
                     let delay = Tools._Number.randomOneInt(delay1, delay2);
@@ -550,11 +546,7 @@
             }
             TimerAdmin._numRandomLoop = _numRandomLoop;
             function _frameNumRandomLoop(delay1, delay2, num, caller, method, compeletMethod, immediately, args, coverBefore) {
-                if (immediately) {
-                    if (TimerAdmin._switch) {
-                        method();
-                    }
-                }
+                immediately && TimerAdmin._switch && method();
                 let num0 = 0;
                 var func = () => {
                     let delay = Tools._Number.randomOneInt(delay1, delay2);
@@ -563,7 +555,7 @@
                             num0++;
                             if (num0 >= num) {
                                 method();
-                                compeletMethod();
+                                compeletMethod && compeletMethod();
                             }
                             else {
                                 method();
@@ -576,14 +568,23 @@
             }
             TimerAdmin._frameNumRandomLoop = _frameNumRandomLoop;
             function _frameOnce(delay, caller, afterMethod, beforeMethod, args, coverBefore) {
-                if (beforeMethod) {
-                    beforeMethod();
-                }
+                beforeMethod && beforeMethod();
                 Laya.timer.frameOnce(delay, caller, () => {
                     afterMethod();
                 }, args, coverBefore);
             }
             TimerAdmin._frameOnce = _frameOnce;
+            function _frameNumOnce(delay, num, caller, afterMethod, beforeMethod, args, coverBefore) {
+                for (let index = 0; index < num; index++) {
+                    if (beforeMethod) {
+                        beforeMethod();
+                    }
+                    Laya.timer.frameOnce(delay, caller, () => {
+                        afterMethod();
+                    }, args, coverBefore);
+                }
+            }
+            TimerAdmin._frameNumOnce = _frameNumOnce;
             function _loop(delay, caller, method, immediately, args, coverBefore) {
                 if (immediately) {
                     if (TimerAdmin._switch) {
@@ -638,11 +639,10 @@
                 Laya.timer.loop(delay, caller, func, args, coverBefore);
             }
             TimerAdmin._numLoop = _numLoop;
-            function _once(delay, afterMethod, beforeMethod, args, coverBefore) {
+            function _once(delay, caller, afterMethod, beforeMethod, args, coverBefore) {
                 if (beforeMethod) {
                     beforeMethod();
                 }
-                let caller = {};
                 Laya.timer.once(delay, caller, () => {
                     afterMethod();
                 }, args, coverBefore);
@@ -739,7 +739,6 @@
                             Gold._num.value = 5000;
                             break;
                         case Platform._Tpye.Research:
-                            Laya.Stat.show();
                             Gold._num.value = 50000000000000;
                             break;
                         default:
@@ -801,6 +800,7 @@
                         break;
                     case SceneAnimation._Type.stickIn.randomstickIn:
                         sumDelay = _stickIn(Scene, SceneAnimation._Type.stickIn.randomstickIn);
+                        break;
                     case SceneAnimation._Type.stickIn.upLeftDownLeft:
                         sumDelay = _stickIn(Scene, SceneAnimation._Type.stickIn.upLeftDownLeft);
                         break;
@@ -889,18 +889,17 @@
                 Scene.scale(1, 0);
                 Laya.timer.once(delaye, caller, () => {
                     Scene.scale(1, 1);
-                    var htmlCanvas1 = Laya.stage.drawToCanvas(Laya.stage.width, Laya.stage.height, 0, 0);
-                    let base641 = htmlCanvas1.toBase64("image/png", 1);
+                    const tex = Scene.drawToTexture(Laya.stage.width, Laya.stage.height, 0, 0);
                     Scene.scale(1, 0);
                     for (let index = 0; index < num; index++) {
-                        let Sp = new Laya.Image;
+                        let Sp = new Laya.Sprite;
                         Laya.stage.addChild(Sp);
                         Sp.width = Laya.stage.width;
                         Sp.height = Laya.stage.height;
                         Sp.pos(0, 0);
                         Sp.zOrder = 100;
                         Sp.name = 'shutters';
-                        Sp.skin = base641;
+                        Sp.texture = tex;
                         let Mask = new Laya.Image;
                         Mask.width = Sp.width;
                         Mask.height = Laya.stage.height / num;
@@ -911,6 +910,7 @@
                         Sp.scale(1, 0);
                         Animation2D.scale(Sp, 1, 0, 1, 1, time, 0, () => {
                             Scene.scale(1, 1);
+                            tex.destroy();
                             Sp.destroy();
                         });
                     }
@@ -918,95 +918,102 @@
                 return time + delaye + 100;
             }
             function _shutters_Close(Scene, type) {
-                let num = 12;
+                let num = 10;
                 let time = 600;
                 let delaye = 100;
                 let caller = {};
                 let ran = Tools._Array.randomGetOne([0, 1, 2, 3, 4, 5]);
                 Laya.timer.once(delaye, caller, () => {
-                    var htmlCanvas1 = Laya.stage.drawToCanvas(Laya.stage.width, Laya.stage.height, 0, 0);
-                    let base641 = htmlCanvas1.toBase64("image/png", 1);
+                    const tex = Scene.drawToTexture(Laya.stage.width, Laya.stage.height, 0, 0);
                     Scene.scale(1, 0);
                     for (let index = 0; index < num; index++) {
-                        let Sp = new Laya.Image;
-                        Laya.stage.addChild(Sp);
-                        Sp.width = Laya.stage.width;
-                        Sp.height = Laya.stage.height;
-                        Sp.pos(0, 0);
-                        Sp.zOrder = 100;
-                        Sp.name = 'shutters';
-                        Sp.skin = base641;
+                        let sp = new Laya.Sprite;
+                        Laya.stage.addChild(sp);
+                        sp.width = Laya.stage.width;
+                        sp.height = Laya.stage.height;
+                        sp.pos(0, 0);
+                        sp.zOrder = 100;
+                        sp.name = 'shutters';
+                        sp.texture = tex;
                         let Mask = new Laya.Image;
                         Mask.skin = `Lwg/UI/ui_orthogon_cycn.png`;
-                        Sp.mask = Mask;
+                        Mask.sizeGrid = '12,12,12,12';
+                        sp.mask = Mask;
                         var func1 = () => {
                             Mask.width = Laya.stage.width;
-                            Mask.height = Laya.stage.height / num;
-                            Mask.pos(0, Laya.stage.height / num * index);
-                            Tools._Node.changePivot(Sp, Sp.width / 2, index * Sp.height / num + Sp.height / num / 2);
-                            Animation2D.scale(Sp, 1, 1, 1, 0, time, 0, () => {
-                                Sp.destroy();
+                            Mask.height = Math.round(Laya.stage.height / num);
+                            Mask.pos(0, Math.round(Laya.stage.height / num * index));
+                            Tools._Node.changePivot(sp, sp.width / 2, index * sp.height / num + sp.height / num / 2);
+                            Animation2D.scale(sp, 1, 1, 1, 0, time, 0, () => {
+                                tex.destroy();
+                                sp.destroy();
                             });
                         };
                         var func2 = () => {
-                            Mask.width = Laya.stage.width / num;
+                            Mask.width = Math.round(Laya.stage.width / num);
                             Mask.height = Laya.stage.height;
-                            Mask.pos(Laya.stage.width / num * index, 0);
-                            Tools._Node.changePivot(Sp, index * Sp.width / num + Sp.width / num / 2, Sp.height / 2);
-                            Animation2D.scale(Sp, 1, 1, 0, 1, time, 0, () => {
-                                Sp.destroy();
+                            Mask.pos(Math.round(Laya.stage.width / num * index), 0);
+                            Tools._Node.changePivot(sp, index * sp.width / num + sp.width / num / 2, sp.height / 2);
+                            Animation2D.scale(sp, 1, 1, 0, 1, time, 0, () => {
+                                tex.destroy();
+                                sp.destroy();
                             });
                         };
                         var func6 = () => {
                             Mask.width = Laya.stage.width;
-                            Mask.height = Laya.stage.height / num;
-                            Mask.pos(0, Laya.stage.height / num * index);
-                            Tools._Node.changePivot(Sp, Sp.width / 2, index * Sp.height / num + Sp.height / num / 2);
-                            Animation2D.scale(Sp, 1, 1, 1, 0, time, 0, () => {
-                                Sp.destroy();
+                            Mask.height = Math.round(Laya.stage.height / num);
+                            Mask.pos(0, Math.round(Laya.stage.height / num * index));
+                            Tools._Node.changePivot(sp, sp.width / 2, index * sp.height / num + sp.height / num / 2);
+                            Animation2D.scale(sp, 1, 1, 1, 0, time, 0, () => {
+                                tex.destroy();
+                                sp.destroy();
                             });
                             if (index % 2 == 0) {
-                                let Sp1 = new Laya.Image;
-                                Laya.stage.addChild(Sp1);
-                                Sp1.width = Laya.stage.width;
-                                Sp1.height = Laya.stage.height;
-                                Sp1.pos(0, 0);
-                                Sp1.zOrder = 100;
-                                Sp1.name = 'shutters';
-                                Sp1.skin = base641;
+                                let sp1 = new Laya.Sprite;
+                                Laya.stage.addChild(sp1);
+                                sp1.width = Laya.stage.width;
+                                sp1.height = Laya.stage.height;
+                                sp1.pos(0, 0);
+                                sp1.zOrder = 100;
+                                sp1.name = 'shutters';
+                                sp1.texture = tex;
                                 let Mask1 = new Laya.Image;
                                 Mask1.skin = `Lwg/UI/ui_orthogon_cycn.png`;
-                                Sp1.mask = Mask1;
-                                Mask1.width = Laya.stage.width / num;
+                                Mask1.sizeGrid = '12,12,12,12';
+                                sp1.mask = Mask1;
+                                Mask1.width = Math.round(Laya.stage.width / num);
                                 Mask1.height = Laya.stage.height;
-                                Mask1.pos(Laya.stage.width / num * index, 0);
-                                Tools._Node.changePivot(Sp1, index * Sp1.width / num + Sp1.width / num / 2, Sp1.height / 2);
-                                Animation2D.scale(Sp1, 1, 1, 0, 1, time, 0, () => {
-                                    Sp1.destroy();
+                                Mask1.pos(Math.round(Laya.stage.width / num * index), 0);
+                                Tools._Node.changePivot(sp1, Math.round(index * sp1.width / num + sp1.width / num / 2), Math.round(sp1.height / 2));
+                                Animation2D.scale(sp1, 1, 1, 0, 1, time, 0, () => {
+                                    tex.destroy();
+                                    sp1.destroy();
                                 });
                             }
                         };
                         var func3 = () => {
-                            Mask.width = Laya.stage.width / num;
+                            Mask.width = Math.round(Laya.stage.width / num);
                             Mask.height = Laya.stage.height + 1000;
-                            Mask.pos(Laya.stage.width / num * index, -1000 / 2);
-                            Tools._Node.changePivot(Mask, Mask.width / 2, Mask.height / 2);
-                            Tools._Node.changePivot(Sp, index * Sp.width / num + Sp.width / num / 2, Sp.height / 2);
+                            Mask.pos(Math.round(Laya.stage.width / num * index), -1000 / 2);
+                            Tools._Node.changePivot(Mask, Math.round(Mask.width / 2), Math.round(Mask.height / 2));
+                            Tools._Node.changePivot(sp, index * sp.width / num + sp.width / num / 2, sp.height / 2);
                             Mask.rotation = 10;
-                            Animation2D.scale(Sp, 1, 1, 0, 1, time, 0, () => {
-                                Sp.destroy();
+                            Animation2D.scale(sp, 1, 1, 0, 1, time, 0, () => {
+                                tex.destroy();
+                                sp.destroy();
                             });
                         };
                         let addLen = 1000;
                         var func4 = () => {
-                            Mask.width = Laya.stage.width / num;
+                            Mask.width = Math.round(Laya.stage.width / num);
                             Mask.height = Laya.stage.height + addLen;
-                            Mask.pos(Laya.stage.width / num * index, -addLen / 2);
-                            Tools._Node.changePivot(Mask, Mask.width / 2, Mask.height / 2);
-                            Tools._Node.changePivot(Sp, index * Sp.width / num + Sp.width / num / 2, Sp.height / 2);
+                            Mask.pos(Math.round(Laya.stage.width / num * index), Math.round(-addLen / 2));
+                            Tools._Node.changePivot(Mask, Math.round(Mask.width / 2), Math.round(Mask.height / 2));
+                            Tools._Node.changePivot(sp, index * sp.width / num + sp.width / num / 2, sp.height / 2);
                             Mask.rotation = -10;
-                            Animation2D.scale(Sp, 1, 1, 0, 1, time, 0, () => {
-                                Sp.destroy();
+                            Animation2D.scale(sp, 1, 1, 0, 1, time, 0, () => {
+                                tex.destroy();
+                                sp.destroy();
                             });
                         };
                         var func5 = () => {
@@ -1014,30 +1021,33 @@
                             Mask.height = Laya.stage.height + addLen;
                             Mask.pos(Laya.stage.width / num * index, -addLen / 2);
                             Tools._Node.changePivot(Mask, Mask.width / 2, Mask.height / 2);
-                            Tools._Node.changePivot(Sp, index * Sp.width / num + Sp.width / num / 2, Sp.height / 2);
+                            Tools._Node.changePivot(sp, index * sp.width / num + sp.width / num / 2, sp.height / 2);
                             Mask.rotation = -15;
-                            Animation2D.scale(Sp, 1, 1, 0, 1, time, 0, () => {
-                                Sp.destroy();
+                            Animation2D.scale(sp, 1, 1, 0, 1, time, 0, () => {
+                                tex.destroy();
+                                sp.destroy();
                             });
-                            let Sp2 = new Laya.Image;
-                            Laya.stage.addChild(Sp2);
-                            Sp2.width = Laya.stage.width;
-                            Sp2.height = Laya.stage.height;
-                            Sp2.pos(0, 0);
-                            Sp2.zOrder = 100;
-                            Sp2.name = 'shutters';
-                            Sp2.skin = base641;
-                            let Mask1 = new Laya.Image;
-                            Mask1.skin = `Lwg/UI/ui_orthogon_cycn.png`;
-                            Sp2.mask = Mask1;
-                            Mask1.width = Laya.stage.width / num;
-                            Mask1.height = Laya.stage.height + addLen;
-                            Mask1.pos(Laya.stage.width / num * index, -addLen / 2);
-                            Tools._Node.changePivot(Mask1, Mask1.width / 2, Mask1.height / 2);
-                            Tools._Node.changePivot(Sp2, index * Sp2.width / num + Sp2.width / num / 2, Sp2.height / 2);
-                            Mask1.rotation = 15;
-                            Animation2D.scale(Sp2, 1, 1, 0, 1, time, 0, () => {
-                                Sp2.destroy();
+                            let sp2 = new Laya.Sprite;
+                            Laya.stage.addChild(sp2);
+                            sp2.width = Laya.stage.width;
+                            sp2.height = Laya.stage.height;
+                            sp2.pos(0, 0);
+                            sp2.zOrder = 100;
+                            sp2.name = 'shutters';
+                            sp2.texture = tex;
+                            let Mask2 = new Laya.Image;
+                            Mask2.skin = `Lwg/UI/ui_orthogon_cycn.png`;
+                            Mask2.sizeGrid = '12,12,12,12';
+                            sp2.mask = Mask2;
+                            Mask2.width = Laya.stage.width / num;
+                            Mask2.height = Laya.stage.height + addLen;
+                            Mask2.pos(Laya.stage.width / num * index, -addLen / 2);
+                            Tools._Node.changePivot(Mask2, Mask2.width / 2, Mask2.height / 2);
+                            Tools._Node.changePivot(sp2, index * sp2.width / num + sp2.width / num / 2, sp2.height / 2);
+                            Mask2.rotation = 15;
+                            Animation2D.scale(sp2, 1, 1, 0, 1, time, 0, () => {
+                                tex.destroy();
+                                sp2.destroy();
                             });
                         };
                         let arr = [func1, func2, func3, func4, func5, func6];
@@ -1103,9 +1113,9 @@
                         element.x = element.pivotX > element.width / 2 ? 800 + element.width : -800 - element.width;
                         element.y = element.rotation > 0 ? element.y + 200 : element.y - 200;
                         Animation2D.rotate(element, 0, time, delay * index);
-                        Animation2D.move_Simple(element, element.x, element.y, originalX, originalY, time, delay * index, () => {
+                        Animation2D.move(element, originalX, originalY, time, () => {
                             Tools._Node.changePivot(element, originalPovitX, originalPovitY);
-                        });
+                        }, delay * index);
                     }
                 }
                 sumDelay = Scene.numChildren * delay + time + 200;
@@ -1231,7 +1241,7 @@
                 zOrder: null,
             };
             function _preLoadOpenScene(openName, closeName, func, zOrder) {
-                _openScene(_SceneName.PreLoadCutIn, closeName);
+                _openScene(_SceneName.PreLoadCutIn, closeName, func);
                 Admin._PreLoadCutIn.openName = openName;
                 Admin._PreLoadCutIn.closeName = closeName;
                 Admin._PreLoadCutIn.func = func;
@@ -1240,6 +1250,30 @@
             Admin._preLoadOpenScene = _preLoadOpenScene;
             class _SceneChange {
                 static _openZOderUp() {
+                    if (SceneAnimation._closeSwitch) {
+                        let num = 0;
+                        for (const key in Admin._SceneControl) {
+                            if (Object.prototype.hasOwnProperty.call(Admin._SceneControl, key)) {
+                                const Scene = Admin._SceneControl[key];
+                                if (Scene.parent) {
+                                    num++;
+                                }
+                            }
+                        }
+                        if (this._openScene) {
+                            this._openScene.zOrder = num;
+                            for (let index = 0; index < this._closeScene.length; index++) {
+                                const element = this._closeScene[index];
+                                if (element) {
+                                    element.zOrder = --num;
+                                }
+                                else {
+                                    this._closeScene.splice(index, 1);
+                                    index--;
+                                }
+                            }
+                        }
+                    }
                 }
                 ;
                 static _closeZOderUP(CloseScene) {
@@ -1280,6 +1314,7 @@
                         else {
                             console.log(`${this._openScene.name}场景没有同名脚本！,需在LwgInit脚本中导入该模块！`);
                         }
+                        this._openZOderUp();
                         this._openFunc();
                     }
                 }
@@ -1483,6 +1518,7 @@
                 lwgOnStageUp(e) { }
                 ;
             }
+            Admin._ScriptBase = _ScriptBase;
             class _SceneBase extends _ScriptBase {
                 constructor() {
                     super();
@@ -1514,6 +1550,9 @@
                 _BtnVar(name) {
                     return this.getVar(name, '_BtnVar');
                 }
+                _BoxVar(name) {
+                    return this.getVar(name, '_BoxVar');
+                }
                 _ImgVar(name) {
                     return this.getVar(name, '_ImgVar');
                 }
@@ -1529,11 +1568,17 @@
                 _TextVar(name) {
                     return this.getVar(name, '_TextVar');
                 }
+                _TextInputVar(name) {
+                    return this.getVar(name, '_TextInputVar');
+                }
                 _FontClipVar(name) {
                     return this.getVar(name, '_FontClipVar');
                 }
                 _FontBox(name) {
                     return this.getVar(name, '_FontBox');
+                }
+                _FontTextInput(name) {
+                    return this.getVar(name, '_FontInput');
                 }
                 onAwake() {
                     this._Owner.width = Laya.stage.width;
@@ -1620,6 +1665,9 @@
                 }
                 get _Owner() {
                     return this.owner;
+                }
+                get _point() {
+                    return new Laya.Point(this._Owner.x, this._Owner.y);
                 }
                 get _Scene() {
                     return this.owner.scene;
@@ -1734,6 +1782,8 @@
                 onAwake() {
                     this._Owner[this['__proto__']['constructor'].name] = this;
                     this.ownerSceneName = this._Scene.name;
+                    this._fPoint = new Laya.Point(this._Owner.x, this._Owner.y);
+                    this._fRotation = this._Owner.rotation;
                     this.lwgOnAwake();
                     this.lwgAdaptive();
                 }
@@ -1743,8 +1793,6 @@
                     this.lwgOnEnable();
                 }
                 onStart() {
-                    this._fPoint = new Laya.Point(this._Owner.x, this._Owner.y);
-                    this._fGPoint = this._gPoint;
                     this.lwgOnStart();
                 }
                 onUpdate() {
@@ -1812,7 +1860,6 @@
                         },
                         func() {
                             this['_func'] && this['_func']();
-                            console.log(this['_func']);
                         }
                     };
                 }
@@ -1974,41 +2021,71 @@
         let DataAdmin;
         (function (DataAdmin) {
             class _Table {
-                constructor(tableName, arrUrl, localStorage, proName, lastVtableName) {
+                constructor(tableName, _tableArr, localStorage, lastVtableName) {
                     this._property = {
                         name: 'name',
+                        index: 'index',
+                        sort: 'sort',
                         chName: 'chName',
                         classify: 'classify',
                         unlockWay: 'unlockWay',
                         conditionNum: 'conditionNum',
                         degreeNum: 'degreeNum',
                         compelet: 'compelet',
-                        unlock: 'unlock',
-                        have: 'have',
                         getAward: 'getAward',
-                        versionUpdateTimes: 'versionUpdateTimes',
+                        pitch: 'pitch',
+                    };
+                    this._unlockWay = {
+                        ads: 'ads',
+                        gold: 'gold',
+                        customs: 'free',
+                        diamond: 'diamond',
+                        free: 'free',
                     };
                     this._tableName = '';
-                    this._arr = [];
                     this._lastArr = [];
                     this._localStorage = false;
                     if (tableName) {
                         this._tableName = tableName;
                         if (localStorage) {
                             this._localStorage = localStorage;
-                            this._arr = _jsonCompare(arrUrl, tableName, proName ? proName : 'name');
+                            this._arr = addCompare(_tableArr, tableName, this._property.name);
                             if (lastVtableName) {
                                 this._compareLastInfor(lastVtableName);
                             }
                         }
                         else {
-                            if (Laya.Loader.getRes(arrUrl)) {
-                                this._arr = Laya.Loader.getRes(arrUrl);
-                            }
-                            else {
-                                console.log(arrUrl, '数据表不存在！');
-                            }
+                            this._arr = _tableArr;
                         }
+                    }
+                }
+                get _arr() {
+                    return this[`_${this._tableName}arr`];
+                }
+                set _arr(arr) {
+                    this[`_${this._tableName}arr`] = arr;
+                }
+                get _List() {
+                    return this[`${this._tableName}_List`];
+                }
+                set _List(list) {
+                    this[`${this._tableName}_List`] = list;
+                    list.array = this._arr;
+                    list.selectEnable = false;
+                    list.vScrollBarSkin = "";
+                    list.renderHandler = new Laya.Handler(this, (Cell, index) => {
+                        this._listRender && this._listRender(Cell, index);
+                    });
+                    list.selectHandler = new Laya.Handler(this, (index) => {
+                        this._listSelect && this._listSelect(index);
+                    });
+                }
+                _refreshAndStorage() {
+                    if (this._localStorage) {
+                        Laya.LocalStorage.setJSON(this._tableName, JSON.stringify(this._arr));
+                    }
+                    if (this._List) {
+                        this._List.refresh();
                     }
                 }
                 _compareLastInfor(lastVtableName) {
@@ -2020,12 +2097,6 @@
                                 const element = this._arr[j];
                                 if (_lastelement[this._property.compelet]) {
                                     element[this._property.compelet] = true;
-                                }
-                                if (_lastelement[this._property.have]) {
-                                    element[this._property.have] = true;
-                                }
-                                if (_lastelement[this._property.unlock]) {
-                                    element[this._property.unlock] = true;
                                 }
                                 if (_lastelement[this._property.getAward]) {
                                     element[this._property.getAward] = true;
@@ -2063,23 +2134,110 @@
                     return value;
                 }
                 ;
+                _getPitchIndexArr() {
+                    for (let index = 0; index < this._arr.length; index++) {
+                        const element = this._arr[index];
+                        if (element[this._property.name] === this._pitchName) {
+                            return index;
+                        }
+                    }
+                }
+                _getPitchIndexByList() {
+                    if (this._List) {
+                        for (let index = 0; index < this._List.array.length; index++) {
+                            const element = this._List.array[index];
+                            if (element[this._property.name] === this._pitchName) {
+                                return index;
+                            }
+                        }
+                    }
+                }
+                _listTweenToPitch(time, func) {
+                    const index = this._getPitchIndexByList();
+                    index && this._List.tweenTo(index, time, Laya.Handler.create(this, () => {
+                        func && func();
+                    }));
+                }
+                _listTweenToPitchChoose(diffIndex, time, func) {
+                    const index = this._getPitchIndexByList();
+                    index && this._List.tweenTo(index + diffIndex, time, Laya.Handler.create(this, () => {
+                        func && func();
+                    }));
+                }
+                _listScrollToLast() {
+                    const index = this._List.array.length - 1;
+                    index && this._List.scrollTo(index);
+                }
                 _setProperty(name, pro, value) {
                     for (const key in this._arr) {
                         if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
                             const element = this._arr[key];
                             if (element[this._property.name] == name) {
                                 element[pro] = value;
+                                this._refreshAndStorage();
                                 break;
                             }
                         }
                     }
-                    if (this._localStorage) {
-                        Laya.LocalStorage.setJSON(this._tableName, JSON.stringify(this._arr));
-                    }
                     return value;
                 }
                 ;
-                _randomOne(proName, value) {
+                _getObjByName(name) {
+                    let obj = null;
+                    for (const key in this._arr) {
+                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                            const element = this._arr[key];
+                            if (element[this._property.name] == name) {
+                                obj = element;
+                                break;
+                            }
+                        }
+                    }
+                    return obj;
+                }
+                _setProSoleByClassify(name, pro, value) {
+                    const obj = this._getObjByName(name);
+                    const objArr = this._getArrByClassify(obj[this._property.classify]);
+                    for (const key in objArr) {
+                        if (Object.prototype.hasOwnProperty.call(objArr, key)) {
+                            const element = objArr[key];
+                            if (element[this._property.name] == name) {
+                                element[pro] = value;
+                            }
+                            else {
+                                element[pro] = !value;
+                            }
+                        }
+                    }
+                    this._refreshAndStorage();
+                }
+                _setAllProPerty(pro, value) {
+                    for (let index = 0; index < this._arr.length; index++) {
+                        const element = this._arr[index];
+                        element[pro] = value;
+                    }
+                    this._refreshAndStorage();
+                }
+                _addAllProPerty(pro, valueFunc) {
+                    for (let index = 0; index < this._arr.length; index++) {
+                        const element = this._arr[index];
+                        element[pro] += valueFunc();
+                    }
+                    this._refreshAndStorage();
+                }
+                _setPitchProperty(pro, value) {
+                    const obj = this._getPitchObj();
+                    obj[pro] = value;
+                    this._refreshAndStorage();
+                    return value;
+                }
+                ;
+                _getPitchProperty(pro) {
+                    const obj = this._getPitchObj();
+                    return obj[pro];
+                }
+                ;
+                _randomOneObj(proName, value) {
                     let arr = [];
                     for (const key in this._arr) {
                         if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
@@ -2104,7 +2262,31 @@
                         return any;
                     }
                 }
-                _getPropertyArr(proName, value) {
+                _getArrByClassify(classify) {
+                    let arr = [];
+                    for (const key in this._arr) {
+                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                            const element = this._arr[key];
+                            if (element[this._property.classify] == classify) {
+                                arr.push(element);
+                            }
+                        }
+                    }
+                    return arr;
+                }
+                _getArrByPitchClassify() {
+                    let arr = [];
+                    for (const key in this._arr) {
+                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                            const element = this._arr[key];
+                            if (element[this._property.classify] == this._pitchClassify) {
+                                arr.push(element);
+                            }
+                        }
+                    }
+                    return arr;
+                }
+                _getArrByProperty(proName, value) {
                     let arr = [];
                     for (const key in this._arr) {
                         if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
@@ -2116,7 +2298,23 @@
                     }
                     return arr;
                 }
-                _setPropertyArr(proName, value) {
+                _getPitchClassfiyName() {
+                    const obj = this._getObjByName(this._pitchName);
+                    return obj[this._property.classify];
+                }
+                _getArrByNoProperty(proName, value) {
+                    let arr = [];
+                    for (const key in this._arr) {
+                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                            const element = this._arr[key];
+                            if (element[proName] && element[proName] !== value) {
+                                arr.push(element);
+                            }
+                        }
+                    }
+                    return arr;
+                }
+                _setArrByProperty(proName, value) {
                     let arr = [];
                     for (const key in this._arr) {
                         if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
@@ -2127,9 +2325,7 @@
                             }
                         }
                     }
-                    if (this._localStorage) {
-                        Laya.LocalStorage.setJSON(this._tableName, JSON.stringify(this._arr));
-                    }
+                    this._refreshAndStorage();
                     return arr;
                 }
                 _checkCondition(name, number, func) {
@@ -2168,8 +2364,189 @@
                     }
                     return bool;
                 }
+                get _pitchClassify() {
+                    if (!this[`${this._tableName}/pitchClassify`]) {
+                        if (this._localStorage) {
+                            return Laya.LocalStorage.getItem(`${this._tableName}/pitchClassify`) ? Laya.LocalStorage.getItem(`${this._tableName}/pitchClassify`) : null;
+                        }
+                        else {
+                            return this[`${this._tableName}/pitchClassify`] = null;
+                        }
+                    }
+                    else {
+                        return this[`${this._tableName}/pitchClassify`];
+                    }
+                }
+                ;
+                set _pitchClassify(str) {
+                    this._lastPitchClassify = this[`${this._tableName}/pitchClassify`] ? this[`${this._tableName}/pitchClassify`] : null;
+                    this[`${this._tableName}/pitchClassify`] = str;
+                    if (this._localStorage) {
+                        Laya.LocalStorage.setItem(`${this._tableName}/pitchClassify`, str.toString());
+                    }
+                    this._refreshAndStorage();
+                }
+                ;
+                get _pitchName() {
+                    if (!this[`${this._tableName}/_pitchName`]) {
+                        if (this._localStorage) {
+                            return Laya.LocalStorage.getItem(`${this._tableName}/_pitchName`) ? Laya.LocalStorage.getItem(`${this._tableName}/_pitchName`) : null;
+                        }
+                        else {
+                            return this[`${this._tableName}/_pitchName`] = null;
+                        }
+                    }
+                    else {
+                        return this[`${this._tableName}/_pitchName`];
+                    }
+                }
+                ;
+                set _pitchName(str) {
+                    this._lastPitchName = this[`${this._tableName}/_pitchName`];
+                    this[`${this._tableName}/_pitchName`] = str;
+                    if (this._localStorage) {
+                        Laya.LocalStorage.setItem(`${this._tableName}/_pitchName`, str.toString());
+                    }
+                    this._refreshAndStorage();
+                }
+                ;
+                get _lastPitchClassify() {
+                    if (!this[`${this._tableName}/_lastPitchClassify`]) {
+                        if (this._localStorage) {
+                            return Laya.LocalStorage.getItem(`${this._tableName}/_lastPitchClassify`) ? Laya.LocalStorage.getItem(`${this._tableName}/_lastPitchClassify`) : null;
+                        }
+                        else {
+                            return this[`${this._tableName}/_lastPitchClassify`] = null;
+                        }
+                    }
+                    else {
+                        return this[`${this._tableName}/_lastPitchClassify`];
+                    }
+                }
+                ;
+                set _lastPitchClassify(str) {
+                    this[`${this._tableName}/_lastPitchClassify`] = str;
+                    if (this._localStorage && str) {
+                        Laya.LocalStorage.setItem(`${this._tableName}/_lastPitchClassify`, str.toString());
+                    }
+                }
+                ;
+                get _lastPitchName() {
+                    if (!this[`${this._tableName}/_lastPitchName`]) {
+                        if (this._localStorage) {
+                            return Laya.LocalStorage.getItem(`${this._tableName}/_lastPitchName`) ? Laya.LocalStorage.getItem(`${this._tableName}/_lastPitchName`) : null;
+                        }
+                        else {
+                            return this[`${this._tableName}/_lastPitchName`] = null;
+                        }
+                    }
+                    else {
+                        return this[`${this._tableName}/_lastPitchName`];
+                    }
+                }
+                set _lastPitchName(str) {
+                    this[`${this._tableName}/_lastPitchName`] = str;
+                    if (this._localStorage && str) {
+                        Laya.LocalStorage.setItem(`${this._tableName}/_lastPitchName`, str.toString());
+                    }
+                }
+                ;
+                _setPitch(name) {
+                    let _calssify;
+                    for (let index = 0; index < this._arr.length; index++) {
+                        const element = this._arr[index];
+                        if (element[this._property.name] == name) {
+                            element[this._property.pitch] = true;
+                            _calssify = element[this._property.classify];
+                        }
+                        else {
+                            element[this._property.pitch] = false;
+                        }
+                    }
+                    this._pitchClassify = _calssify;
+                    this._pitchName = name;
+                    this._refreshAndStorage();
+                }
+                _getPitchObj() {
+                    for (const key in this._arr) {
+                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                            const element = this._arr[key];
+                            if (element[this._property.name] === this._pitchName) {
+                                return element;
+                            }
+                        }
+                    }
+                }
+                _addObject(obj) {
+                    let _obj = Tools._ObjArray.objCopy(obj);
+                    for (let index = 0; index < this._arr.length; index++) {
+                        const element = this._arr[index];
+                        if (element[this._property.name] === _obj[this._property.name]) {
+                            this._arr[index] == _obj;
+                        }
+                    }
+                    this._refreshAndStorage();
+                }
+                _addObjectArr(objArr) {
+                    const _objArr = Tools._ObjArray.arrCopy(objArr);
+                    for (let i = 0; i < _objArr.length; i++) {
+                        const obj = _objArr[i];
+                        for (let j = 0; j < this._arr.length; j++) {
+                            const element = this._arr[j];
+                            if (obj[this._property.name] === element[this._property.name]) {
+                                this._arr[j] = obj;
+                                _objArr.splice(i, 1);
+                                i--;
+                                continue;
+                            }
+                        }
+                    }
+                    for (let k = 0; k < _objArr.length; k++) {
+                        const element = _objArr[k];
+                        this._arr.push(element);
+                    }
+                    this._refreshAndStorage();
+                }
+                _sortByProperty(pro, indexPro, inverted) {
+                    Tools._ObjArray.sortByProperty(this._arr, pro);
+                    if (inverted == undefined || inverted) {
+                        for (let index = this._arr.length - 1; index >= 0; index--) {
+                            const element = this._arr[index];
+                            element[indexPro] = this._arr.length - index;
+                        }
+                        this._arr.reverse();
+                    }
+                    else {
+                        for (let index = 0; index < this._arr.length; index++) {
+                            const element = this._arr[index];
+                            element[indexPro] = index + 1;
+                        }
+                    }
+                    this._refreshAndStorage();
+                }
             }
             DataAdmin._Table = _Table;
+            function addCompare(tableArr, storageName, propertyName) {
+                try {
+                    Laya.LocalStorage.getJSON(storageName);
+                }
+                catch (error) {
+                    Laya.LocalStorage.setJSON(storageName, JSON.stringify(tableArr));
+                    return tableArr;
+                }
+                let storeArr;
+                if (Laya.LocalStorage.getJSON(storageName)) {
+                    storeArr = JSON.parse(Laya.LocalStorage.getJSON(storageName));
+                    let diffArray = Tools._ObjArray.diffProByTwo(tableArr, storeArr, propertyName);
+                    console.log(`${storageName}新添加对象`, diffArray);
+                    Tools._Array.addToarray(storeArr, diffArray);
+                }
+                else {
+                    storeArr = tableArr;
+                }
+                Laya.LocalStorage.setJSON(storageName, JSON.stringify(storeArr));
+                return storeArr;
+            }
             function _jsonCompare(url, storageName, propertyName) {
                 let dataArr;
                 try {
@@ -2186,9 +2563,9 @@
                     try {
                         let dataArr_0 = Laya.loader.getRes(url)['RECORDS'];
                         if (dataArr_0.length >= dataArr.length) {
-                            let diffArray = Tools._ObjArray.differentPropertyTwo(dataArr_0, dataArr, propertyName);
+                            let diffArray = Tools._ObjArray.diffProByTwo(dataArr_0, dataArr, propertyName);
                             console.log('两个数据的差值为：', diffArray);
-                            Tools._Array.oneAddToarray(dataArr, diffArray);
+                            Tools._Array.addToarray(dataArr, diffArray);
                         }
                         else {
                             console.log(storageName + '数据表填写有误，长度不能小于之前的长度');
@@ -2333,8 +2710,84 @@
             }
             Color._changeConstant = _changeConstant;
         })(Color = lwg.Color || (lwg.Color = {}));
-        let Effects;
-        (function (Effects) {
+        let Effects3D;
+        (function (Effects3D) {
+            Effects3D._tex2D = {
+                爱心2: {
+                    url: 'Lwg/Effects/3D/aixin2.png',
+                    tex: null,
+                }
+            };
+            let _Particle;
+            (function (_Particle) {
+                function _createBox(parent, position, sectionSize, sectionRotation, texArr, colorRGBA, multiple) {
+                    const _scaleX = sectionSize ? Tools._Number.randomOneBySection(sectionSize[0][0], sectionSize[1][0]) : Tools._Number.randomOneBySection(0.01, 0.03);
+                    const _scaleY = sectionSize ? Tools._Number.randomOneBySection(sectionSize[0][1], sectionSize[1][1]) : Tools._Number.randomOneBySection(0.01, 0.03);
+                    const _scaleZ = sectionSize ? Tools._Number.randomOneBySection(sectionSize[0][2], sectionSize[1][2]) : Tools._Number.randomOneBySection(0.01, 0.03);
+                    const box = parent.addChild(new Laya.MeshSprite3D(Laya.PrimitiveMesh.createBox(_scaleX, _scaleY, _scaleZ)));
+                    if (position) {
+                        box.transform.position.setValue(position.x, position.y, position.z);
+                    }
+                    else {
+                        box.transform.position.setValue(0, 0, 0);
+                    }
+                    box.transform.localRotationEulerX = sectionRotation ? Tools._Number.randomOneBySection(sectionRotation[0][0], sectionRotation[1][0]) : Tools._Number.randomOneBySection(0, 360);
+                    box.transform.localRotationEulerX = sectionRotation ? Tools._Number.randomOneBySection(sectionRotation[0][1], sectionRotation[1][1]) : Tools._Number.randomOneBySection(0, 360);
+                    box.transform.localRotationEulerX = sectionRotation ? Tools._Number.randomOneBySection(sectionRotation[0][2], sectionRotation[1][2]) : Tools._Number.randomOneBySection(0, 360);
+                    const mat = box.meshRenderer.material = new Laya.UnlitMaterial;
+                    mat.albedoTexture = texArr ? Tools._Array.randomGetOne(texArr) : Effects3D._tex2D.爱心2.tex;
+                    mat.renderMode = 2;
+                    mat.albedoColorR = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][0], colorRGBA[1][0]) : Tools._Number.randomOneBySection(180, 255);
+                    mat.albedoColorG = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][1], colorRGBA[1][1]) : Tools._Number.randomOneBySection(10, 180);
+                    mat.albedoColorB = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][2], colorRGBA[1][2]) : Tools._Number.randomOneBySection(10, 180);
+                    mat.albedoColorA = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][3], colorRGBA[1][3]) : Tools._Number.randomOneBySection(1, 1);
+                    return box;
+                }
+                _Particle._createBox = _createBox;
+                function _spiral(parent, position, sectionSize, sectionRotation, texArr, colorRGBA, liveTime) {
+                    const box = _createBox(parent, position, sectionSize, sectionRotation, texArr, colorRGBA);
+                    const mat = box.meshRenderer.material;
+                    const _liveTime = liveTime ? Tools._Number.randomOneBySection(liveTime[0], liveTime[1]) : Tools._Number.randomOneBySection(100, 200);
+                    let moveCaller = {
+                        time: 0,
+                        alpha: true,
+                        move: false,
+                        vinish: false,
+                    };
+                    box['moveCaller'] = moveCaller;
+                    mat.albedoColorA = 0;
+                    TimerAdmin._frameLoop(1, moveCaller, () => {
+                        moveCaller.time++;
+                        if (moveCaller.alpha) {
+                            mat.albedoColorA += 0.15;
+                            box.transform.localPositionY += 0.002;
+                            if (mat.albedoColorA >= 1) {
+                                moveCaller.alpha = false;
+                                moveCaller.move = true;
+                            }
+                        }
+                        if (moveCaller.move) {
+                            box.transform.localPositionY += 0.005;
+                            if (moveCaller.time > _liveTime) {
+                                moveCaller.move = false;
+                                moveCaller.vinish = true;
+                            }
+                        }
+                        if (moveCaller.vinish) {
+                            mat.albedoColorA -= 0.15;
+                            box.transform.localPositionY += 0.002;
+                            if (mat.albedoColorA <= 0) {
+                                box.removeSelf();
+                            }
+                        }
+                    });
+                    return box;
+                }
+                _Particle._spiral = _spiral;
+            })(_Particle = Effects3D._Particle || (Effects3D._Particle = {}));
+        })(Effects3D = lwg.Effects3D || (lwg.Effects3D = {}));
+        let Effects2D;
+        (function (Effects2D) {
             let _SkinUrl;
             (function (_SkinUrl) {
                 _SkinUrl["\u7231\u5FC31"] = "Lwg/Effects/aixin1.png";
@@ -2351,13 +2804,22 @@
                 _SkinUrl["\u661F\u661F5"] = "Lwg/Effects/star5.png";
                 _SkinUrl["\u661F\u661F6"] = "Lwg/Effects/star6.png";
                 _SkinUrl["\u661F\u661F7"] = "Lwg/Effects/star7.png";
+                _SkinUrl["\u661F\u661F8"] = "Lwg/Effects/star8.png";
+                _SkinUrl["\u83F1\u5F621"] = "Lwg/Effects/rhombus1.png";
+                _SkinUrl["\u83F1\u5F622"] = "Lwg/Effects/rhombus1.png";
+                _SkinUrl["\u83F1\u5F623"] = "Lwg/Effects/rhombus1.png";
+                _SkinUrl["\u77E9\u5F621"] = "Lwg/Effects/rectangle1.png";
+                _SkinUrl["\u77E9\u5F622"] = "Lwg/Effects/rectangle2.png";
+                _SkinUrl["\u77E9\u5F623"] = "Lwg/Effects/rectangle3.png";
                 _SkinUrl["\u96EA\u82B11"] = "Lwg/Effects/xuehua1.png";
                 _SkinUrl["\u53F6\u5B501"] = "Lwg/Effects/yezi1.png";
                 _SkinUrl["\u5706\u5F62\u53D1\u51491"] = "Lwg/Effects/yuanfaguang.png";
                 _SkinUrl["\u5706\u5F621"] = "Lwg/Effects/yuan1.png";
                 _SkinUrl["\u5149\u57081"] = "Lwg/Effects/guangquan1.png";
                 _SkinUrl["\u5149\u57082"] = "Lwg/Effects/guangquan2.png";
-            })(_SkinUrl = Effects._SkinUrl || (Effects._SkinUrl = {}));
+                _SkinUrl["\u4E09\u89D2\u5F621"] = "Lwg/Effects/triangle1.png";
+                _SkinUrl["\u4E09\u89D2\u5F622"] = "Lwg/Effects/triangle2.png";
+            })(_SkinUrl = Effects2D._SkinUrl || (Effects2D._SkinUrl = {}));
             let _Aperture;
             (function (_Aperture) {
                 class _ApertureImage extends Laya.Image {
@@ -2427,7 +2889,7 @@
                     });
                 }
                 _Aperture._continuous = _continuous;
-            })(_Aperture = Effects._Aperture || (Effects._Aperture = {}));
+            })(_Aperture = Effects2D._Aperture || (Effects2D._Aperture = {}));
             let _Particle;
             (function (_Particle) {
                 class _ParticleImgBase extends Laya.Image {
@@ -2447,12 +2909,12 @@
                         this.skin = urlArr ? Tools._Array.randomGetOne(urlArr) : _SkinUrl.圆形1;
                         this.rotation = rotation ? Tools._Number.randomOneBySection(rotation[0], rotation[1]) : 0;
                         this.alpha = 0;
-                        this.zOrder = zOrder ? zOrder : 0;
+                        this.zOrder = zOrder ? zOrder : 1000;
                         let RGBA = [];
-                        RGBA[0] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][0], colorRGBA[1][0]) : Tools._Number.randomOneBySection(0, 255);
-                        RGBA[1] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][1], colorRGBA[1][1]) : Tools._Number.randomOneBySection(0, 255);
-                        RGBA[2] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][2], colorRGBA[1][2]) : Tools._Number.randomOneBySection(0, 255);
-                        RGBA[3] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][3], colorRGBA[1][3]) : Tools._Number.randomOneBySection(0, 255);
+                        RGBA[0] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][0], colorRGBA[1][0]) : Tools._Number.randomOneBySection(180, 255);
+                        RGBA[1] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][1], colorRGBA[1][1]) : Tools._Number.randomOneBySection(10, 180);
+                        RGBA[2] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][2], colorRGBA[1][2]) : Tools._Number.randomOneBySection(10, 180);
+                        RGBA[3] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][3], colorRGBA[1][3]) : Tools._Number.randomOneBySection(1, 1);
                         Color._colour(this, RGBA);
                     }
                 }
@@ -2501,6 +2963,95 @@
                     return Img;
                 }
                 _Particle._snow = _snow;
+                function _fallingRotate(parent, centerPoint, sectionWH, width, height, urlArr, colorRGBA, distance, moveSpeed, scaleSpeed, skewSpeed, rotationSpeed, zOrder) {
+                    const Img = new _ParticleImgBase(parent, centerPoint, sectionWH, width, height, null, urlArr, colorRGBA, zOrder);
+                    let _rotationSpeed = rotationSpeed ? Tools._Number.randomOneBySection(rotationSpeed[0], rotationSpeed[1]) : Tools._Number.randomOneBySection(0, 1);
+                    _rotationSpeed = Tools._Number.randomOneHalf() == 0 ? _rotationSpeed : -_rotationSpeed;
+                    const _moveSpeed = moveSpeed ? Tools._Number.randomOneBySection(moveSpeed[0], moveSpeed[1]) : Tools._Number.randomOneBySection(1, 2.5);
+                    const _scaleSpeed = scaleSpeed ? Tools._Number.randomOneBySection(scaleSpeed[0], scaleSpeed[1]) : Tools._Number.randomOneBySection(0, 0.25);
+                    const _scaleDir = Tools._Number.randomOneHalf();
+                    let _skewSpeed = skewSpeed ? Tools._Number.randomOneBySection(skewSpeed[0], skewSpeed[1]) : Tools._Number.randomOneBySection(1, 10);
+                    _skewSpeed = Tools._Number.randomOneHalf() === 1 ? _skewSpeed : -_skewSpeed;
+                    const _skewDir = Tools._Number.randomOneHalf();
+                    const _scaleOrSkew = Tools._Number.randomOneHalf();
+                    let _distance0 = 0;
+                    const _distance = distance ? Tools._Number.randomOneBySection(distance[0], distance[1]) : Tools._Number.randomOneBySection(100, 300);
+                    const moveCaller = {
+                        appear: true,
+                        move: false,
+                        vinish: false,
+                        scaleSub: true,
+                        scaleAdd: false,
+                    };
+                    Img['moveCaller'] = moveCaller;
+                    TimerAdmin._frameLoop(1, moveCaller, () => {
+                        Img.rotation += _rotationSpeed;
+                        if (_scaleOrSkew === 1) {
+                            if (_skewDir === 1) {
+                                Img.skewX += _skewSpeed;
+                            }
+                            else {
+                                Img.skewY += _skewSpeed;
+                            }
+                        }
+                        else {
+                            if (_scaleDir === 1) {
+                                if (moveCaller.scaleSub) {
+                                    Img.scaleX -= _scaleSpeed;
+                                    if (Img.scaleX <= 0) {
+                                        moveCaller.scaleSub = false;
+                                    }
+                                }
+                                else {
+                                    Img.scaleX += _scaleSpeed;
+                                    if (Img.scaleX >= 1) {
+                                        moveCaller.scaleSub = true;
+                                    }
+                                }
+                            }
+                            else {
+                                if (moveCaller.scaleSub) {
+                                    Img.scaleY -= _scaleSpeed;
+                                    if (Img.scaleY <= 0) {
+                                        moveCaller.scaleSub = false;
+                                    }
+                                }
+                                else {
+                                    Img.scaleY += _scaleSpeed;
+                                    if (Img.scaleY >= 1) {
+                                        moveCaller.scaleSub = true;
+                                    }
+                                }
+                            }
+                        }
+                        if (moveCaller.appear) {
+                            Img.alpha += 0.05;
+                            Img.y += _moveSpeed / 2;
+                            if (Img.alpha >= 1) {
+                                moveCaller.appear = false;
+                                moveCaller.move = true;
+                            }
+                        }
+                        if (moveCaller.move) {
+                            Img.y += _moveSpeed;
+                            _distance0 += _moveSpeed;
+                            if (_distance0 >= _distance) {
+                                moveCaller.move = false;
+                                moveCaller.vinish = true;
+                            }
+                        }
+                        if (moveCaller.vinish) {
+                            Img.alpha -= 0.01;
+                            Img.y += _moveSpeed;
+                            if (Img.alpha <= 0) {
+                                Img.removeSelf();
+                                Laya.timer.clearAll(moveCaller);
+                            }
+                        }
+                    });
+                    return Img;
+                }
+                _Particle._fallingRotate = _fallingRotate;
                 function _fallingVertical(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder, distance, speed, accelerated) {
                     let Img = new _ParticleImgBase(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder);
                     let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(4, 8);
@@ -2629,7 +3180,59 @@
                     return Img;
                 }
                 _Particle._slowlyUp = _slowlyUp;
-                function _spray(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder, moveAngle, distance, rotationSpeed, speed, accelerated) {
+                function _sprayRound(parent, centerPoint, width, height, rotation, urlArr, colorRGBA, distance, time, moveAngle, rotationSpeed, zOrder) {
+                    let Img = new _ParticleImgBase(parent, centerPoint, [0, 0], width, height, rotation, urlArr, colorRGBA, zOrder);
+                    let centerPoint0 = centerPoint ? centerPoint : new Laya.Point(0, 0);
+                    let radius = 0;
+                    const _time = time ? Tools._Number.randomOneBySection(time[0], time[1]) : Tools._Number.randomOneBySection(30, 50);
+                    const _distance = distance ? Tools._Number.randomOneBySection(distance[0], distance[1]) : Tools._Number.randomOneBySection(100, 200);
+                    const _speed = _distance / _time;
+                    const _angle = moveAngle ? Tools._Number.randomOneBySection(moveAngle[0], moveAngle[1]) : Tools._Number.randomOneBySection(0, 360);
+                    let rotationSpeed0 = rotationSpeed ? Tools._Number.randomOneBySection(rotationSpeed[0], rotationSpeed[1]) : Tools._Number.randomOneBySection(0, 20);
+                    rotationSpeed0 = Tools._Number.randomOneHalf() == 0 ? rotationSpeed0 : -rotationSpeed0;
+                    const vinishTime = Tools._Number.randomOneInt(60);
+                    const subAlpha = 1 / vinishTime;
+                    let moveCaller = {
+                        alpha: true,
+                        move: false,
+                        vinish: false,
+                    };
+                    Img['moveCaller'] = moveCaller;
+                    TimerAdmin._frameLoop(1, moveCaller, () => {
+                        Img.rotation += rotationSpeed0;
+                        if (Img.alpha < 1 && moveCaller.alpha) {
+                            Img.alpha += 0.5;
+                            if (Img.alpha >= 1) {
+                                moveCaller.alpha = false;
+                                moveCaller.move = true;
+                            }
+                        }
+                        else {
+                            if (!moveCaller.vinish) {
+                                radius += _speed;
+                                let point = Tools._Point.getRoundPos(_angle, radius, centerPoint0);
+                                Img.pos(point.x, point.y);
+                                if (radius > _distance) {
+                                    moveCaller.move = false;
+                                    moveCaller.vinish = true;
+                                }
+                            }
+                            else {
+                                Img.alpha -= subAlpha;
+                                if (Img.alpha <= 0) {
+                                    Img.removeSelf();
+                                    Laya.timer.clearAll(moveCaller);
+                                }
+                                radius += _speed / 2;
+                                let point = Tools._Point.getRoundPos(_angle, radius, centerPoint0);
+                                Img.pos(point.x, point.y);
+                            }
+                        }
+                    });
+                    return Img;
+                }
+                _Particle._sprayRound = _sprayRound;
+                function _spray(parent, centerPoint, width, height, rotation, urlArr, colorRGBA, distance, moveAngle, rotationSpeed, speed, accelerated, zOrder) {
                     let Img = new _ParticleImgBase(parent, centerPoint, [0, 0], width, height, rotation, urlArr, colorRGBA, zOrder);
                     let centerPoint0 = centerPoint ? centerPoint : new Laya.Point(0, 0);
                     let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(3, 10);
@@ -2645,6 +3248,7 @@
                     let distance1 = distance ? Tools._Number.randomOneBySection(distance[0], distance[1]) : Tools._Number.randomOneBySection(100, 200);
                     let angle0 = moveAngle ? Tools._Number.randomOneBySection(moveAngle[0], moveAngle[1]) : Tools._Number.randomOneBySection(0, 360);
                     let rotationSpeed0 = rotationSpeed ? Tools._Number.randomOneBySection(rotationSpeed[0], rotationSpeed[1]) : Tools._Number.randomOneBySection(0, 20);
+                    rotationSpeed0 = Tools._Number.randomOneHalf() == 0 ? rotationSpeed0 : -rotationSpeed0;
                     TimerAdmin._frameLoop(1, moveCaller, () => {
                         Img.rotation += rotationSpeed0;
                         if (Img.alpha < 1 && moveCaller.alpha) {
@@ -2705,7 +3309,7 @@
                         }
                         Img.x += Tools._Number.randomOneBySection(-sectionWH[0], sectionWH[0]);
                     }
-                    let p = Tools._Point.pointByAngle(_angle);
+                    let p = Tools._Point.angleByPoint(_angle);
                     let _distance = distance ? Tools._Number.randomOneBySection(distance[0], distance[1]) : Tools._Number.randomOneBySection(20, 50);
                     let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(0.5, 1);
                     let accelerated0 = accelerated ? Tools._Number.randomOneBySection(accelerated[0], accelerated[1]) : Tools._Number.randomOneBySection(0.25, 0.45);
@@ -2853,11 +3457,11 @@
                     return Img;
                 }
                 _Particle._AnnularInhalation = _AnnularInhalation;
-            })(_Particle = Effects._Particle || (Effects._Particle = {}));
+            })(_Particle = Effects2D._Particle || (Effects2D._Particle = {}));
             let _Glitter;
             (function (_Glitter) {
                 class _GlitterImage extends Laya.Image {
-                    constructor(parent, centerPos, radiusXY, urlArr, colorRGBA, width, height) {
+                    constructor(parent, centerPos, radiusXY, urlArr, colorRGBA, width, height, zOder) {
                         super();
                         if (!parent.parent) {
                             return;
@@ -2871,17 +3475,18 @@
                         let p = radiusXY ? Tools._Point.randomPointByCenter(centerPos, radiusXY[0], radiusXY[1], 1) : Tools._Point.randomPointByCenter(centerPos, 100, 100, 1);
                         this.pos(p[0].x, p[0].y);
                         let RGBA = [];
-                        RGBA[0] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][0], colorRGBA[1][0]) : Tools._Number.randomOneBySection(0, 255);
-                        RGBA[1] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][1], colorRGBA[1][1]) : Tools._Number.randomOneBySection(0, 255);
-                        RGBA[2] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][2], colorRGBA[1][2]) : Tools._Number.randomOneBySection(0, 255);
-                        RGBA[3] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][3], colorRGBA[1][3]) : Tools._Number.randomOneBySection(0, 255);
+                        RGBA[0] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][0], colorRGBA[1][0]) : Tools._Number.randomOneBySection(10, 255);
+                        RGBA[1] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][1], colorRGBA[1][1]) : Tools._Number.randomOneBySection(200, 255);
+                        RGBA[2] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][2], colorRGBA[1][2]) : Tools._Number.randomOneBySection(10, 255);
+                        RGBA[3] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][3], colorRGBA[1][3]) : Tools._Number.randomOneBySection(1, 1);
                         Color._colour(this, RGBA);
                         this.alpha = 0;
+                        this.zOrder = zOder ? zOder : 1000;
                     }
                 }
                 _Glitter._GlitterImage = _GlitterImage;
-                function _blinkStar(parent, centerPos, radiusXY, urlArr, colorRGBA, width, height, scale, speed, rotateSpeed) {
-                    let Img = new _GlitterImage(parent, centerPos, radiusXY, urlArr, colorRGBA, width, height);
+                function _blinkStar(parent, centerPos, radiusXY, urlArr, colorRGBA, width, height, scale, speed, rotateSpeed, zOder) {
+                    let Img = new _GlitterImage(parent, centerPos, radiusXY, urlArr, colorRGBA, width, height, zOder);
                     Img.scaleX = 0;
                     Img.scaleY = 0;
                     let _scale = scale ? Tools._Number.randomOneBySection(scale[0], scale[1]) : Tools._Number.randomOneBySection(0.8, 1.2);
@@ -2963,7 +3568,7 @@
                     return Img;
                 }
                 _Glitter._simpleInfinite = _simpleInfinite;
-            })(_Glitter = Effects._Glitter || (Effects._Glitter = {}));
+            })(_Glitter = Effects2D._Glitter || (Effects2D._Glitter = {}));
             let _circulation;
             (function (_circulation) {
                 class _circulationImage extends Laya.Image {
@@ -3036,13 +3641,13 @@
                         let targetXY = [posArray[index][0], posArray[index][1]];
                         let distance = (new Laya.Point(Img.x, Img.y)).distance(targetXY[0], targetXY[1]);
                         if (parallel) {
-                            Img.rotation = Tools._Point.angleByPoint(Img.x - targetXY[0], Img.y - targetXY[1]) + 180;
+                            Img.rotation = Tools._Point.pointByAngle(Img.x - targetXY[0], Img.y - targetXY[1]) + 180;
                         }
                         let time = speed * 100 + distance / 5;
                         if (index == posArray.length + 1) {
                             targetXY = [posArray[0][0], posArray[0][1]];
                         }
-                        Animation2D.move_Simple(Img, Img.x, Img.y, targetXY[0], targetXY[1], time, 0, () => {
+                        Animation2D.move(Img, targetXY[0], targetXY[1], time, () => {
                             index++;
                             if (index == posArray.length) {
                                 index = 0;
@@ -3054,8 +3659,8 @@
                     return Img;
                 }
                 _circulation._corner = _corner;
-            })(_circulation = Effects._circulation || (Effects._circulation = {}));
-        })(Effects = lwg.Effects || (lwg.Effects = {}));
+            })(_circulation = Effects2D._circulation || (Effects2D._circulation = {}));
+        })(Effects2D = lwg.Effects2D || (lwg.Effects2D = {}));
         let Click;
         (function (Click) {
             Click._switch = true;
@@ -3091,7 +3696,7 @@
                         btnEffect = new _Reduce();
                         break;
                     default:
-                        btnEffect = new _Largen();
+                        btnEffect = new _NoEffect();
                         break;
                 }
                 target.on(Laya.Event.MOUSE_DOWN, caller, down);
@@ -3117,7 +3722,7 @@
                         btnEffect = new _Largen();
                         break;
                     default:
-                        btnEffect = new _Reduce();
+                        btnEffect = new _NoEffect();
                         break;
                 }
                 target._off(Laya.Event.MOUSE_DOWN, caller, down);
@@ -3131,8 +3736,6 @@
             }
             Click._off = _off;
             class _NoEffect {
-                constructor() {
-                }
                 down() { }
                 move() { }
                 up() { }
@@ -3140,11 +3743,9 @@
             }
             Click._NoEffect = _NoEffect;
             class _Largen {
-                constructor() {
-                }
                 down(event) {
                     event.currentTarget.scale(1.1, 1.1);
-                    Audio._playSound(Click._audioUrl);
+                    AudioAdmin._playSound(Click._audioUrl);
                 }
                 move() { }
                 up(event) {
@@ -3156,11 +3757,9 @@
             }
             Click._Largen = _Largen;
             class _Reduce {
-                constructor() {
-                }
                 down(event) {
                     event.currentTarget.scale(0.9, 0.9);
-                    Audio._playSound(Click._audioUrl);
+                    AudioAdmin._playSound(Click._audioUrl);
                 }
                 move() { }
                 up(event) {
@@ -3467,7 +4066,7 @@
             }
             Animation2D.move_Scale = move_Scale;
             function move_rotate(Node, tRotate, tPoint, time, delayed, func) {
-                Laya.Tween.to(Node, { rotation: tRotate, x: tPoint.x, y: tPoint.y }, time, null, Laya.Handler.create(Node['move_rotate'], () => {
+                Laya.Tween.to(Node, { rotation: tRotate, x: tPoint.x, y: tPoint.y }, time, null, Laya.Handler.create(Node, () => {
                     if (func) {
                         func();
                     }
@@ -3623,13 +4222,13 @@
                 }), delayed);
             }
             Animation2D.bomb_LeftRight = bomb_LeftRight;
-            function bombs_Appear(node, firstAlpha, endScale, maxScale, rotation1, time1, time2, delayed, func) {
+            function bombs_Appear(node, firstAlpha, endScale, maxScale, rotation, time, func, delayed) {
                 node.scale(0, 0);
                 node.alpha = firstAlpha;
-                Laya.Tween.to(node, { scaleX: maxScale, scaleY: maxScale, alpha: 1, rotation: rotation1 }, time1, Laya.Ease.cubicInOut, Laya.Handler.create(this, function () {
-                    Laya.Tween.to(node, { scaleX: endScale, scaleY: endScale, rotation: 0 }, time2, null, Laya.Handler.create(this, function () {
-                        Laya.Tween.to(node, { scaleX: endScale + (maxScale - endScale) * 0.2, scaleY: endScale + (maxScale - endScale) * 0.2, rotation: 0 }, time2, null, Laya.Handler.create(this, function () {
-                            Laya.Tween.to(node, { scaleX: endScale, scaleY: endScale, rotation: 0 }, time2, null, Laya.Handler.create(this, function () {
+                Laya.Tween.to(node, { scaleX: maxScale, scaleY: maxScale, alpha: 1, rotation: rotation }, time, Laya.Ease.cubicInOut, Laya.Handler.create(this, function () {
+                    Laya.Tween.to(node, { scaleX: endScale, scaleY: endScale, rotation: 0 }, time / 2, null, Laya.Handler.create(this, function () {
+                        Laya.Tween.to(node, { scaleX: endScale + (maxScale - endScale) / 3, scaleY: endScale + (maxScale - endScale) / 3, rotation: 0 }, time / 3, null, Laya.Handler.create(this, function () {
+                            Laya.Tween.to(node, { scaleX: endScale, scaleY: endScale, rotation: 0 }, time / 4, null, Laya.Handler.create(this, function () {
                                 if (func) {
                                     func();
                                 }
@@ -3639,7 +4238,7 @@
                 }), delayed ? delayed : 0);
             }
             Animation2D.bombs_Appear = bombs_Appear;
-            function bombs_AppearAllChild(node, firstAlpha, endScale, scale1, rotation1, time1, time2, interval, func, audioType) {
+            function bombs_AppearAllChild(node, firstAlpha, endScale, scale1, rotation1, time1, interval, func, audioType) {
                 let de1 = 0;
                 if (!interval) {
                     interval = 100;
@@ -3652,7 +4251,7 @@
                         if (index !== node.numChildren - 1) {
                             func == null;
                         }
-                        bombs_Appear(Child, firstAlpha, endScale, scale1, rotation1, time1, time2, null, func);
+                        bombs_Appear(Child, firstAlpha, endScale, scale1, rotation1, time1, func);
                     });
                     de1 += interval;
                 }
@@ -3669,13 +4268,13 @@
                         if (index !== node.numChildren - 1) {
                             func == null;
                         }
-                        bombs_Vanish(node, endScale, alpha, rotation, time, 0, func);
+                        bombs_Vanish(node, endScale, alpha, rotation, time, func);
                     });
                     de1 += interval;
                 }
             }
             Animation2D.bombs_VanishAllChild = bombs_VanishAllChild;
-            function bombs_Vanish(node, scale, alpha, rotation, time, delayed, func) {
+            function bombs_Vanish(node, scale, alpha, rotation, time, func, delayed) {
                 Laya.Tween.to(node, { scaleX: scale, scaleY: scale, alpha: alpha, rotation: rotation }, time, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
                     if (func) {
                         func();
@@ -3700,16 +4299,14 @@
                 }), delayed);
             }
             Animation2D.swell_shrink = swell_shrink;
-            function move_Simple(node, fX, fY, targetX, targetY, time, delayed, func, ease) {
-                node.x = fX;
-                node.y = fY;
+            function move(node, targetX, targetY, time, func, delayed, ease) {
                 Laya.Tween.to(node, { x: targetX, y: targetY }, time, ease ? ease : null, Laya.Handler.create(this, function () {
                     if (func) {
                         func();
                     }
                 }), delayed ? delayed : 0);
             }
-            Animation2D.move_Simple = move_Simple;
+            Animation2D.move = move;
             function move_Deform_X(node, firstX, firstR, targetX, scaleX, scaleY, time, delayed, func) {
                 node.alpha = 0;
                 node.x = firstX;
@@ -3863,12 +4460,12 @@
                     if (value) {
                         val = 1;
                         Laya.LocalStorage.setItem('Setting_bgMusic', val.toString());
-                        Audio._playMusic();
+                        AudioAdmin._playMusic();
                     }
                     else {
                         val = 0;
                         Laya.LocalStorage.setItem('Setting_bgMusic', val.toString());
-                        Audio._stopMusic();
+                        AudioAdmin._stopMusic();
                     }
                 }
             };
@@ -3948,8 +4545,8 @@
             }
             Setting.btnSetVinish = btnSetVinish;
         })(Setting = lwg.Setting || (lwg.Setting = {}));
-        let Audio;
-        (function (Audio) {
+        let AudioAdmin;
+        (function (AudioAdmin) {
             let _voiceUrl;
             (function (_voiceUrl) {
                 _voiceUrl["btn"] = "Lwg/Voice/btn.wav";
@@ -3957,7 +4554,7 @@
                 _voiceUrl["victory"] = "Lwg/Voice/guoguan.wav";
                 _voiceUrl["defeated"] = "Lwg/Voice/wancheng.wav";
                 _voiceUrl["huodejinbi"] = "Lwg/Voice/huodejinbi.wav";
-            })(_voiceUrl = Audio._voiceUrl || (Audio._voiceUrl = {}));
+            })(_voiceUrl = AudioAdmin._voiceUrl || (AudioAdmin._voiceUrl = {}));
             function _playSound(url, number, func) {
                 if (!url) {
                     url = _voiceUrl.btn;
@@ -3973,7 +4570,7 @@
                     }));
                 }
             }
-            Audio._playSound = _playSound;
+            AudioAdmin._playSound = _playSound;
             function _playDefeatedSound(url, number, func) {
                 if (!url) {
                     url = _voiceUrl.defeated;
@@ -3989,7 +4586,7 @@
                     }));
                 }
             }
-            Audio._playDefeatedSound = _playDefeatedSound;
+            AudioAdmin._playDefeatedSound = _playDefeatedSound;
             function _playVictorySound(url, number, func) {
                 if (!url) {
                     url = _voiceUrl.victory;
@@ -4005,7 +4602,7 @@
                     }));
                 }
             }
-            Audio._playVictorySound = _playVictorySound;
+            AudioAdmin._playVictorySound = _playVictorySound;
             function _playMusic(url, number, delayed) {
                 if (!url) {
                     url = _voiceUrl.bgm;
@@ -4020,12 +4617,12 @@
                     Laya.SoundManager.playMusic(url, number, Laya.Handler.create(this, function () { }), delayed);
                 }
             }
-            Audio._playMusic = _playMusic;
+            AudioAdmin._playMusic = _playMusic;
             function _stopMusic() {
                 Laya.SoundManager.stopMusic();
             }
-            Audio._stopMusic = _stopMusic;
-        })(Audio = lwg.Audio || (lwg.Audio = {}));
+            AudioAdmin._stopMusic = _stopMusic;
+        })(AudioAdmin = lwg.AudioAdmin || (lwg.AudioAdmin = {}));
         let Tools;
         (function (Tools) {
             function color_RGBtoHexString(r, g, b) {
@@ -4080,6 +4677,69 @@
             })(_Format = Tools._Format || (Tools._Format = {}));
             let _Node;
             (function (_Node) {
+                function tieByParent(Node) {
+                    const Parent = Node.parent;
+                    if (Node.x > Parent.width - Node.width / 2) {
+                        Node.x = Parent.width - Node.width / 2;
+                    }
+                    if (Node.x < Node.width / 2) {
+                        Node.x = Node.width / 2;
+                    }
+                    if (Node.y > Parent.height - Node.height / 2) {
+                        Node.y = Parent.height - Node.height / 2;
+                    }
+                    if (Node.y < Node.height / 2) {
+                        Node.y = Node.height / 2;
+                    }
+                }
+                _Node.tieByParent = tieByParent;
+                function tieByStage(Node, center) {
+                    const Parent = Node.parent;
+                    const gPoint = Parent.localToGlobal(new Laya.Point(Node.x, Node.y));
+                    if (!center) {
+                        if (gPoint.x > Laya.stage.width) {
+                            gPoint.x = Laya.stage.width;
+                        }
+                    }
+                    else {
+                        if (gPoint.x > Laya.stage.width - Node.width / 2) {
+                            gPoint.x = Laya.stage.width - Node.width / 2;
+                        }
+                    }
+                    if (!center) {
+                        if (gPoint.x < 0) {
+                            gPoint.x = 0;
+                        }
+                    }
+                    else {
+                        if (gPoint.x < Node.width / 2) {
+                            gPoint.x = Node.width / 2;
+                        }
+                    }
+                    if (!center) {
+                        if (gPoint.y > Laya.stage.height) {
+                            gPoint.y = Laya.stage.height;
+                        }
+                    }
+                    else {
+                        if (gPoint.y > Laya.stage.height - Node.height / 2) {
+                            gPoint.y = Laya.stage.height - Node.height / 2;
+                        }
+                    }
+                    if (!center) {
+                        if (gPoint.y < 0) {
+                            gPoint.y = 0;
+                        }
+                    }
+                    else {
+                        if (gPoint.y < Node.height / 2) {
+                            gPoint.y = Node.height / 2;
+                        }
+                    }
+                    const lPoint = Parent.globalToLocal(gPoint);
+                    Node.pos(lPoint.x, lPoint.y);
+                }
+                _Node.tieByStage = tieByStage;
                 function simpleCopyImg(Target) {
                     let Img = new Laya.Image;
                     Img.skin = Target.skin;
@@ -4092,26 +4752,26 @@
                     Img.skewX = Target.skewX;
                     Img.skewY = Target.skewY;
                     Img.rotation = Target.rotation;
+                    Img.x = Target.x;
+                    Img.y = Target.y;
                     return Img;
                 }
                 _Node.simpleCopyImg = simpleCopyImg;
                 function leaveStage(_Sprite, func) {
                     let Parent = _Sprite.parent;
-                    let bool = false;
                     let gPoint = Parent.localToGlobal(new Laya.Point(_Sprite.x, _Sprite.y));
                     if (gPoint.x > Laya.stage.width + 10 || gPoint.x < -10) {
                         if (func) {
                             func();
                         }
-                        bool = true;
+                        return true;
                     }
                     if (gPoint.y > Laya.stage.height + 10 || gPoint.y < -10) {
                         if (func) {
                             func();
                         }
-                        bool = true;
+                        return true;
                     }
-                    return bool;
                 }
                 _Node.leaveStage = leaveStage;
                 function checkTwoDistance(_Sprite1, _Sprite2, distance, func) {
@@ -4137,7 +4797,7 @@
                         const element = sp.getChildAt(index);
                         arr.push(element);
                     }
-                    _ObjArray.onPropertySort(arr, 'y');
+                    _ObjArray.sortByProperty(arr, 'y');
                     if (zOrder) {
                         for (let index = 0; index < arr.length; index++) {
                             const element = arr[index];
@@ -4287,9 +4947,14 @@
                     }
                 }
                 _Node.showExcludedChild3D = showExcludedChild3D;
-                function createPrefab(prefab, name) {
-                    let sp = Laya.Pool.getItemByCreateFun(name ? name : prefab.json['props']['name'], prefab.create, prefab);
-                    return sp;
+                function createPrefab(prefab, Parent, point, zOrder, name) {
+                    let Sp = Laya.Pool.getItemByCreateFun(name ? name : prefab.json['props']['name'], prefab.create, prefab);
+                    Parent && Parent.addChild(Sp);
+                    point && Sp.pos(point[0], point[1]);
+                    if (zOrder) {
+                        Sp.zOrder = zOrder;
+                    }
+                    return Sp;
                 }
                 _Node.createPrefab = createPrefab;
                 function childrenVisible2D(node, bool) {
@@ -4360,10 +5025,10 @@
                 _Number.randomOneHalf = randomOneHalf;
                 function randomOneInt(section1, section2) {
                     if (section2) {
-                        return Math.floor(Math.random() * (section2 - section1)) + section1;
+                        return Math.round(Math.random() * (section2 - section1)) + section1;
                     }
                     else {
-                        return Math.floor(Math.random() * section1);
+                        return Math.round(Math.random() * section1);
                     }
                 }
                 _Number.randomOneInt = randomOneInt;
@@ -4446,15 +5111,12 @@
                 }
                 _Point.angleByRad = angleByRad;
                 function twoNodeDistance(obj1, obj2) {
-                    const Parnet1 = obj1.parent;
-                    const Parnet2 = obj2.parent;
-                    const p1 = Parnet1.localToGlobal(new Laya.Point(obj1.x, obj1.y));
-                    const p2 = Parnet2.localToGlobal(new Laya.Point(obj2.x, obj2.y));
-                    let len = p1.distance(p2.x, p2.y);
+                    let point = new Laya.Point(obj1.x, obj1.y);
+                    let len = point.distance(obj2.x, obj2.y);
                     return len;
                 }
                 _Point.twoNodeDistance = twoNodeDistance;
-                function angleByPoint(x, y) {
+                function pointByAngle(x, y) {
                     let radian = Math.atan2(x, y);
                     let angle = 90 - radian * (180 / Math.PI);
                     if (angle <= 0) {
@@ -4462,15 +5124,15 @@
                     }
                     return angle - 90;
                 }
-                _Point.angleByPoint = angleByPoint;
+                _Point.pointByAngle = pointByAngle;
                 ;
-                function pointByAngle(angle) {
+                function angleByPoint(angle) {
                     let radian = (90 - angle) / (180 / Math.PI);
                     let p = new Laya.Point(Math.sin(radian), Math.cos(radian));
                     p.normalize();
                     return p;
                 }
-                _Point.pointByAngle = pointByAngle;
+                _Point.angleByPoint = angleByPoint;
                 ;
                 function dotRotatePoint(x0, y0, x1, y1, angle) {
                     let x2 = x0 + (x1 - x0) * Math.cos(angle * Math.PI / 180) - (y1 - y0) * Math.sin(angle * Math.PI / 180);
@@ -4548,6 +5210,14 @@
                     }
                 }
                 _3D.getMeshSize = getMeshSize;
+                function getSkinMeshSize(MSp3D) {
+                    if (MSp3D.skinnedMeshRenderer) {
+                        let v3;
+                        let extent = MSp3D.skinnedMeshRenderer.bounds.getExtent();
+                        return v3 = new Laya.Vector3(extent.x * 2, extent.y * 2, extent.z * 2);
+                    }
+                }
+                _3D.getSkinMeshSize = getSkinMeshSize;
                 function twoNodeDistance(obj1, obj2) {
                     let obj1V3 = obj1.transform.position;
                     let obj2V3 = obj2.transform.position;
@@ -4597,8 +5267,8 @@
                     let ScreenV4 = new Laya.Vector4();
                     camera.viewport.project(v3, camera.projectionViewMatrix, ScreenV4);
                     let point = new Laya.Vector2();
-                    point.x = ScreenV4.x;
-                    point.y = ScreenV4.y;
+                    point.x = ScreenV4.x / Laya.stage.clientScaleX;
+                    point.y = ScreenV4.y / Laya.stage.clientScaleY;
                     return point;
                 }
                 _3D.posToScreen = posToScreen;
@@ -4667,6 +5337,38 @@
                     return drawPie;
                 }
                 _Draw.drawPieMask = drawPieMask;
+                function screenshot(Sp, quality) {
+                    const htmlCanvas = Sp.drawToCanvas(Sp.width, Sp.height, Sp.x, Sp.y);
+                    const base64 = htmlCanvas.toBase64("image/png", quality ? quality : 1);
+                    return base64;
+                }
+                _Draw.screenshot = screenshot;
+                _Draw._texArr = [];
+                function cameraToSprite(camera, sprite, clear) {
+                    const _camera = camera.clone();
+                    camera.scene.addChild(_camera);
+                    _camera.transform.position = camera.transform.position;
+                    _camera.transform.localRotationEuler = camera.transform.localRotationEuler;
+                    _camera.renderTarget = new Laya.RenderTexture(sprite.width, sprite.height);
+                    _camera.renderingOrder = -1;
+                    _camera.clearFlag = Laya.CameraClearFlags.Sky;
+                    const ptex = new Laya.Texture(_camera.renderTarget, Laya.Texture.DEF_UV);
+                    sprite.graphics.drawTexture(ptex, sprite.x, sprite.y, sprite.width, sprite.height);
+                    _Draw._texArr.push(ptex);
+                    if (_Draw._texArr.length > 3) {
+                        _Draw._texArr[0].destroy();
+                        _Draw._texArr.shift();
+                    }
+                    TimerAdmin._frameOnce(5, this, () => {
+                        _camera.destroy();
+                    });
+                }
+                _Draw.cameraToSprite = cameraToSprite;
+                function drawToTex(Sp, quality) {
+                    let tex = Sp.drawToTexture(Sp.width, Sp.height, Sp.x, Sp.y);
+                    return tex;
+                }
+                _Draw.drawToTex = drawToTex;
                 function reverseRoundMask(node, x, y, radius, eliminate) {
                     if (eliminate == undefined || eliminate == true) {
                         _Node.removeAllChildren(node);
@@ -4701,7 +5403,7 @@
             })(_Draw = Tools._Draw || (Tools._Draw = {}));
             let _ObjArray;
             (function (_ObjArray) {
-                function onPropertySort(array, property) {
+                function sortByProperty(array, property) {
                     var compare = function (obj1, obj2) {
                         var val1 = obj1[property];
                         var val2 = obj2[property];
@@ -4722,8 +5424,8 @@
                     array.sort(compare);
                     return array;
                 }
-                _ObjArray.onPropertySort = onPropertySort;
-                function differentPropertyTwo(objArr1, objArr2, property) {
+                _ObjArray.sortByProperty = sortByProperty;
+                function diffProByTwo(objArr1, objArr2, property) {
                     var result = [];
                     for (var i = 0; i < objArr1.length; i++) {
                         var obj1 = objArr1[i];
@@ -4738,12 +5440,13 @@
                             }
                         }
                         if (!isExist) {
-                            result.push(obj1);
+                            let _obj1 = _ObjArray.objCopy(obj1);
+                            result.push(_obj1);
                         }
                     }
                     return result;
                 }
-                _ObjArray.differentPropertyTwo = differentPropertyTwo;
+                _ObjArray.diffProByTwo = diffProByTwo;
                 function identicalPropertyObjArr(data1, data2, property) {
                     var result = [];
                     for (var i = 0; i < data1.length; i++) {
@@ -4796,39 +5499,61 @@
                     return sourceCopy;
                 }
                 _ObjArray.arrCopy = arrCopy;
+                function modifyProValue(objArr, pro, value) {
+                    for (const key in objArr) {
+                        if (Object.prototype.hasOwnProperty.call(objArr, key)) {
+                            const element = objArr[key];
+                            if (element[pro]) {
+                                element[pro] = value;
+                            }
+                        }
+                    }
+                    return objArr;
+                }
+                _ObjArray.modifyProValue = modifyProValue;
                 function objCopy(obj) {
-                    var copyObj = {};
+                    var _copyObj = {};
                     for (const item in obj) {
                         if (obj.hasOwnProperty(item)) {
                             const element = obj[item];
                             if (typeof element === 'object') {
                                 if (Array.isArray(element)) {
                                     let arr1 = _Array.copy(element);
-                                    copyObj[item] = arr1;
+                                    _copyObj[item] = arr1;
                                 }
                                 else {
                                     objCopy(element);
                                 }
                             }
                             else {
-                                copyObj[item] = element;
+                                _copyObj[item] = element;
                             }
                         }
                     }
-                    return objCopy;
+                    return _copyObj;
                 }
                 _ObjArray.objCopy = objCopy;
             })(_ObjArray = Tools._ObjArray || (Tools._ObjArray = {}));
             let _Array;
             (function (_Array) {
-                function oneAddToarray(array1, array2) {
+                function addToarray(array1, array2) {
                     for (let index = 0; index < array2.length; index++) {
                         const element = array2[index];
                         array1.push(element);
                     }
                     return array1;
                 }
-                _Array.oneAddToarray = oneAddToarray;
+                _Array.addToarray = addToarray;
+                function inverted(array) {
+                    let arr = [];
+                    for (let index = array.length - 1; index >= 0; index--) {
+                        const element = array[index];
+                        arr.push(element);
+                    }
+                    array = arr;
+                    return array;
+                }
+                _Array.inverted = inverted;
                 function randomGetOut(arr, num) {
                     if (!num) {
                         num = 1;
@@ -5103,13 +5828,7 @@
                         Laya.timer.once(this.lwgAllComplete(), this, () => {
                             Admin._SceneControl[LwgPreLoad._loadType] = this._Owner;
                             if (LwgPreLoad._loadType !== Admin._SceneName.PreLoad) {
-                                if (Admin._PreLoadCutIn.openName) {
-                                    console.log('预加载完毕开始打开界面！');
-                                    Admin._openScene(Admin._PreLoadCutIn.openName, Admin._PreLoadCutIn.closeName, () => {
-                                        Admin._PreLoadCutIn.func;
-                                        Admin._closeScene(LwgPreLoad._loadType);
-                                    }, Admin._PreLoadCutIn.zOrder);
-                                }
+                                Admin._PreLoadCutIn.openName && this._openScene(Admin._PreLoadCutIn.openName);
                             }
                             else {
                                 for (const key in Admin._Moudel) {
@@ -5123,6 +5842,7 @@
                                         }
                                     }
                                 }
+                                AudioAdmin._playMusic();
                                 if (Admin._GuideControl.switch) {
                                     this._openScene(_SceneName.Guide, true, false, () => {
                                         LwgPreLoad._loadType = Admin._SceneName.PreLoadCutIn;
@@ -5254,10 +5974,10 @@
                         case _json:
                             Laya.loader.load(_json[index]['url'], Laya.Handler.create(this, (data) => {
                                 if (data == null) {
-                                    console.log('XXXXXXXXXXX数据表' + _json[index] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
+                                    console.log('XXXXXXXXXXX数据表' + _json[index]['url'] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
                                 }
                                 else {
-                                    _json[index]['data'] = data["RECORDS"];
+                                    _json[index]['dataArr'] = data["RECORDS"];
                                     console.log('数据表' + _json[index]['url'] + '加载完成！', '数组下标为：', index);
                                 }
                                 EventAdmin._notify(_Event.progress);
@@ -5458,14 +6178,14 @@
                     sp.y = Laya.stage.height / 2;
                     sp.zOrder = 50;
                     if (Execution._ExecutionNode) {
-                        Animation2D.move_Simple(sp, sp.x, sp.y, Execution._ExecutionNode.x, Execution._ExecutionNode.y, 800, 100, f => {
-                            Animation2D.fadeOut(sp, 1, 0, 200, 0, f => {
+                        Animation2D.move(sp, Execution._ExecutionNode.x, Execution._ExecutionNode.y, 800, () => {
+                            Animation2D.fadeOut(sp, 1, 0, 200, 0, () => {
                                 Animation2D.upDwon_Shake(Execution._ExecutionNode, 10, 80, 0, null);
                                 if (func) {
                                     func();
                                 }
                             });
-                        });
+                        }, 100);
                     }
                 }));
             }
@@ -5581,10 +6301,11 @@
     let Execution = lwg.Execution;
     let Gold = lwg.Gold;
     let Setting = lwg.Setting;
-    let AudioAdmin = lwg.Audio;
+    let AudioAdmin = lwg.AudioAdmin;
     let Click = lwg.Click;
     let Color = lwg.Color;
-    let Effects = lwg.Effects;
+    let Effects2D = lwg.Effects2D;
+    let Effects3D = lwg.Effects3D;
     let Dialogue = lwg.Dialogue;
     let Animation2D = lwg.Animation2D;
     let Animation3D = lwg.Animation3D;
@@ -5640,70 +6361,13 @@
 
     var _Game;
     (function (_Game) {
-        class _Data {
+        class _Data extends DataAdmin._Table {
         }
         _Data._property = {
             name: 'name',
             index: 'index',
             color: 'color',
         };
-        _Data._arr = [
-            {
-                index: 1,
-                name: 'yellow',
-                color: 'yellow',
-            },
-            {
-                index: 2,
-                name: 'yellow',
-                color: 'yellow',
-            },
-            {
-                index: 3,
-                name: 'blue',
-                color: 'blue',
-            }, {
-                index: 4,
-                name: 'blue',
-                color: 'blue',
-            }, {
-                index: 5,
-                name: 'red',
-                color: 'red',
-            }, {
-                index: 6,
-                name: 'red',
-                color: 'red',
-            }, {
-                index: 7,
-                name: 'blue',
-                color: 'blue',
-            }, {
-                index: 8,
-                name: 'blue',
-                color: 'blue',
-            },
-            {
-                index: 9,
-                name: 'blue',
-                color: 'blue',
-            },
-            {
-                index: 10,
-                name: 'blue',
-                color: 'blue',
-            },
-            {
-                index: 11,
-                name: 'red',
-                color: 'red',
-            },
-            {
-                index: 12,
-                name: 'yellow',
-                color: 'yellow',
-            },
-        ];
         _Game._Data = _Data;
         let _Label;
         (function (_Label) {
@@ -5753,7 +6417,7 @@
             }
             lwgOnStart() {
                 let GPoint = this._SceneImg('Aim').localToGlobal(new Laya.Point(this._SceneImg('Hero').x, this._SceneImg('Hero').y));
-                let p = new Laya.Point(this._Owner.x - GPoint.x, this._Owner.y - GPoint.y);
+                let p = new Laya.Point(this._gPoint.x - GPoint.x, this._gPoint.y - GPoint.y);
                 p.normalize();
                 TimerAdmin._frameLoop(1, this, () => {
                     this._Owner.x -= p.x * this.speed;
@@ -5858,12 +6522,13 @@
                 var skill = (Enemy) => {
                     this._evNotify(_Event.skillEnemy, [1]);
                     for (let index = 0; index < 20; index++) {
-                        Effects._Particle._spray(Laya.stage, this._gPoint, [0, 0], [10, 35], null, null, null, null, null, null, [30, 100], null, [5, 20]);
+                        Effects2D._Particle._spray(Laya.stage, this._gPoint, [0, 0], [10, 35], null, null, null, null, null, null, [30, 100], [5, 20]);
                     }
                     Enemy.removeSelf();
                     this._Owner.removeSelf();
                 };
                 var checkEnemy = () => {
+                    console.log('11');
                     if (this.state === this.stateType.free) {
                         return;
                     }
@@ -5887,7 +6552,7 @@
                                 let Shell = Enemy.getChildByName('Shell');
                                 if (Shell) {
                                     const landContentGP = this._SceneImg('Content').localToGlobal(new Laya.Point(this._SceneImg('LandContent').x, this._SceneImg('LandContent').y));
-                                    let angle = Tools._Point.angleByPoint(landContentGP.x - this._gPoint.x, landContentGP.y - this._gPoint.y) + 90;
+                                    let angle = Tools._Point.pointByAngle(landContentGP.x - this._gPoint.x, landContentGP.y - this._gPoint.y) + 90;
                                     if (210 < angle && angle < 330) {
                                         drop();
                                     }
@@ -6021,10 +6686,10 @@
                                 if (e.stageY - this.Weapon.getAimGP().y > 80) {
                                     this.Weapon.dirBy = this.Weapon.dirByType.stage;
                                 }
-                                angle = Tools._Point.angleByPoint(this.Weapon.getAimGP().x - this.Weapon.ins.x, this.Weapon.getAimGP().y - this.Weapon.ins.y);
+                                angle = Tools._Point.pointByAngle(this.Weapon.getAimGP().x - this.Weapon.ins.x, this.Weapon.getAimGP().y - this.Weapon.ins.y);
                             }
                             else if (this.Weapon.dirBy === this.Weapon.dirByType.stage) {
-                                angle = Tools._Point.angleByPoint(e.stageX - this.Weapon.ins.x, e.stageY - this.Weapon.ins.y);
+                                angle = Tools._Point.pointByAngle(e.stageX - this.Weapon.ins.x, e.stageY - this.Weapon.ins.y);
                             }
                             this.Weapon.ins.rotation = this._ImgVar('Aim').rotation = angle;
                             this.Weapon.ins.pos(this.Weapon.getAimGP().x, this.Weapon.getAimGP().y);
@@ -6042,13 +6707,13 @@
                         }
                     },
                     bowstring: () => {
-                        const angle = Tools._Point.angleByPoint(this.Weapon.getTailGP().x - this.Weapon.ins.x, this.Weapon.getTailGP().y - this.Weapon.ins.y);
+                        const angle = Tools._Point.pointByAngle(this.Weapon.getTailGP().x - this.Weapon.ins.x, this.Weapon.getTailGP().y - this.Weapon.ins.y);
                         const lBowstringGP = this._ImgVar('Aim').localToGlobal(new Laya.Point(this._ImgVar('LBowstring').x, this._ImgVar('LBowstring').y));
-                        const lBowstringAngle = Tools._Point.angleByPoint(lBowstringGP.x - this.Weapon.getTailGP().x, lBowstringGP.y - this.Weapon.getTailGP().y);
+                        const lBowstringAngle = Tools._Point.pointByAngle(lBowstringGP.x - this.Weapon.getTailGP().x, lBowstringGP.y - this.Weapon.getTailGP().y);
                         this._ImgVar('LBowstring').rotation = lBowstringAngle - 90 - angle;
                         this._ImgVar('LBowstring').width = this.Weapon.getTailGP().distance(lBowstringGP.x, lBowstringGP.y);
                         const rBowstringGP = this._ImgVar('Aim').localToGlobal(new Laya.Point(this._ImgVar('RBowstring').x, this._ImgVar('RBowstring').y));
-                        const rBowstringAngle = Tools._Point.angleByPoint(rBowstringGP.x - this.Weapon.getTailGP().x, rBowstringGP.y - this.Weapon.getTailGP().y);
+                        const rBowstringAngle = Tools._Point.pointByAngle(rBowstringGP.x - this.Weapon.getTailGP().x, rBowstringGP.y - this.Weapon.getTailGP().y);
                         this._ImgVar('RBowstring').rotation = rBowstringAngle + 90 - angle;
                         this._ImgVar('RBowstring').width = this.Weapon.getTailGP().distance(rBowstringGP.x, rBowstringGP.y);
                     },
@@ -6219,26 +6884,6 @@
     })(_Game || (_Game = {}));
     var _Game$1 = _Game.Game;
 
-    var _Defeated;
-    (function (_Defeated) {
-        class _data {
-        }
-        _Defeated._data = _data;
-        function _init() {
-        }
-        _Defeated._init = _init;
-        class Defeated extends Admin._SceneBase {
-            lwgButton() {
-                this._btnUp(this._ImgVar('BtnBack'), () => {
-                    this._openScene(_SceneName.Start);
-                    EventAdmin._notify(_Game._Event.closeScene);
-                });
-            }
-        }
-        _Defeated.Defeated = Defeated;
-    })(_Defeated || (_Defeated = {}));
-    var _Defeated$1 = _Defeated.Defeated;
-
     var _Guide;
     (function (_Guide) {
         _Guide._complete = {
@@ -6358,41 +7003,23 @@
     })(_Start || (_Start = {}));
     var _Start$1 = _Start.Start;
 
-    var _Victory;
-    (function (_Victory) {
-        class _data {
-        }
-        _Victory._data = _data;
-        function _init() {
-        }
-        _Victory._init = _init;
-        class Victory extends Admin._SceneBase {
-            lwgButton() {
-                this._btnUp(this._ImgVar('BtnGet'), () => {
-                    this._openScene(_SceneName.Start);
-                    EventAdmin._notify(_Game._Event.closeScene);
-                });
-            }
-        }
-        _Victory.Victory = Victory;
-    })(_Victory || (_Victory = {}));
-    var _Victory$1 = _Victory.Victory;
-
     class LwgInit extends _LwgInitScene {
         lwgOnAwake() {
             _LwgInit._pkgInfo = [];
-            Platform._Ues.value = Platform._Tpye.Research;
-            SceneAnimation._Use.value = SceneAnimation._Type.fadeOut;
-            Click._Use.value = Click._Type.largen;
-            Adaptive._Use.value = [720, 1280];
+            Platform._Ues.value = Platform._Tpye.Web;
+            Laya.Stat.show();
+            SceneAnimation._Use.value = SceneAnimation._Type.shutters.randomshutters;
+            SceneAnimation._closeSwitch = true;
+            SceneAnimation._openSwitch = false;
+            Click._Use.value = Click._Type.reduce;
+            Adaptive._Use.value = [1280, 720];
+            Admin._GuideControl.switch = false;
             Admin._Moudel = {
                 _PreLoad: _PreLoad,
                 _PreLoadCutIn: _PreLoadCutIn,
                 _Guide: _Guide,
                 _Start: _Start,
                 _Game: _Game,
-                _Victory: _Victory,
-                _Defeated: _Defeated,
             };
         }
     }

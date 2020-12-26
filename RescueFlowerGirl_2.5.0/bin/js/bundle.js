@@ -5752,7 +5752,7 @@
                 this.speed = 2;
             }
             lwgOnStart() {
-                let GPoint = this._SceneImg('HeroContent').localToGlobal(new Laya.Point(this._SceneImg('Hero').x, this._SceneImg('Hero').y));
+                let GPoint = this._SceneImg('Aim').localToGlobal(new Laya.Point(this._SceneImg('Hero').x, this._SceneImg('Hero').y));
                 let p = new Laya.Point(this._Owner.x - GPoint.x, this._Owner.y - GPoint.y);
                 p.normalize();
                 TimerAdmin._frameLoop(1, this, () => {
@@ -5785,7 +5785,7 @@
                         let bullet = Tools._Node.createPrefab(_Res._list.prefab2D.EnemyBullet.prefab);
                         bullet.addComponent(_EnemyBullet);
                         let GPoint = this._Parent.localToGlobal(new Laya.Point(this._Owner.x, this._Owner.y));
-                        this._Scene.addChild(bullet);
+                        this._SceneImg('EBparrent').addChild(bullet);
                         bullet.pos(GPoint.x, GPoint.y);
                     }
                 });
@@ -5818,7 +5818,7 @@
             }
             ;
             getSpeed() {
-                const acc = (1 - this.dynamics) * 5;
+                const acc = (1 - this.dynamics) * 2;
                 this.launchAcc -= acc;
                 return 80 + this.launchAcc;
             }
@@ -5886,7 +5886,8 @@
                             if (this._Owner.name === Enemy.name.substr(5)) {
                                 let Shell = Enemy.getChildByName('Shell');
                                 if (Shell) {
-                                    let angle = Tools._Point.angleByPoint(this._SceneImg('LandContent').x - this._gPoint.x, this._SceneImg('LandContent').y - this._gPoint.y) + 90;
+                                    const landContentGP = this._SceneImg('Content').localToGlobal(new Laya.Point(this._SceneImg('LandContent').x, this._SceneImg('LandContent').y));
+                                    let angle = Tools._Point.angleByPoint(landContentGP.x - this._gPoint.x, landContentGP.y - this._gPoint.y) + 90;
                                     if (210 < angle && angle < 330) {
                                         drop();
                                     }
@@ -5904,8 +5905,8 @@
                             return;
                         }
                     }
-                    const pos = new Laya.Point(this._SceneImg('LandContent').x, this._SceneImg('LandContent').y);
-                    if (pos.distance(this._gPoint.x, this._gPoint.y) < 150) {
+                    const LandContentGP = this._SceneImg('Content').localToGlobal(new Laya.Point(this._SceneImg('LandContent').x, this._SceneImg('LandContent').y));
+                    if (LandContentGP.distance(this._gPoint.x, this._gPoint.y) < 150) {
                         Laya.timer.clearAll(this);
                         this.state = this.stateType.free;
                         const lP = this._SceneImg('LandContent').globalToLocal(this._gPoint);
@@ -5962,7 +5963,7 @@
                         this.Weapon.rBowstringW = this._ImgVar('RBowstring').width;
                         this.Weapon.heroFP = new Laya.Point(this._ImgVar('Hero').x, this._ImgVar('Hero').y);
                         this.Weapon.minPullDes = this.Weapon.ins.height - 20;
-                        this.Weapon.maxPullDes = this.Weapon.minPullDes + 50;
+                        this.Weapon.maxPullDes = this.Weapon.minPullDes + 40;
                         this.Weapon.pullDes = 0;
                         this.Weapon.Tail = this.Weapon.ins.getChildByName('Tail');
                         this._ImgVar('Quiver').visible = false;
@@ -6077,9 +6078,20 @@
                         this.Weapon[this.Weapon.state](e);
                     }
                 };
-                this.heroContentFP = null;
+                this.Hero = {
+                    mouseP: null,
+                    ContentFP: null,
+                    expand: 250,
+                    onoff: false,
+                    init: () => {
+                        this.Hero.ContentFP = new Laya.Point(this._ImgVar('Content').x, this._ImgVar('Content').y);
+                    },
+                    move: () => {
+                    }
+                };
             }
             lwgOnAwake() {
+                this.Hero.init();
             }
             lwgOnStart() {
                 TimerAdmin._frameLoop(1, this, () => {
@@ -6147,37 +6159,60 @@
                 }
             }
             lwgOnStageDown(e) {
-                this.heroContentFP = new Laya.Point(e.stageX, e.stageY);
+                this.Hero.mouseP = new Laya.Point(e.stageX, e.stageY);
             }
             lwgOnStageMove(e) {
                 if (this.Weapon.ins) {
                     this.Weapon.move(e);
                 }
                 else {
-                    if (this.heroContentFP) {
-                        let diffX = e.stageX - this.heroContentFP.x;
-                        let diffY = e.stageY - this.heroContentFP.y;
+                    if (this.Hero.mouseP) {
+                        let diffX = e.stageX - this.Hero.mouseP.x;
+                        let diffY = e.stageY - this.Hero.mouseP.y;
                         this._ImgVar('HeroContent').x += diffX;
-                        this._ImgVar('HeroContent').y += diffY;
-                        this.heroContentFP = new Laya.Point(e.stageX, e.stageY);
+                        if (this.Hero.onoff) {
+                            if (this._ImgVar('Content').y > this.Hero.ContentFP.y) {
+                                this.Hero.onoff = false;
+                            }
+                            else {
+                                this._ImgVar('Content').y -= diffY;
+                            }
+                        }
+                        else {
+                            this._ImgVar('HeroContent').y += diffY;
+                        }
+                        this.Hero.mouseP = new Laya.Point(e.stageX, e.stageY);
                         if (this._ImgVar('HeroContent').x > Laya.stage.width) {
                             this._ImgVar('HeroContent').x = Laya.stage.width;
+                            this._ImgVar('Content').x -= diffX;
+                            if (this._ImgVar('Content').x < this.Hero.ContentFP.x - this.Hero.expand) {
+                                this._ImgVar('Content').x = this.Hero.ContentFP.x - this.Hero.expand;
+                            }
                         }
                         if (this._ImgVar('HeroContent').x < 0) {
                             this._ImgVar('HeroContent').x = 0;
+                            this._ImgVar('Content').x -= diffX;
                         }
-                        if (this._ImgVar('HeroContent').y < 0) {
+                        if (this._ImgVar('HeroContent').y <= 0) {
                             this._ImgVar('HeroContent').y = 0;
                         }
                         if (this._ImgVar('HeroContent').y > Laya.stage.height - 200) {
                             this._ImgVar('HeroContent').y = Laya.stage.height - 200;
+                            this._ImgVar('Content').y -= diffY;
+                            this.Hero.onoff = true;
+                        }
+                        if (this._ImgVar('Content').x > this.Hero.ContentFP.x + this.Hero.expand) {
+                            this._ImgVar('Content').x = this.Hero.ContentFP.x + this.Hero.expand;
+                        }
+                        if (this._ImgVar('Content').y < this.Hero.ContentFP.y - this.Hero.expand) {
+                            this._ImgVar('Content').y = this.Hero.ContentFP.y - this.Hero.expand;
                         }
                     }
                 }
             }
             lwgOnStageUp() {
                 this.Weapon.checkLuanch();
-                this.heroContentFP = null;
+                this.Hero.mouseP = null;
             }
         }
         _Game.Game = Game;

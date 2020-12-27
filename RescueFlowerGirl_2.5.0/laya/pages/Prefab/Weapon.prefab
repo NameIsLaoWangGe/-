@@ -2,9 +2,9 @@
     "x":0,
     "type":"Image",
     "selectedBox":82,
-    "selecteID":84,
+    "selecteID":83,
     "searchKey":"Image,Weapon",
-    "props":{"y":0,"x":0,"width":32,"presetID":1,"preset":"laya/pages/Prefab/Weapon.prefab","pivotY":0,"pivotX":0,"name":"Weapon","isPresetRoot":true,"height":160},
+    "props":{"y":32,"x":15,"width":32,"presetID":1,"preset":"laya/pages/Prefab/Weapon.prefab","pivotY":0,"pivotX":0,"name":"Weapon","isPresetRoot":true,"height":160,"anchorY":0.2,"anchorX":0.5},
     "nodeParent":-1,
     "maxID":85,
     "label":"Weapon",
@@ -25,20 +25,6 @@
             "isAniNode":true,
             "hasChild":false,
             "compId":83,
-            "child":[
-                ]
-        },
-        {
-            "x":15,
-            "type":"Image",
-            "searchKey":"Image,Tail",
-            "props":{"y":140,"x":16,"width":20,"skin":"Lwg/UI/ui_l_orthogon_cycn.png","presetID":3,"preset":"laya/pages/Prefab/Weapon.prefab","pivotY":10,"pivotX":10,"name":"Tail","height":20,"alpha":0},
-            "nodeParent":82,
-            "label":"Tail",
-            "isDirectory":false,
-            "isAniNode":true,
-            "hasChild":false,
-            "compId":84,
             "child":[
                 ]
         }],

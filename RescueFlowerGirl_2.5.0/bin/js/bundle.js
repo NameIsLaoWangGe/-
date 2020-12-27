@@ -2038,7 +2038,7 @@
                     this._unlockWay = {
                         ads: 'ads',
                         gold: 'gold',
-                        customs: 'free',
+                        customs: 'customs',
                         diamond: 'diamond',
                         free: 'free',
                     };
@@ -6376,7 +6376,6 @@
             _Label["enemy"] = "enemy";
         })(_Label = _Game._Label || (_Game._Label = {}));
         _Game._fireControl = {
-            Aim: null,
             EnemyParent: null,
             rotateSwitch: true,
             moveDownY: 0,
@@ -6416,7 +6415,7 @@
                 this.speed = 2;
             }
             lwgOnStart() {
-                let GPoint = this._SceneImg('Aim').localToGlobal(new Laya.Point(this._SceneImg('Hero').x, this._SceneImg('Hero').y));
+                let GPoint = this._SceneImg('HeroContent').localToGlobal(new Laya.Point(this._SceneImg('Hero').x, this._SceneImg('Hero').y));
                 let p = new Laya.Point(this._gPoint.x - GPoint.x, this._gPoint.y - GPoint.y);
                 p.normalize();
                 TimerAdmin._frameLoop(1, this, () => {
@@ -6465,7 +6464,6 @@
         class _Weapon extends Admin._ObjectBase {
             constructor() {
                 super(...arguments);
-                this.dynamics = 0;
                 this.launchAcc = 0;
                 this.dropAcc = 0;
                 this.stateType = {
@@ -6482,267 +6480,105 @@
             }
             ;
             getSpeed() {
-                const acc = (1 - this.dynamics) * 2;
-                this.launchAcc -= acc;
-                return 80 + this.launchAcc;
+                return 50 + 0.2;
             }
             getDropSpeed() {
                 return this.dropAcc += 0.5;
             }
             lwgOnAwake() {
+                TimerAdmin._frameLoop(1, this, () => {
+                    this.move();
+                });
             }
-            lwgEvent() {
-                var move = () => {
-                    if (!this.fGP) {
-                        this.fGP = new Laya.Point(this._Owner.x, this._Owner.y);
-                    }
-                    if (this.getSpeed() > 0) {
-                        let p = Tools._Point.angleAndLenByPoint(this._Owner.rotation - 90, this.getSpeed());
-                        this._Owner.x += p.x;
-                        this._Owner.y += p.y;
-                    }
-                    else {
-                        this._Owner.y += this.getDropSpeed();
-                    }
-                    !Tools._Node.leaveStage(this._Owner, () => {
-                        this._Owner.removeSelf();
-                    }) && checkEnemy();
-                };
-                var drop = () => {
-                    this.state = this.stateType.free;
-                    Laya.timer.clearAll(this);
-                    TimerAdmin._frameLoop(1, this, () => {
-                        this._Owner.y += 40;
-                        this._Owner.rotation += 10;
-                        Tools._Node.leaveStage(this._Owner, () => {
-                            this._Owner.removeSelf();
-                        });
-                    });
-                };
-                var skill = (Enemy) => {
-                    this._evNotify(_Event.skillEnemy, [1]);
-                    for (let index = 0; index < 20; index++) {
-                        Effects2D._Particle._spray(Laya.stage, this._gPoint, [0, 0], [10, 35], null, null, null, null, null, null, [30, 100], [5, 20]);
-                    }
-                    Enemy.removeSelf();
+            move() {
+                if (this.getSpeed() > 0) {
+                    let p = Tools._Point.angleAndLenByPoint(this._Owner.rotation - 90, this.getSpeed());
+                    this._Owner.x += p.x;
+                    this._Owner.y += p.y;
+                }
+                else {
+                    this._Owner.y += this.getDropSpeed();
+                }
+                !Tools._Node.leaveStage(this._Owner, () => {
                     this._Owner.removeSelf();
-                };
-                var checkEnemy = () => {
-                    console.log('11');
-                    if (this.state === this.stateType.free) {
-                        return;
-                    }
-                    if (this._SceneImg('FrontScenery').getChildByName('Stone')) {
-                        for (let index = 0; index < this._SceneImg('FrontScenery').numChildren; index++) {
-                            const element = this._SceneImg('FrontScenery').getChildAt(index);
-                            if (element.name == 'Stone') {
-                                let gPStone = this._SceneImg('FrontScenery').localToGlobal(new Laya.Point(element.x, element.y));
-                                if (gPStone.distance(this._gPoint.x, this._gPoint.y) < 30) {
-                                    drop();
-                                    return;
-                                }
+                }) && this.checkEnemy();
+            }
+            drop() {
+                this.state = this.stateType.free;
+                Laya.timer.clearAll(this);
+                TimerAdmin._frameLoop(1, this, () => {
+                    this._Owner.y += 40;
+                    this._Owner.rotation += 10;
+                    Tools._Node.leaveStage(this._Owner, () => {
+                        this._Owner.removeSelf();
+                    });
+                });
+            }
+            skill(Enemy) {
+                this._evNotify(_Event.skillEnemy, [1]);
+                for (let index = 0; index < 20; index++) {
+                    Effects2D._Particle._spray(Laya.stage, this._gPoint, [0, 0], [10, 35]);
+                }
+                Enemy.removeSelf();
+                this._Owner.removeSelf();
+            }
+            checkEnemy() {
+                if (this.state === this.stateType.free) {
+                    return;
+                }
+                if (this._SceneImg('FrontScenery').getChildByName('Stone')) {
+                    for (let index = 0; index < this._SceneImg('FrontScenery').numChildren; index++) {
+                        const element = this._SceneImg('FrontScenery').getChildAt(index);
+                        if (element.name == 'Stone') {
+                            let gPStone = this._SceneImg('FrontScenery').localToGlobal(new Laya.Point(element.x, element.y));
+                            if (gPStone.distance(this._gPoint.x, this._gPoint.y) < 30) {
+                                this.drop();
+                                return;
                             }
                         }
                     }
-                    for (let index = 0; index < _Game._fireControl.EnemyParent.numChildren; index++) {
-                        const Enemy = _Game._fireControl.EnemyParent.getChildAt(index);
-                        let gPEnemy = this._SceneImg('EnemyParent').localToGlobal(new Laya.Point(Enemy.x, Enemy.y));
-                        if (gPEnemy.distance(this._gPoint.x, this._gPoint.y) < 50) {
-                            if (this._Owner.name === Enemy.name.substr(5)) {
-                                let Shell = Enemy.getChildByName('Shell');
-                                if (Shell) {
-                                    const landContentGP = this._SceneImg('Content').localToGlobal(new Laya.Point(this._SceneImg('LandContent').x, this._SceneImg('LandContent').y));
-                                    let angle = Tools._Point.pointByAngle(landContentGP.x - this._gPoint.x, landContentGP.y - this._gPoint.y) + 90;
-                                    if (210 < angle && angle < 330) {
-                                        drop();
-                                    }
-                                    else {
-                                        skill(Enemy);
-                                    }
-                                }
-                                else {
-                                    skill(Enemy);
-                                }
+                }
+                for (let index = 0; index < _Game._fireControl.EnemyParent.numChildren; index++) {
+                    const Enemy = _Game._fireControl.EnemyParent.getChildAt(index);
+                    let gPEnemy = this._SceneImg('EnemyParent').localToGlobal(new Laya.Point(Enemy.x, Enemy.y));
+                    if (gPEnemy.distance(this._gPoint.x, this._gPoint.y) < 50) {
+                        let Shell = Enemy.getChildByName('Shell');
+                        if (Shell) {
+                            const landContentGP = this._SceneImg('Content').localToGlobal(new Laya.Point(this._SceneImg('LandContent').x, this._SceneImg('LandContent').y));
+                            let angle = Tools._Point.pointByAngle(landContentGP.x - this._gPoint.x, landContentGP.y - this._gPoint.y) + 90;
+                            if (210 < angle && angle < 330) {
+                                this.drop();
                             }
                             else {
-                                drop();
+                                this.skill(Enemy);
                             }
-                            return;
                         }
+                        else {
+                            this.skill(Enemy);
+                        }
+                        return;
                     }
-                    const LandContentGP = this._SceneImg('Content').localToGlobal(new Laya.Point(this._SceneImg('LandContent').x, this._SceneImg('LandContent').y));
-                    if (LandContentGP.distance(this._gPoint.x, this._gPoint.y) < 150) {
-                        Laya.timer.clearAll(this);
-                        this.state = this.stateType.free;
-                        const lP = this._SceneImg('LandContent').globalToLocal(this._gPoint);
-                        this._SceneImg('LandContent').addChild(this._Owner);
-                        this._Owner.pos(lP.x, lP.y);
-                        this._Owner.rotation -= this._SceneImg('LandContent').rotation;
-                        const mask = new Laya.Sprite;
-                        mask.size(200, 300);
-                        mask.pos(0, 80);
-                        mask.loadImage('Lwg/UI/ui_l_orthogon_white.png');
-                        this._Owner.mask = mask;
-                    }
-                };
-                this._evReg(_Event.launch, (dynamics) => {
-                    if (this.state !== this.stateType.free) {
-                        TimerAdmin._frameLoop(1, this, () => {
-                            this.dynamics = dynamics;
-                            move();
-                        });
-                    }
-                });
+                }
+                const LandContentGP = this._SceneImg('Content').localToGlobal(new Laya.Point(this._SceneImg('LandContent').x, this._SceneImg('LandContent').y));
+                if (LandContentGP.distance(this._gPoint.x, this._gPoint.y) < 150) {
+                    Laya.timer.clearAll(this);
+                    this.state = this.stateType.free;
+                    const lP = this._SceneImg('LandContent').globalToLocal(this._gPoint);
+                    this._SceneImg('LandContent').addChild(this._Owner);
+                    this._Owner.pos(lP.x, lP.y);
+                    this._Owner.rotation -= this._SceneImg('LandContent').rotation;
+                    const mask = new Laya.Sprite;
+                    mask.size(200, 300);
+                    mask.pos(0, Tools._Number.randomOneBySection(40, 60));
+                    mask.loadImage('Lwg/UI/ui_l_orthogon_white.png');
+                    this._Owner.mask = mask;
+                }
             }
         }
         _Game._Weapon = _Weapon;
         class Game extends Admin._SceneBase {
             constructor() {
                 super(...arguments);
-                this.Weapon = {
-                    state: 'checkinAim',
-                    stateType: {
-                        checkinAim: 'checkinAim',
-                        direction: 'direction',
-                    },
-                    ins: null,
-                    Tail: null,
-                    Pic: null,
-                    dynamics: 0,
-                    minPullDes: 0,
-                    pullDes: 0,
-                    maxPullDes: null,
-                    heroFP: null,
-                    lBowstringW: null,
-                    rBowstringW: null,
-                    diffY: -150,
-                    create: (color, x, y) => {
-                        this.Weapon.ins = Tools._Node.createPrefab(_Res._list.prefab2D.Weapon.prefab);
-                        this._ImgVar('WeaponParent').addChild(this.Weapon.ins);
-                        this.Weapon.ins.name = color;
-                        this.Weapon.ins.addComponent(_Weapon);
-                        this.Weapon.ins.pos(x, y + this.Weapon.diffY);
-                        this.Weapon.Pic = this.Weapon.ins.getChildByName('Pic');
-                        this.Weapon.Pic.skin = `Game/UI/Game/Hero/Hero_01_weapon_${color}.png`;
-                        this.Weapon.lBowstringW = this._ImgVar('LBowstring').width;
-                        this.Weapon.rBowstringW = this._ImgVar('RBowstring').width;
-                        this.Weapon.heroFP = new Laya.Point(this._ImgVar('Hero').x, this._ImgVar('Hero').y);
-                        this.Weapon.minPullDes = this.Weapon.ins.height - 20;
-                        this.Weapon.maxPullDes = this.Weapon.minPullDes + 40;
-                        this.Weapon.pullDes = 0;
-                        this.Weapon.Tail = this.Weapon.ins.getChildByName('Tail');
-                        this._ImgVar('Quiver').visible = false;
-                    },
-                    remove: () => {
-                        if (this.Weapon.ins) {
-                            this.Weapon.ins.removeSelf();
-                            this.Weapon.ins = null;
-                            this.Weapon.state = this.Weapon.stateType.checkinAim;
-                        }
-                    },
-                    getAimGP: () => {
-                        return this._ImgVar('Aim').localToGlobal(new Laya.Point(this._ImgVar('Fulcrum').x, this._ImgVar('Fulcrum').y));
-                    },
-                    getTailGP: () => {
-                        return this.Weapon.ins.localToGlobal(new Laya.Point(this.Weapon.Tail.x, this.Weapon.Tail.y));
-                    },
-                    getWeaponGP: () => {
-                        return new Laya.Point(this.Weapon.ins.x, this.Weapon.ins.y);
-                    },
-                    checkinAim: (e) => {
-                        const dis = this.Weapon.getAimGP().distance(e.stageX, e.stageY);
-                        if (dis < 150 && e.stageY >= this.Weapon.getAimGP().y) {
-                            this.Weapon.state = this.Weapon.stateType.direction;
-                            this.Weapon.ins.pivotX = this.Weapon.ins.width / 2;
-                            this.Weapon.ins.pivotY = this.Weapon.ins.height / 2;
-                            this.Weapon.ins.pos(this.Weapon.getAimGP().x, this.Weapon.getAimGP().y);
-                            this._ImgVar('Bow').skin = `Game/UI/Game/Hero/Hero_01_bow_${this.Weapon.ins.name}.png`;
-                            this.Weapon.dirBy = this.Weapon.dirByType.weapon;
-                            this.Weapon.direction(e);
-                        }
-                        else {
-                            this.Weapon.restore();
-                            this.Weapon.ins.rotation = 0;
-                            this.Weapon.ins.pos(e.stageX, e.stageY + this.Weapon.diffY);
-                            this._ImgVar('Bow').skin = `Game/UI/Game/Hero/Hero_01_bow_normalc.png`;
-                        }
-                    },
-                    getAimStageDis: (e) => {
-                        return this.Weapon.getAimGP().distance(e.stageX, e.stageY);
-                    },
-                    dirBy: 'weapon',
-                    dirByType: {
-                        weapon: 'weapon',
-                        stage: 'stage',
-                    },
-                    direction: (e) => {
-                        if (e.stageY < this.Weapon.getAimGP().y) {
-                            this.Weapon.state = this.Weapon.stateType.checkinAim;
-                            this.Weapon.checkinAim(e);
-                        }
-                        else {
-                            let angle = 0;
-                            if (this.Weapon.dirBy === this.Weapon.dirByType.weapon) {
-                                if (e.stageY - this.Weapon.getAimGP().y > 80) {
-                                    this.Weapon.dirBy = this.Weapon.dirByType.stage;
-                                }
-                                angle = Tools._Point.pointByAngle(this.Weapon.getAimGP().x - this.Weapon.ins.x, this.Weapon.getAimGP().y - this.Weapon.ins.y);
-                            }
-                            else if (this.Weapon.dirBy === this.Weapon.dirByType.stage) {
-                                angle = Tools._Point.pointByAngle(e.stageX - this.Weapon.ins.x, e.stageY - this.Weapon.ins.y);
-                            }
-                            this.Weapon.ins.rotation = this._ImgVar('Aim').rotation = angle;
-                            this.Weapon.ins.pos(this.Weapon.getAimGP().x, this.Weapon.getAimGP().y);
-                            this.Weapon.pullDes = this.Weapon.getWeaponGP().distance(e.stageX, e.stageY);
-                            if (this.Weapon.pullDes >= this.Weapon.minPullDes && this.Weapon.pullDes <= this.Weapon.maxPullDes) {
-                                this.Weapon.Tail.y = this.Weapon.pullDes;
-                                this.Weapon.Pic.y = this.Weapon.pullDes - this.Weapon.minPullDes;
-                                const ratio = this.Weapon.Pic.y / (this.Weapon.maxPullDes - this.Weapon.minPullDes);
-                                this._ImgVar('DynamicsBar').mask.y = this._ImgVar('DynamicsBar').height * (1 - ratio);
-                                this.Weapon.dynamics = ratio;
-                                this._ImgVar('Hero').y = this.Weapon.heroFP.y + this.Weapon.Pic.y;
-                            }
-                            this.Weapon.bowstring();
-                            return angle;
-                        }
-                    },
-                    bowstring: () => {
-                        const angle = Tools._Point.pointByAngle(this.Weapon.getTailGP().x - this.Weapon.ins.x, this.Weapon.getTailGP().y - this.Weapon.ins.y);
-                        const lBowstringGP = this._ImgVar('Aim').localToGlobal(new Laya.Point(this._ImgVar('LBowstring').x, this._ImgVar('LBowstring').y));
-                        const lBowstringAngle = Tools._Point.pointByAngle(lBowstringGP.x - this.Weapon.getTailGP().x, lBowstringGP.y - this.Weapon.getTailGP().y);
-                        this._ImgVar('LBowstring').rotation = lBowstringAngle - 90 - angle;
-                        this._ImgVar('LBowstring').width = this.Weapon.getTailGP().distance(lBowstringGP.x, lBowstringGP.y);
-                        const rBowstringGP = this._ImgVar('Aim').localToGlobal(new Laya.Point(this._ImgVar('RBowstring').x, this._ImgVar('RBowstring').y));
-                        const rBowstringAngle = Tools._Point.pointByAngle(rBowstringGP.x - this.Weapon.getTailGP().x, rBowstringGP.y - this.Weapon.getTailGP().y);
-                        this._ImgVar('RBowstring').rotation = rBowstringAngle + 90 - angle;
-                        this._ImgVar('RBowstring').width = this.Weapon.getTailGP().distance(rBowstringGP.x, rBowstringGP.y);
-                    },
-                    restore: () => {
-                        this._ImgVar('LBowstring').width = this.Weapon.lBowstringW;
-                        this._ImgVar('RBowstring').width = this.Weapon.rBowstringW;
-                        this._ImgVar('RBowstring').rotation = this._ImgVar('LBowstring').rotation = 0;
-                        this._ImgVar('Aim').rotation = 0;
-                        this._ImgVar('Hero').y = this.Weapon.heroFP.y;
-                    },
-                    checkLuanch: () => {
-                        if (this.Weapon.ins) {
-                            if (this.Weapon.state === this.Weapon.stateType.direction) {
-                                this._evNotify(_Event.launch, [this.Weapon.dynamics]);
-                                Tools._Node.changePivot(this.Weapon.ins, this.Weapon.ins.pivotX + this.Weapon.Pic.x, this.Weapon.ins.pivotY);
-                            }
-                            else {
-                                this.Weapon.ins.removeSelf();
-                            }
-                            this._ImgVar('Quiver').visible = true;
-                            this.Weapon.restore();
-                            this.Weapon.ins = null;
-                            this.Weapon.state = this.Weapon.stateType.checkinAim;
-                        }
-                    },
-                    move: (e) => {
-                        this.Weapon[this.Weapon.state](e);
-                    }
-                };
                 this.Hero = {
                     mouseP: null,
                     ContentFP: null,
@@ -6751,7 +6587,27 @@
                     init: () => {
                         this.Hero.ContentFP = new Laya.Point(this._ImgVar('Content').x, this._ImgVar('Content').y);
                     },
-                    move: () => {
+                    move: (e) => {
+                        if (this.Hero.mouseP) {
+                            let diffX = e.stageX - this.Hero.mouseP.x;
+                            let diffY = e.stageY - this.Hero.mouseP.y;
+                            this._ImgVar('HeroContent').x += diffX;
+                            this._ImgVar('HeroContent').y += diffY;
+                            this.Hero.mouseP = new Laya.Point(e.stageX, e.stageY);
+                            if (this._ImgVar('HeroContent').x > Laya.stage.width) {
+                                this._ImgVar('HeroContent').x = Laya.stage.width;
+                            }
+                            if (this._ImgVar('HeroContent').x < 0) {
+                                this._ImgVar('HeroContent').x = 0;
+                            }
+                            if (this._ImgVar('HeroContent').y <= 0) {
+                                this._ImgVar('HeroContent').y = 0;
+                            }
+                            if (this._ImgVar('HeroContent').y > Laya.stage.height - 200) {
+                                this._ImgVar('HeroContent').y = Laya.stage.height - 200;
+                                this.Hero.onoff = true;
+                            }
+                        }
                     }
                 };
             }
@@ -6763,7 +6619,6 @@
                     this._ImgVar('LandContent').rotation += 0.1;
                 });
                 _Game._fireControl.EnemyParent = this._ImgVar('EnemyParent');
-                _Game._fireControl.Aim = this._ImgVar('Aim');
                 for (let index = 0; index < this._ImgVar('EnemyParent').numChildren; index++) {
                     const element = this._ImgVar('EnemyParent').getChildAt(index);
                     Tools._Node.changePivot(element, element.width / 2, element.height / 2);
@@ -6811,72 +6666,26 @@
                 });
             }
             lwgButton() {
-                let QuiverArr = [this._ImgVar('Quiver_blue'), this._ImgVar('Quiver_yellow'), this._ImgVar('Quiver_red')];
-                for (let index = 0; index < QuiverArr.length; index++) {
-                    const element = QuiverArr[index];
-                    this._btnFour(element, (e) => {
-                        e.stopPropagation();
-                        this.Weapon.create(element.name.substr(7), e.stageX, e.stageY);
-                    }, null, () => {
-                        this.Weapon.remove();
-                    }, () => {
-                    }, 'null');
-                }
+            }
+            create(color, x, y) {
+                const Weapon = Tools._Node.createPrefab(_Res._list.prefab2D.Weapon.prefab);
+                this._ImgVar('WeaponParent').addChild(Weapon);
+                Weapon.addComponent(_Weapon);
+                Weapon.pos(x, y);
+                const Pic = Weapon.getChildByName('Pic');
+                Pic.skin = `Game/UI/Game/Hero/Hero_01_weapon_${color}.png`;
+                Weapon.name = color;
+                return Weapon;
             }
             lwgOnStageDown(e) {
                 this.Hero.mouseP = new Laya.Point(e.stageX, e.stageY);
             }
             lwgOnStageMove(e) {
-                if (this.Weapon.ins) {
-                    this.Weapon.move(e);
-                }
-                else {
-                    if (this.Hero.mouseP) {
-                        let diffX = e.stageX - this.Hero.mouseP.x;
-                        let diffY = e.stageY - this.Hero.mouseP.y;
-                        this._ImgVar('HeroContent').x += diffX;
-                        if (this.Hero.onoff) {
-                            if (this._ImgVar('Content').y > this.Hero.ContentFP.y) {
-                                this.Hero.onoff = false;
-                            }
-                            else {
-                                this._ImgVar('Content').y -= diffY;
-                            }
-                        }
-                        else {
-                            this._ImgVar('HeroContent').y += diffY;
-                        }
-                        this.Hero.mouseP = new Laya.Point(e.stageX, e.stageY);
-                        if (this._ImgVar('HeroContent').x > Laya.stage.width) {
-                            this._ImgVar('HeroContent').x = Laya.stage.width;
-                            this._ImgVar('Content').x -= diffX;
-                            if (this._ImgVar('Content').x < this.Hero.ContentFP.x - this.Hero.expand) {
-                                this._ImgVar('Content').x = this.Hero.ContentFP.x - this.Hero.expand;
-                            }
-                        }
-                        if (this._ImgVar('HeroContent').x < 0) {
-                            this._ImgVar('HeroContent').x = 0;
-                            this._ImgVar('Content').x -= diffX;
-                        }
-                        if (this._ImgVar('HeroContent').y <= 0) {
-                            this._ImgVar('HeroContent').y = 0;
-                        }
-                        if (this._ImgVar('HeroContent').y > Laya.stage.height - 200) {
-                            this._ImgVar('HeroContent').y = Laya.stage.height - 200;
-                            this._ImgVar('Content').y -= diffY;
-                            this.Hero.onoff = true;
-                        }
-                        if (this._ImgVar('Content').x > this.Hero.ContentFP.x + this.Hero.expand) {
-                            this._ImgVar('Content').x = this.Hero.ContentFP.x + this.Hero.expand;
-                        }
-                        if (this._ImgVar('Content').y < this.Hero.ContentFP.y - this.Hero.expand) {
-                            this._ImgVar('Content').y = this.Hero.ContentFP.y - this.Hero.expand;
-                        }
-                    }
-                }
+                this.Hero.move(e);
             }
             lwgOnStageUp() {
-                this.Weapon.checkLuanch();
+                let color;
+                this.create('blue', this._ImgVar('HeroContent').x, this._ImgVar('HeroContent').y);
                 this.Hero.mouseP = null;
             }
         }
@@ -7003,6 +6812,26 @@
     })(_Start || (_Start = {}));
     var _Start$1 = _Start.Start;
 
+    var _Victory;
+    (function (_Victory) {
+        class _data {
+        }
+        _Victory._data = _data;
+        function _init() {
+        }
+        _Victory._init = _init;
+        class Victory extends Admin._SceneBase {
+            lwgButton() {
+                this._btnUp(this._ImgVar('BtnGet'), () => {
+                    this._openScene(_SceneName.Start);
+                    EventAdmin._notify(_Game._Event.closeScene);
+                });
+            }
+        }
+        _Victory.Victory = Victory;
+    })(_Victory || (_Victory = {}));
+    var _Victory$1 = _Victory.Victory;
+
     class LwgInit extends _LwgInitScene {
         lwgOnAwake() {
             _LwgInit._pkgInfo = [];
@@ -7020,6 +6849,7 @@
                 _Guide: _Guide,
                 _Start: _Start,
                 _Game: _Game,
+                _Victory: _Victory,
             };
         }
     }

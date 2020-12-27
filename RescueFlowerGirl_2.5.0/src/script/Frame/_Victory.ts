@@ -2,7 +2,6 @@ import ADManager from "../TJ/Admanager";
 import { Admin, EventAdmin, _SceneName } from "./Lwg";
 import { _Game } from "./_Game";
 import { _Share } from "./_Share";
-import { _Special } from "./_Special";
 export module _Victory {
     export class _data {
     }

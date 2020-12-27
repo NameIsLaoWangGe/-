@@ -3,7 +3,7 @@
     "type":"Image",
     "selectedBox":115,
     "searchKey":"Image,Enemy",
-    "props":{"y":0,"x":0,"width":74,"skin":"Game/UI/Game/Enemy/enemy_01_blue.png","rotation":0,"presetID":1,"preset":"laya/pages/Prefab/Enemy.prefab","pivotY":74,"pivotX":37,"name":"Enemy","isPresetRoot":true,"height":74},
+    "props":{"y":-74,"x":-37,"width":74,"skin":"Game/UI/Game/Enemy/enemy_01_blue.png","rotation":0,"presetID":1,"preset":"laya/pages/Prefab/Enemy.prefab","name":"Enemy","isPresetRoot":true,"height":74,"anchorY":1,"anchorX":0.5},
     "nodeParent":-1,
     "maxID":116,
     "label":"Enemy",

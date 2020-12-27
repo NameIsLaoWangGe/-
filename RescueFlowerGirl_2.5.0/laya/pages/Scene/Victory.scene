@@ -32,7 +32,7 @@
             "x":15,
             "type":"Image",
             "searchKey":"Image,BtnGet,BtnGet",
-            "props":{"y":918,"x":360,"width":370,"var":"BtnGet","skin":"Lwg/UI/ui_l_orthogon_green.png","sizeGrid":"23,10,10,13","pivotY":91,"pivotX":185,"name":"BtnGet","height":181},
+            "props":{"y":918,"x":360,"width":370,"var":"BtnGet","skin":"Lwg/UI/ui_l_orthogon_cycn.png","sizeGrid":"23,10,10,13","pivotY":91,"pivotX":185,"name":"BtnGet","height":181},
             "nodeParent":2,
             "label":"BtnGet",
             "isOpen":true,

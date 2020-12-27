@@ -4,6 +4,7 @@ import { _Guide } from "./_Guide";
 import { _PreLoad } from "./_PreLoad";
 import { _PreLoadCutIn } from "./_PreLoadCutIn";
 import { _Start } from "./_Start";
+import { _Victory } from "./_Victory";
 export default class LwgInit extends _LwgInitScene {
     lwgOnAwake(): void {
 
@@ -29,7 +30,7 @@ export default class LwgInit extends _LwgInitScene {
             _Start: _Start,
             _Game: _Game,
             // _Settle: _Settle,
-            // _Victory: _Victory,
+            _Victory: _Victory,
             // _Share: _Share,
             // _Special: _Special,
             // _PropTry: _PropTry,

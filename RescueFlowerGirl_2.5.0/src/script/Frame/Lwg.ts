@@ -1486,10 +1486,10 @@ export module lwg {
                 }
             }
         }
-        /**可替代上述等级对象*/
-        export class _Game {
+        // /**可替代上述等级对象*/
+        // export class _Game {
 
-        }
+        // }
         /**引导控制*/
         export let _GuideControl = {
             switch: false,
@@ -2055,6 +2055,8 @@ export module lwg {
             }
             /**初始位置*/
             _fPoint: Laya.Point;
+            /**初始全局位置*/
+            _fGPoint: Laya.Point;
             /**初始角度*/
             _fRotation: number;
             /**获取坐标*/
@@ -2179,6 +2181,7 @@ export module lwg {
                 this.ownerSceneName = this._Scene.name;
                 /**初始位置*/
                 this._fPoint = new Laya.Point(this._Owner.x, this._Owner.y);
+                this._fGPoint =this._Parent.localToGlobal(new Laya.Point(this._Owner.x, this._Owner.y)) ;
                 /**初始角度*/
                 this._fRotation = this._Owner.rotation;
                 this.lwgOnAwake();
@@ -2462,7 +2465,7 @@ export module lwg {
             /**种类*/
             _classify: any;
             /**数据表名称*/
-            _tableName: string = '';
+            _tableName: string = 'name';
             get _arr(): Array<any> {
                 return this[`_${this._tableName}arr`];
             }
@@ -2497,7 +2500,7 @@ export module lwg {
             /**表格中的Tap*/
             _Tap: Laya.List;
             /**
-             * @param {string} tableName 在本地存储的名称
+             * @param {string} tableName 名称,本地存储也是这个名字
              * @param {Array<any>} tableArr 数据表数组
              * @param localStorage 是否存储在本地
              * @param lastVtableName 如果表格发生改变，对比上个版本的数据表将一些成果继承赋值
@@ -6478,6 +6481,8 @@ export module lwg {
              *通过prefab创建一个实例
              * @param {Laya.Prefab} prefab 预制体
              * @param {string} [name] 名称
+             * @param {Laya.Node} [Parent] 父节点
+             * @param { [number, number]} [point] 坐标
              * @return {*}  {Laya.Sprite}
              */
             export function createPrefab(prefab: Laya.Prefab, Parent?: Laya.Node, point?: [number, number], zOrder?: number, name?: string): Laya.Sprite {

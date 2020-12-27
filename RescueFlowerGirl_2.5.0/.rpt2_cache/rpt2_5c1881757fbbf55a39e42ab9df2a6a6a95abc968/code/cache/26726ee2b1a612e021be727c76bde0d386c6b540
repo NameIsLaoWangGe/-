@@ -1,0 +1,4 @@
+{
+  "code": "export var _LwgEvent;\r\n(function (_LwgEvent) {\r\n    let PreLoad;\r\n    (function (PreLoad) {\r\n    })(PreLoad = _LwgEvent.PreLoad || (_LwgEvent.PreLoad = {}));\r\n    let Guide;\r\n    (function (Guide) {\r\n    })(Guide = _LwgEvent.Guide || (_LwgEvent.Guide = {}));\r\n    let Game;\r\n    (function (Game) {\r\n        Game[\"heroBlood\"] = \"_Game_calculateBlood\";\r\n        Game[\"closeScene\"] = \"_Game_closeScene\";\r\n        Game[\"launch\"] = \"_WeaponSateType_launch\";\r\n        Game[\"enemyBlood\"] = \"_WeaponSateType_enemyBlood\";\r\n    })(Game = _LwgEvent.Game || (_LwgEvent.Game = {}));\r\n    let Task;\r\n    (function (Task) {\r\n    })(Task = _LwgEvent.Task || (_LwgEvent.Task = {}));\r\n})(_LwgEvent || (_LwgEvent = {}));\r\n",
+  "references": []
+}

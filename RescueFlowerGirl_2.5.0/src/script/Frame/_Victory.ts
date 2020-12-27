@@ -1,5 +1,6 @@
 import ADManager from "../TJ/Admanager";
 import { Admin, EventAdmin, _SceneName } from "./Lwg";
+import { _LwgEvent } from "./LwgEvent";
 import { _Game } from "./_Game";
 import { _Share } from "./_Share";
 export module _Victory {
@@ -12,7 +13,7 @@ export module _Victory {
         lwgButton(): void {
             this._btnUp(this._ImgVar('BtnGet'), () => {
                 this._openScene(_SceneName.Start);
-                EventAdmin._notify(_Game._Event.closeScene);
+                EventAdmin._notify(_LwgEvent.Game.closeScene);
             })
         }
     }

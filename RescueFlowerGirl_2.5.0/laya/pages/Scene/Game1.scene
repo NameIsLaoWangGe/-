@@ -1,12 +1,12 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":32,
-    "selecteID":62,
+    "selectedBox":2,
+    "selecteID":124,
     "searchKey":"View",
     "props":{"y":0,"x":0,"width":720,"sceneColor":"#000000","height":1280},
     "nodeParent":-1,
-    "maxID":125,
+    "maxID":131,
     "label":"View",
     "isOpen":true,
     "isDirectory":true,
@@ -118,18 +118,19 @@
             "props":{"y":300,"x":348,"width":559,"var":"Content","name":"Content","height":532,"anchorY":0.5,"anchorX":0.5},
             "nodeParent":2,
             "label":"Content",
-            "isOpen":false,
+            "isOpen":true,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":123,
             "child":[
                 {
+                    "x":30,
                     "type":"Image",
-                    "searchKey":"Image,LandContent,LandContent",
-                    "props":{"width":450,"var":"LandContent","rotation":0,"pivotY":225,"pivotX":225,"name":"LandContent","height":450,"centerY":0,"centerX":0},
+                    "searchKey":"Image,Land,Land",
+                    "props":{"width":450,"var":"Land","rotation":0,"pivotY":225,"pivotX":225,"name":"Land","height":450,"centerY":0,"centerX":0},
                     "nodeParent":123,
-                    "label":"LandContent",
+                    "label":"Land",
                     "isOpen":true,
                     "isDirectory":true,
                     "isAniNode":true,
@@ -137,9 +138,10 @@
                     "compId":30,
                     "child":[
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,BehindScenery,BehindScenery",
-                            "props":{"y":0,"x":0,"width":427,"var":"BehindScenery","name":"BehindScenery","height":449},
+                            "props":{"zOrder":0,"y":0,"x":0,"width":427,"var":"BehindScenery","name":"BehindScenery","height":449},
                             "nodeParent":30,
                             "label":"BehindScenery",
                             "isOpen":false,
@@ -189,130 +191,25 @@
                                 }]
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,EnemyParent,EnemyParent",
-                            "props":{"y":0,"x":0,"width":415,"var":"EnemyParent","name":"EnemyParent","height":428},
+                            "props":{"zOrder":1,"y":0,"x":0,"width":415,"var":"EnemyParent","name":"EnemyParent","height":428},
                             "nodeParent":30,
                             "label":"EnemyParent",
-                            "isOpen":false,
-                            "isDirectory":true,
+                            "isOpen":true,
+                            "isDirectory":false,
                             "isAniNode":true,
-                            "hasChild":true,
+                            "hasChild":false,
                             "compId":41,
                             "child":[
-                                {
-                                    "type":"Image",
-                                    "searchKey":"Image,Enemyblue",
-                                    "props":{"y":72,"x":110,"width":60,"skin":"Game/UI/Game/Enemy/enemy_01_blue.png","rotation":-32,"pivotY":30,"pivotX":30,"name":"Enemyblue","height":60},
-                                    "nodeParent":41,
-                                    "label":"Enemyblue",
-                                    "isOpen":true,
-                                    "isDirectory":true,
-                                    "isAniNode":true,
-                                    "hasChild":true,
-                                    "compId":84,
-                                    "child":[
-                                        {
-                                            "type":"Image",
-                                            "searchKey":"Image,Shell",
-                                            "props":{"y":6.5,"x":29,"width":64,"skin":"Game/UI/Game/Enemy/shell.png","pivotY":18,"pivotX":32,"name":"Shell","height":35},
-                                            "nodeParent":84,
-                                            "label":"Shell",
-                                            "isDirectory":false,
-                                            "isAniNode":true,
-                                            "hasChild":false,
-                                            "compId":88,
-                                            "child":[
-                                                ]
-                                        }]
-                                },
-                                {
-                                    "type":"Image",
-                                    "searchKey":"Image,Enemyblue",
-                                    "props":{"y":35,"x":251,"width":60,"skin":"Game/UI/Game/Enemy/enemy_01_blue.png","rotation":0,"pivotY":30,"pivotX":30,"name":"Enemyblue","height":60},
-                                    "nodeParent":41,
-                                    "label":"Enemyblue",
-                                    "isOpen":true,
-                                    "isDirectory":true,
-                                    "isAniNode":true,
-                                    "hasChild":true,
-                                    "compId":42,
-                                    "child":[
-                                        {
-                                            "type":"Image",
-                                            "searchKey":"Image,Shell",
-                                            "props":{"y":7,"width":63,"skin":"Game/UI/Game/Enemy/shell.png","pivotY":18,"pivotX":32,"name":"Shell","height":36,"centerX":0},
-                                            "nodeParent":42,
-                                            "label":"Shell",
-                                            "isDirectory":false,
-                                            "isAniNode":true,
-                                            "hasChild":false,
-                                            "compId":90,
-                                            "child":[
-                                                ]
-                                        }]
-                                },
-                                {
-                                    "type":"Image",
-                                    "searchKey":"Image,Enemyyellow",
-                                    "props":{"y":187,"x":425,"width":60,"skin":"Game/UI/Game/Enemy/enemy_01_yellow.png","rotation":80,"pivotY":30,"pivotX":30,"name":"Enemyyellow","height":60},
-                                    "nodeParent":41,
-                                    "label":"Enemyyellow",
-                                    "isOpen":true,
-                                    "isDirectory":false,
-                                    "isAniNode":true,
-                                    "hasChild":false,
-                                    "compId":43,
-                                    "child":[
-                                        ]
-                                },
-                                {
-                                    "type":"Image",
-                                    "searchKey":"Image,Enemyred",
-                                    "props":{"y":429,"x":201,"width":60,"skin":"Game/UI/Game/Enemy/enemy_01_red.png","rotation":-177,"pivotY":30,"pivotX":30,"name":"Enemyred","height":60},
-                                    "nodeParent":41,
-                                    "label":"Enemyred",
-                                    "isOpen":true,
-                                    "isDirectory":false,
-                                    "isAniNode":true,
-                                    "hasChild":false,
-                                    "compId":44,
-                                    "child":[
-                                        ]
-                                },
-                                {
-                                    "type":"Image",
-                                    "searchKey":"Image,Enemyyellow",
-                                    "props":{"y":355,"x":371,"width":60,"skin":"Game/UI/Game/Enemy/enemy_01_yellow.png","rotation":134,"pivotY":30,"pivotX":30,"name":"Enemyyellow","height":60},
-                                    "nodeParent":41,
-                                    "label":"Enemyyellow",
-                                    "isOpen":true,
-                                    "isDirectory":false,
-                                    "isAniNode":true,
-                                    "hasChild":false,
-                                    "compId":85,
-                                    "child":[
-                                        ]
-                                },
-                                {
-                                    "type":"Image",
-                                    "searchKey":"Image,Enemyred",
-                                    "props":{"y":281,"x":42,"width":60,"skin":"Game/UI/Game/Enemy/enemy_01_red.png","rotation":-108,"pivotY":30,"pivotX":30,"name":"Enemyred","height":60},
-                                    "nodeParent":41,
-                                    "label":"Enemyred",
-                                    "isOpen":true,
-                                    "isDirectory":false,
-                                    "isAniNode":true,
-                                    "hasChild":false,
-                                    "compId":86,
-                                    "child":[
-                                        ]
-                                }]
+                                ]
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,MiddleScenery,MiddleScenery",
-                            "props":{"y":0,"x":0,"width":427,"var":"MiddleScenery","name":"MiddleScenery","height":449},
+                            "props":{"zOrder":2,"y":0,"x":0,"width":427,"var":"MiddleScenery","name":"MiddleScenery","height":449},
                             "nodeParent":30,
                             "label":"MiddleScenery",
                             "isOpen":false,
@@ -375,9 +272,10 @@
                                 }]
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,Land",
-                            "props":{"y":225,"x":225,"width":403,"skin":"Game/UI/Game/SceneStyle_01/land.png","pivotY":202,"pivotX":202,"name":"Land","height":404},
+                            "props":{"zOrder":3,"y":225,"x":225,"width":403,"skin":"Game/UI/Game/SceneStyle_01/land.png","pivotY":202,"pivotX":202,"name":"Land","height":404},
                             "nodeParent":30,
                             "label":"Land",
                             "isOpen":true,
@@ -389,9 +287,10 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,FrontScenery,FrontScenery",
-                            "props":{"y":23,"x":23,"width":427,"var":"FrontScenery","name":"FrontScenery","height":449},
+                            "props":{"zOrder":4,"y":23,"x":23,"width":427,"var":"FrontScenery","name":"FrontScenery","height":449},
                             "nodeParent":30,
                             "label":"FrontScenery",
                             "isOpen":false,
@@ -415,9 +314,10 @@
                                 }]
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,MobileFrame,MobileFrame",
-                            "props":{"y":50,"x":47,"width":351,"var":"MobileFrame","name":"MobileFrame","height":351},
+                            "props":{"zOrder":5,"y":50,"x":47,"width":351,"var":"MobileFrame","name":"MobileFrame","height":351},
                             "nodeParent":30,
                             "label":"MobileFrame",
                             "isDirectory":false,
@@ -429,6 +329,7 @@
                         }]
                 },
                 {
+                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,Heroine,Heroine",
                     "props":{"width":80,"var":"Heroine","skin":"Game/UI/Game/Heroine/heroine_01.png","pivotY":37,"pivotX":40,"name":"Heroine","height":73,"centerY":0,"centerX":0},
@@ -440,20 +341,21 @@
                     "compId":31,
                     "child":[
                         ]
-                },
-                {
-                    "type":"Image",
-                    "searchKey":"Image,EBparrent,EBparrent",
-                    "props":{"y":0,"x":0,"width":191,"var":"EBparrent","name":"EBparrent","height":208},
-                    "nodeParent":123,
-                    "label":"EBparrent",
-                    "isDirectory":false,
-                    "isAniNode":true,
-                    "hasChild":false,
-                    "compId":124,
-                    "child":[
-                        ]
                 }]
+        },
+        {
+            "x":15,
+            "type":"Image",
+            "searchKey":"Image,EBparrent,EBparrent",
+            "props":{"y":0,"x":0,"width":191,"var":"EBparrent","name":"EBparrent","height":208},
+            "nodeParent":2,
+            "label":"EBparrent",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":124,
+            "child":[
+                ]
         },
         {
             "x":15,

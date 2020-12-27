@@ -37,6 +37,10 @@ export module _Res {
             EnemyBullet: {
                 url: 'Prefab/EnemyBullet.json',
                 prefab: null as Laya.Prefab,
+            },
+            Boss: {
+                url: 'Prefab/Boss.json',
+                prefab: null as Laya.Prefab,
             }
         },
         // texture: {
@@ -51,24 +55,27 @@ export module _Res {
         //         texture: Laya.Texture2D,
         //     },
         // },
-        /**通过直接获取场景的显示和打开，和scene关联，实现，先加载，然后直接切换*/
         scene2D: {
             UIStart: "Scene/" + _SceneName.Start + '.json',
             GameScene: "Scene/" + _SceneName.Game + '.json',
         },
         json: {
-            // SingleColor: {
-            //     url: "_LwgData" + "/_Game/SingleColor" + ".json",
-            //     data: new Array,
-            // },
-            // Colours: {
-            //     url: "_LwgData" + "/_Game/Colours" + ".json",
-            //     data: new Array,
-            // },
-            // SelectLevel: {
-            //     url: "_LwgData" + "/_SelectLevel/SelectLevel" + ".json",
-            //     data: new Array,
-            // }
+            Boss: {
+                url: "_LwgData" + "/_Game/Boss" + ".json",
+                dataArr: null as any[],
+            },
+            Enemy: {
+                url: "_LwgData" + "/_Game/Enemy" + ".json",
+                dataArr: null as any[],
+            },
+            HeroLevel: {
+                url: "_LwgData" + "/_Game/HeroLevel" + ".json",
+                dataArr: null as any[],
+            },
+            HeroType: {
+                url: "_LwgData" + "/_Game/HeroType" + ".json",
+                dataArr: null as any[],
+            }
         },
         // skeleton: {
         //     test: {
@@ -82,7 +89,7 @@ export module _Res {
 export module _PreLoad {
     export class PreLoad extends _LwgPreLoad._PreLoadScene {
         lwgOnStart(): void {
-            EventAdmin._notify(_LwgPreLoad._Event.importList, [_Res._list]);
+            this._evNotify(_LwgPreLoad._Event.importList, [_Res._list]);
         }
         lwgOpenAni(): number { return 1; }
         lwgStepComplete(): void {
@@ -92,6 +99,6 @@ export module _PreLoad {
         }
     }
 }
-export default PreLoad;
+export default _PreLoad.PreLoad;
 
 

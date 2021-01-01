@@ -4,7 +4,7 @@
   {
     "index": 1,
     "name": "level1",
-    "quantity": 10,
+    "quantity": 8,
     "shellNum": 4,
     "speed": [
       0.2,
@@ -18,7 +18,7 @@
   {
     "index": 2,
     "name": "level2",
-    "quantity": 11,
+    "quantity": 8,
     "shellNum": 5,
     "speed": [
       0.2,
@@ -32,7 +32,7 @@
   {
     "index": 3,
     "name": "level3",
-    "quantity": 12,
+    "quantity": 8,
     "shellNum": 6,
     "speed": [
       0.2,
@@ -46,7 +46,7 @@
   {
     "index": 4,
     "name": "level4",
-    "quantity": 13,
+    "quantity": 8,
     "shellNum": 7,
     "speed": [
       0.2,
@@ -60,7 +60,7 @@
   {
     "index": 5,
     "name": "level5",
-    "quantity": 14,
+    "quantity": 8,
     "shellNum": 8,
     "speed": [
       0.2,
@@ -74,7 +74,7 @@
   {
     "index": 6,
     "name": "level6",
-    "quantity": 15,
+    "quantity": 8,
     "shellNum": 9,
     "speed": [
       0.2,
@@ -88,7 +88,7 @@
   {
     "index": 7,
     "name": "level7",
-    "quantity": 16,
+    "quantity": 8,
     "shellNum": 10,
     "speed": [
       0.2,
@@ -102,7 +102,7 @@
   {
     "index": 8,
     "name": "level8",
-    "quantity": 17,
+    "quantity": 8,
     "shellNum": 11,
     "speed": [
       0.2,
@@ -116,7 +116,7 @@
   {
     "index": 9,
     "name": "level9",
-    "quantity": 18,
+    "quantity": 8,
     "shellNum": 12,
     "speed": [
       0.2,
@@ -130,7 +130,7 @@
   {
     "index": 10,
     "name": "level10",
-    "quantity": 19,
+    "quantity": 8,
     "shellNum": 13,
     "speed": [
       0.2,
@@ -144,7 +144,7 @@
   {
     "index": 11,
     "name": "level11",
-    "quantity": 20,
+    "quantity": 8,
     "shellNum": 14,
     "speed": [
       0.2,

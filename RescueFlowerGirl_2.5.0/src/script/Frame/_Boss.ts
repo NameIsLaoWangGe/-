@@ -36,12 +36,12 @@ export module _Boss {
             this.move();
         }
         attack(): void {
-            TimerAdmin._frameRandomLoop(100, 1000, this, () => {
-                let bullet = Tools._Node.createPrefab(_Res._list.prefab2D.EnemyBullet.prefab)
-                bullet.addComponent(_EnemyBullet);
-                this._SceneImg('EBparrent').addChild(bullet);
-                bullet.pos(this._gPoint.x, this._gPoint.y);
-            })
+            // TimerAdmin._frameRandomLoop(100, 1000, this, () => {
+            //     let bullet = Tools._Node.createPrefab(_Res._list.prefab2D.EnemyBullet.prefab)
+            //     bullet.addComponent(_EnemyBullet);
+            //     this._SceneImg('EBparrent').addChild(bullet);
+            //     bullet.pos(this._gPoint.x, this._gPoint.y);
+            // })
         }
         move(): void {
             TimerAdmin._frameLoop(1, this, () => {
@@ -158,15 +158,15 @@ export module _Boss {
         }
         attack(): void {
             const num = 20;
-            TimerAdmin._frameRandomLoop(100, 500, this, () => {
-                for (let index = 0; index < num; index++) {
-                    const bullet = Tools._Node.createPrefab(_Res._list.prefab2D.EnemyBullet.prefab) as Laya.Image;
-                    this._SceneImg('EBparrent').addChild(bullet);
-                    bullet.pos(this._gPoint.x, this._gPoint.y);
-                    bullet.rotation = 360 / num * index;
-                    bullet.addComponent(BossBullet);
-                }
-            })
+            // TimerAdmin._frameRandomLoop(100, 500, this, () => {
+            //     for (let index = 0; index < num; index++) {
+            //         const bullet = Tools._Node.createPrefab(_Res._list.prefab2D.EnemyBullet.prefab) as Laya.Image;
+            //         this._SceneImg('EBparrent').addChild(bullet);
+            //         bullet.pos(this._gPoint.x, this._gPoint.y);
+            //         bullet.rotation = 360 / num * index;
+            //         bullet.addComponent(BossBullet);
+            //     }
+            // })
         }
     }
     export class BossBullet extends _EnemyBullet {

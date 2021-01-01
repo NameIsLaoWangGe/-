@@ -94,24 +94,46 @@ export module _Game {
                 }
             }
             //什么都没有打中时，会停在地面上，不会穿透地面
-            const LandContentGP = this._SceneImg('Content').localToGlobal(new Laya.Point(this._SceneImg('Land').x, this._SceneImg('Land').y));
-            if (LandContentGP.distance(this._gPoint.x, this._gPoint.y) < 155) {
+            let Ground: Laya.Image;
+            const ran = Tools._Number.randomOneInt(0, 2);
+            if (ran == 0) {
+                Ground = this._SceneImg('Land').getChildByName('FrontGround') as Laya.Image;
+            } else if (ran == 1) {
+                Ground = this._SceneImg('Land').getChildByName('MiddleGround') as Laya.Image;
+            } else if (ran == 2) {
+                Ground = this._SceneImg('Land').getChildByName('BehindGround') as Laya.Image;
+            }
+            const GroundGP = this._SceneImg('Land').localToGlobal(new Laya.Point(Ground.x, Ground.y));
+            if (GroundGP.distance(this._gPoint.x, this._gPoint.y) < 160) {
                 Laya.timer.clearAll(this);
                 this.state = this.stateType.free;
-                const lP = this._SceneImg('Land').globalToLocal(this._gPoint);
-                this._SceneImg('Land').addChild(this._Owner);
+                const lP = Ground.globalToLocal(this._gPoint);
+                let ArrowParent = Ground.getChildByName('ArrowParent') as Laya.Sprite;
+                if (!Ground.getChildByName('ArrowParent')) {
+                    ArrowParent = new Laya.Sprite;
+                    ArrowParent.name = 'ArrowParent';
+                    Ground.addChild(ArrowParent);
+                    ArrowParent.size(Ground.width, Ground.height);
+                }
+                ArrowParent.cacheAs = "bitmap";
+                ArrowParent.addChild(this._Owner);
                 this._Owner.pos(lP.x, lP.y);
                 this._Owner.rotation -= this._SceneImg('Land').rotation;
+                // 通过移动图片的位置，表现每支箭的力度略有差别
+                const Pic = this._Owner.getChildByName('Pic') as Laya.Image;
+                Pic.y -= Tools._Number.randomOneBySection(20);
                 const mask = new Laya.Sprite;
                 mask.size(200, 300);
                 mask.pos(0, Tools._Number.randomOneBySection(20, 30));
                 mask.loadImage('Lwg/UI/ui_l_orthogon_white.png');
                 this._Owner.mask = mask;
-                // 注意层级关系，这样有层次感
-                this._Owner.zOrder = Tools._Number.randomOneBySection(0, 5);
-                TimerAdmin._frameOnce(600, this, () => {
-                    this._Owner.removeSelf();
-                })
+                // 绘制节点
+                if (ArrowParent.numChildren > 5) {
+                    const tex = ArrowParent.drawToTexture(ArrowParent.width, ArrowParent.height, 0, 0) as Laya.Texture;
+                    ArrowParent.texture && ArrowParent.texture.destroy();
+                    ArrowParent.texture = tex;
+                    Tools._Node.removeAllChildren(ArrowParent);
+                }
             }
         }
     }

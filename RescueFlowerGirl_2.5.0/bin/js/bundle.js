@@ -6424,12 +6424,6 @@
                 this.move();
             }
             attack() {
-                TimerAdmin._frameRandomLoop(100, 1000, this, () => {
-                    let bullet = Tools._Node.createPrefab(_Res._list.prefab2D.EnemyBullet.prefab);
-                    bullet.addComponent(_EnemyBullet);
-                    this._SceneImg('EBparrent').addChild(bullet);
-                    bullet.pos(this._gPoint.x, this._gPoint.y);
-                });
             }
             move() {
                 TimerAdmin._frameLoop(1, this, () => {
@@ -6546,15 +6540,6 @@
             }
             attack() {
                 const num = 20;
-                TimerAdmin._frameRandomLoop(100, 500, this, () => {
-                    for (let index = 0; index < num; index++) {
-                        const bullet = Tools._Node.createPrefab(_Res._list.prefab2D.EnemyBullet.prefab);
-                        this._SceneImg('EBparrent').addChild(bullet);
-                        bullet.pos(this._gPoint.x, this._gPoint.y);
-                        bullet.rotation = 360 / num * index;
-                        bullet.addComponent(BossBullet);
-                    }
-                });
             }
         }
         _Boss.Boss = Boss;
@@ -6722,23 +6707,46 @@
                         return;
                     }
                 }
-                const LandContentGP = this._SceneImg('Content').localToGlobal(new Laya.Point(this._SceneImg('Land').x, this._SceneImg('Land').y));
-                if (LandContentGP.distance(this._gPoint.x, this._gPoint.y) < 155) {
+                let Ground;
+                const ran = Tools._Number.randomOneInt(0, 2);
+                if (ran == 0) {
+                    Ground = this._SceneImg('Land').getChildByName('FrontGround');
+                }
+                else if (ran == 1) {
+                    Ground = this._SceneImg('Land').getChildByName('MiddleGround');
+                }
+                else if (ran == 2) {
+                    Ground = this._SceneImg('Land').getChildByName('BehindGround');
+                }
+                const GroundGP = this._SceneImg('Land').localToGlobal(new Laya.Point(Ground.x, Ground.y));
+                if (GroundGP.distance(this._gPoint.x, this._gPoint.y) < 160) {
                     Laya.timer.clearAll(this);
                     this.state = this.stateType.free;
-                    const lP = this._SceneImg('Land').globalToLocal(this._gPoint);
-                    this._SceneImg('Land').addChild(this._Owner);
+                    const lP = Ground.globalToLocal(this._gPoint);
+                    let ArrowParent = Ground.getChildByName('ArrowParent');
+                    if (!Ground.getChildByName('ArrowParent')) {
+                        ArrowParent = new Laya.Sprite;
+                        ArrowParent.name = 'ArrowParent';
+                        Ground.addChild(ArrowParent);
+                        ArrowParent.size(Ground.width, Ground.height);
+                    }
+                    ArrowParent.cacheAs = "bitmap";
+                    ArrowParent.addChild(this._Owner);
                     this._Owner.pos(lP.x, lP.y);
                     this._Owner.rotation -= this._SceneImg('Land').rotation;
+                    const Pic = this._Owner.getChildByName('Pic');
+                    Pic.y -= Tools._Number.randomOneBySection(20);
                     const mask = new Laya.Sprite;
                     mask.size(200, 300);
                     mask.pos(0, Tools._Number.randomOneBySection(20, 30));
                     mask.loadImage('Lwg/UI/ui_l_orthogon_white.png');
                     this._Owner.mask = mask;
-                    this._Owner.zOrder = Tools._Number.randomOneBySection(0, 5);
-                    TimerAdmin._frameOnce(600, this, () => {
-                        this._Owner.removeSelf();
-                    });
+                    if (ArrowParent.numChildren > 5) {
+                        const tex = ArrowParent.drawToTexture(ArrowParent.width, ArrowParent.height, 0, 0);
+                        ArrowParent.texture && ArrowParent.texture.destroy();
+                        ArrowParent.texture = tex;
+                        Tools._Node.removeAllChildren(ArrowParent);
+                    }
                 }
             }
         }

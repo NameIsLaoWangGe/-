@@ -2,11 +2,11 @@
     "x":0,
     "type":"View",
     "selectedBox":2,
-    "selecteID":32,
+    "selecteID":123,
     "searchKey":"View",
     "props":{"y":0,"x":0,"width":720,"sceneColor":"#000000","height":1280},
     "nodeParent":-1,
-    "maxID":170,
+    "maxID":186,
     "label":"View",
     "isOpen":true,
     "isDirectory":true,
@@ -119,13 +119,14 @@
             "props":{"y":300,"x":348,"width":559,"var":"Content","name":"Content","height":532,"anchorY":0.5,"anchorX":0.5},
             "nodeParent":2,
             "label":"Content",
-            "isOpen":false,
+            "isOpen":true,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":123,
             "child":[
                 {
+                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,Land,Land",
                     "props":{"width":450,"var":"Land","rotation":0,"pivotY":225,"pivotX":225,"name":"Land","height":450,"centerY":0,"centerX":0},
@@ -138,12 +139,13 @@
                     "compId":30,
                     "child":[
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,BehindScenery,BehindScenery",
                             "props":{"zOrder":5,"y":0,"x":0,"width":427,"var":"BehindScenery","name":"BehindScenery","height":449},
                             "nodeParent":30,
                             "label":"BehindScenery",
-                            "isOpen":true,
+                            "isOpen":false,
                             "isDirectory":true,
                             "isAniNode":true,
                             "hasChild":true,
@@ -203,26 +205,13 @@
                                 }]
                         },
                         {
-                            "type":"Image",
-                            "searchKey":"Image,EnemyParent,EnemyParent",
-                            "props":{"zOrder":10,"y":0,"x":0,"width":415,"var":"EnemyParent","name":"EnemyParent","height":428},
-                            "nodeParent":30,
-                            "label":"EnemyParent",
-                            "isOpen":true,
-                            "isDirectory":false,
-                            "isAniNode":true,
-                            "hasChild":false,
-                            "compId":41,
-                            "child":[
-                                ]
-                        },
-                        {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,MiddleScenery,MiddleScenery",
                             "props":{"zOrder":15,"y":0,"x":0,"width":472,"var":"MiddleScenery","name":"MiddleScenery","height":479},
                             "nodeParent":30,
                             "label":"MiddleScenery",
-                            "isOpen":true,
+                            "isOpen":false,
                             "isDirectory":true,
                             "isAniNode":true,
                             "hasChild":true,
@@ -252,6 +241,32 @@
                                             "compId":141,
                                             "child":[
                                                 ]
+                                        },
+                                        {
+                                            "type":"Image",
+                                            "searchKey":"Image,Blood",
+                                            "props":{"zOrder":50,"y":88,"width":49,"skin":"Lwg/UI/ui_l_orthogon_white.png","sizeGrid":"4,4,4,4","name":"Blood","height":10,"centerX":7},
+                                            "nodeParent":140,
+                                            "label":"Blood",
+                                            "isOpen":true,
+                                            "isDirectory":true,
+                                            "isAniNode":true,
+                                            "hasChild":true,
+                                            "compId":172,
+                                            "child":[
+                                                {
+                                                    "type":"Image",
+                                                    "searchKey":"Image,Pic",
+                                                    "props":{"y":2,"x":2,"width":45,"skin":"Lwg/UI/ui_orthogon_red.png","sizeGrid":"1,1,1,1","name":"Pic","height":6},
+                                                    "nodeParent":172,
+                                                    "label":"Pic",
+                                                    "isDirectory":false,
+                                                    "isAniNode":true,
+                                                    "hasChild":false,
+                                                    "compId":173,
+                                                    "child":[
+                                                        ]
+                                                }]
                                         }]
                                 },
                                 {
@@ -260,7 +275,7 @@
                                     "props":{"y":280,"x":19,"width":213,"scaleY":1,"scaleX":1,"rotation":-109,"name":"Tree","height":259,"anchorY":0.5,"anchorX":0.5},
                                     "nodeParent":53,
                                     "label":"Tree",
-                                    "isOpen":false,
+                                    "isOpen":true,
                                     "isDirectory":true,
                                     "isAniNode":true,
                                     "hasChild":true,
@@ -278,6 +293,32 @@
                                             "compId":159,
                                             "child":[
                                                 ]
+                                        },
+                                        {
+                                            "type":"Image",
+                                            "searchKey":"Image,Blood",
+                                            "props":{"zOrder":50,"y":58,"width":49,"skin":"Lwg/UI/ui_l_orthogon_white.png","sizeGrid":"4,4,4,4","name":"Blood","height":10,"centerX":0},
+                                            "nodeParent":158,
+                                            "label":"Blood",
+                                            "isOpen":true,
+                                            "isDirectory":true,
+                                            "isAniNode":true,
+                                            "hasChild":true,
+                                            "compId":174,
+                                            "child":[
+                                                {
+                                                    "type":"Image",
+                                                    "searchKey":"Image,Pic",
+                                                    "props":{"y":2,"x":2,"width":45,"skin":"Lwg/UI/ui_orthogon_red.png","sizeGrid":"1,1,1,1","name":"Pic","height":6},
+                                                    "nodeParent":174,
+                                                    "label":"Pic",
+                                                    "isDirectory":false,
+                                                    "isAniNode":true,
+                                                    "hasChild":false,
+                                                    "compId":175,
+                                                    "child":[
+                                                        ]
+                                                }]
                                         }]
                                 },
                                 {
@@ -286,7 +327,7 @@
                                     "props":{"y":338,"x":412,"width":228,"scaleY":1,"scaleX":1,"rotation":-241,"name":"Tree","height":257,"anchorY":0.5,"anchorX":0.5},
                                     "nodeParent":53,
                                     "label":"Tree",
-                                    "isOpen":false,
+                                    "isOpen":true,
                                     "isDirectory":true,
                                     "isAniNode":true,
                                     "hasChild":true,
@@ -304,6 +345,32 @@
                                             "compId":161,
                                             "child":[
                                                 ]
+                                        },
+                                        {
+                                            "type":"Image",
+                                            "searchKey":"Image,Blood",
+                                            "props":{"zOrder":50,"y":62,"width":49,"skin":"Lwg/UI/ui_l_orthogon_white.png","sizeGrid":"4,4,4,4","name":"Blood","height":10,"centerX":1},
+                                            "nodeParent":160,
+                                            "label":"Blood",
+                                            "isOpen":true,
+                                            "isDirectory":true,
+                                            "isAniNode":true,
+                                            "hasChild":true,
+                                            "compId":176,
+                                            "child":[
+                                                {
+                                                    "type":"Image",
+                                                    "searchKey":"Image,Pic",
+                                                    "props":{"y":2,"x":2,"width":45,"skin":"Lwg/UI/ui_orthogon_red.png","sizeGrid":"1,1,1,1","name":"Pic","height":6},
+                                                    "nodeParent":176,
+                                                    "label":"Pic",
+                                                    "isDirectory":false,
+                                                    "isAniNode":true,
+                                                    "hasChild":false,
+                                                    "compId":177,
+                                                    "child":[
+                                                        ]
+                                                }]
                                         }]
                                 },
                                 {
@@ -312,7 +379,7 @@
                                     "props":{"y":274.5,"x":456.5,"width":217,"scaleY":1,"scaleX":1,"rotation":-255,"pivotY":110,"pivotX":109,"name":"Tree","height":270},
                                     "nodeParent":53,
                                     "label":"Tree",
-                                    "isOpen":false,
+                                    "isOpen":true,
                                     "isDirectory":true,
                                     "isAniNode":true,
                                     "hasChild":true,
@@ -330,6 +397,32 @@
                                             "compId":163,
                                             "child":[
                                                 ]
+                                        },
+                                        {
+                                            "type":"Image",
+                                            "searchKey":"Image,Blood",
+                                            "props":{"zOrder":50,"y":21,"width":49,"skin":"Lwg/UI/ui_l_orthogon_white.png","sizeGrid":"4,4,4,4","name":"Blood","height":10,"centerX":-1},
+                                            "nodeParent":162,
+                                            "label":"Blood",
+                                            "isOpen":true,
+                                            "isDirectory":true,
+                                            "isAniNode":true,
+                                            "hasChild":true,
+                                            "compId":178,
+                                            "child":[
+                                                {
+                                                    "type":"Image",
+                                                    "searchKey":"Image,Pic",
+                                                    "props":{"y":2,"x":2,"width":45,"skin":"Lwg/UI/ui_orthogon_red.png","sizeGrid":"1,1,1,1","name":"Pic","height":6},
+                                                    "nodeParent":178,
+                                                    "label":"Pic",
+                                                    "isDirectory":false,
+                                                    "isAniNode":true,
+                                                    "hasChild":false,
+                                                    "compId":179,
+                                                    "child":[
+                                                        ]
+                                                }]
                                         }]
                                 },
                                 {
@@ -338,7 +431,7 @@
                                     "props":{"y":70,"x":374,"width":222,"scaleY":1,"scaleX":1,"rotation":-314,"name":"Tree","height":257,"anchorY":0.5,"anchorX":0.5},
                                     "nodeParent":53,
                                     "label":"Tree",
-                                    "isOpen":false,
+                                    "isOpen":true,
                                     "isDirectory":true,
                                     "isAniNode":true,
                                     "hasChild":true,
@@ -356,16 +449,43 @@
                                             "compId":165,
                                             "child":[
                                                 ]
+                                        },
+                                        {
+                                            "type":"Image",
+                                            "searchKey":"Image,Blood",
+                                            "props":{"zOrder":50,"y":57,"width":49,"skin":"Lwg/UI/ui_l_orthogon_white.png","sizeGrid":"4,4,4,4","name":"Blood","height":10,"centerX":1},
+                                            "nodeParent":164,
+                                            "label":"Blood",
+                                            "isOpen":true,
+                                            "isDirectory":true,
+                                            "isAniNode":true,
+                                            "hasChild":true,
+                                            "compId":180,
+                                            "child":[
+                                                {
+                                                    "type":"Image",
+                                                    "searchKey":"Image,Pic",
+                                                    "props":{"y":2,"x":2,"width":45,"skin":"Lwg/UI/ui_orthogon_red.png","sizeGrid":"1,1,1,1","name":"Pic","height":6},
+                                                    "nodeParent":180,
+                                                    "label":"Pic",
+                                                    "isDirectory":false,
+                                                    "isAniNode":true,
+                                                    "hasChild":false,
+                                                    "compId":181,
+                                                    "child":[
+                                                        ]
+                                                }]
                                         }]
                                 }]
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,FrontGround",
                             "props":{"zOrder":20,"width":500,"name":"FrontGround","height":500,"centerY":0,"centerX":0,"anchorY":0.5,"anchorX":0.5},
                             "nodeParent":30,
                             "label":"FrontGround",
-                            "isOpen":true,
+                            "isOpen":false,
                             "isDirectory":true,
                             "isAniNode":true,
                             "hasChild":true,
@@ -386,6 +506,7 @@
                                 }]
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,FrontScenery,FrontScenery",
                             "props":{"zOrder":25,"y":23,"x":23,"width":427,"var":"FrontScenery","name":"FrontScenery","height":449},
@@ -410,9 +531,25 @@
                                     "child":[
                                         ]
                                 }]
+                        },
+                        {
+                            "x":45,
+                            "type":"Image",
+                            "searchKey":"Image,EnemyParent,EnemyParent",
+                            "props":{"zOrder":30,"var":"EnemyParent","top":0,"right":0,"name":"EnemyParent","left":0,"bottom":0},
+                            "nodeParent":30,
+                            "label":"EnemyParent",
+                            "isOpen":true,
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":41,
+                            "child":[
+                                ]
                         }]
                 },
                 {
+                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,Heroine,Heroine",
                     "props":{"width":80,"var":"Heroine","skin":"Game/UI/Game/Heroine/heroine_01.png","pivotY":37,"pivotX":40,"name":"Heroine","height":73,"centerY":0,"centerX":0},
@@ -424,6 +561,33 @@
                     "compId":31,
                     "child":[
                         ]
+                },
+                {
+                    "x":30,
+                    "type":"Image",
+                    "searchKey":"Image, EnemyRoom, EnemyRoom",
+                    "props":{"zOrder":30,"y":263,"x":280,"width":88,"var":" EnemyRoom","skin":"Lwg/UI/ui_square_c_009.png","pivotY":41,"pivotX":44,"name":" EnemyRoom","height":81},
+                    "nodeParent":123,
+                    "label":" EnemyRoom",
+                    "isOpen":false,
+                    "isDirectory":true,
+                    "isAniNode":true,
+                    "hasChild":true,
+                    "compId":184,
+                    "child":[
+                        {
+                            "type":"Label",
+                            "searchKey":"Label",
+                            "props":{"width":77,"valign":"middle","text":"房屋","italic":false,"height":49,"fontSize":30,"centerY":0,"centerX":0,"bold":true,"align":"center"},
+                            "nodeParent":184,
+                            "label":"Label",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":185,
+                            "child":[
+                                ]
+                        }]
                 }]
         },
         {

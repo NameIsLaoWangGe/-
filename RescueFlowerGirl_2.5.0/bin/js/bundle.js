@@ -6325,13 +6325,46 @@
         (function (Game) {
             Game["heroBlood"] = "_Game_calculateBlood";
             Game["closeScene"] = "_Game_closeScene";
-            Game["launch"] = "_WeaponSateType_launch";
-            Game["enemyBlood"] = "_WeaponSateType_enemyBlood";
+            Game["launch"] = "_Game_launch";
+            Game["enemyBlood"] = "_Game_enemyBlood";
+            Game["addBuff"] = "_WeaponSateType_addBuff";
         })(Game = _LwgEvent.Game || (_LwgEvent.Game = {}));
         let Task;
         (function (Task) {
         })(Task = _LwgEvent.Task || (_LwgEvent.Task = {}));
     })(_LwgEvent || (_LwgEvent = {}));
+
+    class _EnemyBullet extends Admin._ObjectBase {
+        constructor() {
+            super(...arguments);
+            this.speed = 2;
+        }
+        lwgOnStart() {
+            this.move();
+            this.checkHero();
+        }
+        move() {
+            let GPoint = this._SceneImg('Hero').localToGlobal(new Laya.Point(this._SceneImg('Hero').x, this._SceneImg('Hero').y));
+            let p = new Laya.Point(this._gPoint.x - GPoint.x, this._gPoint.y - GPoint.y);
+            p.normalize();
+            TimerAdmin._frameLoop(1, this, () => {
+                this._Owner.x -= p.x * this.speed;
+                this._Owner.y -= p.y * this.speed;
+                Tools._Node.leaveStage(this._Owner, () => {
+                    this._Owner.removeSelf();
+                    return;
+                });
+            });
+        }
+        checkHero() {
+            TimerAdmin._frameLoop(1, this, () => {
+                Tools._Node.checkTwoDistance(this._Owner, this._SceneImg('Hero'), 50, () => {
+                    this._Owner.removeSelf();
+                    this._evNotify(_LwgEvent.Game.heroBlood, [1]);
+                });
+            });
+        }
+    }
 
     var _Res;
     (function (_Res) {
@@ -6355,6 +6388,10 @@
                 },
                 Boss: {
                     url: 'Prefab/Boss.json',
+                    prefab: null,
+                },
+                Buff: {
+                    url: 'Prefab/Buff.json',
                     prefab: null,
                 }
             },
@@ -6399,38 +6436,6 @@
     })(_PreLoad || (_PreLoad = {}));
     var _PreLoad$1 = _PreLoad.PreLoad;
 
-    class _EnemyBullet extends Admin._ObjectBase {
-        constructor() {
-            super(...arguments);
-            this.speed = 2;
-        }
-        lwgOnStart() {
-            this.move();
-            this.checkHero();
-        }
-        move() {
-            let GPoint = this._SceneImg('Hero').localToGlobal(new Laya.Point(this._SceneImg('Hero').x, this._SceneImg('Hero').y));
-            let p = new Laya.Point(this._gPoint.x - GPoint.x, this._gPoint.y - GPoint.y);
-            p.normalize();
-            TimerAdmin._frameLoop(1, this, () => {
-                this._Owner.x -= p.x * this.speed;
-                this._Owner.y -= p.y * this.speed;
-                Tools._Node.leaveStage(this._Owner, () => {
-                    this._Owner.removeSelf();
-                    return;
-                });
-            });
-        }
-        checkHero() {
-            TimerAdmin._frameLoop(1, this, () => {
-                Tools._Node.checkTwoDistance(this._Owner, this._SceneImg('Hero'), 50, () => {
-                    this._Owner.removeSelf();
-                    this._evNotify(_LwgEvent.Game.heroBlood, [1]);
-                });
-            });
-        }
-    }
-
     class _EnemyData extends DataAdmin._Table {
         constructor(_EnemyParent) {
             super();
@@ -6443,28 +6448,48 @@
             };
             this.EnemyParent = _EnemyParent;
             this._arr = _Res._list.json.Enemy.dataArr;
+            this.levelData = this._getObjByName(`level${Admin._game.level}`);
+            this.quantity = this.levelData['quantity'];
+            this.presentQuantity = 0;
+            EventAdmin._register('presentQuantity', this, () => {
+                this.presentQuantity--;
+            });
         }
-        createEnmey() {
-            const obj = this._getObjByName(`level${Admin._game.level}`);
-            const quantity = obj[this._otherPro.quantity];
-            const shellNum = obj[this._otherPro.shellNum];
-            let shellNumTime = 0;
-            for (let index = 0; index < quantity; index++) {
-                const element = Tools._Node.createPrefab(_Res._list.prefab2D.Enemy.prefab, this.EnemyParent);
-                shellNumTime++;
-                const color = Tools._Array.randomGetOne(['blue', 'yellow', 'red']);
-                element.name = `${color}${index}`;
-                let speed = Tools._Number.randomOneBySection(obj[this._otherPro.speed][0], obj[this._otherPro.speed][1]);
-                speed = Tools._Number.randomOneHalf() == 0 ? -speed : speed;
-                element['_EnemyData'] = {
-                    shell: shellNumTime <= shellNum ? true : false,
-                    blood: obj['blood'],
-                    angle: Tools._Number.randomOneBySection(0, 360),
-                    speed: speed,
-                    color: color,
-                };
-                element.addComponent(_Enemy);
+        get presentQuantity() {
+            return this['_presentQuantity'];
+        }
+        ;
+        set presentQuantity(val) {
+            this['_presentQuantity'] = val;
+            if (val < 10) {
+                if (this.quantity > 0) {
+                    this.createEnmey();
+                }
             }
+            if (val === 0 && this.quantity === 0) {
+                Admin._openScene('Victory');
+            }
+        }
+        ;
+        createEnmey() {
+            this.presentQuantity++;
+            this.quantity--;
+            const shellNum = this.levelData[this._otherPro.shellNum];
+            let shellNumTime = 0;
+            const element = Tools._Node.createPrefab(_Res._list.prefab2D.Enemy.prefab, this.EnemyParent);
+            shellNumTime++;
+            const color = Tools._Array.randomGetOne(['blue', 'yellow', 'red']);
+            element.name = `${color}${color}`;
+            let speed = Tools._Number.randomOneBySection(this.levelData[this._otherPro.speed][0], this.levelData[this._otherPro.speed][1]);
+            speed = Tools._Number.randomOneHalf() == 0 ? -speed : speed;
+            element['_EnemyData'] = {
+                shell: shellNumTime <= shellNum ? true : false,
+                blood: this.levelData['blood'],
+                angle: Tools._Number.randomOneBySection(0, 360),
+                speed: speed,
+                color: color,
+            };
+            element.addComponent(_Enemy);
         }
     }
     class _Enemy extends Admin._ObjectBase {
@@ -6474,7 +6499,7 @@
         generalProInit() {
             const shell = this._Owner['_EnemyData']['shell'];
             this.Shell = this._Owner.getChildByName('Shell');
-            !shell && this.Shell.removeSelf();
+            this.Shell.removeSelf();
             this.Pic = this._Owner.getChildByName('Pic');
             this.Pic.skin = `Game/UI/Game/Enemy/enemy_01_${this._Owner['_EnemyData']['color']}.png`;
             this.blood = this._Owner['_EnemyData']['blood'];
@@ -6484,10 +6509,26 @@
             const angle = this._Owner['_EnemyData']['angle'];
             this._Owner.rotation = angle;
             this.speed = this._Owner['_EnemyData']['speed'];
+            this.groundRadius = 200;
         }
         lwgOnStart() {
             this.attack();
-            this.move();
+            this.appear(() => {
+                this.move();
+            });
+        }
+        appear(func) {
+            let radius = 0;
+            const radiusSpeed = 2;
+            const time = 220 / radiusSpeed;
+            TimerAdmin._frameNumLoop(1, time, this, () => {
+                radius += radiusSpeed;
+                let point = Tools._Point.getRoundPos(this._Owner.rotation, radius, new Laya.Point(this._SceneImg('Land').width / 2, this._SceneImg('Land').height / 2));
+                this._Owner.x = point.x;
+                this._Owner.y = point.y;
+            }, () => {
+                func();
+            });
         }
         attack() {
             TimerAdmin._frameRandomLoop(100, 1000, this, () => {
@@ -6513,116 +6554,50 @@
                         for (let index = 0; index < 20; index++) {
                             Effects2D._Particle._spray(Laya.stage, this._gPoint, [10, 30]);
                         }
-                        if (this._Owner.parent.numChildren == 1) {
-                            this._openScene('Victory', false);
-                        }
                         this._Owner.removeSelf();
+                        this._evNotify('presentQuantity');
                     }
                 }
             });
         }
     }
 
-    class BossBullet extends _EnemyBullet {
-        lwgOnStart() {
-            this.move();
-            this.checkHero();
+    class _BuffData extends DataAdmin._Table {
+        constructor() {
+            super(...arguments);
+            this.type = {
+                ballisticNum: 'ballisticNum',
+            };
         }
-        move() {
-            TimerAdmin._frameLoop(1, this, () => {
-                let point = Tools._Point.getRoundPos(this._Owner.rotation, this.speed += 2, this._fPoint);
-                this._Owner.x = point.x;
-                this._Owner.y = point.y;
-            });
-        }
-    }
-    class Skill {
         static _ins() {
             if (!this.ins) {
-                this.ins = new Skill();
+                this.ins = new _BuffData();
             }
             return this.ins;
         }
-        round() {
-            for (let index = 0; index < 20; index++) {
-                const bullet = Tools._Node.createPrefab(_Res._list.prefab2D.EnemyBullet.prefab);
-                bullet;
-            }
+        createBuff(type, Parent, x, y) {
+            const Buff = Tools._Node.createPrefab(_Res._list.prefab2D.Buff.prefab, Parent, [x, y]);
+            Buff['buffType'] = type;
+            Buff.addComponent(_Buff);
+            return Buff;
         }
     }
-
-    var _Boss;
-    (function (_Boss) {
-        class _BossData extends DataAdmin._Table {
-            constructor() {
-                super();
-                this._otherPro = {
-                    blood: 'blood',
-                    specials: 'specials',
-                    speed: 'speed',
-                    skills: 'skills',
-                    bulletPower: 'bulletPower',
-                };
-                this._arr = _Res._list.json.Boss.dataArr;
-            }
-            static _ins() {
-                if (!this.ins) {
-                    this.ins = new _BossData();
-                    this.ins._arr = _Res._list.json.Boss.dataArr;
-                    this.ins.levelData = this.ins._getObjByName(`Boss${Admin._game.level}`);
-                }
-                return this.ins;
-            }
-            getLevelSkill() {
-                return this.levelData['skills'];
-            }
-            getLevelSpeed() {
-                return this.levelData['speed'];
-            }
-            getLevelblood() {
-                return this.levelData['blood'];
-            }
-            getOtherBossSkill() {
-                return;
-            }
-            createLevelBoss(Parent) {
-                const element = Tools._Node.createPrefab(_Res._list.prefab2D.Enemy.prefab, Parent);
-                const color = Tools._Array.randomGetOne(['blue', 'yellow', 'red']);
-                element.name = `${color}'Boss`;
-                let speed = Tools._Number.randomOneBySection(_BossData._ins().getLevelSpeed()[0], _BossData._ins().getLevelSpeed()[1]);
-                speed = Tools._Number.randomOneHalf() == 0 ? -speed : speed;
-                console.log(speed);
-                element['_EnemyData'] = {
-                    blood: _BossData._ins().getLevelblood(),
-                    angle: Tools._Number.randomOneBySection(0, 360),
-                    speed: speed,
-                    color: color,
-                    sikllNameArr: _BossData._ins().getLevelSkill(),
-                };
-                element.addComponent(Boss);
-                return element;
-            }
+    class _Buff extends Admin._ObjectBase {
+        lwgOnStart() {
+            this.checkHero();
         }
-        _Boss._BossData = _BossData;
-        class Boss extends _Enemy {
-            lwgOnAwake() {
-                this.generalProInit();
-            }
-            attack() {
-                const num = 20;
-                TimerAdmin._frameRandomLoop(100, 500, this, () => {
-                    for (let index = 0; index < num; index++) {
-                        const bullet = Tools._Node.createPrefab(_Res._list.prefab2D.EnemyBullet.prefab);
-                        this._SceneImg('EBparrent').addChild(bullet);
-                        bullet.pos(this._gPoint.x, this._gPoint.y);
-                        bullet.rotation = 360 / num * index;
-                        bullet.addComponent(BossBullet);
-                    }
+        checkHero() {
+            TimerAdmin._frameLoop(1, this, () => {
+                this._Owner.y += 5;
+                !Tools._Node.leaveStage(this._Owner, () => {
+                    this._Owner.removeSelf();
+                }) && Tools._Node.checkTwoDistance(this._Owner, this._SceneImg('Hero'), 50, () => {
+                    this._Owner.removeSelf();
+                    this._evNotify(_LwgEvent.Game.addBuff, [this._Owner['buffType']]);
                 });
-            }
+            });
         }
-        _Boss.Boss = Boss;
-    })(_Boss || (_Boss = {}));
+    }
 
     class _HeroWeapon extends Admin._ObjectBase {
         constructor() {
@@ -6738,14 +6713,20 @@
                 const element = this._SceneImg('MiddleScenery').getChildAt(index);
                 if (element.name == 'Tree') {
                     if (this.displayArrow(element, 30)) {
-                        return;
-                    }
-                }
-            }
-            for (let index = 0; index < this._SceneImg('BehindScenery').numChildren; index++) {
-                const element = this._SceneImg('BehindScenery').getChildAt(index);
-                if (element.name == 'Tree') {
-                    if (this.displayArrow(element, 30)) {
+                        const Pic = element.getChildByName('Blood').getChildByName('Pic');
+                        const sum = 20;
+                        if (element['BloodNum'] === undefined) {
+                            element['BloodNum'] = sum;
+                        }
+                        if (element['Prowidth'] === undefined) {
+                            element['Prowidth'] = Pic.width;
+                        }
+                        element['BloodNum'] -= 1;
+                        Pic.width = Pic.width - element['Prowidth'] / sum;
+                        if (element['BloodNum'] <= 0) {
+                            _BuffData._ins().createBuff(0, this._Scene, this._gPoint.x, this._gPoint.y);
+                            element.removeSelf();
+                        }
                         return;
                     }
                 }
@@ -6822,24 +6803,27 @@
             this.Blood = this._Owner.getChildByName('Blood');
             this.bloodNum = 5;
             this.attackInterval = 10;
+            this.ballisticNum = 1;
+            this.ballisticPos = [
+                [[0, 0]],
+                [[-20, 0], [20, 0]],
+                [[-20, 0], [0, 0], [20, 0]],
+                [[-30, 0], [-10, 0], [10, 0], [30, 0]],
+                [[-40, 0], [-20, 0], [0, 0], [20, 0], [40, 0]],
+                [[-50, 0], [-30, 0], [-10, 0], [10, 0], [30, 0], [50, 0]],
+                [[-60, 0], [-40, 0], [-20, 0], [0, 0], [20, 0], [40, 0], [60, 0]],
+            ];
             this.time = 0;
         }
         lwgOnStart() {
             TimerAdmin._frameLoop(this.attackInterval, this, () => {
                 if (this.mouseP) {
-                    let color;
-                    this.time++;
-                    if (this.time == 1) {
-                        color = 'blue';
+                    for (let index = 1; index < this.ballisticPos[this.ballisticNum].length; index++) {
+                        const pos = this.ballisticPos[this.ballisticNum][index];
+                        if (pos) {
+                            this.createWeapon(Tools._Array.randomGetOne(['blue', 'yellow', 'red']), this._Owner.x + pos[0], this._Owner.y + pos[1]);
+                        }
                     }
-                    else if (this.time == 2) {
-                        color = 'yellow';
-                    }
-                    else if (this.time == 3) {
-                        color = 'red';
-                        this.time = 0;
-                    }
-                    this.createWeapon(color, this._Owner.x, this._Owner.y);
                 }
             });
         }
@@ -6854,6 +6838,21 @@
                         this['bloodNumSwitch'] = true;
                         this._openScene(_SceneName.Defeated, false);
                     }
+                }
+            });
+            this._evReg(_LwgEvent.Game.addBuff, (type) => {
+                switch (type) {
+                    case 0:
+                        this.ballisticNum++;
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    default:
+                        break;
                 }
             });
         }
@@ -6903,11 +6902,11 @@
 
     var _Game;
     (function (_Game) {
+        _Game._texArr = [];
         class Game extends Admin._SceneBase {
             lwgOnAwake() {
                 this.EnemyData = new _EnemyData(this._ImgVar('EnemyParent'));
                 this.EnemyData.createEnmey();
-                _Boss._BossData._ins().createLevelBoss(this._ImgVar('EnemyParent'));
                 this._ImgVar('Hero').addComponent(_Hero);
             }
             lwgOnStart() {

@@ -1,5 +1,5 @@
 import { Adaptive, Admin, Click, Platform, SceneAnimation, _LwgInit, _LwgInitScene } from "./Lwg";
-import { _Game } from "./_Game";
+import { _Game } from "../Game/_Game";
 import { _Guide } from "./_Guide";
 import { _PreLoad } from "./_PreLoad";
 import { _PreLoadCutIn } from "./_PreLoadCutIn";

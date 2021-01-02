@@ -1,6 +1,6 @@
 import { Admin, EventAdmin, _SceneName } from "./Lwg";
 import { _LwgEvent } from "./LwgEvent";
-import { _Game } from "./_Game";
+import { _Game } from "../Game/_Game";
 
 export module _Defeated {
     export class _data {

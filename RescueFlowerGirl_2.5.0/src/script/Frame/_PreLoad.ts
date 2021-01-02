@@ -41,6 +41,10 @@ export module _Res {
             Boss: {
                 url: 'Prefab/Boss.json',
                 prefab: null as Laya.Prefab,
+            },
+            Buff: {
+                url: 'Prefab/Buff.json',
+                prefab: null as Laya.Prefab,
             }
         },
         // texture: {

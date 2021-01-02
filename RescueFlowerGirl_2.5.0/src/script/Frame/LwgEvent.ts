@@ -8,8 +8,9 @@ export module _LwgEvent {
     export enum Game {
         heroBlood = '_Game_calculateBlood',
         closeScene = '_Game_closeScene',
-        launch = '_WeaponSateType_launch',
-        enemyBlood = '_WeaponSateType_enemyBlood',
+        launch = '_Game_launch',
+        enemyBlood = '_Game_enemyBlood',
+        addBuff = '_WeaponSateType_addBuff',
     }
     export enum Task {
 

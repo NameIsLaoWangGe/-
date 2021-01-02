@@ -2,11 +2,11 @@
     "x":0,
     "type":"View",
     "selectedBox":2,
-    "selecteID":123,
+    "selecteID":186,
     "searchKey":"View",
     "props":{"y":0,"x":0,"width":720,"sceneColor":"#000000","height":1280},
     "nodeParent":-1,
-    "maxID":186,
+    "maxID":187,
     "label":"View",
     "isOpen":true,
     "isDirectory":true,
@@ -616,6 +616,20 @@
             "isAniNode":true,
             "hasChild":false,
             "compId":49,
+            "child":[
+                ]
+        },
+        {
+            "x":15,
+            "type":"Image",
+            "searchKey":"Image,BossParent,BossParent",
+            "props":{"y":0,"x":0,"width":166,"var":"BossParent","name":"BossParent","height":139},
+            "nodeParent":2,
+            "label":"BossParent",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":186,
             "child":[
                 ]
         }],

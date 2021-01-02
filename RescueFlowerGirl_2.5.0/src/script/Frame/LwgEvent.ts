@@ -10,7 +10,8 @@ export module _LwgEvent {
         closeScene = '_Game_closeScene',
         launch = '_Game_launch',
         enemyBlood = '_Game_enemyBlood',
-        addBuff = '_WeaponSateType_addBuff',
+        addBuff = '_Game_addBuff',
+        creatBoss = '_Game_creatBoss',
     }
     export enum Task {
 

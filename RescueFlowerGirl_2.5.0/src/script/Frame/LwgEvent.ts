@@ -12,6 +12,7 @@ export module _LwgEvent {
         enemyBlood = '_Game_enemyBlood',
         addBuff = '_Game_addBuff',
         creatBoss = '_Game_creatBoss',
+        treeBlood = '_Game_treeBlood',
     }
     export enum Task {
 

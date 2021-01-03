@@ -246,9 +246,9 @@ P 966ABEE0 Hero_01_bow_blue.png
 P FDAD67A1 Hero_01_bow_normalc.png
 P EF054BF2 Hero_01_bow_red.png
 P BAE88F48 Hero_01_bow_yellow.png
-P 7B3B66DC Hero_01_weapon_blue.png
-P 3ABED63E Hero_01_weapon_red.png
-P 4D028ADF Hero_01_weapon_yellow.png
+P 94CE79E2 Hero_01_weapon_blue.png
+P 94CE79E2 Hero_01_weapon_red.png
+P 94CE79E2 Hero_01_weapon_yellow.png
 D Game/UI/Game/Heroine
 P 01D78A36 heroine_01.png
 D Game/UI/Game/SceneStyle_01

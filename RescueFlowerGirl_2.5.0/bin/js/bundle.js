@@ -6329,6 +6329,7 @@
             Game["enemyBlood"] = "_Game_enemyBlood";
             Game["addBuff"] = "_Game_addBuff";
             Game["creatBoss"] = "_Game_creatBoss";
+            Game["treeBlood"] = "_Game_treeBlood";
         })(Game = _LwgEvent.Game || (_LwgEvent.Game = {}));
         let Task;
         (function (Task) {
@@ -6448,6 +6449,27 @@
         }
     }
 
+    class _ObjGeneral extends Admin._ObjectBase {
+        bloodInit(bloodSum) {
+            this.bloodPresnt = this.bloodSum = bloodSum;
+            this.bloodPic = this._Owner.getChildByName('Blood').getChildByName('Pic');
+            this.bloodWidth = this.bloodPic.width;
+        }
+        subBlood(Obj, num, func, deathFunc) {
+            if (Obj == this._Owner) {
+                this.bloodPresnt -= num;
+                this.bloodPic.width = this.bloodWidth * this.bloodPresnt / this.bloodSum;
+                if (this.bloodPresnt <= 0) {
+                    deathFunc && deathFunc();
+                    this._Owner.destroy();
+                }
+                else {
+                    func && func();
+                }
+            }
+        }
+    }
+
     class _EnemyData extends DataAdmin._Table {
         constructor(_EnemyParent) {
             super();
@@ -6504,11 +6526,13 @@
             element.addComponent(_Enemy);
         }
     }
-    class _Enemy extends Admin._ObjectBase {
+    class _Enemy extends _ObjGeneral {
         lwgOnAwake() {
             this.generalProInit();
+            this.bloodInit(this._Owner['_EnemyData']['blood']);
         }
         generalProInit() {
+            this._Owner.pos(this._SceneImg('Land').width / 2, this._SceneImg('Land').height / 2);
             const shell = this._Owner['_EnemyData']['shell'];
             this.Shell = this._Owner.getChildByName('Shell');
             this.Shell.removeSelf();
@@ -6516,10 +6540,6 @@
             if (this._Owner['_EnemyData']['color']) {
                 this.Pic.skin = `Game/UI/Game/Enemy/enemy_01_${this._Owner['_EnemyData']['color']}.png`;
             }
-            this.blood = this._Owner['_EnemyData']['blood'];
-            this.bloodPresnt = this.blood;
-            this.bloodPic = this._Owner.getChildByName('Blood').getChildByName('Pic');
-            this.bloodWidth = this.bloodPic.width;
             const angle = this._Owner['_EnemyData']['angle'];
             this._Owner.rotation = angle;
             this.speed = this._Owner['_EnemyData']['speed'];
@@ -6561,20 +6581,15 @@
         }
         lwgEvent() {
             this._evReg(_LwgEvent.Game.enemyBlood, (Enemy, num) => {
-                if (Enemy === this._Owner) {
-                    this.bloodPresnt -= num;
-                    this.bloodPic.width = this.bloodWidth * this.bloodPresnt / this.blood;
-                    if (this.bloodPresnt <= 0) {
-                        for (let index = 0; index < 20; index++) {
-                            Effects2D._Particle._spray(Laya.stage, this._gPoint, [10, 30]);
-                        }
-                        this._Owner.removeSelf();
-                        this._evNotify('presentQuantity');
-                        if (this._Owner.name === 'Boss') {
-                            Admin._openScene('Victory');
-                        }
+                this.subBlood(Enemy, num, null, () => {
+                    for (let index = 0; index < 20; index++) {
+                        Effects2D._Particle._spray(Laya.stage, this._gPoint, [10, 30]);
                     }
-                }
+                    this._evNotify('presentQuantity');
+                    if (this._Owner.name === 'Boss') {
+                        Admin._openScene('Victory');
+                    }
+                });
             });
         }
         attack1() {
@@ -6687,6 +6702,7 @@
                 this._Owner.pos(this._SceneImg('Content').x, this._SceneImg('Content').y);
                 this._Owner.rotation = 0;
                 this._SceneImg('Content').removeSelf();
+                this.bloodInit(this._Owner['_EnemyData']['blood']);
             }
             lwgOnStart() {
                 this.attack();
@@ -6729,43 +6745,6 @@
         _Boss.Boss = Boss;
     })(_Boss || (_Boss = {}));
 
-    class _BuffData extends DataAdmin._Table {
-        constructor() {
-            super(...arguments);
-            this.type = {
-                ballisticNum: 'ballisticNum',
-            };
-        }
-        static _ins() {
-            if (!this.ins) {
-                this.ins = new _BuffData();
-            }
-            return this.ins;
-        }
-        createBuff(type, Parent, x, y) {
-            const Buff = Tools._Node.createPrefab(_Res._list.prefab2D.Buff.prefab, Parent, [x, y]);
-            Buff['buffType'] = type;
-            Buff.addComponent(_Buff);
-            return Buff;
-        }
-    }
-    class _Buff extends Admin._ObjectBase {
-        lwgOnStart() {
-            this.checkHero();
-        }
-        checkHero() {
-            TimerAdmin._frameLoop(1, this, () => {
-                this._Owner.y += 5;
-                !Tools._Node.leaveStage(this._Owner, () => {
-                    this._Owner.removeSelf();
-                }) && Tools._Node.checkTwoDistance(this._Owner, this._SceneImg('Hero'), 50, () => {
-                    this._Owner.removeSelf();
-                    this._evNotify(_LwgEvent.Game.addBuff, [this._Owner['buffType']]);
-                });
-            });
-        }
-    }
-
     class _HeroWeapon extends Admin._ObjectBase {
         constructor() {
             super(...arguments);
@@ -6791,6 +6770,7 @@
             return this.dropAcc += 0.5;
         }
         lwgOnAwake() {
+            this.Pic = this._Owner.getChildByName('Pic');
             TimerAdmin._frameLoop(1, this, () => {
                 this.move();
             });
@@ -6805,7 +6785,7 @@
                 this._Owner.y += this.getDropSpeed();
             }
             const leave = Tools._Node.leaveStage(this._Owner, () => {
-                this._Owner.removeSelf();
+                this._Owner.destroy();
             });
             if (!leave) {
                 if (!this._SceneImg('Content').parent) {
@@ -6819,9 +6799,7 @@
         checkBoss() {
             for (let index = 0; index < this._SceneImg('BossParent').numChildren; index++) {
                 const Enemy = this._SceneImg('BossParent').getChildAt(index);
-                let gPEnemy = this._SceneImg('BossParent').localToGlobal(new Laya.Point(Enemy.x, Enemy.y));
-                if (gPEnemy.distance(this._gPoint.x, this._gPoint.y) < 50) {
-                    this.skill(Enemy);
+                if (this.displayArrow(Enemy, 50)) {
                     return;
                 }
             }
@@ -6833,20 +6811,16 @@
                 this._Owner.y += 40;
                 this._Owner.rotation += 10;
                 Tools._Node.leaveStage(this._Owner, () => {
-                    this._Owner.removeSelf();
+                    this._Owner.destroy();
                 });
             });
-        }
-        skill(Enemy) {
-            this._evNotify(_LwgEvent.Game.enemyBlood, [Enemy, 1]);
-            this._Owner.removeSelf();
         }
         displayArrow(Ele, dis) {
             const EleParent = Ele.parent;
             const elementGP = EleParent.localToGlobal(new Laya.Point(Ele.x, Ele.y));
             if (elementGP.distance(this._gPoint.x, this._gPoint.y) < dis) {
-                Laya.timer.clearAll(this);
                 this.state = this.stateType.free;
+                Laya.timer.clearAll(this);
                 const lP = Ele.globalToLocal(this._gPoint);
                 let ArrowParent;
                 const ran = Tools._Number.randomOneInt(0, 1);
@@ -6857,7 +6831,9 @@
                         ArrowParent.name = 'ArrowParentF';
                         Ele.addChild(ArrowParent);
                         ArrowParent.size(Ele.width, Ele.height);
+                        ArrowParent.cacheAs = "bitmap";
                         ArrowParent.zOrder = 5;
+                        _Game._arrowParentArr.push(ArrowParent);
                     }
                 }
                 else {
@@ -6867,26 +6843,44 @@
                         ArrowParent.name = 'ArrowParentR';
                         Ele.addChild(ArrowParent);
                         ArrowParent.size(Ele.width, Ele.height);
+                        ArrowParent.cacheAs = "bitmap";
                         ArrowParent.zOrder = -5;
+                        _Game._arrowParentArr.push(ArrowParent);
                     }
                 }
-                ArrowParent.cacheAs = "bitmap";
                 ArrowParent.addChild(this._Owner);
                 this._Owner.pos(lP.x, lP.y);
-                this._Owner.rotation -= this._SceneImg('Land').rotation;
-                if (EleParent !== this._SceneImg('Land')) {
+                if (EleParent == this._SceneImg('Land') || EleParent == this._SceneImg('MiddleScenery') || EleParent == this._SceneImg('EnemyParent')) {
+                    this._Owner.rotation -= Ele.rotation;
+                    this._Owner.rotation -= this._SceneImg('Land').rotation;
+                }
+                else if (EleParent == this._SceneImg('Land')) {
                     this._Owner.rotation -= Ele.rotation;
                 }
-                const Pic = this._Owner.getChildByName('Pic');
-                Pic.y -= Tools._Number.randomOneBySection(20);
+                this.Pic = this._Owner.getChildByName('Pic');
+                this.Pic.y -= Tools._Number.randomOneBySection(50);
                 const mask = new Laya.Sprite;
                 mask.size(200, 300);
                 mask.pos(0, Tools._Number.randomOneBySection(20, 30));
                 mask.loadImage('Lwg/UI/ui_l_orthogon_white.png');
                 this._Owner.mask = mask;
-                TimerAdmin._frameOnce(120, this, () => {
-                    this._Owner.removeSelf();
-                });
+                if (ArrowParent.numChildren > 5) {
+                    const tex = ArrowParent.drawToTexture(ArrowParent.width, ArrowParent.height, 0, 0);
+                    ArrowParent.texture && ArrowParent.texture.destroy(true);
+                    ArrowParent.texture = tex;
+                    for (let index = 0; index < ArrowParent.numChildren; index++) {
+                        const element = ArrowParent.getChildAt(index);
+                        element.destroy(true);
+                        index--;
+                    }
+                    _Game._texArr.push(tex);
+                }
+                if (Ele.name == 'Tree') {
+                    this._evNotify(_LwgEvent.Game.treeBlood, [Ele, 1]);
+                }
+                else if (EleParent.name == 'EnemyParent' || EleParent.name == 'BossParent') {
+                    this._evNotify(_LwgEvent.Game.enemyBlood, [Ele, 1]);
+                }
                 return true;
             }
         }
@@ -6898,20 +6892,6 @@
                 const element = this._SceneImg('MiddleScenery').getChildAt(index);
                 if (element.name == 'Tree') {
                     if (this.displayArrow(element, 30)) {
-                        const Pic = element.getChildByName('Blood').getChildByName('Pic');
-                        const sum = 20;
-                        if (element['BloodNum'] === undefined) {
-                            element['BloodNum'] = sum;
-                        }
-                        if (element['Prowidth'] === undefined) {
-                            element['Prowidth'] = Pic.width;
-                        }
-                        element['BloodNum'] -= 1;
-                        Pic.width = Pic.width - element['Prowidth'] / sum;
-                        if (element['BloodNum'] <= 0) {
-                            _BuffData._ins().createBuff(0, this._Scene, this._gPoint.x, this._gPoint.y);
-                            element.removeSelf();
-                        }
                         return;
                     }
                 }
@@ -6940,11 +6920,11 @@
                             this.drop();
                         }
                         else {
-                            this.skill(Enemy);
+                            this.displayArrow(Enemy, 50);
                         }
                     }
                     else {
-                        this.skill(Enemy);
+                        this.displayArrow(Enemy, 50);
                     }
                     return;
                 }
@@ -7085,14 +7065,70 @@
         }
     }
 
+    class _BuffData extends DataAdmin._Table {
+        constructor() {
+            super(...arguments);
+            this.type = {
+                ballisticNum: 'ballisticNum',
+            };
+        }
+        static _ins() {
+            if (!this.ins) {
+                this.ins = new _BuffData();
+            }
+            return this.ins;
+        }
+        createBuff(type, Parent, x, y) {
+            const Buff = Tools._Node.createPrefab(_Res._list.prefab2D.Buff.prefab, Parent, [x, y]);
+            Buff['buffType'] = type;
+            Buff.addComponent(_Buff);
+            return Buff;
+        }
+    }
+    class _Buff extends Admin._ObjectBase {
+        lwgOnStart() {
+            this.checkHero();
+        }
+        checkHero() {
+            TimerAdmin._frameLoop(1, this, () => {
+                this._Owner.y += 5;
+                !Tools._Node.leaveStage(this._Owner, () => {
+                    this._Owner.removeSelf();
+                }) && Tools._Node.checkTwoDistance(this._Owner, this._SceneImg('Hero'), 60, () => {
+                    this._Owner.removeSelf();
+                    this._evNotify(_LwgEvent.Game.addBuff, [this._Owner['buffType']]);
+                });
+            });
+        }
+    }
+    class Tree extends _ObjGeneral {
+        lwgOnAwake() {
+            this.bloodInit(20);
+        }
+        lwgEvent() {
+            this._evReg(_LwgEvent.Game.treeBlood, (Tree, num) => {
+                this.subBlood(Tree, num, null, () => {
+                    _BuffData._ins().createBuff(0, this._Scene, this._gPoint.x, this._gPoint.y);
+                });
+            });
+        }
+    }
+
     var _Game;
     (function (_Game) {
         _Game._texArr = [];
+        _Game._arrowParentArr = [];
         class Game extends Admin._SceneBase {
             lwgOnAwake() {
                 this.EnemyData = new _EnemyData(this._ImgVar('EnemyParent'));
                 this.EnemyData.createEnmey();
                 this._ImgVar('Hero').addComponent(_Hero);
+                for (let index = 0; index < this._ImgVar('MiddleScenery').numChildren; index++) {
+                    const element = this._ImgVar('MiddleScenery').getChildAt(index);
+                    if (element.name == 'Tree') {
+                        element.addComponent(Tree);
+                    }
+                }
             }
             lwgOnStart() {
                 TimerAdmin._frameLoop(1, this, () => {
@@ -7101,6 +7137,19 @@
             }
             lwgEvent() {
                 this._evReg(_LwgEvent.Game.closeScene, () => {
+                    for (let index = 0; index < _Game._texArr.length; index++) {
+                        const element = _Game._texArr[index];
+                        element.destroy(true);
+                        _Game._texArr.splice(index, 1);
+                        index--;
+                    }
+                    for (let index = 0; index < _Game._arrowParentArr.length; index++) {
+                        const element = _Game._arrowParentArr[index];
+                        element.destroy(true);
+                        _Game._arrowParentArr.splice(index, 1);
+                        index--;
+                    }
+                    Laya.Resource.destroyUnusedResources();
                     this._closeScene();
                 });
                 this._evReg(_LwgEvent.Game.creatBoss, () => {

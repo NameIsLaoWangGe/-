@@ -1,0 +1,8 @@
+{
+  "code": "import { Admin, EventAdmin, _SceneName } from \"./Lwg\";\r\nimport { _LwgEvent } from \"./LwgEvent\";\r\nexport var _Defeated;\r\n(function (_Defeated) {\r\n    class _data {\r\n    }\r\n    _Defeated._data = _data;\r\n    function _init() {\r\n    }\r\n    _Defeated._init = _init;\r\n    class Defeated extends Admin._SceneBase {\r\n        lwgButton() {\r\n            this._btnUp(this._ImgVar('BtnBack'), () => {\r\n                this._openScene(_SceneName.Start);\r\n                EventAdmin._notify(_LwgEvent.Game.closeScene);\r\n            });\r\n        }\r\n    }\r\n    _Defeated.Defeated = Defeated;\r\n})(_Defeated || (_Defeated = {}));\r\nexport default _Defeated.Defeated;\r\n",
+  "references": [
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Frame/Lwg.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Frame/LwgEvent.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Game/_Game.ts"
+  ]
+}

@@ -4,7 +4,7 @@
   {
     "index": 1,
     "name": "Boss1",
-    "blood": 1000,
+    "blood": 100,
     "specials": [
       "shell"
     ],

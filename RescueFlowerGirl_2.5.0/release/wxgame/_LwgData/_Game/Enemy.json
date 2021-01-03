@@ -4,7 +4,7 @@
   {
     "index": 1,
     "name": "level1",
-    "quantity": 8,
+    "quantity": 12,
     "shellNum": 4,
     "speed": [
       0.2,
@@ -153,6 +153,20 @@
     "blood": 20,
     "boss": [
       "Boss11"
+    ]
+  },
+  {
+    "index": 12,
+    "name": "level12",
+    "quantity": 9,
+    "shellNum": 15,
+    "speed": [
+      0.2,
+      0.16
+    ],
+    "blood": 21,
+    "boss": [
+      "Boss12"
     ]
   }
 ]

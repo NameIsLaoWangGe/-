@@ -1,0 +1,6 @@
+{
+  "code": "import { Admin } from \"../Frame/Lwg\";\r\nexport default class _ObjGeneral extends Admin._ObjectBase {\r\n    bloodInit(bloodSum) {\r\n        this.bloodPresnt = this.bloodSum = bloodSum;\r\n        this.bloodPic = this._Owner.getChildByName('Blood').getChildByName('Pic');\r\n        this.bloodWidth = this.bloodPic.width;\r\n    }\r\n    subBlood(Obj, num, func, deathFunc) {\r\n        if (Obj == this._Owner) {\r\n            this.bloodPresnt -= num;\r\n            this.bloodPic.width = this.bloodWidth * this.bloodPresnt / this.bloodSum;\r\n            if (this.bloodPresnt <= 0) {\r\n                deathFunc && deathFunc();\r\n                this._Owner.destroy();\r\n            }\r\n            else {\r\n                func && func();\r\n            }\r\n        }\r\n    }\r\n}\r\n",
+  "references": [
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Frame/Lwg.ts"
+  ]
+}

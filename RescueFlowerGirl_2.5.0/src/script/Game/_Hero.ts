@@ -17,7 +17,7 @@ export default class _Hero extends Admin._ObjectBase {
     time: number;
     lwgOnAwake(): void {
         this.Blood = this._Owner.getChildByName('Blood') as Laya.Image;
-        this.bloodNum = 5;
+        this.bloodNum = 100;
         this.attackInterval = 10;
         this.ballisticNum = 1;
         this.ballisticPos = [

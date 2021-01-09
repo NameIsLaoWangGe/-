@@ -6661,7 +6661,7 @@ export module lwg {
                 if (section2) {
                     let num: number;
                     if (intSet) {
-                        num = Math.floor(Math.random() * (section2 - section1)) + section1;
+                        num = Math.round(Math.random() * (section2 - section1)) + section1;
                     } else {
                         num = Math.random() * (section2 - section1) + section1;
                     }
@@ -6669,7 +6669,7 @@ export module lwg {
                 } else {
                     let num;
                     if (intSet) {
-                        num = Math.floor(Math.random() * section1);
+                        num = Math.round(Math.random() * section1);
                     } else {
                         num = Math.random() * section1;
                     }

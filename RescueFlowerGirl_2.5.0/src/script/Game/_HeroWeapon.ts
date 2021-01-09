@@ -76,32 +76,32 @@ export class _HeroWeapon extends Admin._ObjectBase {
             this.state = this.stateType.free;
             Laya.timer.clearAll(this);
             const lP = Ele.globalToLocal(this._gPoint);
-            let ArrowParent: Laya.Sprite;
-            const ran = Tools._Number.randomOneInt(0, 1);
-            if (ran == 0) {
-                ArrowParent = Ele.getChildByName('ArrowParentF') as Laya.Sprite;
-                if (!ArrowParent) {
-                    ArrowParent = new Laya.Sprite;
-                    ArrowParent.name = 'ArrowParentF';
-                    Ele.addChild(ArrowParent);
-                    ArrowParent.size(Ele.width, Ele.height);
-                    ArrowParent.cacheAs = "bitmap";
-                    ArrowParent.zOrder = 5;
-                    _Game._arrowParentArr.push(ArrowParent);
-                }
-            } else {
-                ArrowParent = Ele.getChildByName('ArrowParentR') as Laya.Sprite;
-                if (!ArrowParent) {
-                    ArrowParent = new Laya.Sprite;
-                    ArrowParent.name = 'ArrowParentR';
-                    Ele.addChild(ArrowParent);
-                    ArrowParent.size(Ele.width, Ele.height);
-                    ArrowParent.cacheAs = "bitmap";
-                    ArrowParent.zOrder = -5;
-                    _Game._arrowParentArr.push(ArrowParent);
-                }
-            }
-            ArrowParent.addChild(this._Owner);
+            // let ArrowParent: Laya.Sprite;
+            // const ran = Tools._Number.randomOneInt(0, 1);
+            // if (ran == 0) {
+            //     ArrowParent = Ele.getChildByName('ArrowParentF') as Laya.Sprite;
+            //     if (!ArrowParent) {
+            //         ArrowParent = new Laya.Sprite;
+            //         ArrowParent.name = 'ArrowParentF';
+            //         Ele.addChild(ArrowParent);
+            //         ArrowParent.size(Ele.width, Ele.height);
+            //         // ArrowParent.cacheAs = "bitmap";
+            //         ArrowParent.zOrder = 5;
+            //         _Game._arrowParentArr.push(ArrowParent);
+            //     }
+            // } else {
+            //     ArrowParent = Ele.getChildByName('ArrowParentR') as Laya.Sprite;
+            //     if (!ArrowParent) {
+            //         ArrowParent = new Laya.Sprite;
+            //         ArrowParent.name = 'ArrowParentR';
+            //         Ele.addChild(ArrowParent);
+            //         ArrowParent.size(Ele.width, Ele.height);
+            //         // ArrowParent.cacheAs = "bitmap";
+            //         ArrowParent.zOrder = -5;
+            //         _Game._arrowParentArr.push(ArrowParent);
+            //     }
+            // }
+            Ele.addChild(this._Owner);
             this._Owner.pos(lP.x, lP.y);
             if (EleParent == this._SceneImg('Land') || EleParent == this._SceneImg('MiddleScenery') || EleParent == this._SceneImg('EnemyParent')) {
                 this._Owner.rotation -= Ele.rotation;
@@ -109,31 +109,38 @@ export class _HeroWeapon extends Admin._ObjectBase {
             } else if (EleParent == this._SceneImg('Land')) {
                 this._Owner.rotation -= Ele.rotation;
             }
-            // 通过移动图片的位置，表现每支箭的力度略有差别
             this.Pic = this._Owner.getChildByName('Pic') as Laya.Image;
-            this.Pic.y -= Tools._Number.randomOneBySection(50);
             const mask = new Laya.Sprite;
             mask.size(200, 300);
-            mask.pos(0, Tools._Number.randomOneBySection(20, 30));
             mask.loadImage('Lwg/UI/ui_l_orthogon_white.png');
             this._Owner.mask = mask;
+            this.Pic.pos(0, -Tools._Number.randomOneBySection(30));
+            mask.pos(0, Tools._Number.randomOneBySection(20, 30));
             // 绘制贴图后删除，减少节点数量
-            if (ArrowParent.numChildren > 5) {
-                const tex = ArrowParent.drawToTexture(ArrowParent.width, ArrowParent.height, 0, 0) as Laya.Texture;
-                ArrowParent.texture && ArrowParent.texture.destroy(true);
-                ArrowParent.texture = tex;
-                for (let index = 0; index < ArrowParent.numChildren; index++) {
-                    const element = ArrowParent.getChildAt(index) as Laya.Image;
-                    element.destroy(true);
-                    index--;
-                }
-                _Game._texArr.push(tex);
-            }
+            // if (ArrowParent.numChildren > 20) {
+            //     const tex = ArrowParent.drawToTexture(ArrowParent.width, ArrowParent.height, 0, 0) as Laya.Texture;
+            //     ArrowParent.texture && ArrowParent.texture.destroy(true);
+            //     ArrowParent.texture = tex;
+            //     for (let index = 0; index < ArrowParent.numChildren; index++) {
+            //         const element = ArrowParent.getChildAt(index) as Laya.Image;
+            //         element.destroy(true);
+            //         index--;
+            //     }
+            //     _Game._texArr.push(tex);
+            // }
             if (Ele.name == 'Tree') {
+                // 通过移动图片的位置，表现每支箭的力度略有差别
                 this._evNotify(_LwgEvent.Game.treeBlood, [Ele, 1]);
             } else if (EleParent.name == 'EnemyParent' || EleParent.name == 'BossParent') {
+                if (this._Owner) {
+                    this.Pic.pos(0, -Tools._Number.randomOneBySection(30, 50));
+                    mask.pos(0, Tools._Number.randomOneBySection(5, 10));
+                }
                 this._evNotify(_LwgEvent.Game.enemyBlood, [Ele, 1]);
             }
+            Laya.timer.once(200, this, () => {
+                this._Owner.destroy();
+            })
             return true;
         }
     }
@@ -167,7 +174,7 @@ export class _HeroWeapon extends Admin._ObjectBase {
         for (let index = 0; index < this._SceneImg('EnemyParent').numChildren; index++) {
             const Enemy = this._SceneImg('EnemyParent').getChildAt(index) as Laya.Image;
             let gPEnemy = this._SceneImg('EnemyParent').localToGlobal(new Laya.Point(Enemy.x, Enemy.y));
-            if (gPEnemy.distance(this._gPoint.x, this._gPoint.y) < 50) {
+            if (gPEnemy.distance(this._gPoint.x, this._gPoint.y) < 20) {
                 // 通过倾斜角度计算是否可以打到，有头盔的在头向下的时候打不到
                 let Shell = Enemy.getChildByName('Shell') as Laya.Image;
                 if (Shell) {
@@ -188,7 +195,6 @@ export class _HeroWeapon extends Admin._ObjectBase {
     }
     //什么都没有打中时，会停在地面上，不会穿透地面
     checkLand(): void {
-
         // 动态创建中后景地面
         let Ground: Laya.Image;
         const ran = Tools._Number.randomOneInt(0, 2);

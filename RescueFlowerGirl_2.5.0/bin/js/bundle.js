@@ -5076,7 +5076,7 @@
                     if (section2) {
                         let num;
                         if (intSet) {
-                            num = Math.floor(Math.random() * (section2 - section1)) + section1;
+                            num = Math.round(Math.random() * (section2 - section1)) + section1;
                         }
                         else {
                             num = Math.random() * (section2 - section1) + section1;
@@ -5086,7 +5086,7 @@
                     else {
                         let num;
                         if (intSet) {
-                            num = Math.floor(Math.random() * section1);
+                            num = Math.round(Math.random() * section1);
                         }
                         else {
                             num = Math.random() * section1;
@@ -6412,30 +6412,23 @@
             this.speed = 2;
         }
         lwgOnStart() {
-            this.move();
             this.checkHeroAndLevel();
         }
         move() {
-            let GPoint = this._SceneImg('Hero').localToGlobal(new Laya.Point(this._SceneImg('Hero').x, this._SceneImg('Hero').y));
-            let p = new Laya.Point(this._gPoint.x - GPoint.x, this._gPoint.y - GPoint.y);
-            p.normalize();
+            this[`moveType${this._Owner['_moveType']['moveNum']}`]();
+        }
+        moveType1() {
             TimerAdmin._frameLoop(1, this, () => {
-                this._Owner.x -= p.x * this.speed;
-                this._Owner.y -= p.y * this.speed;
-                Tools._Node.leaveStage(this._Owner, () => {
-                    this._Owner.removeSelf();
-                    return;
-                });
+                let point = Tools._Point.getRoundPos(this._Owner['_moveType']['angle'], this.speed += 2, this._Owner['_moveType']['point']);
+                this._Owner.pos(point.x, point.y);
             });
         }
-        move1() {
+        moveType2() {
             TimerAdmin._frameLoop(1, this, () => {
                 this._Owner.y += 3;
             });
         }
-        move2() {
-        }
-        move3() {
+        moveType3() {
         }
         checkHeroAndLevel() {
             TimerAdmin._frameLoop(1, this, () => {
@@ -6496,9 +6489,7 @@
         set presentQuantity(val) {
             this['_presentQuantity'] = val;
             if (val < 10) {
-                if (this.quantity > 0) {
-                    this.createEnmey();
-                }
+                this.createEnmey();
             }
             if (val === 0 && this.quantity === 0) {
                 EventAdmin._notify(_LwgEvent.Game.creatBoss);
@@ -6506,8 +6497,12 @@
         }
         ;
         createEnmey() {
-            this.presentQuantity++;
             this.quantity--;
+            if (this.quantity < 0) {
+                this.quantity = 0;
+                return;
+            }
+            this.presentQuantity++;
             const shellNum = this.levelData[this._otherPro.shellNum];
             let shellNumTime = 0;
             const element = Tools._Node.createPrefab(_Res._list.prefab2D.Enemy.prefab, this.EnemyParent);
@@ -6530,6 +6525,7 @@
         lwgOnAwake() {
             this.generalProInit();
             this.bloodInit(this._Owner['_EnemyData']['blood']);
+            this.ranAttackNum = Tools._Number.randomOneBySection(1, 2, true);
         }
         generalProInit() {
             this._Owner.pos(this._SceneImg('Land').width / 2, this._SceneImg('Land').height / 2);
@@ -6565,12 +6561,7 @@
             });
         }
         attack() {
-            TimerAdmin._frameRandomLoop(100, 1000, this, () => {
-                let bullet = Tools._Node.createPrefab(_Res._list.prefab2D.EnemyBullet.prefab);
-                bullet.addComponent(_EnemyBullet);
-                this._SceneImg('EBparrent').addChild(bullet);
-                bullet.pos(this._gPoint.x, this._gPoint.y);
-            });
+            this[`attackType${this.ranAttackNum}`]();
         }
         move() {
             TimerAdmin._frameLoop(1, this, () => {
@@ -6592,20 +6583,32 @@
                 });
             });
         }
-        attack1() {
-            TimerAdmin._frameRandomLoop(100, 1000, this, () => {
-                let bullet = Tools._Node.createPrefab(_Res._list.prefab2D.EnemyBullet.prefab);
-                bullet.addComponent(_EnemyBullet);
-                this._SceneImg('EBparrent').addChild(bullet);
-                bullet.pos(this._gPoint.x, this._gPoint.y);
+        attackType1() {
+            const angleSpeed = 15;
+            TimerAdmin._frameRandomLoop(120, 300, this, () => {
+                for (let index = 0; index < 3; index++) {
+                    const bullet = Tools._Node.createPrefab(_Res._list.prefab2D.EnemyBullet.prefab);
+                    this._SceneImg('EBparrent').addChild(bullet);
+                    bullet.pos(this._gPoint.x, this._gPoint.y);
+                    bullet.addComponent(_EnemyBullet);
+                    let speed = 0;
+                    const gPoint = new Laya.Point(this._gPoint.x, this._gPoint.y);
+                    TimerAdmin._frameLoop(1, _EnemyBullet, () => {
+                        let point = Tools._Point.getRoundPos(index * angleSpeed + 180 - angleSpeed, speed += 2, gPoint);
+                        bullet.pos(point.x, point.y);
+                    });
+                }
             });
         }
-        attack2() {
-            TimerAdmin._frameRandomLoop(100, 1000, this, () => {
+        attackType2() {
+            TimerAdmin._frameRandomLoop(50, 100, this, () => {
                 let bullet = Tools._Node.createPrefab(_Res._list.prefab2D.EnemyBullet.prefab);
-                bullet.addComponent(_EnemyBullet);
                 this._SceneImg('EBparrent').addChild(bullet);
                 bullet.pos(this._gPoint.x, this._gPoint.y);
+                bullet.addComponent(_EnemyBullet);
+                TimerAdmin._frameLoop(1, _EnemyBullet, () => {
+                    bullet.y += 3;
+                });
             });
         }
         attack3() {
@@ -6625,7 +6628,7 @@
         }
         move() {
             TimerAdmin._frameLoop(1, this, () => {
-                let point = Tools._Point.getRoundPos(this._Owner.rotation, this.speed += 2, this._fPoint);
+                let point = Tools._Point.getRoundPos(this._Owner.rotation, this.speed += 2, this._fGPoint);
                 this._Owner.x = point.x;
                 this._Owner.y = point.y;
             });
@@ -6822,33 +6825,7 @@
                 this.state = this.stateType.free;
                 Laya.timer.clearAll(this);
                 const lP = Ele.globalToLocal(this._gPoint);
-                let ArrowParent;
-                const ran = Tools._Number.randomOneInt(0, 1);
-                if (ran == 0) {
-                    ArrowParent = Ele.getChildByName('ArrowParentF');
-                    if (!ArrowParent) {
-                        ArrowParent = new Laya.Sprite;
-                        ArrowParent.name = 'ArrowParentF';
-                        Ele.addChild(ArrowParent);
-                        ArrowParent.size(Ele.width, Ele.height);
-                        ArrowParent.cacheAs = "bitmap";
-                        ArrowParent.zOrder = 5;
-                        _Game._arrowParentArr.push(ArrowParent);
-                    }
-                }
-                else {
-                    ArrowParent = Ele.getChildByName('ArrowParentR');
-                    if (!ArrowParent) {
-                        ArrowParent = new Laya.Sprite;
-                        ArrowParent.name = 'ArrowParentR';
-                        Ele.addChild(ArrowParent);
-                        ArrowParent.size(Ele.width, Ele.height);
-                        ArrowParent.cacheAs = "bitmap";
-                        ArrowParent.zOrder = -5;
-                        _Game._arrowParentArr.push(ArrowParent);
-                    }
-                }
-                ArrowParent.addChild(this._Owner);
+                Ele.addChild(this._Owner);
                 this._Owner.pos(lP.x, lP.y);
                 if (EleParent == this._SceneImg('Land') || EleParent == this._SceneImg('MiddleScenery') || EleParent == this._SceneImg('EnemyParent')) {
                     this._Owner.rotation -= Ele.rotation;
@@ -6858,29 +6835,25 @@
                     this._Owner.rotation -= Ele.rotation;
                 }
                 this.Pic = this._Owner.getChildByName('Pic');
-                this.Pic.y -= Tools._Number.randomOneBySection(50);
                 const mask = new Laya.Sprite;
                 mask.size(200, 300);
-                mask.pos(0, Tools._Number.randomOneBySection(20, 30));
                 mask.loadImage('Lwg/UI/ui_l_orthogon_white.png');
                 this._Owner.mask = mask;
-                if (ArrowParent.numChildren > 5) {
-                    const tex = ArrowParent.drawToTexture(ArrowParent.width, ArrowParent.height, 0, 0);
-                    ArrowParent.texture && ArrowParent.texture.destroy(true);
-                    ArrowParent.texture = tex;
-                    for (let index = 0; index < ArrowParent.numChildren; index++) {
-                        const element = ArrowParent.getChildAt(index);
-                        element.destroy(true);
-                        index--;
-                    }
-                    _Game._texArr.push(tex);
-                }
+                this.Pic.pos(0, -Tools._Number.randomOneBySection(30));
+                mask.pos(0, Tools._Number.randomOneBySection(20, 30));
                 if (Ele.name == 'Tree') {
                     this._evNotify(_LwgEvent.Game.treeBlood, [Ele, 1]);
                 }
                 else if (EleParent.name == 'EnemyParent' || EleParent.name == 'BossParent') {
+                    if (this._Owner) {
+                        this.Pic.pos(0, -Tools._Number.randomOneBySection(30, 50));
+                        mask.pos(0, Tools._Number.randomOneBySection(5, 10));
+                    }
                     this._evNotify(_LwgEvent.Game.enemyBlood, [Ele, 1]);
                 }
+                Laya.timer.once(200, this, () => {
+                    this._Owner.destroy();
+                });
                 return true;
             }
         }
@@ -6911,7 +6884,7 @@
             for (let index = 0; index < this._SceneImg('EnemyParent').numChildren; index++) {
                 const Enemy = this._SceneImg('EnemyParent').getChildAt(index);
                 let gPEnemy = this._SceneImg('EnemyParent').localToGlobal(new Laya.Point(Enemy.x, Enemy.y));
-                if (gPEnemy.distance(this._gPoint.x, this._gPoint.y) < 50) {
+                if (gPEnemy.distance(this._gPoint.x, this._gPoint.y) < 20) {
                     let Shell = Enemy.getChildByName('Shell');
                     if (Shell) {
                         const landContentGP = this._SceneImg('Content').localToGlobal(new Laya.Point(this._SceneImg('Land').x, this._SceneImg('Land').y));
@@ -6966,7 +6939,7 @@
     class _Hero extends Admin._ObjectBase {
         lwgOnAwake() {
             this.Blood = this._Owner.getChildByName('Blood');
-            this.bloodNum = 5;
+            this.bloodNum = 100;
             this.attackInterval = 10;
             this.ballisticNum = 1;
             this.ballisticPos = [
@@ -7149,7 +7122,6 @@
                         _Game._arrowParentArr.splice(index, 1);
                         index--;
                     }
-                    Laya.Resource.destroyUnusedResources();
                     this._closeScene();
                 });
                 this._evReg(_LwgEvent.Game.creatBoss, () => {

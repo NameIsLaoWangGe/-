@@ -46,7 +46,7 @@ export module _Game {
                     _arrowParentArr.splice(index, 1);
                     index--;
                 }
-                Laya.Resource.destroyUnusedResources();
+                // Laya.Resource.destroyUnusedResources();
                 this._closeScene();
             });
             this._evReg(_LwgEvent.Game.creatBoss, () => {

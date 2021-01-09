@@ -1,1 +1,7371 @@
-!function(){"use strict";var e;!function(e){let t,n,o,r,i,l,s,c,h,u,_,d,m,y,g,p,f,L,w,S,b,O,v;!function(e){let t,a,n,o;function getDialogContent_Random(e){let t=[],a=getUseWhere(e),n=Math.floor(Math.random()*a.length);for(const e in a[n])if(a[n].hasOwnProperty(e)){const o=a[n][e];"content"==e.substring(0,7)&&"-1"!==o&&t.push(o)}return t}function getUseWhere(t){let a=[];for(let n=0;n<e._dialogContent.Array.length;n++){const o=e._dialogContent.Array[n];o.useWhere==t&&a.push(o)}return a}!function(e){e.blackBord="Frame/UI/ui_orthogon_black.png"}(t||(t={})),e.createHint_Middle=function(e){let a=Laya.Pool.getItemByClass("Hint_M",Laya.Sprite);a.name="Hint_M",Laya.stage.addChild(a),a.width=Laya.stage.width,a.height=100,a.pivotY=a.height/2,a.pivotX=Laya.stage.width/2,a.x=Laya.stage.width/2,a.y=Laya.stage.height/2,a.zOrder=100;let n=new Laya.Image;a.addChild(n),n.skin=t.blackBord,n.width=Laya.stage.width,n.pivotX=Laya.stage.width/2,n.height=100,n.pivotY=n.height/2,n.y=a.height/2,n.x=Laya.stage.width/2,n.alpha=.6;let o=new Laya.Label;a.addChild(o),o.width=Laya.stage.width,o.text=e,o.pivotX=Laya.stage.width/2,o.x=Laya.stage.width/2,o.height=100,o.pivotY=50,o.y=a.height/2,o.bold=!0,o.fontSize=35,o.color="#ffffff",o.align="center",o.valign="middle",o.alpha=0,f.scale_Alpha(a,0,1,0,1,1,1,200,0,e=>{f.fadeOut(o,0,1,150,0,e=>{f.fadeOut(o,1,0,200,800,e=>{f.scale_Alpha(a,1,1,1,1,0,0,200,0,e=>{a.removeSelf()})})})})},e._dialogContent={get Array(){return null!==Laya.loader.getRes("GameData/Dialogue/Dialogue.json").RECORDS?Laya.loader.getRes("GameData/Dialogue/Dialogue.json").RECORDS:[]}},e.getDialogContent=function(t,a){let n;for(let o=0;o<e._dialogContent.Array.length;o++){const r=e._dialogContent.Array[o];if(r.useWhere==t&&r.name==a){n=r;break}}let o=[];for(const e in n)if(n.hasOwnProperty(e)){const t=n[e];"content"!=e.substring(0,7)&&-1===t||o.push(t)}return o},e.getDialogContent_Random=getDialogContent_Random,e.getUseWhere=getUseWhere,function(e){e.scene1="scene1",e.scene2="scene2",e.scene3="scene3"}(a=e.UseWhere||(e.UseWhere={})),function(e){e.name="name",e.useWhere="useWhere",e.content="content",e.max="max"}(n=e.DialogProperty||(e.DialogProperty={})),function(e){e.voluntarily="voluntarily",e.manual="manual",e.clickContent="clickContent"}(o=e.PlayMode||(e.PlayMode={})),e.createVoluntarilyDialogue=function(t,a,n,o,r,i,l){null==o&&(o=0),Laya.timer.once(o,this,()=>{let o;Laya.loader.load("Prefab/Dialogue_Common.json",Laya.Handler.create(this,function(s){let c=new Laya.Prefab;c.json=s,o=Laya.Pool.getItemByCreateFun("Pre_Dialogue",c.create,c),i?i.addChild(o):Laya.stage.addChild(o),o.x=t,o.y=a;let h,u=o.getChildByName("Content");void 0!==l?u.text=l[0]:(h=getDialogContent_Random(n),u.text=h[0]),o.zOrder=100,null==r&&(r=1e3),f.scale_Alpha(o,0,0,0,1,1,1,150,1e3,()=>{for(let e=0;e<h.length;e++)Laya.timer.once(e*r,this,()=>{u.text=h[e],e==h.length-1&&Laya.timer.once(r,this,()=>{f.scale_Alpha(o,1,1,1,0,0,0,150,1e3,()=>{o.removeSelf()})})})}),e.DialogueNode=o}))})},e.createCommonDialog=function(e,t,a,n){let o;Laya.loader.load("Prefab/Dialogue_Common.json",Laya.Handler.create(this,function(r){let i=new Laya.Prefab;i.json=r,o=Laya.Pool.getItemByCreateFun("Dialogue_Common",i.create,i),e.addChild(o),o.pos(t,a),o.getChildByName("Dialogue_Common").text=n}))}}(t=e.Dialogue||(e.Dialogue={})),function(e){let t;function _createOne(a,n,o){let r=Laya.Pool.getItemByClass("addGold",Laya.Image);r.name="addGold";Math.floor(12*Math.random());return r.alpha=1,r.zOrder=60,r.width=a,r.height=n,r.pivotX=a/2,r.pivotY=n/2,r.skin=o||t[0],e.GoldNode&&(r.zOrder=e.GoldNode.zOrder+10),r}e._num={get value(){return Laya.LocalStorage.getItem("GoldNum")?Number(Laya.LocalStorage.getItem("GoldNum")):0},set value(e){Laya.LocalStorage.setItem("GoldNum",e.toString())}},e._createGoldNode=function(t,a,n){let o;n||(n=Laya.stage),e.GoldNode&&e.GoldNode.removeSelf(),Laya.loader.load("Prefab/LwgGold.json",Laya.Handler.create(this,function(r){let i=new Laya.Prefab;i.json=r,(o=Laya.Pool.getItemByCreateFun("gold",i.create,i)).getChildByName("Num").text=S._Format.formatNumber(e._num.value),n.addChild(o),o.pos(t,a),o.zOrder=100,e.GoldNode=o}))},e._add=function(t){e._num.value+=Number(t),e.GoldNode.getChildByName("Num").text=S._Format.formatNumber(e._num.value)},e._addDisPlay=function(t){let a=e.GoldNode.getChildByName("Num");a.value=(Number(a.value)+Number(t)).toString()},e._addNoDisPlay=function(t){e._num.value+=Number(t)},e._nodeAppear=function(t,a,n){e.GoldNode&&(t?f.scale_Alpha(e.GoldNode,0,1,1,1,1,1,t,0,t=>{e.GoldNode.visible=!0}):e.GoldNode.visible=!0,a&&(e.GoldNode.x=a),n&&(e.GoldNode.y=n))},e._nodeVinish=function(t){e.GoldNode&&(t?f.scale_Alpha(e.GoldNode,1,1,1,1,1,0,t,0,t=>{e.GoldNode.visible=!1}):e.GoldNode.visible=!1)},function(e){e[e["Frame/Effects/iconGold.png"]=0]="Frame/Effects/iconGold.png"}(t||(t={})),e._createOne=_createOne,e._getAni_Single=function(e,t,a,n,o,r,i,l,s){for(let c=0;c<t;c++)Laya.timer.once(30*c,this,()=>{let h=_createOne(a,n,o);e.addChild(h),f.move_Scale(h,1,r.x,r.y,i.x,i.y,1,350,0,null,()=>{w._playSound(w._voiceUrl.huodejinbi),c===t-1?Laya.timer.once(200,this,()=>{s&&s()}):l&&l(),h.removeSelf()})})},e._getAni_Heap=function(a,n,o,r,i,l,s,c,h){for(let u=0;u<n;u++){let _=_createOne(o||100,r||100,i||t[0]);(a=a||Laya.stage).addChild(_),l=l||new Laya.Point(Laya.stage.width/2,Laya.stage.height/2),s=s||new Laya.Point(e.GoldNode.x,e.GoldNode.y);let d=1==Math.floor(2*Math.random())?l.x+100*Math.random():l.x-100*Math.random(),m=1==Math.floor(2*Math.random())?l.y+100*Math.random():l.y-100*Math.random();f.move_Scale(_,.5,l.x,l.y,d,m,1,300,100*Math.random()+100,Laya.Ease.expoIn,()=>{f.move_Scale(_,1,_.x,_.y,s.x,s.y,1,400,200*Math.random()+100,Laya.Ease.cubicOut,()=>{w._playSound(w._voiceUrl.huodejinbi),u===n-1?Laya.timer.once(200,this,()=>{h&&h()}):c&&c(),_.removeSelf()})})}}}(n=e.Gold||(e.Gold={})),function(e){e.dispatcher=new Laya.EventDispatcher,e._register=function(t,a,n){a||console.error("事件的执行域必须存在!"),e.dispatcher.on(t.toString(),a,n)},e._registerOnce=function(t,a,n){a||console.error("事件的执行域必须存在!"),e.dispatcher.once(t.toString(),a,n)},e._notify=function(t,a){e.dispatcher.event(t.toString(),a)},e._off=function(t,a,n){e.dispatcher.off(t.toString(),a,n)},e._offAll=function(t){e.dispatcher.offAll(t.toString())},e._offCaller=function(t){e.dispatcher.offAllCaller(t)}}(o=e.EventAdmin||(e.EventAdmin={})),function(e){e._date={get year(){return(new Date).getFullYear()},get month(){return(new Date).getMonth()},get date(){return(new Date).getDate()},get day(){return(new Date).getDay()},get hours(){return(new Date).getHours()},get minutes(){return(new Date).getMinutes()},get seconds(){return(new Date).getSeconds()},get milliseconds(){return(new Date).getMilliseconds()},get toLocaleDateString(){return(new Date).toLocaleDateString()},get toLocaleTimeString(){return(new Date).toLocaleTimeString()}},e._init=function(){let t=new Date;e._loginInfo=u._arrayArr("DateAdmin._loginInfo"),e._loginInfo.value.push([t.getFullYear(),t.getMonth()+1,t.getDate(),t.getDay(),t.getHours(),t.getMinutes(),t.getSeconds()]);let a=[];if(e._loginInfo.value.length>0)for(let t=0;t<e._loginInfo.value.length;t++)a.push(e._loginInfo.value[t]);a.push([t.getFullYear(),t.getMonth()+1,t.getDate(),t.getDay(),t.getHours(),t.getMinutes(),t.getSeconds()]),e._loginInfo.value=a,e._loginCount=u._mum("DateAdmin._loginCount"),e._loginCount.value++,e._loginToday.num++},e._loginToday={get num(){return Laya.LocalStorage.getItem("DateAdmin._loginToday")?Number(Laya.LocalStorage.getItem("DateAdmin._loginToday")):0},set num(t){e._date.date==e._loginInfo.value[e._loginInfo.value.length-1][2]&&Laya.LocalStorage.setItem("DateAdmin._loginToday",t.toString())}},e._last={get date(){return e._loginInfo.value.length>1?e._loginInfo.value[e._loginInfo.value.length-2][2]:e._loginInfo.value[e._loginInfo.value.length-1][2]}},e._front={get date(){return e._loginInfo.value[e._loginInfo.value.length-1][2]}}}(r=e.DateAdmin||(e.DateAdmin={})),function(e){e._switch=!0,e._frameLoop=function(t,a,n,o,r,i){o&&e._switch&&n(),Laya.timer.frameLoop(t,a,()=>{e._switch&&n()},r,i)},e._frameRandomLoop=function(t,a,n,o,r,i,l){r&&e._switch&&o();var s=()=>{let r=S._Number.randomOneInt(t,a);Laya.timer.frameOnce(r,n,()=>{e._switch&&(o(),s())},i,l)};s()},e._frameNumLoop=function(t,a,n,o,r,i,l,s){i&&e._switch&&o();let c=0;var h=()=>{e._switch&&(++c>=a?(o(),r&&r(),Laya.timer.clear(n,h)):o())};Laya.timer.frameLoop(t,n,h,l,s)},e._numRandomLoop=function(t,a,n,o,r,i,l,s,c){l&&e._switch&&r();let h=0;var u=()=>{let l=S._Number.randomOneInt(t,a);Laya.timer.frameOnce(l,o,()=>{e._switch&&(++h>=n?(r(),i()):(r(),u()))},s,c)};u()},e._frameNumRandomLoop=function(t,a,n,o,r,i,l,s,c){l&&e._switch&&r();let h=0;var u=()=>{let l=S._Number.randomOneInt(t,a);Laya.timer.frameOnce(l,o,()=>{e._switch&&(++h>=n?(r(),i&&i()):(r(),u()))},s,c)};u()},e._frameOnce=function(e,t,a,n,o,r){n&&n(),Laya.timer.frameOnce(e,t,()=>{a()},o,r)},e._frameNumOnce=function(e,t,a,n,o,r,i){for(let l=0;l<t;l++)o&&o(),Laya.timer.frameOnce(e,a,()=>{n()},r,i)},e._loop=function(t,a,n,o,r,i){o&&e._switch&&n(),Laya.timer.loop(t,a,()=>{e._switch&&n()},r,i)},e._randomLoop=function(t,a,n,o,r,i,l){r&&e._switch&&o();var s=()=>{let r=S._Number.randomOneInt(t,a);Laya.timer.once(r,n,()=>{e._switch&&(o(),s())},i,l)};s()},e._numLoop=function(t,a,n,o,r,i,l,s){i&&o();let c=0;var h=()=>{e._switch&&(++c>a?(o(),r&&r(),Laya.timer.clear(n,h)):o())};Laya.timer.loop(t,n,h,l,s)},e._once=function(e,t,a,n,o,r){n&&n(),Laya.timer.once(e,t,()=>{a()},o,r)},e._clearAll=function(e){for(let t=0;t<e.length;t++)Laya.timer.clearAll(e[t])},e._clear=function(e){for(let t=0;t<e.length;t++)Laya.timer.clear(e[t][0],e[t][1])}}(i=e.TimerAdmin||(e.TimerAdmin={})),function(e){e._Use={get value(){return this.Adaptive_value?this.Adaptive_value:null},set value(e){this.Adaptive_value=e}},e._stageWidth=function(t){for(let a=0;a<t.length;a++){const n=t[a];0==n.pivotX&&n.width?n.x=n.x/e._Use.value[0]*Laya.stage.width+n.width/2:n.x=n.x/e._Use.value[0]*Laya.stage.width}},e._stageHeight=function(t){for(let a=0;a<t.length;a++){const n=t[a];0==n.pivotY&&n.height?n.y=n.y/e._Use.value[1]*n.scaleX*Laya.stage.height+n.height/2:n.y=n.y/e._Use.value[1]*n.scaleX*Laya.stage.height}},e._center=function(e,t){for(let a=0;a<e.length;a++){const n=e[a];n.width>0?n.x=t.width/2-(n.width/2-n.pivotX)*n.scaleX:n.x=t.width/2,n.height>0?n.y=t.height/2-(n.height/2-n.pivotY)*n.scaleY:n.y=t.height/2}}}(l=e.Adaptive||(e.Adaptive={})),function(e){e._Tpye={Bytedance:"Bytedance",WeChat:"WeChat",OPPO:"OPPO",OPPOTest:"OPPOTest",VIVO:"VIVO",General:"General",Web:"Web",WebTest:"WebTest",Research:"Research"},e._Ues={get value(){return this._platform_name?this._platform_name:null},set value(t){switch(this._platform_name=t,t){case e._Tpye.WebTest:Laya.LocalStorage.clear(),n._num.value=5e3;break;case e._Tpye.Research:n._num.value=5e13}}}}(s=e.Platform||(e.Platform={})),function(e){function _fadeOut_Open(e){return e.Background&&f.fadeOut(e,0,1,200,300),f.fadeOut(e,0,1,400,0),700}function _fadeOut_Close(e){return e.Background&&f.fadeOut(e,1,0,75),f.fadeOut(e,1,0,150,50),200}function _shutters_Close(t,a){let n=S._Array.randomGetOne([0,1,2,3,4,5]);return Laya.timer.once(100,{},()=>{const o=t.drawToTexture(Laya.stage.width,Laya.stage.height,0,0);t.scale(1,0);for(let t=0;t<10;t++){let u=new Laya.Sprite;Laya.stage.addChild(u),u.width=Laya.stage.width,u.height=Laya.stage.height,u.pos(0,0),u.zOrder=100,u.name="shutters",u.texture=o;let _=new Laya.Image;_.skin="Lwg/UI/ui_orthogon_cycn.png",_.sizeGrid="12,12,12,12",u.mask=_;var r=()=>{_.width=Laya.stage.width,_.height=Math.round(Laya.stage.height/10),_.pos(0,Math.round(Laya.stage.height/10*t)),S._Node.changePivot(u,u.width/2,t*u.height/10+u.height/10/2),f.scale(u,1,1,1,0,600,0,()=>{o.destroy(),u.destroy()})},i=()=>{_.width=Math.round(Laya.stage.width/10),_.height=Laya.stage.height,_.pos(Math.round(Laya.stage.width/10*t),0),S._Node.changePivot(u,t*u.width/10+u.width/10/2,u.height/2),f.scale(u,1,1,0,1,600,0,()=>{o.destroy(),u.destroy()})},l=()=>{if(_.width=Laya.stage.width,_.height=Math.round(Laya.stage.height/10),_.pos(0,Math.round(Laya.stage.height/10*t)),S._Node.changePivot(u,u.width/2,t*u.height/10+u.height/10/2),f.scale(u,1,1,1,0,600,0,()=>{o.destroy(),u.destroy()}),t%2==0){let e=new Laya.Sprite;Laya.stage.addChild(e),e.width=Laya.stage.width,e.height=Laya.stage.height,e.pos(0,0),e.zOrder=100,e.name="shutters",e.texture=o;let a=new Laya.Image;a.skin="Lwg/UI/ui_orthogon_cycn.png",a.sizeGrid="12,12,12,12",e.mask=a,a.width=Math.round(Laya.stage.width/10),a.height=Laya.stage.height,a.pos(Math.round(Laya.stage.width/10*t),0),S._Node.changePivot(e,Math.round(t*e.width/10+e.width/10/2),Math.round(e.height/2)),f.scale(e,1,1,0,1,600,0,()=>{o.destroy(),e.destroy()})}},s=()=>{_.width=Math.round(Laya.stage.width/10),_.height=Laya.stage.height+1e3,_.pos(Math.round(Laya.stage.width/10*t),-500),S._Node.changePivot(_,Math.round(_.width/2),Math.round(_.height/2)),S._Node.changePivot(u,t*u.width/10+u.width/10/2,u.height/2),_.rotation=10,f.scale(u,1,1,0,1,600,0,()=>{o.destroy(),u.destroy()})};let d=1e3;var c=()=>{_.width=Math.round(Laya.stage.width/10),_.height=Laya.stage.height+d,_.pos(Math.round(Laya.stage.width/10*t),Math.round(-d/2)),S._Node.changePivot(_,Math.round(_.width/2),Math.round(_.height/2)),S._Node.changePivot(u,t*u.width/10+u.width/10/2,u.height/2),_.rotation=-10,f.scale(u,1,1,0,1,600,0,()=>{o.destroy(),u.destroy()})},h=()=>{_.width=Laya.stage.width/10,_.height=Laya.stage.height+d,_.pos(Laya.stage.width/10*t,-d/2),S._Node.changePivot(_,_.width/2,_.height/2),S._Node.changePivot(u,t*u.width/10+u.width/10/2,u.height/2),_.rotation=-15,f.scale(u,1,1,0,1,600,0,()=>{o.destroy(),u.destroy()});let e=new Laya.Sprite;Laya.stage.addChild(e),e.width=Laya.stage.width,e.height=Laya.stage.height,e.pos(0,0),e.zOrder=100,e.name="shutters",e.texture=o;let a=new Laya.Image;a.skin="Lwg/UI/ui_orthogon_cycn.png",a.sizeGrid="12,12,12,12",e.mask=a,a.width=Laya.stage.width/10,a.height=Laya.stage.height+d,a.pos(Laya.stage.width/10*t,-d/2),S._Node.changePivot(a,a.width/2,a.height/2),S._Node.changePivot(e,t*e.width/10+e.width/10/2,e.height/2),a.rotation=15,f.scale(e,1,1,0,1,600,0,()=>{o.destroy(),e.destroy()})};let m=[r,i,s,c,h,l];switch(a){case e._Type.shutters.crosswise:r();break;case e._Type.shutters.vertical:i();break;case e._Type.shutters.lSideling:s();break;case e._Type.shutters.rSideling:c();break;case e._Type.shutters.intersection1:h();break;case e._Type.shutters.intersection2:l();case e._Type.shutters.randomshutters:m[n]()}}}),700}function _stickIn(t,a){let n=0;t.getChildByName("Background")&&f.fadeOut(t.getChildByName("Background"),0,1,700);let o=S._Node.zOrderByY(t,!1);for(let t=0;t<o.length;t++){const n=o[t];if("Background"!==n.name&&"NoAni"!==n.name.substr(0,5)){let o=n.pivotX,r=n.pivotY;switch(a){case e._Type.stickIn.upLeftDownLeft:n.rotation=n.y>Laya.stage.height/2?-180:180,S._Node.changePivot(n,0,0);break;case e._Type.stickIn.upRightDownLeft:n.rotation=n.y>Laya.stage.height/2?-180:180,S._Node.changePivot(n,180==n.rotation?n.width:0,0);break;case e._Type.stickIn.randomstickIn:n.rotation=1==S._Number.randomOneHalf()?180:-180,S._Node.changePivot(n,1==S._Number.randomOneHalf()?0:n.width,1==S._Number.randomOneHalf()?0:n.height)}let i=n.x,l=n.y;n.x=n.pivotX>n.width/2?800+n.width:-800-n.width,n.y=n.rotation>0?n.y+200:n.y-200,f.rotate(n,0,700,100*t),f.move(n,i,l,700,()=>{S._Node.changePivot(n,o,r)},100*t)}}return n=100*t.numChildren+700+200}e._Type={fadeOut:"fadeOut",stickIn:{randomstickIn:"randomstickIn",upLeftDownLeft:"upLeftDownRight",upRightDownLeft:"upRightDownLeft"},shutters:{crosswise:"crosswise",vertical:"vertical",lSideling:"lSideling",rSideling:"rSideling",intersection1:"intersection1",intersection2:"intersection2",randomshutters:"randomshutters"},leftMove:"leftMove",rightMove:"rightMove",centerRotate:"centerRotate",drawUp:"drawUp"},e._openSwitch=!0,e._closeSwitch=!1,e._Use={get value(){return this.SceneAnimation_name?this.SceneAnimation_name:null},set value(e){this.SceneAnimation_name=e}},e._commonOpenAni=function(t){let a=0;var n=()=>{g._switch=!0,t[t.name]&&(t[t.name].lwgOpenAniAfter(),t[t.name].lwgButton(),h._SceneChange._close())};if(!e._openSwitch)return n(),0;switch(e._Use.value){case e._Type.fadeOut:a=_fadeOut_Open(t);break;case e._Type.stickIn.randomstickIn:a=_stickIn(t,e._Type.stickIn.randomstickIn);break;case e._Type.stickIn.upLeftDownLeft:a=_stickIn(t,e._Type.stickIn.upLeftDownLeft);break;case e._Type.stickIn.upRightDownLeft:a=_stickIn(t,e._Type.stickIn.upRightDownLeft);case e._Type.stickIn.randomstickIn:a=_stickIn(t,e._Type.stickIn.randomstickIn);case e._Type.shutters.lSideling:a=function(e,t){return e.scale(1,0),Laya.timer.once(100,{},()=>{e.scale(1,1);const t=e.drawToTexture(Laya.stage.width,Laya.stage.height,0,0);e.scale(1,0);for(let a=0;a<12;a++){let n=new Laya.Sprite;Laya.stage.addChild(n),n.width=Laya.stage.width,n.height=Laya.stage.height,n.pos(0,0),n.zOrder=100,n.name="shutters",n.texture=t;let o=new Laya.Image;o.width=n.width,o.height=Laya.stage.height/12,o.pos(0,Laya.stage.height/12*a),o.skin="Lwg/UI/ui_orthogon_cycn.png",n.mask=o,S._Node.changePivot(n,n.width/2,a*n.height/12+n.height/12/2),n.scale(1,0),f.scale(n,1,0,1,1,500,0,()=>{e.scale(1,1),t.destroy(),n.destroy()})}}),700}(t,e._Type.shutters.lSideling);default:a=_fadeOut_Open(t)}return Laya.timer.once(a,this,()=>{n()}),a},e._commonCloseAni=function(t,a){t[t.name].lwgBeforeCloseAni();let n=0;switch(e._Use.value){case e._Type.fadeOut:n=_fadeOut_Close(t);break;case e._Type.stickIn.upLeftDownLeft:case e._Type.stickIn.upRightDownLeft:case e._Type.stickIn.randomstickIn:break;case e._Type.shutters.vertical:n=_shutters_Close(t,e._Type.shutters.vertical);break;case e._Type.shutters.crosswise:n=_shutters_Close(t,e._Type.shutters.crosswise);break;case e._Type.shutters.lSideling:n=_shutters_Close(t,e._Type.shutters.lSideling);break;case e._Type.shutters.rSideling:n=_shutters_Close(t,e._Type.shutters.rSideling);break;case e._Type.shutters.intersection1:n=_shutters_Close(t,e._Type.shutters.intersection1);break;case e._Type.shutters.intersection2:n=_shutters_Close(t,e._Type.shutters.intersection2);break;case e._Type.shutters.randomshutters:n=_shutters_Close(t,e._Type.shutters.randomshutters);break;default:n=_fadeOut_Close(t)}Laya.timer.once(n,this,()=>{a()})}}(c=e.SceneAnimation||(e.SceneAnimation={})),function(e){let t;e._game={switch:!0,get level(){return Laya.LocalStorage.getItem("_gameLevel")?Number(Laya.LocalStorage.getItem("_gameLevel")):1},set level(e){let t=e-this.level;t>0&&(this.maxLevel+=t),e>this.loopLevel&&-1!=this.loopLevel?Laya.LocalStorage.setItem("_gameLevel",1..toString()):Laya.LocalStorage.setItem("_gameLevel",e.toString())},get maxLevel(){return Laya.LocalStorage.getItem("_game_maxLevel")?Number(Laya.LocalStorage.getItem("_game_maxLevel")):this.level},set maxLevel(e){Laya.LocalStorage.setItem("_game_maxLevel",e.toString())},get loopLevel(){return this._gameloopLevel?this._gameloopLevel:-1},set loopLevel(e){this._gameloopLevel=e},LevelNode:new Laya.Sprite,_createLevel(t,a,n){let o;Laya.loader.load("prefab/LevelNode.json",Laya.Handler.create(this,function(r){let i=new Laya.Prefab;i.json=r,o=Laya.Pool.getItemByCreateFun("prefab",i.create,i),t.addChild(o),o.pos(a,n),o.zOrder=0;o.getChildByName("level");e._game.LevelNode=o}))},pause:{get switch(){return e._game.switch},set switch(t){this.bool=t,t?(e._game.switch=!1,i._switch=!1,g._switch=!0):(e._game.switch=!0,i._switch=!0,g._switch=!1)}}},e._GuideControl={switch:!1},e._SceneControl={},e._sceneScript={},e._Moudel={},function(e){e.PreLoad="PreLoad",e.PreLoadCutIn="PreLoadCutIn",e.Guide="Guide",e.Start="Start",e.Shop="Shop",e.Task="Task",e.Set="Set",e.Skin="Skin",e.Puase="Puase",e.Share="Share",e.Game3D="Game3D",e.Victory="Victory",e.Defeated="Defeated",e.PassHint="PassHint",e.SkinTry="SkinTry",e.Redeem="Redeem",e.Turntable="Turntable",e.CaidanPifu="CaidanPifu",e.Operation="Operation",e.VictoryBox="VictoryBox",e.CheckIn="CheckIn",e.Resurgence="Resurgence",e.AdsHint="AdsHint",e.LwgInit="LwgInit",e.Game="Game",e.SmallHint="SmallHint",e.DrawCard="DrawCard",e.PropTry="PropTry",e.Card="Card",e.ExecutionHint="ExecutionHint",e.SkinQualified="SkinQualified",e.Eastereggister="Eastereggister",e.SelectLevel="SelectLevel",e.Settle="Settle",e.Special="Special",e.Compound="Compound"}(t=e._SceneName||(e._SceneName={})),e._PreLoadCutIn={openName:null,closeName:null,func:null,zOrder:null},e._preLoadOpenScene=function(a,n,o,r){_openScene(t.PreLoadCutIn,n,o),e._PreLoadCutIn.openName=a,e._PreLoadCutIn.closeName=n,e._PreLoadCutIn.func=o,e._PreLoadCutIn.zOrder=r};class a{static _openZOderUp(){if(c._closeSwitch){let t=0;for(const a in e._SceneControl)if(Object.prototype.hasOwnProperty.call(e._SceneControl,a)){e._SceneControl[a].parent&&t++}if(this._openScene){this._openScene.zOrder=t;for(let e=0;e<this._closeScene.length;e++){const a=this._closeScene[e];a?a.zOrder=--t:(this._closeScene.splice(e,1),e--)}}}}static _closeZOderUP(t){if(c._closeSwitch){let a=0;for(const t in e._SceneControl)if(Object.prototype.hasOwnProperty.call(e._SceneControl,t)){e._SceneControl[t].parent&&a++}t&&(t.zOrder=a,this._openScene&&(this._openScene.zOrder=a-1))}}static _open(){this._openScene&&(this._openZOder?Laya.stage.addChildAt(this._openScene,this._openZOder):Laya.stage.addChild(this._openScene),e._Moudel[`_${this._openScene.name}`]?e._Moudel[`_${this._openScene.name}`][this._openScene.name]&&(this._openScene.getComponent(e._Moudel[`_${this._openScene.name}`][this._openScene.name])||this._openScene.addComponent(e._Moudel[`_${this._openScene.name}`][this._openScene.name])):console.log(`${this._openScene.name}场景没有同名脚本！,需在LwgInit脚本中导入该模块！`),this._openZOderUp(),this._openFunc())}static _close(){if(this._closeScene.length>0)for(let e=0;e<this._closeScene.length;e++){let t=this._closeScene[e];t&&(_closeScene(t.name),this._closeScene.splice(e,1),e--)}this._remake()}static _remake(){this._openScene=null,this._openZOder=1,this._openFunc=null,this._closeZOder=0}}function _openScene(t,n,o,r){g._switch=!1,Laya.Scene.load("Scene/"+t+".json",Laya.Handler.create(this,function(i){S._Node.checkChildren(Laya.stage,t)?console.log(t,"场景重复出现！请检查代码"):(a._openScene=e._SceneControl[i.name=t]=i,a._closeScene.push(e._SceneControl[n]),a._closeZOder=n?e._SceneControl[n].zOrder:0,a._openZOder=r||null,a._openFunc=o||(()=>{}),a._open())}))}function _closeScene(t,n){if(!e._SceneControl[t])return void console.log("场景",t,"关闭失败！可能是名称不对！");var o=()=>{n&&n(),g._switch=!0,e._SceneControl[t].close()};if(!c._closeSwitch)return void o();a._closeZOderUP(e._SceneControl[t]);let r=e._SceneControl[t][e._SceneControl[t].name];if(r&&r){g._switch=!1,r.lwgBeforeCloseAni();let a=r.lwgCloseAni();null!==a?Laya.timer.once(a,this,()=>{o(),g._switch=!0}):c._commonCloseAni(e._SceneControl[t],o)}}a._openScene=null,a._openZOder=1,a._openFunc=null,a._closeScene=[],a._closeZOder=0,a._sceneNum=1,e._SceneChange=a,e._openScene=_openScene,e._closeScene=_closeScene;class n extends Laya.Script{constructor(){super(...arguments),this.ownerSceneName=""}getFind(e,t){if(this[`_Scene${t}${e}`])return this[`_Scene${t}${e}`];{let a=S._Node.findChild2D(this.owner.scene,e);if(a)return this[`_Scene${t}${e}`]=a;console.log(`场景内不存在节点${e}`)}}_FindImg(e){return this.getFind(e,"_FindImg")}_FindSp(e){return this.getFind(e,"_FindSp")}_FindBox(e){return this.getFind(e,"_FindBox")}_FindTap(e){return this.getFind(e,"_FindTap")}_FindLabel(e){return this.getFind(e,"_FindLabel")}_FindList(e){return this.getFind(e,"_FindList")}_storeNum(e,t,a){return u._mum(`${this.owner.name}/${e}`,t,a)}_storeStr(e,t,a){return u._str(`${this.owner.name}/${e}`,t,a)}_storeBool(e,t,a){return u._bool(`${this.owner.name}/${e}`,t,a)}_storeArray(e,t,a){return u._array(`${this.owner.name}/${e}`,t,a)}lwgOnAwake(){}lwgAdaptive(){}lwgEvent(){}_evReg(e,t){o._register(e,this,t)}_evRegOne(e,t){o._registerOnce(e,this,t)}_evNotify(e,t){o._notify(e,t)}lwgOnEnable(){}lwgOnStart(){}lwgButton(){}_btnDown(e,t,a){g._on(null==a?g._Use.value:a,e,this,e=>{g._switch&&t&&t(e)},null,null,null)}_btnMove(e,t,a){g._on(null==a?g._Use.value:a,e,this,null,e=>{g._switch&&t&&t(e)},null,null)}_btnUp(e,t,a){g._on(null==a?g._Use.value:a,e,this,null,null,e=>{g._switch&&t&&t(e)},null)}_btnOut(e,t,a){g._on(null==a?g._Use.value:a,e,this,null,null,null,e=>{g._switch&&t&&t(e)})}_btnFour(e,t,a,n,o,r){g._on(null==r?r:g._Use.value,e,this,e=>{g._switch&&t&&t(e)},e=>{g._switch&&a&&a(e)},e=>{g._switch&&n&&n(e)},e=>{g._switch&&o&&o(e)})}_openScene(t,a,n,o,r){let i;null!=a&&1!=a||(i=this.ownerSceneName),n?e._preLoadOpenScene(t,i,o,r):e._openScene(t,i,o,r)}_closeScene(t,a){e._closeScene(t||this.ownerSceneName,a)}lwgOnUpdate(){}lwgOnDisable(){}onStageMouseDown(e){g._switch&&this.lwgOnStageDown(e)}onStageMouseMove(e){g._switch&&this.lwgOnStageMove(e)}onStageMouseUp(e){g._switch&&this.lwgOnStageUp(e)}lwgOnStageDown(e){}lwgOnStageMove(e){}lwgOnStageUp(e){}}e._ScriptBase=n;e._SceneBase=class extends n{constructor(){super(),this._calssName=t.PreLoad}get _Owner(){return this.owner}getVar(e,t){return this[`_Scene${t}${e}`]?this[`_Scene${t}${e}`]:this._Owner[e]?this[`_Scene${t}${e}`]=this._Owner[e]:void console.log("场景内不存在var节点：",e)}_SpriteVar(e){return this.getVar(e,"_SpriteVar")}_AniVar(e){return this.getVar(e,"_AniVar")}_BtnVar(e){return this.getVar(e,"_BtnVar")}_BoxVar(e){return this.getVar(e,"_BoxVar")}_ImgVar(e){return this.getVar(e,"_ImgVar")}_LabelVar(e){return this.getVar(e,"_LabelVar")}_ListVar(e){return this.getVar(e,"_ListVar")}_TapVar(e){return this.getVar(e,"_TapVar")}_TextVar(e){return this.getVar(e,"_TextVar")}_TextInputVar(e){return this.getVar(e,"_TextInputVar")}_FontClipVar(e){return this.getVar(e,"_FontClipVar")}_FontBox(e){return this.getVar(e,"_FontBox")}_FontTextInput(e){return this.getVar(e,"_FontInput")}onAwake(){this._Owner.width=Laya.stage.width,this._Owner.height=Laya.stage.height,this._Owner.getChildByName("Background")&&(this._Owner.getChildByName("Background").width=Laya.stage.width,this._Owner.getChildByName("Background").height=Laya.stage.height),null==this._Owner.name?console.log("场景名称失效，脚本赋值失败"):(this.ownerSceneName=this._calssName=this._Owner.name,this._Owner[this._calssName]=this),this.moduleOnAwake(),this.lwgOnAwake(),this.lwgAdaptive()}moduleOnAwake(){}onEnable(){this.moduleEvent(),this.lwgEvent(),this.moduleOnEnable(),this.lwgOnEnable()}moduleOnEnable(){}moduleEvent(){}onStart(){this.btnAndOpenAni(),this.moduleOnStart(),this.lwgOnStart()}moduleOnStart(){}btnAndOpenAni(){let e=this.lwgOpenAni();null!==e?Laya.timer.once(e,this,()=>{g._switch=!0,this.lwgOpenAniAfter(),this.lwgButton(),a._close()}):c._commonOpenAni(this._Owner)}lwgOpenAni(){return null}lwgOpenAniAfter(){}_adaHeight(e){l._stageHeight(e)}_adaWidth(e){l._stageWidth(e)}_adaptiveCenter(e){l._center(e,Laya.stage)}onUpdate(){this.lwgOnUpdate()}lwgBeforeCloseAni(){}lwgCloseAni(){return null}onDisable(){f.fadeOut(this._Owner,1,0,2e3,1),this.lwgOnDisable(),Laya.timer.clearAll(this),Laya.Tween.clearAll(this),o._offCaller(this)}};e._ObjectBase=class extends n{constructor(){super()}get _Owner(){return this.owner}get _point(){return new Laya.Point(this._Owner.x,this._Owner.y)}get _Scene(){return this.owner.scene}get _Parent(){if(this._Owner.parent)return this.owner.parent}get _gPoint(){return this._Parent.localToGlobal(new Laya.Point(this._Owner.x,this._Owner.y))}get _RigidBody(){return this._Owner._OwnerRigidBody||(this._Owner._OwnerRigidBody=this._Owner.getComponent(Laya.RigidBody)),this._Owner._OwnerRigidBody}get _BoxCollier(){return this._Owner._OwnerBoxCollier||(this._Owner._OwnerBoxCollier=this._Owner.getComponent(Laya.BoxCollider)),this._Owner._OwnerBoxCollier}get _CilrcleCollier(){return this._Owner._OwnerCilrcleCollier?this._Owner._OwnerCilrcleCollier:this._Owner._OwnerCilrcleCollier=this._Owner.getComponent(Laya.BoxCollider)}get _PolygonCollier(){return this._Owner._OwnerPolygonCollier?this._Owner._OwnerPolygonCollier:this._Owner._OwnerPolygonCollier=this._Owner.getComponent(Laya.BoxCollider)}getSceneVar(e,t){return this[`_Scene${t}${e}`]?this[`_Scene${t}${e}`]:this._Scene[e]?this[`_Scene${t}${e}`]=this._Scene[e]:void console.log(`场景内不存在var节点${e}`)}_SceneSprite(e){return this.getSceneVar(e,"_SceneSprite")}_SceneAni(e){return this.getSceneVar(e,"_SceneAni")}_SceneImg(e){return this.getSceneVar(e,"_SceneImg")}_SceneLabel(e){return this.getSceneVar(e,"_SceneLabel")}_SceneList(e){return this.getSceneVar(e,"_SceneList")}_SceneTap(e){return this.getSceneVar(e,"_SceneTap")}_SceneText(e){return this.getSceneVar(e,"_SceneText")}_SceneFontClip(e){return this.getSceneVar(e,"_SceneFontClip")}_SceneBox(e){return this.getSceneVar(e,"_SceneBox")}getChild(e,t){return this[`${t}${e}`]?this[`${t}${e}`]:this._Owner.getChildByName(e)?this[`${t}${e}`]=this._Owner.getChildByName(e):(console.log("场景内不存在子节点：",e),null)}_ImgChild(e){return this.getChild(e,"_ImgChild")}_SpriteChild(e){return this.getChild(e,"_SpriteChild")}_LableChild(e){return this.getChild(e,"_LableChild")}_ListChild(e){return this.getChild(e,"_ListChild")}_TapChild(e){return this.getChild(e,"_TapChild")}_TapBox(e){return this.getChild(e,"_TapBox")}_TapFontClip(e){return this.getChild(e,"_TapFontClip")}onAwake(){this._Owner[this.__proto__.constructor.name]=this,this.ownerSceneName=this._Scene.name,this._fPoint=new Laya.Point(this._Owner.x,this._Owner.y),this._fGPoint=this._Parent.localToGlobal(new Laya.Point(this._Owner.x,this._Owner.y)),this._fRotation=this._Owner.rotation,this.lwgOnAwake(),this.lwgAdaptive()}onEnable(){this.lwgButton(),this.lwgEvent(),this.lwgOnEnable()}onStart(){this.lwgOnStart()}onUpdate(){this.lwgOnUpdate()}onDisable(){this.lwgOnDisable(),Laya.timer.clearAll(this),o._offCaller(this)}}}(h=e.Admin||(e.Admin={})),function(e){class t{removeSelf(){}func(){}}e._NumVariable=class extends t{get value(){}set value(e){}};e._StrVariable=class extends t{get value(){}set value(e){}};e._BoolVariable=class extends t{get value(){}set value(e){}};e._ArrayVariable=class extends t{get value(){}set value(e){}};e._ArrayArrVariable=class extends t{get value(){}set value(e){}},e._mum=function(e,t,a){return this[`_mum${e}`]||(this[`_mum${e}`]={get value(){return Laya.LocalStorage.getItem(e)?Number(Laya.LocalStorage.getItem(e)):(a=a||0,Laya.LocalStorage.setItem(e,a.toString()),a)},set value(t){Laya.LocalStorage.setItem(e,t.toString()),this.func()},removeSelf(){Laya.LocalStorage.removeItem(e)},func(){this._func&&this._func()}}),t&&(this[`_mum${e}`]._func=t),this[`_mum${e}`]},e._str=function(e,t,a){return this[`_str${e}`]||(this[`_str${e}`]={get value(){return Laya.LocalStorage.getItem(e)?Laya.LocalStorage.getItem(e):(a=a||null,Laya.LocalStorage.setItem(e,a.toString()),a)},set value(t){Laya.LocalStorage.setItem(e,t.toString()),this.func()},removeSelf(){Laya.LocalStorage.removeItem(e)},func(){t&&t()}}),t&&(this[`_str${e}`]._func=t),this[`_str${e}`]},e._bool=function(e,t,a){return this[`_bool${e}`]||(this[`_bool${e}`]={get value(){return Laya.LocalStorage.getItem(e)?"false"!=Laya.LocalStorage.getItem(e)&&("true"==Laya.LocalStorage.getItem(e)||void 0):(a?Laya.LocalStorage.setItem(e,"true"):Laya.LocalStorage.setItem(e,"false"),this.func(),a)},set value(t){t=t?"true":"false",Laya.LocalStorage.setItem(e,t.toString())},removeSelf(){Laya.LocalStorage.removeItem(e)},func(){t&&t()}}),t&&(this[`_bool${e}`]._func=t),this[`_bool${e}`]},e._array=function(e,t,a){return this[`_array${e}`]||(this[`_array${e}`]={get value(){try{let t=Laya.LocalStorage.getJSON(e);return t?JSON.parse(t):(a=a||[],Laya.LocalStorage.setItem(e,a.toString()),this.func(),a)}catch(e){return[]}},set value(t){Laya.LocalStorage.setJSON(e,JSON.stringify(t))},removeSelf(){Laya.LocalStorage.removeItem(e)},func(){t&&t()}}),t&&(this[`_array${e}`]._func=t),this[`_array${e}`]},e._arrayArr=function(e,t,a){return this[`_arrayArr${e}`]||(this[`_arrayArr${e}`]={get value(){try{let t=Laya.LocalStorage.getJSON(e);return t?JSON.parse(t):(a=a||[],Laya.LocalStorage.setItem(e,a.toString()),a)}catch(e){return[]}},set value(t){Laya.LocalStorage.setJSON(e,JSON.stringify(t)),this.func()},removeSelf(){Laya.LocalStorage.removeItem(e)},func(){t&&t()}}),t&&(this[`_arrayArr${e}`]._func=t),this[`_arrayArr${e}`]}}(u=e.StorageAdmin||(e.StorageAdmin={})),function(e){e._Table=class{constructor(e,t,a,n){this._property={name:"name",index:"index",sort:"sort",chName:"chName",classify:"classify",unlockWay:"unlockWay",conditionNum:"conditionNum",degreeNum:"degreeNum",compelet:"compelet",getAward:"getAward",pitch:"pitch"},this._unlockWay={ads:"ads",gold:"gold",customs:"customs",diamond:"diamond",free:"free"},this._tableName="name",this._lastArr=[],this._localStorage=!1,e&&(this._tableName=e,a?(this._localStorage=a,this._arr=function(e,t,a){try{Laya.LocalStorage.getJSON(t)}catch(a){return Laya.LocalStorage.setJSON(t,JSON.stringify(e)),e}let n;if(Laya.LocalStorage.getJSON(t)){n=JSON.parse(Laya.LocalStorage.getJSON(t));let o=S._ObjArray.diffProByTwo(e,n,a);console.log(`${t}新添加对象`,o),S._Array.addToarray(n,o)}else n=e;return Laya.LocalStorage.setJSON(t,JSON.stringify(n)),n}(t,e,this._property.name),n&&this._compareLastInfor(n)):this._arr=t)}get _arr(){return this[`_${this._tableName}arr`]}set _arr(e){this[`_${this._tableName}arr`]=e}get _List(){return this[`${this._tableName}_List`]}set _List(e){this[`${this._tableName}_List`]=e,e.array=this._arr,e.selectEnable=!1,e.vScrollBarSkin="",e.renderHandler=new Laya.Handler(this,(e,t)=>{this._listRender&&this._listRender(e,t)}),e.selectHandler=new Laya.Handler(this,e=>{this._listSelect&&this._listSelect(e)})}_refreshAndStorage(){this._localStorage&&Laya.LocalStorage.setJSON(this._tableName,JSON.stringify(this._arr)),this._List&&this._List.refresh()}_compareLastInfor(e){if(this._lastArr=this._getlastVersion(e),this._lastArr.length>0)for(let e=0;e<this._lastArr.length;e++){const t=this._lastArr[e];for(let e=0;e<this._arr.length;e++){const a=this._arr[e];t[this._property.compelet]&&(a[this._property.compelet]=!0),t[this._property.getAward]&&(a[this._property.getAward]=!0),t[this._property.degreeNum]>a[this._property.degreeNum]&&(a[this._property.getAward]=t[this._property.degreeNum])}}}_getlastVersion(e){let t=[];try{Laya.LocalStorage.getJSON(e)&&(t=JSON.parse(Laya.LocalStorage.getJSON(e)))}catch(t){console.log(e+"前版本不存在！")}return t}_getProperty(e,t){let a;for(const n in this._arr)if(Object.prototype.hasOwnProperty.call(this._arr,n)){const o=this._arr[n];if(o[this._property.name]==e){a=o[t];break}}return a}_getPitchIndexArr(){for(let e=0;e<this._arr.length;e++)if(this._arr[e][this._property.name]===this._pitchName)return e}_getPitchIndexByList(){if(this._List)for(let e=0;e<this._List.array.length;e++)if(this._List.array[e][this._property.name]===this._pitchName)return e}_listTweenToPitch(e,t){const a=this._getPitchIndexByList();a&&this._List.tweenTo(a,e,Laya.Handler.create(this,()=>{t&&t()}))}_listTweenToPitchChoose(e,t,a){const n=this._getPitchIndexByList();n&&this._List.tweenTo(n+e,t,Laya.Handler.create(this,()=>{a&&a()}))}_listScrollToLast(){const e=this._List.array.length-1;e&&this._List.scrollTo(e)}_setProperty(e,t,a){for(const n in this._arr)if(Object.prototype.hasOwnProperty.call(this._arr,n)){const o=this._arr[n];if(o[this._property.name]==e){o[t]=a,this._refreshAndStorage();break}}return a}_getObjByName(e){let t=null;for(const a in this._arr)if(Object.prototype.hasOwnProperty.call(this._arr,a)){const n=this._arr[a];if(n[this._property.name]==e){t=n;break}}return t}_setProSoleByClassify(e,t,a){const n=this._getObjByName(e),o=this._getArrByClassify(n[this._property.classify]);for(const n in o)if(Object.prototype.hasOwnProperty.call(o,n)){const r=o[n];r[this._property.name]==e?r[t]=a:r[t]=!a}this._refreshAndStorage()}_setAllProPerty(e,t){for(let a=0;a<this._arr.length;a++)this._arr[a][e]=t;this._refreshAndStorage()}_addAllProPerty(e,t){for(let a=0;a<this._arr.length;a++)this._arr[a][e]+=t();this._refreshAndStorage()}_setPitchProperty(e,t){return this._getPitchObj()[e]=t,this._refreshAndStorage(),t}_getPitchProperty(e){return this._getPitchObj()[e]}_randomOneObj(e,t){let a=[];for(const n in this._arr)if(Object.prototype.hasOwnProperty.call(this._arr,n)){const o=this._arr[n];t?o[e]&&o[e]==t&&a.push(o):o[e]&&a.push(o)}return 0==a.length?null:S._Array.randomGetOne(a)}_getArrByClassify(e){let t=[];for(const a in this._arr)if(Object.prototype.hasOwnProperty.call(this._arr,a)){const n=this._arr[a];n[this._property.classify]==e&&t.push(n)}return t}_getArrByPitchClassify(){let e=[];for(const t in this._arr)if(Object.prototype.hasOwnProperty.call(this._arr,t)){const a=this._arr[t];a[this._property.classify]==this._pitchClassify&&e.push(a)}return e}_getArrByProperty(e,t){let a=[];for(const n in this._arr)if(Object.prototype.hasOwnProperty.call(this._arr,n)){const o=this._arr[n];o[e]&&o[e]==t&&a.push(o)}return a}_getPitchClassfiyName(){return this._getObjByName(this._pitchName)[this._property.classify]}_getArrByNoProperty(e,t){let a=[];for(const n in this._arr)if(Object.prototype.hasOwnProperty.call(this._arr,n)){const o=this._arr[n];o[e]&&o[e]!==t&&a.push(o)}return a}_setArrByProperty(e,t){let a=[];for(const t in this._arr)if(Object.prototype.hasOwnProperty.call(this._arr,t)){const n=this._arr[t];n[e]&&(n[e],a.push(n))}return this._refreshAndStorage(),a}_checkCondition(e,t,a){let n=null;t=null==t?1:t;let o=this._getProperty(e,this._property.degreeNum),r=this._getProperty(e,this._property.conditionNum);return this._getProperty(e,this._property.compelet)?n=-1:r<=o+t?(this._setProperty(e,this._property.degreeNum,r),this._setProperty(e,this._property.compelet,!0),n=!0):(this._setProperty(e,this._property.degreeNum,o+t),n=!1),a&&a(),n}_checkAllCompelet(){let e=!0;for(let t=0;t<this._arr.length;t++)if(!this._arr[t][this._property.compelet])return e=!1;return e}get _pitchClassify(){return this[`${this._tableName}/pitchClassify`]?this[`${this._tableName}/pitchClassify`]:this._localStorage?Laya.LocalStorage.getItem(`${this._tableName}/pitchClassify`)?Laya.LocalStorage.getItem(`${this._tableName}/pitchClassify`):null:this[`${this._tableName}/pitchClassify`]=null}set _pitchClassify(e){this._lastPitchClassify=this[`${this._tableName}/pitchClassify`]?this[`${this._tableName}/pitchClassify`]:null,this[`${this._tableName}/pitchClassify`]=e,this._localStorage&&Laya.LocalStorage.setItem(`${this._tableName}/pitchClassify`,e.toString()),this._refreshAndStorage()}get _pitchName(){return this[`${this._tableName}/_pitchName`]?this[`${this._tableName}/_pitchName`]:this._localStorage?Laya.LocalStorage.getItem(`${this._tableName}/_pitchName`)?Laya.LocalStorage.getItem(`${this._tableName}/_pitchName`):null:this[`${this._tableName}/_pitchName`]=null}set _pitchName(e){this._lastPitchName=this[`${this._tableName}/_pitchName`],this[`${this._tableName}/_pitchName`]=e,this._localStorage&&Laya.LocalStorage.setItem(`${this._tableName}/_pitchName`,e.toString()),this._refreshAndStorage()}get _lastPitchClassify(){return this[`${this._tableName}/_lastPitchClassify`]?this[`${this._tableName}/_lastPitchClassify`]:this._localStorage?Laya.LocalStorage.getItem(`${this._tableName}/_lastPitchClassify`)?Laya.LocalStorage.getItem(`${this._tableName}/_lastPitchClassify`):null:this[`${this._tableName}/_lastPitchClassify`]=null}set _lastPitchClassify(e){this[`${this._tableName}/_lastPitchClassify`]=e,this._localStorage&&e&&Laya.LocalStorage.setItem(`${this._tableName}/_lastPitchClassify`,e.toString())}get _lastPitchName(){return this[`${this._tableName}/_lastPitchName`]?this[`${this._tableName}/_lastPitchName`]:this._localStorage?Laya.LocalStorage.getItem(`${this._tableName}/_lastPitchName`)?Laya.LocalStorage.getItem(`${this._tableName}/_lastPitchName`):null:this[`${this._tableName}/_lastPitchName`]=null}set _lastPitchName(e){this[`${this._tableName}/_lastPitchName`]=e,this._localStorage&&e&&Laya.LocalStorage.setItem(`${this._tableName}/_lastPitchName`,e.toString())}_setPitch(e){let t;for(let a=0;a<this._arr.length;a++){const n=this._arr[a];n[this._property.name]==e?(n[this._property.pitch]=!0,t=n[this._property.classify]):n[this._property.pitch]=!1}this._pitchClassify=t,this._pitchName=e,this._refreshAndStorage()}_getPitchObj(){for(const e in this._arr)if(Object.prototype.hasOwnProperty.call(this._arr,e)){const t=this._arr[e];if(t[this._property.name]===this._pitchName)return t}}_addObject(e){let t=S._ObjArray.objCopy(e);for(let e=0;e<this._arr.length;e++)this._arr[e][this._property.name]===t[this._property.name]&&this._arr[e];this._refreshAndStorage()}_addObjectArr(e){const t=S._ObjArray.arrCopy(e);for(let e=0;e<t.length;e++){const a=t[e];for(let n=0;n<this._arr.length;n++){const o=this._arr[n];a[this._property.name]!==o[this._property.name]||(this._arr[n]=a,t.splice(e,1),e--)}}for(let e=0;e<t.length;e++){const a=t[e];this._arr.push(a)}this._refreshAndStorage()}_sortByProperty(e,t,a){if(S._ObjArray.sortByProperty(this._arr,e),null==a||a){for(let e=this._arr.length-1;e>=0;e--)this._arr[e][t]=this._arr.length-e;this._arr.reverse()}else for(let e=0;e<this._arr.length;e++)this._arr[e][t]=e+1;this._refreshAndStorage()}}}(_=e.DataAdmin||(e.DataAdmin={})),function(e){e.RGBToHexString=function(e,t,a){return"#"+("00000"+(e<<16|t<<8|a).toString(16)).slice(-6)},e.HexStringToRGB=function(e){return[]},e._colour=function(e,t,a){let n=new Laya.ColorFilter;return e.blendMode="null",t?n.color(t[0],t[1],t[2],t[3]):n.color(S._Number.randomOneBySection(255,100,!0),S._Number.randomOneBySection(255,100,!0),S._Number.randomOneBySection(255,100,!0),1),e.filters=[n],a&&Laya.timer.once(a,this,()=>{for(let t=0;t<e.filters.length;t++)if(e.filters[t]==n){e.filters=[];break}}),n},e._changeOnce=function(e,t,a,n){if(!e)return;let o=new Laya.ColorFilter;o.color(0,0,0,0);let r=t[0]/a,l=t[1]/a,s=t[2]/a,c=0;t[3]&&(c=t[3]/a);let h={add:!0},u=0,_=0,d=0,m=0;i._frameLoop(1,h,()=>{u<t[0]&&h.add?(_+=l,d+=s,0!==c&&(m+=c),(u+=r)>=t[0]&&(h.add=!1)):(_-=l,d-=s,0!==c&&(m-=c),(u-=r)<=0&&(n&&n(),Laya.timer.clearAll(h))),o.color(u,_,d,m),e.filters=[o]})},e._changeConstant=function(e,t,a,n){let o,r=[];e.filters?(o=e.filters[0],r=[e.filters[0]._alpha[0],e.filters[0]._alpha[1],e.filters[0]._alpha[2],e.filters[0]._alpha[3]?e.filters[0]._alpha[3]:1]):((o=new Laya.ColorFilter).color(t[0],t[1],t[2],t[3]?t[3]:1),r=[t[0],t[1],t[2],t[3]?t[3]:1],e.filters=[o]);let l=[S._Number.randomCountBySection(t[0],a[0])[0],S._Number.randomCountBySection(t[1],a[1])[0],S._Number.randomCountBySection(t[2],a[2])[0],S._Number.randomCountBySection(t[3]?t[3]:1,a[3]?a[3]:1)[0]],s=(l[0]-r[0])/n,c=(l[1]-r[1])/n,h=(l[2]-r[2])/n,u=0;l[3]&&(u=(l[3]-r[3])/n),e.changeCaller&&Laya.timer.clearAll(e.changeCaller);let _={};e.changeCaller=_;let d=0;i._frameLoop(1,_,()=>{++d<=n?(r[0]+=s,r[1]+=c,r[2]+=h):Laya.timer.clearAll(_),o.color(r[0],r[1],r[2],r[3]),e.filters=[o]})}}(d=e.Color||(e.Color={})),function(e){let t;e._tex2D={"爱心2":{url:"Lwg/Effects/3D/aixin2.png",tex:null}},function(t){function _createBox(t,a,n,o,r,i,l){const s=n?S._Number.randomOneBySection(n[0][0],n[1][0]):S._Number.randomOneBySection(.01,.03),c=n?S._Number.randomOneBySection(n[0][1],n[1][1]):S._Number.randomOneBySection(.01,.03),h=n?S._Number.randomOneBySection(n[0][2],n[1][2]):S._Number.randomOneBySection(.01,.03),u=t.addChild(new Laya.MeshSprite3D(Laya.PrimitiveMesh.createBox(s,c,h)));a?u.transform.position.setValue(a.x,a.y,a.z):u.transform.position.setValue(0,0,0),u.transform.localRotationEulerX=o?S._Number.randomOneBySection(o[0][0],o[1][0]):S._Number.randomOneBySection(0,360),u.transform.localRotationEulerX=o?S._Number.randomOneBySection(o[0][1],o[1][1]):S._Number.randomOneBySection(0,360),u.transform.localRotationEulerX=o?S._Number.randomOneBySection(o[0][2],o[1][2]):S._Number.randomOneBySection(0,360);const _=u.meshRenderer.material=new Laya.UnlitMaterial;return _.albedoTexture=r?S._Array.randomGetOne(r):e._tex2D.爱心2.tex,_.renderMode=2,_.albedoColorR=i?S._Number.randomOneBySection(i[0][0],i[1][0]):S._Number.randomOneBySection(180,255),_.albedoColorG=i?S._Number.randomOneBySection(i[0][1],i[1][1]):S._Number.randomOneBySection(10,180),_.albedoColorB=i?S._Number.randomOneBySection(i[0][2],i[1][2]):S._Number.randomOneBySection(10,180),_.albedoColorA=i?S._Number.randomOneBySection(i[0][3],i[1][3]):S._Number.randomOneBySection(1,1),u}t._createBox=_createBox,t._spiral=function(e,t,a,n,o,r,l){const s=_createBox(e,t,a,n,o,r),c=s.meshRenderer.material,h=l?S._Number.randomOneBySection(l[0],l[1]):S._Number.randomOneBySection(100,200);let u={time:0,alpha:!0,move:!1,vinish:!1};return s.moveCaller=u,c.albedoColorA=0,i._frameLoop(1,u,()=>{u.time++,u.alpha&&(c.albedoColorA+=.15,s.transform.localPositionY+=.002,c.albedoColorA>=1&&(u.alpha=!1,u.move=!0)),u.move&&(s.transform.localPositionY+=.005,u.time>h&&(u.move=!1,u.vinish=!0)),u.vinish&&(c.albedoColorA-=.15,s.transform.localPositionY+=.002,c.albedoColorA<=0&&s.removeSelf())}),s}}(t=e._Particle||(e._Particle={}))}(m=e.Effects3D||(e.Effects3D={})),function(e){let t,a,n,o,r;!function(e){e["爱心1"]="Lwg/Effects/aixin1.png",e["爱心2"]="Lwg/Effects/aixin2.png",e["爱心3"]="Lwg/Effects/aixin3.png",e["花1"]="Lwg/Effects/hua1.png",e["花2"]="Lwg/Effects/hua2.png",e["花3"]="Lwg/Effects/hua3.png",e["花4"]="Lwg/Effects/hua4.png",e["星星1"]="Lwg/Effects/star1.png",e["星星2"]="Lwg/Effects/star2.png",e["星星3"]="Lwg/Effects/star3.png",e["星星4"]="Lwg/Effects/star4.png",e["星星5"]="Lwg/Effects/star5.png",e["星星6"]="Lwg/Effects/star6.png",e["星星7"]="Lwg/Effects/star7.png",e["星星8"]="Lwg/Effects/star8.png",e["菱形1"]="Lwg/Effects/rhombus1.png",e["菱形2"]="Lwg/Effects/rhombus1.png",e["菱形3"]="Lwg/Effects/rhombus1.png",e["矩形1"]="Lwg/Effects/rectangle1.png",e["矩形2"]="Lwg/Effects/rectangle2.png",e["矩形3"]="Lwg/Effects/rectangle3.png",e["雪花1"]="Lwg/Effects/xuehua1.png",e["叶子1"]="Lwg/Effects/yezi1.png",e["圆形发光1"]="Lwg/Effects/yuanfaguang.png",e["圆形1"]="Lwg/Effects/yuan1.png",e["光圈1"]="Lwg/Effects/guangquan1.png",e["光圈2"]="Lwg/Effects/guangquan2.png",e["三角形1"]="Lwg/Effects/triangle1.png",e["三角形2"]="Lwg/Effects/triangle2.png"}(t=e._SkinUrl||(e._SkinUrl={})),function(e){class a extends Laya.Image{constructor(e,a,n,o,r,i,l,s){if(super(),!e.parent)return;e.addChild(this),a?this.pos(a.x,a.y):this.pos(0,0),this.width=n||100,this.height=o||100,this.pivotX=this.width/2,this.pivotY=this.height/2,this.rotation=r?S._Number.randomOneBySection(r[0],r[1]):S._Number.randomOneBySection(360),this.skin=i?S._Array.randomGetOne(i):t.花3,this.zOrder=s||0,this.alpha=0;let c=[];c[0]=l?S._Number.randomOneBySection(l[0][0],l[1][0]):S._Number.randomOneBySection(0,255),c[1]=l?S._Number.randomOneBySection(l[0][1],l[1][1]):S._Number.randomOneBySection(0,255),c[2]=l?S._Number.randomOneBySection(l[0][2],l[1][2]):S._Number.randomOneBySection(0,255),c[3]=l?S._Number.randomOneBySection(l[0][3],l[1][3]):S._Number.randomOneBySection(0,255),d._colour(this,c)}}e._ApertureImage=a,e._continuous=function(e,t,n,o,r,l,s,c,h,u,_){let d=new a(e,t,n,o,r,l,s,c),m=u?S._Number.randomOneBySection(u[0],u[1]):.025,y=_?S._Number.randomOneBySection(_[0],_[1]):5e-4,g=h?S._Number.randomOneBySection(h[0],h[1]):2,p={alpha:!0,scale:!1,vanish:!1};d.moveCaller=p;let f=0;i._frameLoop(1,p,()=>{p.alpha?(d.alpha+=.05,f=0,d.alpha>=1&&(p.alpha=!1,p.scale=!0)):p.scale?(f+=y,d.scaleX>g&&(p.scale=!1,p.vanish=!0)):p.vanish&&(f-=y)<0&&(d.alpha-=.015,d.alpha<=0&&(d.removeSelf(),Laya.timer.clearAll(p))),d.scaleX=d.scaleY+=m+f})}}(a=e._Aperture||(e._Aperture={})),function(e){class a extends Laya.Image{constructor(e,a,n,o,r,i,l,s,c){super(),e.addChild(this);let h=n?S._Number.randomOneBySection(n[0]):S._Number.randomOneBySection(200),u=n?S._Number.randomOneBySection(n[1]):S._Number.randomOneBySection(50);h=0==S._Number.randomOneHalf()?h:-h,u=0==S._Number.randomOneHalf()?u:-u,this.x=a?a.x+h:h,this.y=a?a.y+u:u,this.width=o?S._Number.randomOneBySection(o[0],o[1]):S._Number.randomOneBySection(20,50),this.height=r?S._Number.randomOneBySection(r[0],r[1]):this.width,this.pivotX=this.width/2,this.pivotY=this.height/2,this.skin=l?S._Array.randomGetOne(l):t.圆形1,this.rotation=i?S._Number.randomOneBySection(i[0],i[1]):0,this.alpha=0,this.zOrder=c||1e3;let _=[];_[0]=s?S._Number.randomOneBySection(s[0][0],s[1][0]):S._Number.randomOneBySection(180,255),_[1]=s?S._Number.randomOneBySection(s[0][1],s[1][1]):S._Number.randomOneBySection(10,180),_[2]=s?S._Number.randomOneBySection(s[0][2],s[1][2]):S._Number.randomOneBySection(10,180),_[3]=s?S._Number.randomOneBySection(s[0][3],s[1][3]):S._Number.randomOneBySection(1,1),d._colour(this,_)}}e._ParticleImgBase=a,e._snow=function(e,t,n,o,r,l,s,c,h,u,_,d,m){let y=new a(e,t,n,o,r,l,s,c,h),g=_?S._Number.randomOneBySection(_[0],_[1]):S._Number.randomOneBySection(0,1);g=0==S._Number.randomOneHalf()?g:-g;let p=d?S._Number.randomOneBySection(d[0],d[1]):S._Number.randomOneBySection(1,2.5),f=m?S._Number.randomOneBySection(m[0],m[1]):0,L={alpha:!0,move:!1,vinish:!1};y.moveCaller=L;let w=0,b=u?S._Number.randomOneBySection(u[0],u[1]):S._Number.randomOneBySection(100,300);return i._frameLoop(1,L,()=>{y.x+=f,y.rotation+=g,y.alpha<1&&L.alpha&&(y.alpha+=.05,w=y.y++,y.alpha>=1&&(L.alpha=!1,L.move=!0)),w<b&&L.move&&(w=y.y+=p)>=b&&(L.move=!1,L.vinish=!0),L.vinish&&(y.alpha-=.03,y.y+=p,(y.alpha<=0||p<=0)&&(y.removeSelf(),Laya.timer.clearAll(L)))}),y},e._fallingRotate=function(e,t,n,o,r,l,s,c,h,u,_,d,m){const y=new a(e,t,n,o,r,null,l,s,m);let g=d?S._Number.randomOneBySection(d[0],d[1]):S._Number.randomOneBySection(0,1);g=0==S._Number.randomOneHalf()?g:-g;const p=h?S._Number.randomOneBySection(h[0],h[1]):S._Number.randomOneBySection(1,2.5),f=u?S._Number.randomOneBySection(u[0],u[1]):S._Number.randomOneBySection(0,.25),L=S._Number.randomOneHalf();let w=_?S._Number.randomOneBySection(_[0],_[1]):S._Number.randomOneBySection(1,10);w=1===S._Number.randomOneHalf()?w:-w;const b=S._Number.randomOneHalf(),O=S._Number.randomOneHalf();let v=0;const N=c?S._Number.randomOneBySection(c[0],c[1]):S._Number.randomOneBySection(100,300),C={appear:!0,move:!1,vinish:!1,scaleSub:!0,scaleAdd:!1};return y.moveCaller=C,i._frameLoop(1,C,()=>{y.rotation+=g,1===O?1===b?y.skewX+=w:y.skewY+=w:1===L?C.scaleSub?(y.scaleX-=f,y.scaleX<=0&&(C.scaleSub=!1)):(y.scaleX+=f,y.scaleX>=1&&(C.scaleSub=!0)):C.scaleSub?(y.scaleY-=f,y.scaleY<=0&&(C.scaleSub=!1)):(y.scaleY+=f,y.scaleY>=1&&(C.scaleSub=!0)),C.appear&&(y.alpha+=.05,y.y+=p/2,y.alpha>=1&&(C.appear=!1,C.move=!0)),C.move&&(y.y+=p,(v+=p)>=N&&(C.move=!1,C.vinish=!0)),C.vinish&&(y.alpha-=.01,y.y+=p,y.alpha<=0&&(y.removeSelf(),Laya.timer.clearAll(C)))}),y},e._fallingVertical=function(e,t,n,o,r,l,s,c,h,u,_,d){let m=new a(e,t,n,o,r,l,s,c,h),y=_?S._Number.randomOneBySection(_[0],_[1]):S._Number.randomOneBySection(4,8),g=d?S._Number.randomOneBySection(d[0],d[1]):S._Number.randomOneBySection(.25,.45),p=0,f={alpha:!0,move:!1,vinish:!1};m.moveCaller=f;let L=u?S._Number.randomOneBySection(u[0],u[1]):S._Number.randomOneBySection(100,300),w=m.y;return i._frameLoop(1,f,()=>{m.alpha<1&&f.alpha&&(m.alpha+=.04,m.alpha>=1&&(f.alpha=!1,f.move=!0)),f.alpha||(p+=g,m.y+=y+p),!f.alpha&&f.move&&m.y-w>=L&&(f.move=!1,f.vinish=!0),f.vinish&&(m.alpha-=.03,m.alpha<=0&&(Laya.timer.clearAll(f),m.removeSelf()))}),m},e._fallingVertical_Reverse=function(e,t,n,o,r,l,s,c,h,u,_,d){let m=new a(e,t,n,o,r,l,s,c,h),y=_?S._Number.randomOneBySection(_[0],_[1]):S._Number.randomOneBySection(4,8),g=d?S._Number.randomOneBySection(d[0],d[1]):S._Number.randomOneBySection(.25,.45),p=0,f={alpha:!0,move:!1,vinish:!1};m.moveCaller=f;let L=u?S._Number.randomOneBySection(u[0],u[1]):S._Number.randomOneBySection(100,300),w=m.y;return i._frameLoop(1,f,()=>{m.alpha<1&&f.alpha&&(m.alpha+=.04,m.alpha>=1&&(f.alpha=!1,f.move=!0)),f.alpha||(p+=g,m.y+=y+p),!f.alpha&&f.move&&m.y-w<=L&&(f.move=!1,f.vinish=!0),f.vinish&&(m.alpha-=.03,m.alpha<=0&&(Laya.timer.clearAll(f),m.removeSelf()))}),m},e._slowlyUp=function(e,t,n,o,r,l,s,c,h,u,_,d){let m=new a(e,t,n,o,r,l,s,c,h),y=_?S._Number.randomOneBySection(_[0],_[1]):S._Number.randomOneBySection(1.5,2),g=d?S._Number.randomOneBySection(d[0],d[1]):S._Number.randomOneBySection(.001,.005),p=0,f={alpha:!0,move:!1,vinish:!1};m.moveCaller=f;let L=m.y,w=0,b=u?S._Number.randomOneBySection(u[0],u[1]):S._Number.randomOneBySection(-250,-600);return i._frameLoop(1,f,()=>{m.alpha<1&&f.alpha&&(m.alpha+=.03,m.alpha>=1&&(f.alpha=!1,f.move=!0)),w>b&&f.move||(f.move=!1,f.vinish=!0),f.vinish&&(m.alpha-=.02,m.scaleX-=.005,m.scaleY-=.005,m.alpha<=0&&(m.removeSelf(),Laya.timer.clearAll(f))),p+=g,m.y-=y+p,w=L-m.y}),m},e._sprayRound=function(e,t,n,o,r,l,s,c,h,u,_,d){let m=new a(e,t,[0,0],n,o,r,l,s,d),y=t||new Laya.Point(0,0),g=0;const p=h?S._Number.randomOneBySection(h[0],h[1]):S._Number.randomOneBySection(30,50),f=c?S._Number.randomOneBySection(c[0],c[1]):S._Number.randomOneBySection(100,200),L=f/p,w=u?S._Number.randomOneBySection(u[0],u[1]):S._Number.randomOneBySection(0,360);let b=_?S._Number.randomOneBySection(_[0],_[1]):S._Number.randomOneBySection(0,20);b=0==S._Number.randomOneHalf()?b:-b;const O=1/S._Number.randomOneInt(60);let v={alpha:!0,move:!1,vinish:!1};return m.moveCaller=v,i._frameLoop(1,v,()=>{if(m.rotation+=b,m.alpha<1&&v.alpha)m.alpha+=.5,m.alpha>=1&&(v.alpha=!1,v.move=!0);else if(v.vinish){m.alpha-=O,m.alpha<=0&&(m.removeSelf(),Laya.timer.clearAll(v)),g+=L/2;let e=S._Point.getRoundPos(w,g,y);m.pos(e.x,e.y)}else{g+=L;let e=S._Point.getRoundPos(w,g,y);m.pos(e.x,e.y),g>f&&(v.move=!1,v.vinish=!0)}}),m},e._spray=function(e,t,n,o,r,l,s,c,h,u,_,d,m){let y=new a(e,t,[0,0],n,o,r,l,s,m),g=t||new Laya.Point(0,0),p=_?S._Number.randomOneBySection(_[0],_[1]):S._Number.randomOneBySection(3,10),f=d?S._Number.randomOneBySection(d[0],d[1]):S._Number.randomOneBySection(.25,.45),L=0,w={alpha:!0,move:!1,vinish:!1};y.moveCaller=w;let b=0,O=c?S._Number.randomOneBySection(c[0],c[1]):S._Number.randomOneBySection(100,200),v=h?S._Number.randomOneBySection(h[0],h[1]):S._Number.randomOneBySection(0,360),N=u?S._Number.randomOneBySection(u[0],u[1]):S._Number.randomOneBySection(0,20);return N=0==S._Number.randomOneHalf()?N:-N,i._frameLoop(1,w,()=>{if(y.rotation+=N,y.alpha<1&&w.alpha)y.alpha+=.5,y.alpha>=1&&(w.alpha=!1,w.move=!0);else{b<O&&w.move||(w.move=!1,w.vinish=!0),w.vinish&&(y.alpha-=.05,y.alpha<=.3&&(y.removeSelf(),Laya.timer.clearAll(w))),b+=p+(L+=f);let e=S._Point.getRoundPos(v,b,g);y.pos(e.x,e.y)}}),y},e._outsideBox=function(e,t,n,o,r,l,s,c,h,u,_,d,m,y){let g=new a(e,t,[0,0],o,r,l,s,c,h),p=0;n=n||[100,100],u=u||60,"x"==(0==S._Number.randomOneHalf()?"x":"y")?(0==S._Number.randomOneHalf()?(g.x+=n[0],p=0==S._Number.randomOneHalf()?S._Number.randomOneBySection(0,90-u):S._Number.randomOneBySection(0,-90+u)):(g.x-=n[0],p=S._Number.randomOneBySection(90+u,270-u)),g.y+=S._Number.randomOneBySection(-n[1],n[1])):(0==S._Number.randomOneHalf()?(g.y-=n[1],p=S._Number.randomOneBySection(180+u,360-u)):(g.y+=n[1],p=S._Number.randomOneBySection(0+u,180-u)),g.x+=S._Number.randomOneBySection(-n[0],n[0]));let f=S._Point.angleByPoint(p),L=_?S._Number.randomOneBySection(_[0],_[1]):S._Number.randomOneBySection(20,50),w=m?S._Number.randomOneBySection(m[0],m[1]):S._Number.randomOneBySection(.5,1),b=y?S._Number.randomOneBySection(y[0],y[1]):S._Number.randomOneBySection(.25,.45),O=0,v=d?S._Number.randomOneBySection(d[0],d[1]):S._Number.randomOneBySection(0,20),N=new Laya.Point(g.x,g.y),C={alpha:!0,move:!1,vinish:!1};return g.moveCaller=C,i._frameLoop(1,C,()=>{g.rotation+=v,C.alpha?(g.alpha+=.5,g.alpha>=1&&(C.alpha=!1,C.move=!0)):C.move?N.distance(g.x,g.y)>=L&&(C.move=!1,C.vinish=!0):C.vinish&&(g.alpha-=.05,g.alpha<=.3&&(g.removeSelf(),Laya.timer.clearAll(C))),C.alpha||(O+=b,g.x+=f.x*(w+O),g.y+=f.y*(w+O))}),g},e._moveToTargetToMove=function(e,t,n,o,r,l,s,c,h,u,_,d,m,y){let g=new a(e,t,[0,0],n,o,r,s,c,h),p=t||new Laya.Point(0,0),f=m?S._Number.randomOneBySection(m[0],m[1]):S._Number.randomOneBySection(5,6),L=y?S._Number.randomOneBySection(y[0],y[1]):S._Number.randomOneBySection(.25,.45),w=0,b={alpha:!0,move1:!1,stop:!1,move2:!1,vinish:!1};g.moveCaller=b;let O=0,v=u?S._Number.randomOneBySection(u[0],u[1]):S._Number.randomOneBySection(100,200),N=_?S._Number.randomOneBySection(_[0],_[1]):S._Number.randomOneBySection(100,200),C=l?S._Number.randomOneBySection(l[0],l[1]):S._Number.randomOneBySection(0,360);return g.rotation=C-90,d?S._Number.randomOneBySection(d[0],d[1]):S._Number.randomOneBySection(0,20),i._frameLoop(1,b,()=>{b.alpha?(O+=f+(w+=L),g.alpha+=.5,g.alpha>=1&&(b.alpha=!1,b.move1=!0)):b.move1?(O+=f+(w+=L))>=v&&(b.move1=!1,b.stop=!0):b.stop?(O+=.1,(w-=.3)<=0&&(b.stop=!1,b.move2=!0)):b.move2?(O+=f+(w+=L/2))>=v+N&&(b.move2=!1,b.vinish=!0):b.vinish&&(O+=.5,g.alpha-=.05,g.alpha<=0&&(g.removeSelf(),Laya.timer.clearAll(b)));let e=S._Point.getRoundPos(C,O,p);g.pos(e.x,e.y)}),g},e._AnnularInhalation=function(e,a,n,o,r,l,s,c,h,u){let _=new Laya.Image;e.addChild(_),r=r||[25,50],_.width=S._Number.randomCountBySection(r[0],r[1])[0],_.height=l?S._Number.randomCountBySection(l[0],l[1])[0]:_.width,_.pivotX=_.width/2,_.pivotY=_.height/2,_.skin=s?S._Array.randomGetOut(s)[0]:t[S._Number.randomCountBySection(0,12)[0]];let d=S._Number.randomCountBySection(n[0],n[1])[0];_.alpha=0;let m=c?S._Number.randomCountBySection(c[0],c[1])[0]:S._Number.randomCountBySection(5,10)[0],y=o?S._Number.randomCountBySection(o[0],o[1])[0]:S._Number.randomCountBySection(0,360)[0],g={},p=0;return h=h||.35,i._frameLoop(1,g,()=>{_.alpha<1?(_.alpha+=.05,d-=m/2+(p+=h/5)):d-=m+(p+=h);let e=S._Point.getRoundPos(y,d,a);_.pos(e.x,e.y),(e.distance(a.x,a.y)<=20||e.distance(a.x,a.y)>=1e3)&&(_.removeSelf(),Laya.timer.clearAll(g))}),_}}(n=e._Particle||(e._Particle={})),function(e){class a extends Laya.Image{constructor(e,a,n,o,r,i,l,s){if(super(),!e.parent)return;e.addChild(this),this.skin=o?S._Array.randomGetOne(o):t.星星1,this.width=i?S._Number.randomOneBySection(i[0],i[1]):80,this.height=l?S._Number.randomOneBySection(l[0],l[1]):this.width,this.pivotX=this.width/2,this.pivotY=this.height/2;let c=n?S._Point.randomPointByCenter(a,n[0],n[1],1):S._Point.randomPointByCenter(a,100,100,1);this.pos(c[0].x,c[0].y);let h=[];h[0]=r?S._Number.randomOneBySection(r[0][0],r[1][0]):S._Number.randomOneBySection(10,255),h[1]=r?S._Number.randomOneBySection(r[0][1],r[1][1]):S._Number.randomOneBySection(200,255),h[2]=r?S._Number.randomOneBySection(r[0][2],r[1][2]):S._Number.randomOneBySection(10,255),h[3]=r?S._Number.randomOneBySection(r[0][3],r[1][3]):S._Number.randomOneBySection(1,1),d._colour(this,h),this.alpha=0,this.zOrder=s||1e3}}e._GlitterImage=a,e._blinkStar=function(e,t,n,o,r,i,l,s,c,h,u){let _=new a(e,t,n,o,r,i,l,u);_.scaleX=0,_.scaleY=0;let d=s?S._Number.randomOneBySection(s[0],s[1]):S._Number.randomOneBySection(.8,1.2),m=c?S._Number.randomOneBySection(c[0],c[1]):S._Number.randomOneBySection(.01,.02),y=h?S._Number.randomOneInt(h[0],h[1]):S._Number.randomOneInt(0,5);y=0==S._Number.randomOneHalf()?-y:y;let g={appear:!0,scale:!1,vanish:!1};return _.moveCaller=g,Laya.timer.frameLoop(1,g,()=>{g.appear?(_.alpha+=.1,_.rotation+=y,_.scaleX=_.scaleY+=m,_.alpha>=1&&(g.appear=!1,g.scale=!0)):g.scale?(_.rotation+=y,_.scaleX=_.scaleY+=m,_.scaleX>d&&(g.scale=!1,g.vanish=!0)):g.vanish&&(_.rotation-=y,_.alpha-=.015,_.scaleX-=.01,_.scaleY-=.01,_.scaleX<=0&&(_.removeSelf(),Laya.timer.clearAll(g)))}),_},e._simpleInfinite=function(e,a,n,o,r,i,l,s){let c=new Laya.Image;e.addChild(c),c.width=o,c.height=r,c.pos(a,n),c.skin=l||t.光圈1,c.alpha=0,c.zOrder=i||0;let h=!0,u={};return Laya.timer.frameLoop(1,u,()=>{h?(c.alpha+=s?2*s:.02,c.alpha>=1&&(h=!1,u.end=!0)):(c.alpha-=s||.01,c.alpha<=0&&(u.end?(Laya.timer.clearAll(u),c.removeSelf()):h=!0))}),c}}(o=e._Glitter||(e._Glitter={})),function(e){class a extends Laya.Image{constructor(e,a,n,o,r,i){super(),e.addChild(this),this.skin=a?S._Array.randomGetOne(a):t.圆形发光1,this.width=o?S._Number.randomOneBySection(o[0],o[1]):80,this.height=r?S._Number.randomOneBySection(r[0],r[1]):this.width,this.pivotX=this.width/2,this.pivotY=this.height/2;let l=[];l[0]=n?S._Number.randomOneBySection(n[0][0],n[1][0]):S._Number.randomOneBySection(0,255),l[1]=n?S._Number.randomOneBySection(n[0][1],n[1][1]):S._Number.randomOneBySection(0,255),l[2]=n?S._Number.randomOneBySection(n[0][2],n[1][2]):S._Number.randomOneBySection(0,255),l[3]=n?S._Number.randomOneBySection(n[0][3],n[1][3]):S._Number.randomOneBySection(0,255),d._colour(this,l),this.zOrder=i||0,this.alpha=0,this.scaleX=0,this.scaleY=0}}e._circulationImage=a,e._corner=function(e,t,n,o,r,l,s,c,h){if(t.length<=1)return;let u=new a(e,n,o,r,l,s);new a(e,n,o,r,l,s).filters=u.filters,u.pos(t[0][0],t[0][1]),u.alpha=1;let _={num:0,alpha:!0,move:!1};u.moveCaller=_;let d=0;u.scale(1,1),i._frameLoop(1,_,()=>{let t=new a(e,n,o,r,l,s);t.filters=u.filters,t.x=u.x,t.y=u.y,t.rotation=u.rotation,t.alpha=1,t.zOrder=-1,t.scaleX=u.scaleX,t.scaleY=u.scaleY,f.fadeOut(t,1,0,200,0,()=>{t.removeSelf()}),null==u.parent&&Laya.timer.clearAll(_),_.num++,n&&(_.num>n.length?_.num=0:u.skin=n[_.num])});var m=()=>{let e=[t[d][0],t[d][1]],a=new Laya.Point(u.x,u.y).distance(e[0],e[1]);c&&(u.rotation=S._Point.pointByAngle(u.x-e[0],u.y-e[1])+180);let n=100*h+a/5;d==t.length+1&&(e=[t[0][0],t[0][1]]),f.move(u,e[0],e[1],n,()=>{++d==t.length&&(d=0),m()})};return m(),u}}(r=e._circulation||(e._circulation={}))}(y=e.Effects2D||(e.Effects2D={})),function(e){e._switch=!0,e._createButton=function(){new Laya.Sprite,new Laya.Image,new Laya.Label},e._Type={no:"no",largen:"largen",reduce:"reduce"},e._Use={get value(){return this.Click_name?this.Click_name:null},set value(e){this.Click_name=e}},e._on=function(o,r,i,l,s,c,h){let u;switch(o){case e._Type.no:u=new t;break;case e._Type.largen:u=new a;break;case e._Type.reduce:u=new n;break;default:u=new t}r.on(Laya.Event.MOUSE_DOWN,i,l),r.on(Laya.Event.MOUSE_MOVE,i,s),r.on(Laya.Event.MOUSE_UP,i,c),r.on(Laya.Event.MOUSE_OUT,i,h),r.on(Laya.Event.MOUSE_DOWN,i,u.down),r.on(Laya.Event.MOUSE_MOVE,i,u.move),r.on(Laya.Event.MOUSE_UP,i,u.up),r.on(Laya.Event.MOUSE_OUT,i,u.out)},e._off=function(n,o,r,i,l,s,c){let h;switch(n){case e._Type.no:h=new t;break;case e._Type.largen:case e._Type.reduce:h=new a;break;default:h=new t}o._off(Laya.Event.MOUSE_DOWN,r,i),o._off(Laya.Event.MOUSE_MOVE,r,l),o._off(Laya.Event.MOUSE_UP,r,s),o._off(Laya.Event.MOUSE_OUT,r,c),o._off(Laya.Event.MOUSE_DOWN,r,h.down),o._off(Laya.Event.MOUSE_MOVE,r,h.move),o._off(Laya.Event.MOUSE_UP,r,h.up),o._off(Laya.Event.MOUSE_OUT,r,h.out)};class t{down(){}move(){}up(){}out(){}}e._NoEffect=t;class a{down(t){t.currentTarget.scale(1.1,1.1),w._playSound(e._audioUrl)}move(){}up(e){e.currentTarget.scale(1,1)}out(e){e.currentTarget.scale(1,1)}}e._Largen=a;class n{down(t){t.currentTarget.scale(.9,.9),w._playSound(e._audioUrl)}move(){}up(e){e.currentTarget.scale(1,1)}out(e){e.currentTarget.scale(1,1)}}e._Reduce=n}(g=e.Click||(e.Click={})),function(e){function moveTo(t,a,n,o,r,i,l=0,s=!0,c,h){let u=t.transform.position.clone();if(0==n||null==n)return t.transform.position=a.clone(),void(i&&i.apply(o));(h<=0||null==h)&&(h=e.frameRate);let _=function(){t.transform&&(t.transform.position=u),c&&c()};Laya.timer.once(l,t,function(){Laya.timer.frameLoop(h,t,_)});let d=Laya.Tween.to(u,{x:a.x,y:a.y,z:a.z},n,r,Laya.Handler.create(t,function(){t.transform&&(t.transform.position=a.clone(),Laya.timer.clear(t,_)),i&&i.apply(o)}),l,s);e.tweenMap[t.id]||(e.tweenMap[t.id]=[]),e.tweenMap[t.id].push(d)}function rotateTo(t,a,n,o,r,i,l,s,c,h){let u=t.transform.localRotationEuler.clone();if(0==n||null==n)return t.transform.localRotationEuler=a.clone(),void(i&&i.apply(o));(h<=0||null==h)&&(h=e.frameRate);let _=function(){t.transform&&(t.transform.localRotationEuler=u),c&&c()};Laya.timer.once(l,t,function(){Laya.timer.frameLoop(h,t,_)});let d=Laya.Tween.to(u,{x:a.x,y:a.y,z:a.z},n,r,Laya.Handler.create(t,function(){t.transform&&(t.transform.localRotationEuler=a.clone(),Laya.timer.clear(t,_)),i&&i.apply(o)}),l,s);e.tweenMap[t.id]||(e.tweenMap[t.id]=[]),e.tweenMap[t.id].push(d)}e.tweenMap={},e.frameRate=1,e.moveTo=moveTo,e.rotateTo=rotateTo,e.scaleTo=function(t,a,n,o,r,i,l,s,c,h){let u=t.transform.localScale.clone();if(0==n||null==n)return t.transform.localScale=a.clone(),void(i&&i.apply(o));(h<=0||null==h)&&(h=e.frameRate);let _=function(){t.transform.localScale=u.clone(),c&&c()};Laya.timer.once(l,this,function(){Laya.timer.frameLoop(h,t,_)});let d=Laya.Tween.to(u,{x:a.x,y:a.y,z:a.z},n,r,Laya.Handler.create(t,function(){t.transform.localScale=a.clone(),Laya.timer.clear(t,_),i&&i.apply(o)}),l,s);e.tweenMap[t.id]||(e.tweenMap[t.id]=[]),e.tweenMap[t.id].push(d)},e.ClearTween=function(t){let a=e.tweenMap[t.id];if(a&&a.length)for(;a.length>0;)a.pop().clear();Laya.timer.clearAll(t)},e.rock=function(e,t,a,n,o,r,i){r||(r=0);let l=new Laya.Vector3(e.transform.localRotationEulerX+t.x,e.transform.localRotationEulerY+t.y,e.transform.localRotationEulerZ+t.z);rotateTo(e,l,a/2,n,i,()=>{let r=new Laya.Vector3(e.transform.localRotationEulerX-2*t.x,e.transform.localRotationEulerY-2*t.y,e.transform.localRotationEulerZ-2*t.z);rotateTo(e,r,a,n,i,()=>{let r=new Laya.Vector3(e.transform.localRotationEulerX+t.x,e.transform.localRotationEulerY+t.y,e.transform.localRotationEulerZ+t.z);rotateTo(e,r,a/2,n,i,()=>{o&&o()})})},r)},e.moveRotateTo=function(e,t,a,n,o,r,i,l,s,c){moveTo(e,t.transform.position,a,n,o,null,i,l,s,c),rotateTo(e,t.transform.localRotationEuler,a,n,o,r,i,l,null,c)}}(p=e.Animation3D||(e.Animation3D={})),function(e){function bombs_Appear(e,t,a,n,o,r,i,l){e.scale(0,0),e.alpha=t,Laya.Tween.to(e,{scaleX:n,scaleY:n,alpha:1,rotation:o},r,Laya.Ease.cubicInOut,Laya.Handler.create(this,function(){Laya.Tween.to(e,{scaleX:a,scaleY:a,rotation:0},r/2,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{scaleX:a+(n-a)/3,scaleY:a+(n-a)/3,rotation:0},r/3,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{scaleX:a,scaleY:a,rotation:0},r/4,null,Laya.Handler.create(this,function(){i&&i()}),0)}),0)}),0)}),l||0)}function bombs_Vanish(e,t,a,n,o,r,i){Laya.Tween.to(e,{scaleX:t,scaleY:t,alpha:a,rotation:n},o,Laya.Ease.cubicOut,Laya.Handler.create(this,function(){r&&r()}),i||0)}e._clearAll=function(e){for(let t=0;t<e.length;t++)Laya.Tween.clearAll(e[t])},e.circulation_scale=function(e,t,a,n,o){Laya.Tween.to(e,{scaleX:1+t,scaleY:1+t},a,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{scaleX:1-t,scaleY:1-t},a/2,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{scaleX:1,scaleY:1},a/2,null,Laya.Handler.create(this,function(){o&&o()}),0)}),0)}),n||0)},e.leftRight_Shake=function(e,t,a,n,o,r){n||(n=0),r||(g._switch=!1),Laya.Tween.to(e,{x:e.x-t},a,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{x:e.x+2*t},a,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{x:e.x-t},a,null,Laya.Handler.create(this,function(){o&&o(),r||(g._switch=!0)}))}))}),n)},e.rotate=function(e,t,a,n,o){Laya.Tween.to(e,{rotation:t},a,null,Laya.Handler.create(e,function(){o&&o()}),n||0)},e.upDown_Overturn=function(e,t,a){Laya.Tween.to(e,{scaleY:0},t,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{scaleY:1},t,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{scaleY:0},t,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{scaleY:1},t,null,Laya.Handler.create(this,function(){null===a&&void 0===a||a()}),0)}),0)}),0)}),0)},e.leftRight_Overturn=function(e,t,a){Laya.Tween.to(e,{scaleX:0},t,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{scaleX:1},t,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{scaleX:0},t,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{scaleX:1},t,null,Laya.Handler.create(this,function(){}),0),null!==a&&a()}),0)}),0)}),0)},e.upDwon_Shake=function(e,t,a,n,o){Laya.Tween.to(e,{y:e.y+t},a,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{y:e.y-2*t},a,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{y:e.y+t},a,null,Laya.Handler.create(this,function(){null!==o&&o()}))}))}),n)},e.fadeOut=function(e,t,a,n,o,r,i){e.alpha=t,i&&(g._switch=!1),Laya.Tween.to(e,{alpha:a},n,null,Laya.Handler.create(this,function(){r&&r(),i&&(g._switch=!0)}),o||0)},e.fadeOut_KickBack=function(e,t,a,n,o,r){e.alpha=t,Laya.Tween.to(e,{alpha:a},n,null,Laya.Handler.create(this,function(){null!==r&&r()}),o)},e.move_FadeOut=function(e,t,a,n,o,r,i,l){e.alpha=0,e.x=t,e.y=a,Laya.Tween.to(e,{alpha:1,x:n,y:o},r,null,Laya.Handler.create(this,function(){null!==l&&l()}),i)},e.move_Fade_Out=function(e,t,a,n,o,r,i,l){e.alpha=1,e.x=t,e.y=a,Laya.Tween.to(e,{alpha:0,x:n,y:o},r,null,Laya.Handler.create(this,function(){null!==l&&l()}),i)},e.move_FadeOut_Scale_01=function(e,t,a,n,o,r,i,l){e.alpha=0,e.targetX=0,e.targetY=0,e.x=t,e.y=a,Laya.Tween.to(e,{alpha:1,x:n,y:o,scaleX:1,scaleY:1},r,null,Laya.Handler.create(this,function(){null!==l&&l()}),i)},e.move_Scale=function(e,t,a,n,o,r,i,l,s,c,h){e.scaleX=t,e.scaleY=t,e.x=a,e.y=n,Laya.Tween.to(e,{x:o,y:r,scaleX:i,scaleY:i},l,c?null:c,Laya.Handler.create(this,function(){h&&h()}),s||0)},e.move_rotate=function(e,t,a,n,o,r){Laya.Tween.to(e,{rotation:t,x:a.x,y:a.y},n,null,Laya.Handler.create(e,()=>{r&&r()}),o||0)},e.rotate_Scale=function(e,t,a,n,o,r,i,l,s,c){e.scaleX=a,e.scaleY=n,e.rotation=t,Laya.Tween.to(e,{rotation:o,scaleX:r,scaleY:i},l,null,Laya.Handler.create(this,()=>{c&&c(),e.rotation=0}),s||0)},e.drop_Simple=function(e,t,a,n,o,r,i){e.y=t,Laya.Tween.to(e,{y:a,rotation:n},o,Laya.Ease.circOut,Laya.Handler.create(this,function(){null!==i&&i()}),r)},e.drop_KickBack=function(e,t,a,n,o,r,i,l){e.alpha=t,e.y=a,i||(i=0),Laya.Tween.to(e,{alpha:1,y:n+o},r,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{y:n-o/2},r/2,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{y:n},r/4,null,Laya.Handler.create(this,function(){l&&l()}),0)}),0)}),i)},e.drop_Excursion=function(e,t,a,n,o,r,i){Laya.Tween.to(e,{x:e.x+a,y:e.y+1*t/6},o,Laya.Ease.expoIn,Laya.Handler.create(this,function(){Laya.Tween.to(e,{x:e.x+a+50,y:t,rotation:n},o,null,Laya.Handler.create(this,function(){null!==i&&i()}),0)}),r)},e.goUp_Simple=function(e,t,a,n,o,r,i){e.y=t,e.rotation=a,Laya.Tween.to(e,{y:n,rotation:0},o,Laya.Ease.cubicOut,Laya.Handler.create(this,function(){null!==i&&i()}),r)},e.cardRotateX_TowFace=function(e,t,a,n,o){Laya.Tween.to(e,{scaleX:0},t,null,Laya.Handler.create(this,function(){S._Node.childrenVisible2D(e,!1),a&&a(),Laya.Tween.to(e,{scaleX:1},.9*t,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{scaleX:0},.8*t,null,Laya.Handler.create(this,function(){S._Node.childrenVisible2D(e,!0),Laya.Tween.to(e,{scaleX:1},.7*t,null,Laya.Handler.create(this,function(){o&&o()}),0)}),0)}),0)}),n)},e.cardRotateX_OneFace=function(e,t,a,n,o){Laya.Tween.to(e,{scaleX:0},a,null,Laya.Handler.create(this,function(){null!==t&&t(),Laya.Tween.to(e,{scaleX:1},a,null,Laya.Handler.create(this,function(){null!==o&&o()}),0)}),n)},e.cardRotateY_TowFace=function(e,t,a,n,o){Laya.Tween.to(e,{scaleY:0},t,null,Laya.Handler.create(this,function(){S._Node.childrenVisible2D(e,!1),a&&a(),Laya.Tween.to(e,{scaleY:1},t,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{scaleY:0},t,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{scaleY:1},1*t/2,null,Laya.Handler.create(this,function(){S._Node.childrenVisible2D(e,!0),o&&o()}),0)}),0)}),0)}),n)},e.cardRotateY_OneFace=function(e,t,a,n,o){Laya.Tween.to(e,{scaleY:0},a,null,Laya.Handler.create(this,function(){t&&t(),Laya.Tween.to(e,{scaleY:1},a,null,Laya.Handler.create(this,function(){o&&o()}),0)}),n||0)},e.move_changeRotate=function(e,t,a,n,o,r,i){let l=t*n+e.x*(1-n),s=a*n+e.y*(1-n);Laya.Tween.to(e,{x:l,y:s,rotation:45},r,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{x:t,y:a,rotation:0},r,null,Laya.Handler.create(this,function(){null!==i&&i()}),0)}),0)},e.bomb_LeftRight=function(e,t,a,n,o){Laya.Tween.to(e,{scaleX:t},a,Laya.Ease.cubicInOut,Laya.Handler.create(this,function(){Laya.Tween.to(e,{scaleX:.85},.5*a,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{scaleX:.9*t},.55*a,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{scaleX:.95},.6*a,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{scaleX:1},.65*a,null,Laya.Handler.create(this,function(){n&&n()}),0)}),0)}),0)}),0)}),o)},e.bombs_Appear=bombs_Appear,e.bombs_AppearAllChild=function(e,t,a,n,o,r,i,l,s){let c=0;i||(i=100);for(let s=0;s<e.numChildren;s++){let h=e.getChildAt(s);h.alpha=0,Laya.timer.once(c,this,()=>{h.alpha=1,e.numChildren,bombs_Appear(h,t,a,n,o,r,l)}),c+=i}},e.bombs_VanishAllChild=function(e,t,a,n,o,r,i){let l=0;r||(r=100);for(let s=0;s<e.numChildren;s++)e.getChildAt(s),Laya.timer.once(l,this,()=>{e.numChildren,bombs_Vanish(e,t,a,n,o,i)}),l+=r},e.bombs_Vanish=bombs_Vanish,e.swell_shrink=function(e,t,a,n,o,r){o||(o=0),Laya.Tween.to(e,{scaleX:a,scaleY:a,alpha:1},n,Laya.Ease.cubicInOut,Laya.Handler.create(this,function(){Laya.Tween.to(e,{scaleX:t,scaleY:t,rotation:0},n,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{scaleX:t+.5*(a-t),scaleY:t+.5*(a-t),rotation:0},.5*n,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{scaleX:t,scaleY:t,rotation:0},n,null,Laya.Handler.create(this,function(){r&&r()}),0)}),0)}),0)}),o)},e.move=function(e,t,a,n,o,r,i){Laya.Tween.to(e,{x:t,y:a},n,i||null,Laya.Handler.create(this,function(){o&&o()}),r||0)},e.move_Deform_X=function(e,t,a,n,o,r,i,l,s){e.alpha=0,e.x=t,e.rotation=a,Laya.Tween.to(e,{x:n,scaleX:1+o,scaleY:1+r,rotation:a/3,alpha:1},i,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{scaleX:1,scaleY:1,rotation:0},i,null,Laya.Handler.create(this,function(){null!==s&&s()}),0)}),l)},e.move_Deform_Y=function(e,t,a,n,o,r,i,l,s){e.alpha=0,t&&(e.y=t),e.rotation=a,Laya.Tween.to(e,{y:n,scaleX:1+o,scaleY:1+r,rotation:a/3,alpha:1},i,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{scaleX:1,scaleY:1,rotation:0},i,null,Laya.Handler.create(this,function(){null!==s&&s()}),0)}),l)},e.blink_FadeOut_v=function(e,t,a,n,o,r){e.alpha=t,Laya.Tween.to(e,{alpha:a},n,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{alpha:t},n,null,Laya.Handler.create(this,function(){null!==r&&r()}),0)}),o)},e.blink_FadeOut=function(e,t,a,n,o,r){e.alpha=t,o||(o=0),Laya.Tween.to(e,{alpha:t},n,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{alpha:a},n,null,Laya.Handler.create(this,function(){r&&r()}),0)}),o)},e.shookHead_Simple=function(e,t,a,n,o){let r=e.rotation;Laya.Tween.to(e,{rotation:r+t},a,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{rotation:r-2*t},a,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{rotation:r+t},a,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{rotation:r},a,null,Laya.Handler.create(this,function(){o&&o()}),0)}),0)}),0)}),n||0)},e.HintAni_01=function(e,t,a,n,o,r,i){e.alpha=0,Laya.Tween.to(e,{alpha:1,y:e.y-t},a,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{y:e.y-15},n,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{alpha:0,y:e.y+t+o},r,null,Laya.Handler.create(this,function(){null!==i&&i()}),0)}),0)}),0)},e.scale_Alpha=function(e,t,a,n,o,r,i,l,s,c,h){s||(s=0),h||(h=null),e.alpha=t,e.scaleX=a,e.scaleY=n,Laya.Tween.to(e,{scaleX:o,scaleY:r,alpha:i},l,h,Laya.Handler.create(this,function(){c&&c()}),s)},e.scale=function(e,t,a,n,o,r,i,l,s){e.scaleX=t,e.scaleY=a,Laya.Tween.to(e,{scaleX:n,scaleY:o},r,s||null,Laya.Handler.create(this,function(){l&&l()}),i||0)},e.rotate_Magnify_KickBack=function(e,t,a,n,o,r,i,l){e.alpha=0,e.scaleX=0,e.scaleY=0,Laya.Tween.to(e,{alpha:1,rotation:360+t,scaleX:1+a,scaleY:1+a},n,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{rotation:360-t/2,scaleX:1+a/2,scaleY:1+a/2},o,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{rotation:360+t/3,scaleX:1+a/5,scaleY:1+a/5},o,null,Laya.Handler.create(this,function(){Laya.Tween.to(e,{rotation:360,scaleX:1,scaleY:1},o,null,Laya.Handler.create(this,function(){e.rotation=0,null!==l&&l()}),0)}),i)}),0)}),r)}}(f=e.Animation2D||(e.Animation2D={})),function(e){e._sound={get switch(){return"0"!=Laya.LocalStorage.getItem("Setting_sound")},set switch(e){let t;t=e?1:0,Laya.LocalStorage.setItem("Setting_sound",t.toString())}},e._bgMusic={get switch(){return"0"!=Laya.LocalStorage.getItem("Setting_bgMusic")},set switch(e){let t;e?(t=1,Laya.LocalStorage.setItem("Setting_bgMusic",t.toString()),w._playMusic()):(t=0,Laya.LocalStorage.setItem("Setting_bgMusic",t.toString()),w._stopMusic())}},e._shake={get switch(){return"0"!=Laya.LocalStorage.getItem("Setting_shake")},set switch(e){let t;t=e?1:0,Laya.LocalStorage.setItem("Setting_shake",t.toString())}},e._createBtnSet=function(t,a,n,o,r,i,l){let s=new Laya.Image;return s.width=n||100,s.height=n||100,s.skin=r||"Frame/UI/icon_set.png",i?i.addChild(s):Laya.stage.addChild(s),s.pivotX=s.width/2,s.pivotY=s.height/2,s.x=t,s.y=a,s.zOrder=l||100,g._on(g._Type.largen,s,null,null,function(e){e.stopPropagation(),h._openScene(h._SceneName.Set)},null),e._BtnSet=s,e._BtnSet.name="BtnSetNode",s},e.btnSetAppear=function(t,a,n){e._BtnSet&&(t?f.scale_Alpha(e._BtnSet,0,1,1,1,1,1,t,0,t=>{e._BtnSet.visible=!0}):e._BtnSet.visible=!0,a&&(e._BtnSet.x=a),n&&(e._BtnSet.y=n))},e.btnSetVinish=function(t){e._BtnSet&&(t?f.scale_Alpha(e._BtnSet,1,1,1,1,1,0,t,0,t=>{e._BtnSet.visible=!1}):e._BtnSet.visible=!1)}}(L=e.Setting||(e.Setting={})),function(e){let t;!function(e){e.btn="Lwg/Voice/btn.wav",e.bgm="Lwg/Voice/bgm.mp3",e.victory="Lwg/Voice/guoguan.wav",e.defeated="Lwg/Voice/wancheng.wav",e.huodejinbi="Lwg/Voice/huodejinbi.wav"}(t=e._voiceUrl||(e._voiceUrl={})),e._playSound=function(e,a,n){e||(e=t.btn),a||(a=1),L._sound.switch&&Laya.SoundManager.playSound(e,a,Laya.Handler.create(this,function(){n&&n()}))},e._playDefeatedSound=function(e,a,n){e||(e=t.defeated),a||(a=1),L._sound.switch&&Laya.SoundManager.playSound(e,a,Laya.Handler.create(this,function(){n&&n()}))},e._playVictorySound=function(e,a,n){e||(e=t.victory),a||(a=1),L._sound.switch&&Laya.SoundManager.playSound(e,a,Laya.Handler.create(this,function(){n&&n()}))},e._playMusic=function(e,a,n){e||(e=t.bgm),a||(a=0),n||(n=0),L._bgMusic.switch&&Laya.SoundManager.playMusic(e,a,Laya.Handler.create(this,function(){}),n)},e._stopMusic=function(){Laya.SoundManager.stopMusic()}}(w=e.AudioAdmin||(e.AudioAdmin={})),function(e){let t,a,n,o,r,l,s,c,h;e.color_RGBtoHexString=function(e,t,a){return"#"+("00000"+(e<<16|t<<8|a).toString(16)).slice(-6)},function(e){e.formatNumber=function(e,t=0){let a;return a=e>=1e27?(e/1e27).toFixed(t)+"ae":e>=1e24?(e/1e24).toFixed(t)+"ad":e>=1e21?(e/1e21).toFixed(t)+"ac":e>=1e18?(e/1e18).toFixed(t)+"ab":e>=1e15?(e/1e15).toFixed(t)+"aa":e>=1e12?(e/1e12).toFixed(t)+"t":e>=1e9?(e/1e9).toFixed(t)+"b":e>=1e6?(e/1e6).toFixed(t)+"m":e>=1e3?(e/1e3).toFixed(t)+"k":Math.round(e).toString()},e.strAddNum=function(e,t){return(Number(e)+t).toString()},e.NumAddStr=function(e,t){return Number(t)+e}}(t=e._Format||(e._Format={})),function(t){t.tieByParent=function(e){const t=e.parent;e.x>t.width-e.width/2&&(e.x=t.width-e.width/2),e.x<e.width/2&&(e.x=e.width/2),e.y>t.height-e.height/2&&(e.y=t.height-e.height/2),e.y<e.height/2&&(e.y=e.height/2)},t.tieByStage=function(e,t){const a=e.parent,n=a.localToGlobal(new Laya.Point(e.x,e.y));t?n.x>Laya.stage.width-e.width/2&&(n.x=Laya.stage.width-e.width/2):n.x>Laya.stage.width&&(n.x=Laya.stage.width),t?n.x<e.width/2&&(n.x=e.width/2):n.x<0&&(n.x=0),t?n.y>Laya.stage.height-e.height/2&&(n.y=Laya.stage.height-e.height/2):n.y>Laya.stage.height&&(n.y=Laya.stage.height),t?n.y<e.height/2&&(n.y=e.height/2):n.y<0&&(n.y=0);const o=a.globalToLocal(n);e.pos(o.x,o.y)},t.simpleCopyImg=function(e){let t=new Laya.Image;return t.skin=e.skin,t.width=e.width,t.height=e.height,t.pivotX=e.pivotX,t.pivotY=e.pivotY,t.scaleX=e.scaleX,t.scaleY=e.scaleY,t.skewX=e.skewX,t.skewY=e.skewY,t.rotation=e.rotation,t.x=e.x,t.y=e.y,t},t.leaveStage=function(e,t){let a=e.parent.localToGlobal(new Laya.Point(e.x,e.y));return a.x>Laya.stage.width+10||a.x<-10?(t&&t(),!0):a.y>Laya.stage.height+10||a.y<-10?(t&&t(),!0):void 0},t.checkTwoDistance=function(e,t,a,n){let o=e.parent.localToGlobal(new Laya.Point(e.x,e.y)),r=t.parent.localToGlobal(new Laya.Point(t.x,t.y));return o.distance(r.x,r.y)<a&&n&&n(),o.distance(r.x,r.y)},t.zOrderByY=function(e,t,a){let n=[];if(0==e.numChildren)return n;for(let t=0;t<e.numChildren;t++){const a=e.getChildAt(t);n.push(a)}if(c.sortByProperty(n,"y"),t)for(let e=0;e<n.length;e++)n[e].zOrder=e;if(a){let e=[];for(let t=n.length-1;t>=0;t--){const a=n[t];console.log(a),a.zOrder=n.length-t,e.push(a)}return e}return n},t.changePivot=function(e,t,a,n){let o=e.pivotX,r=e.pivotY;n&&(t=Math.round(t),a=Math.round(a)),e.width&&(e.pivot(t,a),e.x+=e.pivotX-o,e.y+=e.pivotY-r)},t.changePivotCenter=function(e,t){let a,n,o=e.pivotX,r=e.pivotY;t&&(a=Math.round(e.width/2),n=Math.round(e.height/2)),e.width&&(e.pivot(e.width/2,e.height/2),e.x+=e.pivotX-o,e.y+=e.pivotY-r)},t.getChildArrByProperty=function(e,t,a){let n=[];for(let o=0;o<e.numChildren;o++){const r=e.getChildAt(o);r[t]==a&&n.push(r)}return n},t.randomChildren=function(t,a){let n=[],o=[];for(let e=0;e<t.numChildren;e++)o.push(e);let r=e._Array.randomGetOut(o,a);for(let e=0;e<r.length;e++)n.push(t.getChildAt(r[e]));return n},t.removeAllChildren=function(e){e.numChildren>0&&e.removeChildren(0,e.numChildren-1)},t.removeOneChildren=function(e,t){for(let a=0;a<e.numChildren;a++){const n=e.getChildAt(a);n.name==t&&n.removeSelf()}},t.checkChildren=function(e,t){let a=!1;for(let n=0;n<e.numChildren;n++)e.getChildAt(n).name==t&&(a=!0);return a},t.showExcludedChild2D=function(e,t,a){for(let n=0;n<e.numChildren;n++){let o=e.getChildAt(n);for(let e=0;e<t.length;e++)o.name==t[e]?o.visible=!(!a&&null!=a):o.visible=!a&&null!=a}},t.showExcludedChild3D=function(e,t,a){for(let n=0;n<e.numChildren;n++){let o=e.getChildAt(n);for(let e=0;e<t.length;e++)o.name==t[e]?o.active=!(!a&&null!=a):o.active=!a&&null!=a}},t.createPrefab=function(e,t,a,n,o){let r=Laya.Pool.getItemByCreateFun(o||e.json.props.name,e.create,e);return t&&t.addChild(r),a&&r.pos(a[0],a[1]),n&&(r.zOrder=n),r},t.childrenVisible2D=function(e,t){for(let a=0;a<e.numChildren;a++){const n=e.getChildAt(a);n.visible=!!t}},t.childrenVisible3D=function(e,t){for(let a=0;a<e.numChildren;a++){const n=e.getChildAt(a);n.active=!!t}},t.findChild3D=function findChild3D(e,t){var a;if(null!=(a=e.getChildByName(t)))return a;for(var n=null,o=0;o<e.numChildren;o++)if(null!=(n=findChild3D(e.getChildAt(o),t)))return n;return null},t.findChild2D=function findChild2D(e,t){var a;if(null!=(a=e.getChildByName(t)))return a;for(var n=null,o=0;o<e.numChildren;o++)if(null!=(n=findChild2D(e.getChildAt(o),t)))return n;return null},t.findChildByName2D=function(e,t){return[]}}(a=e._Node||(e._Node={})),function(e){e.randomOneHalf=function(){let e;return e=Math.floor(2*Math.random())},e.randomOneInt=function(e,t){return t?Math.round(Math.random()*(t-e))+e:Math.round(Math.random()*e)},e.randomCountBySection=function(e,t,a,n){let o=[];if(a||(a=1),t){for(;a>o.length;){let a;a=n||null==n?Math.floor(Math.random()*(t-e))+e:Math.random()*(t-e)+e,o.push(a),h.unique01(o)}return o}for(;a>o.length;){let t;t=n||null==n?Math.floor(Math.random()*e):Math.random()*e,o.push(t),h.unique01(o)}return o},e.randomOneBySection=function(e,t,a){let n;if(e>t&&(n=e,e=t,t=n),t){let n;return n=a?Math.floor(Math.random()*(t-e))+e:Math.random()*(t-e)+e}{let t;return t=a?Math.floor(Math.random()*e):Math.random()*e}}}(n=e._Number||(e._Number={})),function(t){t.getOtherLocal=function(e,t){let a=e.parent.localToGlobal(new Laya.Point(e.x,e.y));return t.globalToLocal(a)},t.angleByRad=function(e){return e/180*Math.PI},t.twoNodeDistance=function(e,t){return new Laya.Point(e.x,e.y).distance(t.x,t.y)},t.pointByAngle=function(e,t){let a=90-Math.atan2(e,t)*(180/Math.PI);return a<=0&&(a=270+(90+a)),a-90},t.angleByPoint=function(e){let t=(90-e)/(180/Math.PI),a=new Laya.Point(Math.sin(t),Math.cos(t));return a.normalize(),a},t.dotRotatePoint=function(e,t,a,n,o){let r=e+(a-e)*Math.cos(o*Math.PI/180)-(n-t)*Math.sin(o*Math.PI/180),i=t+(a-e)*Math.sin(o*Math.PI/180)+(n-t)*Math.cos(o*Math.PI/180);return new Laya.Point(r,i)},t.angleAndLenByPoint=function(e,t){const a={x:0,y:0};return a.x=t*Math.cos(e*Math.PI/180),a.y=t*Math.sin(e*Math.PI/180),new Laya.Point(a.x,a.y)},t.getRoundPos=function(e,t,a){var n=a,o=(t=t,2*Math.PI/360*e),r=n.x+Math.sin(o)*t,i=n.y-Math.cos(o)*t;return new Laya.Point(r,i)},t.randomPointByCenter=function(t,a,n,o){o||(o=1);let r=[];for(let i=0;i<o;i++){let o=e._Number.randomCountBySection(0,a,1,!1),i=e._Number.randomCountBySection(0,n,1,!1),l=0==e._Number.randomOneHalf()?o[0]:-o[0],s=0==e._Number.randomOneHalf()?i[0]:-i[0],c=new Laya.Point(t.x+l,t.y+s);r.push(c)}return r},t.getPArrBetweenTwoP=function(e,t,a){let n=[],o=t.x-e.x,r=t.y-e.y;for(let t=0;t<a;t++)n.push(new Laya.Point(e.x+o/a*t,e.y+r/a*t));return n.length>=1&&n.unshift(),n.length>=1&&n.pop(),n},t.reverseVector=function(e,t,a){let n;return n=new Laya.Point(e.x-t.x,e.y-t.y),a&&n.normalize(),n}}(o=e._Point||(e._Point={})),function(e){function twoSubV3(e,t,a){let n=new Laya.Vector3;if(Laya.Vector3.subtract(e,t,n),a){let e=new Laya.Vector3;return Laya.Vector3.normalize(n,e),e}return n}e.getMeshSize=function(e){if(e.meshRenderer){let t,a=e.meshRenderer.bounds.getExtent();return t=new Laya.Vector3(2*a.x,2*a.y,2*a.z)}},e.getSkinMeshSize=function(e){if(e.skinnedMeshRenderer){let t,a=e.skinnedMeshRenderer.bounds.getExtent();return t=new Laya.Vector3(2*a.x,2*a.y,2*a.z)}},e.twoNodeDistance=function(e,t){let a=e.transform.position,n=t.transform.position,o=new Laya.Vector3;return Laya.Vector3.subtract(a,n,o),Laya.Vector3.scalarLength(o)},e.twoPositionDistance=function(e,t){let a=twoSubV3(e,t);return Laya.Vector3.scalarLength(a)},e.twoSubV3=twoSubV3,e.maximumDistanceLimi=function(e,t,a){let n=new Laya.Vector3,o=t.transform.position;if(Laya.Vector3.subtract(o,e,n),Laya.Vector3.scalarLength(n)>=a){let o=new Laya.Vector3;Laya.Vector3.normalize(n,o);let r=e.x+o.x*a,i=e.y+o.y*a,l=e.z+o.z*a,s=new Laya.Vector3(r,i,l);return t.transform.position=s,s}},e.posToScreen=function(e,t){let a=new Laya.Vector4;t.viewport.project(e,t.projectionViewMatrix,a);let n=new Laya.Vector2;return n.x=a.x/Laya.stage.clientScaleX,n.y=a.y/Laya.stage.clientScaleY,n},e.reverseVector=function(e,t,a){let n=new Laya.Vector3(e.x-t.x,e.y-t.y,e.z-t.z);if(a){let e=new Laya.Vector3;return Laya.Vector3.normalize(n,e),e}return n},e.rayScanning=function(e,t,a,n){let o=new Laya.Ray(new Laya.Vector3(0,0,0),new Laya.Vector3(0,0,0)),r=new Array;if(e.viewportPointToRay(a,o),t.physicsSimulation.rayCastAll(o,r),n){let e;for(let t=0;t<r.length;t++)r[t].collider.owner.name==n&&(e=r[t]);return e}return r},e.animatorPlay=function(e,t,a,n){let o=e.getComponent(Laya.Animator);if(o)return n||(n=0),o.play(t,n,a),o;console.log(e.name,"没有动画组件")}}(r=e._3D||(e._3D={})),function(e){e.sk_indexControl=function(e,t){e.play(t,!0),e.player.currentTime=15e3/e.player.cacheFrameRate}}(l=e._Skeleton||(e._Skeleton={})),function(e){e.drawPieMask=function(e,t,a){e.cacheAs="bitmap";let n=new Laya.Sprite;return n.blendMode="destination-out",e.addChild(n),n.graphics.drawPie(e.width/2,e.height/2,e.width/2+10,t,a,"#000000")},e.screenshot=function(e,t){return e.drawToCanvas(e.width,e.height,e.x,e.y).toBase64("image/png",t||1)},e._texArr=[],e.cameraToSprite=function(t,a,n){const o=t.clone();t.scene.addChild(o),o.transform.position=t.transform.position,o.transform.localRotationEuler=t.transform.localRotationEuler,o.renderTarget=new Laya.RenderTexture(a.width,a.height),o.renderingOrder=-1,o.clearFlag=Laya.CameraClearFlags.Sky;const r=new Laya.Texture(o.renderTarget,Laya.Texture.DEF_UV);a.graphics.drawTexture(r,a.x,a.y,a.width,a.height),e._texArr.push(r),e._texArr.length>3&&(e._texArr[0].destroy(),e._texArr.shift()),i._frameOnce(5,this,()=>{o.destroy()})},e.drawToTex=function(e,t){return e.drawToTexture(e.width,e.height,e.x,e.y)},e.reverseRoundMask=function(e,t,n,o,r){null!=r&&1!=r||a.removeAllChildren(e);let i=new Laya.Sprite;return i.name="reverseRoundMask",i.blendMode="destination-out",e.cacheAs="bitmap",e.addChild(i),i.graphics.drawCircle(0,0,o,"#000000"),i.pos(t,n),i},e.reverseRoundrectMask=function(e,t,n,o,r,i,l){null!=l&&1!=l||a.removeAllChildren(e);let s=new Laya.Sprite;s.name="reverseRoundrectMask",s.blendMode="destination-out",e.cacheAs="bitmap",e.addChild(s),s.graphics.drawPath(0,0,[["moveTo",5,0],["lineTo",o-i,0],["arcTo",o,0,o,i,i],["lineTo",o,r-i],["arcTo",o,r,o-i,r,i],["lineTo",r-i,r],["arcTo",0,r,0,r-i,i],["lineTo",0,i],["arcTo",0,0,i,0,i],["closePath"]],{fillStyle:"#000000"}),s.width=o,s.height=r,s.pivotX=o/2,s.pivotY=r/2,s.pos(t,n)}}(s=e._Draw||(e._Draw={})),function(e){function objCopy(e){var t={};for(const a in e)if(e.hasOwnProperty(a)){const n=e[a];if("object"==typeof n)if(Array.isArray(n)){let e=h.copy(n);t[a]=e}else objCopy(n);else t[a]=n}return t}e.sortByProperty=function(e,t){return e.sort(function(e,a){var n=e[t],o=a[t];return isNaN(Number(n))||isNaN(Number(o))||(n=Number(n),o=Number(o)),n<o?-1:n>o?1:0}),e},e.diffProByTwo=function(t,a,n){for(var o=[],r=0;r<t.length;r++){for(var i=t[r],l=i[n],s=!1,c=0;c<a.length;c++)if(a[c][n]==l){s=!0;break}if(!s){let t=e.objCopy(i);o.push(t)}}return o},e.identicalPropertyObjArr=function(e,t,a){for(var n=[],o=0;o<e.length;o++){for(var r=e[o],i=(r[a],!1),l=0;l<t.length;l++)if(t[l][a]==name){i=!0;break}i&&n.push(r)}return n},e.objArrUnique=function(e,t){for(var a=0,n=e.length;a<n;a++){var o=a+1;for(n=e.length;o<n;o++)e[a][t]===e[o][t]&&(e.splice(o,1),o--,n--)}return e},e.getArrByValue=function(e,t){let a=[];for(let n=0;n<e.length;n++)e[n][t]&&a.push(e[n][t]);return a},e.arrCopy=function(e){var t=e instanceof Array?[]:{};for(var a in e)t[a]="object"==typeof e[a]?objCopy(e[a]):e[a];return t},e.modifyProValue=function(e,t,a){for(const n in e)if(Object.prototype.hasOwnProperty.call(e,n)){const o=e[n];o[t]&&(o[t]=a)}return e},e.objCopy=objCopy}(c=e._ObjArray||(e._ObjArray={})),function(e){function copy(e){for(var t=[],a=0;a<e.length;a++)t.push(e[a]);return t}e.addToarray=function(e,t){for(let a=0;a<t.length;a++){const n=t[a];e.push(n)}return e},e.inverted=function(e){let t=[];for(let a=e.length-1;a>=0;a--){const n=e[a];t.push(n)}return e=t},e.randomGetOut=function(t,a){a||(a=1);let n=e.copy(t),o=[];if(a>n.length)return"数组长度小于取出的数！";for(let e=0;e<a;e++){let e=Math.round(Math.random()*(n.length-1)),t=n[e];n.splice(e,1),o.push(t)}return o},e.randomGetOne=function(e){let t=copy(e);return t[Math.round(Math.random()*(t.length-1))]},e.copy=copy,e.unique01=function(e){for(var t=0,a=e.length;t<a;t++){var n=t+1;for(a=e.length;n<a;n++)e[t]===e[n]&&(e.splice(n,1),n--,a--)}return e},e.unique02=function(e){for(var t=[(e=e.sort())[0]],a=1,n=e.length;a<n;a++)e[a]!==e[a-1]&&t.push(e[a]);return t},e.unique03=function(e){return Array.from(new Set(e))},e.oneExcludeOtherOne=function(t,a){let n=e.copy(t),o=e.copy(a);for(let e=0;e<n.length;e++)for(let t=0;t<o.length;t++)n[e]==o[t]&&(n.splice(e,1),e--);return n},e.moreExclude=function(e,t){let a=[];for(let t=0;t<e.length;t++)for(let n=0;n<e[t].length;n++)a.push(e[t][n]);let n=copy(a),o=copy(n),r=[];for(let e=0;e<o.length;e++)r.push({name:o[e],num:0});for(let e=0;e<a.length;e++)for(let t=0;t<r.length;t++)a[e]==r[t].name&&r[t].num++;let i=[],l=[];for(let t=0;t<r.length;t++)r[t],r[t].num==e.length?i.push(r[t].name):l.push(r[t].name);return t?l:i}}(h=e._Array||(e._Array={}))}(S=e.Tools||(e.Tools={})),function(e){let t,n,r=[],i=[],l=[],s=[],c=[],u=[],_=[],d=[],m=[],y=[],g=[];e._sumProgress=0,e._loadOrder=[],e._loadOrderIndex=0,e._loadType=h._SceneName.PreLoad,function(e){e.scene3D="scene3D",e.prefab3D="prefab3D",e.mesh3D="mesh3D",e.material="material",e.texture="texture",e.texture2D="texture2D",e.pic2D="pic2D",e.scene2D="scene2D",e.prefab2D="prefab2D",e.json="json",e.skeleton="skeleton"}(t=e._ListName||(e._ListName={})),e._currentProgress={get value(){return this.len?this.len:0},set value(t){if(this.len=t,this.len>=e._sumProgress){if(0==e._sumProgress)return;console.log("当前进度条进度为:",e._currentProgress.value/e._sumProgress),console.log('所有资源加载完成！此时所有资源可通过例如 Laya.loader.getRes("url")获取'),o._notify(e._Event.complete)}else{let t=0;for(let a=0;a<=e._loadOrderIndex;a++)t+=e._loadOrder[a].length;this.len==t&&e._loadOrderIndex++,o._notify(e._Event.stepLoding)}}},function(e){e.importList="_PreLoad_importList",e.complete="_PreLoad_complete",e.stepLoding="_PreLoad_startLoding",e.progress="_PreLoad_progress"}(n=e._Event||(e._Event={})),e._remakeLode=function(){r=[],i=[],l=[],s=[],u=[],_=[],d=[],m=[],y=[],g=[],e._loadOrder=[],e._sumProgress=0,e._loadOrderIndex=0,e._currentProgress.value=0};e._PreLoadScene=class extends h._SceneBase{moduleOnAwake(){e._remakeLode()}lwgStartLoding(t){o._notify(e._Event.importList,t)}moduleEvent(){o._registerOnce(n.importList,this,a=>{for(const e in a)if(Object.prototype.hasOwnProperty.call(a,e))for(const n in a[e])if(Object.prototype.hasOwnProperty.call(a[e],n)){const o=a[e][n];switch(e){case t.json:y.push(o);break;case t.material:s.push(o);break;case t.mesh3D:l.push(o);break;case t.pic2D:_.push(o);break;case t.prefab2D:m.push(o);break;case t.prefab3D:i.push(o);break;case t.scene2D:d.push(o);break;case t.scene3D:r.push(o);break;case t.texture2D:u.push(o);break;case t.skeleton:g.push(o);break;case t.texture:c.push(o)}}e._loadOrder=[_,d,m,i,y,c,u,l,s,g,r];for(let t=0;t<e._loadOrder.length;t++)e._sumProgress+=e._loadOrder[t].length,e._loadOrder[t].length<=0&&(e._loadOrder.splice(t,1),t--);let n=this.lwgOpenAni();Laya.timer.once(n||0,this,()=>{o._notify(e._Event.stepLoding)})}),o._register(n.stepLoding,this,()=>{this.startLodingRule()}),o._registerOnce(n.complete,this,()=>{Laya.timer.once(this.lwgAllComplete(),this,()=>{if(h._SceneControl[e._loadType]=this._Owner,e._loadType!==h._SceneName.PreLoad)h._PreLoadCutIn.openName&&this._openScene(h._PreLoadCutIn.openName);else{for(const e in h._Moudel)if(Object.prototype.hasOwnProperty.call(h._Moudel,e)){const t=h._Moudel[e];t._init?t._init():console.log(t,"模块没有初始化函数！")}w._playMusic(),h._GuideControl.switch?this._openScene(a.Guide,!0,!1,()=>{e._loadType=h._SceneName.PreLoadCutIn}):this._openScene(a.Start,!0,!1,()=>{e._loadType=h._SceneName.PreLoadCutIn})}})}),o._register(n.progress,this,()=>{e._currentProgress.value++,e._currentProgress.value<e._sumProgress&&(console.log("当前进度条进度为:",e._currentProgress.value/e._sumProgress),this.lwgStepComplete())})}moduleOnEnable(){e._loadOrderIndex=0}startLodingRule(){if(e._loadOrder.length<=0)return console.log("没有加载项"),void o._notify(e._Event.complete);let t=0;for(let a=0;a<e._loadOrderIndex;a++)t+=e._loadOrder[a].length;let a=e._currentProgress.value-t;switch(e._loadOrder[e._loadOrderIndex]){case _:Laya.loader.load(_[a],Laya.Handler.create(this,e=>{null==e?console.log("XXXXXXXXXXX2D资源"+_[a]+"加载失败！不会停止加载进程！","数组下标为：",a,"XXXXXXXXXXX"):console.log("2D图片"+_[a]+"加载完成！","数组下标为：",a),o._notify(n.progress)}));break;case d:Laya.loader.load(d[a],Laya.Handler.create(this,e=>{null==e?console.log("XXXXXXXXXXX数据表"+d[a]+"加载失败！不会停止加载进程！","数组下标为：",a,"XXXXXXXXXXX"):console.log("2D场景"+d[a]+"加载完成！","数组下标为：",a),o._notify(n.progress)}),null,Laya.Loader.JSON);break;case r:Laya.Scene3D.load(r[a].url,Laya.Handler.create(this,e=>{null==e?console.log("XXXXXXXXXXX3D场景"+r[a].url+"加载失败！不会停止加载进程！","数组下标为：",a,"XXXXXXXXXXX"):(r[a].Scene=e,console.log("3D场景"+r[a].url+"加载完成！","数组下标为：",a)),o._notify(n.progress)}));break;case i:Laya.Sprite3D.load(i[a].url,Laya.Handler.create(this,e=>{null==e?console.log("XXXXXXXXXXX3D预设体"+i[a].url+"加载失败！不会停止加载进程！","数组下标为：",a,"XXXXXXXXXXX"):(i[a].Prefab=e,console.log("3D预制体"+i[a].url+"加载完成！","数组下标为：",a)),o._notify(n.progress)}));break;case l:Laya.Mesh.load(l[a].url,Laya.Handler.create(this,e=>{null==e?console.log("XXXXXXXXXXX3D网格"+l[a].url+"加载失败！不会停止加载进程！","数组下标为：",a,"XXXXXXXXXXX"):console.log("3D网格"+l[a].url+"加载完成！","数组下标为：",a),o._notify(n.progress)}));break;case c:Laya.loader.load(c[a].url,Laya.Handler.create(this,e=>{null==e?console.log("XXXXXXXXXXX2D纹理"+c[a].url+"加载失败！不会停止加载进程！","数组下标为：",a,"XXXXXXXXXXX"):(c[a].texture=e,console.log("纹理"+c[a].url+"加载完成！","数组下标为：",a)),o._notify(n.progress)}));break;case u:Laya.Texture2D.load(u[a].url,Laya.Handler.create(this,function(e){null==e?console.log("XXXXXXXXXXX2D纹理"+u[a].url+"加载失败！不会停止加载进程！","数组下标为：",a,"XXXXXXXXXXX"):(u[a].texture2D=e,console.log("3D纹理"+u[a].url+"加载完成！","数组下标为：",a)),o._notify(n.progress)}));break;case s:Laya.Material.load(s[a].url,Laya.Handler.create(this,e=>{null==e?console.log("XXXXXXXXXXX材质"+s[a].url+"加载失败！不会停止加载进程！","数组下标为：",a,"XXXXXXXXXXX"):console.log("材质"+s[a].url+"加载完成！","数组下标为：",a),o._notify(n.progress)}));break;case y:Laya.loader.load(y[a].url,Laya.Handler.create(this,e=>{null==e?console.log("XXXXXXXXXXX数据表"+y[a].url+"加载失败！不会停止加载进程！","数组下标为：",a,"XXXXXXXXXXX"):(y[a].dataArr=e.RECORDS,console.log("数据表"+y[a].url+"加载完成！","数组下标为：",a)),o._notify(n.progress)}),null,Laya.Loader.JSON);break;case g:g[a].templet.on(Laya.Event.ERROR,this,()=>{console.log("XXXXXXXXXXX骨骼动画"+g[a]+"加载失败！不会停止加载进程！","数组下标为：",a,"XXXXXXXXXXX"),o._notify(n.progress)}),g[a].templet.on(Laya.Event.COMPLETE,this,()=>{console.log("骨骼动画",g[a].templet.url,"加载完成！","数组下标为：",a),o._notify(n.progress)}),g[a].templet.loadAni(g[a].url);break;case m:Laya.loader.load(m[a].url,Laya.Handler.create(this,e=>{if(null==e)console.log("XXXXXXXXXXX数据表"+m[a].url+"加载失败！不会停止加载进程！","数组下标为：",a,"XXXXXXXXXXX");else{let t=new Laya.Prefab;t.json=e,m[a].prefab=t,console.log("2D预制体"+m[a].url+"加载完成！","数组下标为：",a)}o._notify(n.progress)}))}}lwgStepComplete(){}lwgAllComplete(){return 0}}}(b=e.LwgPreLoad||(e.LwgPreLoad={})),function(e){let t;function _init(){switch(s._Ues.value){case s._Tpye.WeChat:_loadPkg_Wechat();break;case s._Tpye.OPPO||s._Tpye.VIVO:_loadPkg_VIVO()}}function _loadPkg_VIVO(){if(e._pkgStep!==e._pkgInfo.length){let t=e._pkgInfo[e._pkgStep].name;Laya.Browser.window.qg.loadSubpackage({name:t,success:t=>{e._pkgStep++,_loadPkg_VIVO()},fail:e=>{console.error(`load ${t} err: `,e)}})}}function _loadPkg_Wechat(){if(e._pkgStep!==e._pkgInfo.length){let t=e._pkgInfo[e._pkgStep],a=t.name,n=t.root;Laya.Browser.window.wx.loadSubpackage({name:a,success:t=>{console.log(`load ${a} suc`),Laya.MiniAdpter.subNativeFiles[a]=n,Laya.MiniAdpter.nativefiles.push(n),e._pkgStep++,console.log("加载次数",e._pkgStep),_loadPkg_Wechat()},fail:e=>{console.error(`load ${a} err: `,e)}})}}e._pkgStep=0,e._pkgInfo=[{name:"sp1",root:"res"},{name:"sp2",root:"3DScene"},{name:"sp3",root:"3DPrefab"}],function(e){e.start="_ResPrepare_start",e.nextStep="_ResPrepare_nextStep",e.compelet="_ResPrepare_compelet"}(t=e._Event||(e._Event={})),e._init=_init,e._loadPkg_VIVO=_loadPkg_VIVO,e._loadPkg_Wechat=_loadPkg_Wechat;e._LwgInitScene=class extends h._SceneBase{lwgOpenAni(){return 1}moduleOnAwake(){}moduleOnStart(){_init(),r._init(),this._openScene(a.PreLoad),this._Owner.close()}}}(O=e._LwgInit||(e._LwgInit={})),function(e){e._execution={get value(){return this._Execution_executionNum?this._Execution_executionNum:Laya.LocalStorage.getItem("_Execution_executionNum")?Number(Laya.LocalStorage.getItem("_Execution_executionNum")):15},set value(e){console.log(e),this._Execution_executionNum=e,Laya.LocalStorage.setItem("_Execution_executionNum",e.toString())}},e._addExDate={get value(){return this._Execution_addExDate?this._Execution_addExDate:Laya.LocalStorage.getItem("_Execution_addExDate")?Number(Laya.LocalStorage.getItem("_Execution_addExDate")):(new Date).getDay()},set value(e){this._Execution_addExDate=e,Laya.LocalStorage.setItem("_Execution_addExDate",e.toString())}},e._addExHours={get value(){return this._Execution_addExHours?this._Execution_addExHours:Laya.LocalStorage.getItem("_Execution_addExHours")?Number(Laya.LocalStorage.getItem("_Execution_addExHours")):(new Date).getHours()},set value(e){this._Execution_addExHours=e,Laya.LocalStorage.setItem("_Execution_addExHours",e.toString())}},e._addMinutes={get value(){return this._Execution_addMinutes?this._Execution_addMinutes:Laya.LocalStorage.getItem("_Execution_addMinutes")?Number(Laya.LocalStorage.getItem("_Execution_addMinutes")):(new Date).getMinutes()},set value(e){this._Execution_addMinutes=e,Laya.LocalStorage.setItem("_Execution_addMinutes",e.toString())}},e._createExecutionNode=function(t){let a;Laya.loader.load("prefab/ExecutionNum.json",Laya.Handler.create(this,function(n){let o=new Laya.Prefab;o.json=n,a=Laya.Pool.getItemByCreateFun("prefab",o.create,o),t.addChild(a),a.getChildByName("Num").value=e._execution.value.toString(),a.pos(297,90),a.zOrder=50,e._ExecutionNode=a,e._ExecutionNode.name="_ExecutionNode"}))},e._addExecution=function(t,a,n){let o;Laya.loader.load("prefab/execution.json",Laya.Handler.create(this,function(t){let a=new Laya.Prefab;a.json=t,o=Laya.Pool.getItemByCreateFun("prefab",a.create,a),Laya.stage.addChild(o),o.x=Laya.stage.width/2,o.y=Laya.stage.height/2,o.zOrder=50,e._ExecutionNode&&f.move(o,e._ExecutionNode.x,e._ExecutionNode.y,800,()=>{f.fadeOut(o,1,0,200,0,()=>{f.upDwon_Shake(e._ExecutionNode,10,80,0,null),n&&n()})},100)}))},e.createConsumeEx=function(t){let a=Laya.Pool.getItemByClass("label",Laya.Label);a.name="label",Laya.stage.addChild(a),a.text="-2",a.fontSize=40,a.bold=!0,a.color="#59245c",a.x=e._ExecutionNode.x+100,a.y=e._ExecutionNode.y-a.height/2+4,a.zOrder=100,f.fadeOut(a,0,1,200,150,()=>{f.leftRight_Shake(e._ExecutionNode,15,60,0,null),f.fadeOut(a,1,0,600,400,()=>{})})};e.ExecutionNode=class extends h._ObjectBase{constructor(){super(...arguments),this.time=0,this.countNum=59,this.timeSwitch=!0}lwgOnAwake(){this.Num=this._Owner.getChildByName("Num"),this.CountDown=this._Owner.getChildByName("CountDown"),this.CountDown_board=this._Owner.getChildByName("CountDown_board"),this.countNum=59,this.CountDown.text="00:"+this.countNum,this.CountDown_board.text=this.CountDown.text;let t=new Date;t.getDate()!==e._addExDate.value?e._execution.value=15:t.getHours()==e._addExHours.value?(console.log(t.getMinutes(),e._addMinutes.value),e._execution.value+=t.getMinutes()-e._addMinutes.value,e._execution.value>15&&(e._execution.value=15)):e._execution.value=15,this.Num.value=e._execution.value.toString(),e._addExDate.value=t.getDate(),e._addExHours.value=t.getHours(),e._addMinutes.value=t.getMinutes()}countDownAddEx(){if(this.time++,this.time%60==0){if(this.countNum--,this.countNum<0){this.countNum=59,e._execution.value+=1,this.Num.value=e._execution.value.toString();let t=new Date;e._addExHours.value=t.getHours(),e._addMinutes.value=t.getMinutes()}this.countNum>=10&&this.countNum<=59?(this.CountDown.text="00:"+this.countNum,this.CountDown_board.text=this.CountDown.text):this.countNum>=0&&this.countNum<10&&(this.CountDown.text="00:0"+this.countNum,this.CountDown_board.text=this.CountDown.text)}}lwgOnUpdate(){Number(this.Num.value)>=15?this.timeSwitch&&(e._execution.value=15,this.Num.value=e._execution.value.toString(),this.CountDown.text="00:00",this.CountDown_board.text=this.CountDown.text,this.countNum=60,this.timeSwitch=!1):(this.timeSwitch=!0,this.countDownAddEx())}}}(v=e.Execution||(e.Execution={}))}(e||(e={}));let t=e.Admin,a=(t._SceneBase,t._ObjectBase,t._SceneName),n=e.Platform,o=e.SceneAnimation,r=e.Adaptive,i=(e.StorageAdmin,e.DataAdmin),l=e.EventAdmin,s=(e.DateAdmin,e.TimerAdmin),c=(e.Execution,e.Gold,e.Setting),h=(e.AudioAdmin,e.Click),u=(e.Color,e.Effects2D),_=(e.Effects3D,e.Dialogue,e.Animation2D,e.Animation3D,e.Tools),d=e.LwgPreLoad,m=(e.LwgPreLoad._PreLoadScene,e._LwgInit),y=e._LwgInit._LwgInitScene;var g,p,f;!function(e){let t,a,n,o;t=e.PreLoad||(e.PreLoad={}),a=e.Guide||(e.Guide={}),function(e){e.heroBlood="_Game_calculateBlood",e.closeScene="_Game_closeScene",e.launch="_Game_launch",e.enemyBlood="_Game_enemyBlood",e.addBuff="_Game_addBuff",e.creatBoss="_Game_creatBoss"}(n=e.Game||(e.Game={})),o=e.Task||(e.Task={})}(g||(g={})),function(e){e._list={prefab2D:{LwgGold:{url:"Prefab/LwgGold.json",prefab:null},Weapon:{url:"Prefab/Weapon.json",prefab:null},Enemy:{url:"Prefab/Enemy.json",prefab:null},EnemyBullet:{url:"Prefab/EnemyBullet.json",prefab:null},Boss:{url:"Prefab/Boss.json",prefab:null},Buff:{url:"Prefab/Buff.json",prefab:null}},scene2D:{UIStart:"Scene/"+a.Start+".json",GameScene:"Scene/"+a.Game+".json"},json:{Boss:{url:"_LwgData/_Game/Boss.json",dataArr:null},Enemy:{url:"_LwgData/_Game/Enemy.json",dataArr:null},HeroLevel:{url:"_LwgData/_Game/HeroLevel.json",dataArr:null},HeroType:{url:"_LwgData/_Game/HeroType.json",dataArr:null}}}}(p||(p={})),function(e){e.PreLoad=class extends d._PreLoadScene{lwgOnStart(){this._evNotify(d._Event.importList,[p._list])}lwgOpenAni(){return 1}lwgStepComplete(){}lwgAllComplete(){return 1e3}}}(f||(f={}));var L,w;f.PreLoad;class S extends t._ObjectBase{constructor(){super(...arguments),this.speed=2}lwgOnStart(){this.move(),this.checkHeroAndLevel()}move(){let e=this._SceneImg("Hero").localToGlobal(new Laya.Point(this._SceneImg("Hero").x,this._SceneImg("Hero").y)),t=new Laya.Point(this._gPoint.x-e.x,this._gPoint.y-e.y);t.normalize(),s._frameLoop(1,this,()=>{this._Owner.x-=t.x*this.speed,this._Owner.y-=t.y*this.speed,_._Node.leaveStage(this._Owner,()=>{this._Owner.removeSelf()})})}move1(){s._frameLoop(1,this,()=>{this._Owner.y+=3})}move2(){}move3(){}checkHeroAndLevel(){s._frameLoop(1,this,()=>{!_._Node.leaveStage(this._Owner,()=>{this._Owner.removeSelf()})&&_._Node.checkTwoDistance(this._Owner,this._SceneImg("Hero"),40,()=>{this._Owner.removeSelf(),this._evNotify(g.Game.heroBlood,[1])})})}}class b extends i._Table{constructor(e){super(),this._otherPro={quantity:"quantity",shellNum:"shellNum",blood:"blood",boss:"boss",speed:"speed"},this.EnemyParent=e,this._arr=p._list.json.Enemy.dataArr,this.levelData=this._getObjByName(`level${t._game.level}`),this.quantity=this.levelData.quantity,this.presentQuantity=0,l._register("presentQuantity",this,()=>{this.presentQuantity--})}get presentQuantity(){return this._presentQuantity}set presentQuantity(e){this._presentQuantity=e,e<10&&this.quantity>0&&this.createEnmey(),0===e&&0===this.quantity&&l._notify(g.Game.creatBoss)}createEnmey(){this.presentQuantity++,this.quantity--;const e=this.levelData[this._otherPro.shellNum];const t=_._Node.createPrefab(p._list.prefab2D.Enemy.prefab,this.EnemyParent);const a=_._Array.randomGetOne(["blue","yellow","red"]);t.name=`${a}${a}`;let n=_._Number.randomOneBySection(this.levelData[this._otherPro.speed][0],this.levelData[this._otherPro.speed][1]);n=0==_._Number.randomOneHalf()?-n:n,t._EnemyData={shell:1<=e,blood:this.levelData.blood,angle:_._Number.randomOneBySection(0,360),speed:n,color:a},t.addComponent(O)}}class O extends t._ObjectBase{lwgOnAwake(){this.generalProInit()}generalProInit(){this._Owner._EnemyData.shell;this.Shell=this._Owner.getChildByName("Shell"),this.Shell.removeSelf(),this.Pic=this._Owner.getChildByName("Pic"),this._Owner._EnemyData.color&&(this.Pic.skin=`Game/UI/Game/Enemy/enemy_01_${this._Owner._EnemyData.color}.png`),this.blood=this._Owner._EnemyData.blood,this.bloodPresnt=this.blood,this.bloodPic=this._Owner.getChildByName("Blood").getChildByName("Pic"),this.bloodWidth=this.bloodPic.width;const e=this._Owner._EnemyData.angle;this._Owner.rotation=e,this.speed=this._Owner._EnemyData.speed,this.groundRadius=200}lwgOnStart(){this.attack(),this.appear(()=>{this.move()})}appear(e){let t=0;s._frameNumLoop(1,110,this,()=>{t+=2;let e=_._Point.getRoundPos(this._Owner.rotation,t,new Laya.Point(this._SceneImg("Land").width/2,this._SceneImg("Land").height/2));this._Owner.x=e.x,this._Owner.y=e.y},()=>{e()})}attack(){s._frameRandomLoop(100,1e3,this,()=>{let e=_._Node.createPrefab(p._list.prefab2D.EnemyBullet.prefab);e.addComponent(S),this._SceneImg("EBparrent").addChild(e),e.pos(this._gPoint.x,this._gPoint.y)})}move(){s._frameLoop(1,this,()=>{let e=_._Point.getRoundPos(this._Owner.rotation+=this.speed,220,new Laya.Point(this._SceneImg("Land").width/2,this._SceneImg("Land").height/2));this._Owner.x=e.x,this._Owner.y=e.y})}lwgEvent(){this._evReg(g.Game.enemyBlood,(e,a)=>{if(e===this._Owner&&(this.bloodPresnt-=a,this.bloodPic.width=this.bloodWidth*this.bloodPresnt/this.blood,this.bloodPresnt<=0)){for(let e=0;e<20;e++)u._Particle._spray(Laya.stage,this._gPoint,[10,30]);this._Owner.removeSelf(),this._evNotify("presentQuantity"),"Boss"===this._Owner.name&&t._openScene("Victory")}})}attack1(){s._frameRandomLoop(100,1e3,this,()=>{let e=_._Node.createPrefab(p._list.prefab2D.EnemyBullet.prefab);e.addComponent(S),this._SceneImg("EBparrent").addChild(e),e.pos(this._gPoint.x,this._gPoint.y)})}attack2(){s._frameRandomLoop(100,1e3,this,()=>{let e=_._Node.createPrefab(p._list.prefab2D.EnemyBullet.prefab);e.addComponent(S),this._SceneImg("EBparrent").addChild(e),e.pos(this._gPoint.x,this._gPoint.y)})}attack3(){s._frameRandomLoop(100,1e3,this,()=>{let e=_._Node.createPrefab(p._list.prefab2D.EnemyBullet.prefab);e.addComponent(S),this._SceneImg("EBparrent").addChild(e),e.pos(this._gPoint.x,this._gPoint.y)})}}class v extends S{lwgOnStart(){this.move(),this.checkHeroAndLevel()}move(){s._frameLoop(1,this,()=>{let e=_._Point.getRoundPos(this._Owner.rotation,this.speed+=2,this._fPoint);this._Owner.x=e.x,this._Owner.y=e.y})}}!function(e){class a extends i._Table{constructor(){super(),this._otherPro={blood:"blood",specials:"specials",speed:"speed",skills:"skills",bulletPower:"bulletPower"},this._arr=p._list.json.Boss.dataArr}static _ins(){return this.ins||(this.ins=new a,this.ins._arr=p._list.json.Boss.dataArr,this.ins.levelData=this.ins._getObjByName(`Boss${t._game.level}`)),this.ins}getLevelSkill(){return this.levelData.skills}getLevelSpeed(){return this.levelData.speed}getLevelblood(){return this.levelData.blood}getOtherBossSkill(){}createLevelBoss(e){const t=_._Node.createPrefab(p._list.prefab2D.Enemy.prefab,e);t.name="Boss";let o=_._Number.randomOneBySection(a._ins().getLevelSpeed()[0],a._ins().getLevelSpeed()[1]);return o=0==_._Number.randomOneHalf()?-o:o,t._EnemyData={blood:a._ins().getLevelblood(),angle:_._Number.randomOneBySection(0,360),speed:o,sikllNameArr:a._ins().getLevelSkill()},t.addComponent(n),t}}e._BossData=a;class n extends O{lwgOnAwake(){this.generalProInit(),this._Owner.pos(this._SceneImg("Content").x,this._SceneImg("Content").y),this._Owner.rotation=0,this._SceneImg("Content").removeSelf()}lwgOnStart(){this.attack(),this.move()}move(){let e="left";s._frameLoop(1,this,()=>{"right"==e?(this._Owner.x++,this._Owner.x>Laya.stage.width-100&&(e="left")):(this._Owner.x--,this._Owner.x<100&&(e="right"))})}appear(){}attack(){let e=0;s._frameRandomLoop(50,100,this,()=>{e++;for(let t=0;t<20;t++){const a=_._Node.createPrefab(p._list.prefab2D.EnemyBullet.prefab);this._SceneImg("EBparrent").addChild(a),a.pos(this._gPoint.x,this._gPoint.y),a.rotation=18*t+10*e,a.addComponent(v)}},!0)}}e.Boss=n}(L||(L={}));class N extends i._Table{constructor(){super(...arguments),this.type={ballisticNum:"ballisticNum"}}static _ins(){return this.ins||(this.ins=new N),this.ins}createBuff(e,t,a,n){const o=_._Node.createPrefab(p._list.prefab2D.Buff.prefab,t,[a,n]);return o.buffType=e,o.addComponent(C),o}}class C extends t._ObjectBase{lwgOnStart(){this.checkHero()}checkHero(){s._frameLoop(1,this,()=>{this._Owner.y+=5,!_._Node.leaveStage(this._Owner,()=>{this._Owner.removeSelf()})&&_._Node.checkTwoDistance(this._Owner,this._SceneImg("Hero"),50,()=>{this._Owner.removeSelf(),this._evNotify(g.Game.addBuff,[this._Owner.buffType])})})}}class x extends t._ObjectBase{constructor(){super(...arguments),this.launchAcc=0,this.dropAcc=0,this.stateType={launch:"launch",free:"free"}}get state(){return this.Statevalue?this.Statevalue:"launch"}set state(e){this.Statevalue=e}getSpeed(){return 20.1}getDropSpeed(){return this.dropAcc+=.5}lwgOnAwake(){s._frameLoop(1,this,()=>{this.move()})}move(){if(this.getSpeed()>0){let e=_._Point.angleAndLenByPoint(this._Owner.rotation-90,this.getSpeed());this._Owner.x+=e.x,this._Owner.y+=e.y}else this._Owner.y+=this.getDropSpeed();_._Node.leaveStage(this._Owner,()=>{this._Owner.removeSelf()})||(this._SceneImg("Content").parent?this.checkEnemy():this.checkBoss())}checkBoss(){for(let e=0;e<this._SceneImg("BossParent").numChildren;e++){const t=this._SceneImg("BossParent").getChildAt(e);if(this._SceneImg("BossParent").localToGlobal(new Laya.Point(t.x,t.y)).distance(this._gPoint.x,this._gPoint.y)<50)return void this.skill(t)}}drop(){this.state=this.stateType.free,Laya.timer.clearAll(this),s._frameLoop(1,this,()=>{this._Owner.y+=40,this._Owner.rotation+=10,_._Node.leaveStage(this._Owner,()=>{this._Owner.removeSelf()})})}skill(e){this._evNotify(g.Game.enemyBlood,[e,1]),this._Owner.removeSelf()}displayArrow(e,t){const a=e.parent;if(a.localToGlobal(new Laya.Point(e.x,e.y)).distance(this._gPoint.x,this._gPoint.y)<t){Laya.timer.clearAll(this),this.state=this.stateType.free;const t=e.globalToLocal(this._gPoint);let n;0==_._Number.randomOneInt(0,1)?(n=e.getChildByName("ArrowParentF"))||((n=new Laya.Sprite).name="ArrowParentF",e.addChild(n),n.size(e.width,e.height),n.zOrder=5):(n=e.getChildByName("ArrowParentR"))||((n=new Laya.Sprite).name="ArrowParentR",e.addChild(n),n.size(e.width,e.height),n.zOrder=-5),n.cacheAs="bitmap",n.addChild(this._Owner),this._Owner.pos(t.x,t.y),this._Owner.rotation-=this._SceneImg("Land").rotation,a!==this._SceneImg("Land")&&(this._Owner.rotation-=e.rotation),this._Owner.getChildByName("Pic").y-=_._Number.randomOneBySection(20);const o=new Laya.Sprite;return o.size(200,300),o.pos(0,_._Number.randomOneBySection(20,30)),o.loadImage("Lwg/UI/ui_l_orthogon_white.png"),this._Owner.mask=o,s._frameOnce(120,this,()=>{this._Owner.removeSelf()}),!0}}checkEnemy(){if(this.state!=this.stateType.free){for(let e=0;e<this._SceneImg("MiddleScenery").numChildren;e++){const t=this._SceneImg("MiddleScenery").getChildAt(e);if("Tree"==t.name&&this.displayArrow(t,30)){const e=t.getChildByName("Blood").getChildByName("Pic"),a=20;return void 0===t.BloodNum&&(t.BloodNum=a),void 0===t.Prowidth&&(t.Prowidth=e.width),t.BloodNum-=1,e.width=e.width-t.Prowidth/a,void(t.BloodNum<=0&&(N._ins().createBuff(0,this._Scene,this._gPoint.x,this._gPoint.y),t.removeSelf()))}}if(this._SceneImg("FrontScenery").getChildByName("Stone"))for(let e=0;e<this._SceneImg("FrontScenery").numChildren;e++){const t=this._SceneImg("FrontScenery").getChildAt(e);if("Stone"==t.name){if(this._SceneImg("FrontScenery").localToGlobal(new Laya.Point(t.x,t.y)).distance(this._gPoint.x,this._gPoint.y)<30)return void this.drop()}}for(let e=0;e<this._SceneImg("EnemyParent").numChildren;e++){const t=this._SceneImg("EnemyParent").getChildAt(e);if(this._SceneImg("EnemyParent").localToGlobal(new Laya.Point(t.x,t.y)).distance(this._gPoint.x,this._gPoint.y)<50){if(t.getChildByName("Shell")){const e=this._SceneImg("Content").localToGlobal(new Laya.Point(this._SceneImg("Land").x,this._SceneImg("Land").y));let a=_._Point.pointByAngle(e.x-this._gPoint.x,e.y-this._gPoint.y)+90;210<a&&a<330?this.drop():this.skill(t)}else this.skill(t);return}}this.checkLand()}}checkLand(){let e;const t=_._Number.randomOneInt(0,2),a=this._SceneImg("Land").getChildByName("FrontGround");0==t?e=a:1==t?(e=this._SceneImg("Land").getChildByName("MiddleGround"))||((e=new Laya.Image).name="MiddleGround",this._SceneImg("Land").addChild(e),e.zOrder=14):2==t&&((e=this._SceneImg("Land").getChildByName("BehindGround"))||((e=new Laya.Image).name="BehindGround",this._SceneImg("Land").addChild(e),e.zOrder=4)),e.size(a.width,a.height),e.anchorX=e.anchorY=.5,e.pos(a.x,a.y),this.displayArrow(e,160)}}class P extends t._ObjectBase{lwgOnAwake(){this.Blood=this._Owner.getChildByName("Blood"),this.bloodNum=5,this.attackInterval=10,this.ballisticNum=1,this.ballisticPos=[[[0,0]],[[-20,0],[20,0]],[[-20,0],[0,0],[20,0]],[[-30,0],[-10,0],[10,0],[30,0]],[[-40,0],[-20,0],[0,0],[20,0],[40,0]],[[-50,0],[-30,0],[-10,0],[10,0],[30,0],[50,0]],[[-60,0],[-40,0],[-20,0],[0,0],[20,0],[40,0],[60,0]]],this.time=0}lwgOnStart(){s._frameLoop(this.attackInterval,this,()=>{if(this.mouseP)for(let e=1;e<this.ballisticPos[this.ballisticNum].length;e++){const t=this.ballisticPos[this.ballisticNum][e];t&&this.createWeapon(_._Array.randomGetOne(["blue","yellow","red"]),this._Owner.x+t[0],this._Owner.y+t[1])}})}lwgEvent(){const e=this.Blood.getChildAt(0),t=e.width;this._evReg(g.Game.heroBlood,n=>{e.width=e.width-t/this.bloodNum,this.bloodNum-=n,this.bloodNumSwitch||this.bloodNum<=0&&(this.bloodNumSwitch=!0,this._openScene(a.Defeated,!1))}),this._evReg(g.Game.addBuff,e=>{switch(e){case 0:this.ballisticNum++}})}createWeapon(e,t,a){const n=_._Node.createPrefab(p._list.prefab2D.Weapon.prefab);return this._SceneImg("WeaponParent").addChild(n),n.addComponent(x),n.pos(t,a),n.getChildByName("Pic").skin=`Game/UI/Game/Hero/Hero_01_weapon_${e}.png`,n.name=e,n}move(e){if(this.mouseP){let t=e.stageX-this.mouseP.x,a=e.stageY-this.mouseP.y;this._Owner.x+=t,this._Owner.y+=a,this.mouseP=new Laya.Point(e.stageX,e.stageY),this._Owner.x>Laya.stage.width&&(this._Owner.x=Laya.stage.width),this._Owner.x<0&&(this._Owner.x=0),this._Owner.y<=0&&(this._Owner.y=0),this._Owner.y>Laya.stage.height&&(this._Owner.y=Laya.stage.height)}}lwgOnStageDown(e){this.mouseP=new Laya.Point(e.stageX,e.stageY)}lwgOnStageMove(e){this.move(e)}lwgOnStageUp(){this.mouseP=null}}!function(e){e._texArr=[];e.Game=class extends t._SceneBase{lwgOnAwake(){this.EnemyData=new b(this._ImgVar("EnemyParent")),this.EnemyData.createEnmey(),this._ImgVar("Hero").addComponent(P)}lwgOnStart(){s._frameLoop(1,this,()=>{this._ImgVar("Land").rotation+=.1})}lwgEvent(){this._evReg(g.Game.closeScene,()=>{this._closeScene()}),this._evReg(g.Game.creatBoss,()=>{L._BossData._ins().createLevelBoss(this._ImgVar("BossParent"))})}}}(w||(w={}));var B;w.Game;!function(e){let a;e._complete={get bool(){return!!Laya.LocalStorage.getItem("_Guide_complete")&&0!=Number(Laya.LocalStorage.getItem("_Guide_complete"))},set bool(e){1==e&&(e=1),Laya.LocalStorage.setItem("_Guide_complete",e.toString())}},e._whichStep={get num(){return Laya.LocalStorage.getItem("_Guide_whichStep")?Number(Laya.LocalStorage.getItem("_Guide_whichStep")):1},set num(e){Laya.LocalStorage.setItem("_Guide_whichStep",e.toString())}},e._whichStepNum=1,function(e){e.onStep="_Guide_onStep",e.stepComplete="_Guide_stepComplete",e.appear="_Guide_appear",e.start="_Guide_start",e.complete="_Guide_complete"}(a=e._Event||(e._Event={})),e._init=function(){};e.Guide=class extends t._SceneBase{lwgOnStart(){this._openScene("Start")}lwgOnEnable(){}}}(B||(B={}));var X;B.Guide;!function(e){let t;!function(e){e.animation1="_PreLoadCutIn_animation1",e.preLoad="_PreLoadCutIn_preLoad",e.animation2="_PreLoadCutIn_animation2"}(t=e._Event||(e._Event={}));e.PreLoadCutIn=class extends d._PreLoadScene{lwgOnStart(){l._notify(t.animation1)}lwgEventRegister(){l._register(t.animation1,this,()=>{let e=0;s._frameNumLoop(1,30,this,()=>{e++,this._LabelVar("Schedule").text=`${e}`},()=>{l._notify(d._Event.importList,[{}])})})}lwgOpenAni(){return 100}lwgStepComplete(){}lwgAllComplete(){return 1e3}}}(X||(X={}));var A;X.PreLoadCutIn;!function(e){e._init=function(){console.log(e)};e.Start=class extends t._SceneBase{lwgOnAwake(){c._bgMusic.switch=!1}lwgButton(){this._btnUp(this._ImgVar("BtnStart"),()=>{let e=a.Game+1;this._openScene(e,!0,!1,()=>{t._SceneControl[e].getComponent(w.Game)||t._SceneControl[e].addComponent(w.Game)})})}};e.StartItem=class extends t._ObjectBase{}}(A||(A={}));var I;A.Start;!function(e){e._data=class{},e._init=function(){};e.Victory=class extends t._SceneBase{lwgButton(){this._btnUp(this._ImgVar("BtnGet"),()=>{this._openScene(a.Start),l._notify(g.Game.closeScene)})}}}(I||(I={}));var T;I.Victory;!function(e){e._data=class{},e._init=function(){};e.Defeated=class extends t._SceneBase{lwgButton(){this._btnUp(this._ImgVar("BtnBack"),()=>{this._openScene(a.Start),l._notify(g.Game.closeScene)})}}}(T||(T={}));T.Defeated;class D extends y{lwgOnAwake(){m._pkgInfo=[],n._Ues.value=n._Tpye.Web,Laya.Stat.show(),o._Use.value=o._Type.fadeOut,o._closeSwitch=!0,o._openSwitch=!1,h._Use.value=h._Type.reduce,r._Use.value=[1280,720],t._GuideControl.switch=!1,t._Moudel={_PreLoad:f,_PreLoadCutIn:X,_Guide:B,_Start:A,_Game:w,_Victory:I,_Defeated:T}}}class E{constructor(){}static init(){(0,Laya.ClassUtils.regClass)("script/Frame/LwgInit.ts",D)}}E.width=720,E.height=1280,E.scaleMode="fixedwidth",E.screenMode="vertical",E.alignV="top",E.alignH="left",E.startScene="Scene/Lwginit.scene",E.sceneRoot="",E.debug=!1,E.stat=!1,E.physicsDebug=!0,E.exportSceneToJson=!0,E.init();new class{constructor(){window.Laya3D?Laya3D.init(E.width,E.height):Laya.init(E.width,E.height,Laya.WebGL),Laya.Physics&&Laya.Physics.enable(),Laya.DebugPanel&&Laya.DebugPanel.enable(),Laya.stage.scaleMode=E.scaleMode,Laya.stage.screenMode=E.screenMode,Laya.stage.alignV=E.alignV,Laya.stage.alignH=E.alignH,Laya.URL.exportSceneToJson=E.exportSceneToJson,(E.debug||"true"==Laya.Utils.getQueryString("debug"))&&Laya.enableDebugPanel(),E.physicsDebug&&Laya.PhysicsDebugDraw&&Laya.PhysicsDebugDraw.enable(),E.stat&&Laya.Stat.show(),Laya.alertGlobalError=!0,Laya.ResourceVersion.enable("version.json",Laya.Handler.create(this,this.onVersionLoaded),Laya.ResourceVersion.FILENAME_VERSION)}onVersionLoaded(){Laya.AtlasInfoManager.enable("fileconfig.json",Laya.Handler.create(this,this.onConfigLoaded))}onConfigLoaded(){E.startScene&&Laya.Scene.open(E.startScene)}}}();
+(function () {
+    'use strict';
+
+    var lwg;
+    (function (lwg) {
+        let Dialogue;
+        (function (Dialogue) {
+            let Skin;
+            (function (Skin) {
+                Skin["blackBord"] = "Frame/UI/ui_orthogon_black.png";
+            })(Skin || (Skin = {}));
+            function createHint_Middle(describe) {
+                let Hint_M = Laya.Pool.getItemByClass('Hint_M', Laya.Sprite);
+                Hint_M.name = 'Hint_M';
+                Laya.stage.addChild(Hint_M);
+                Hint_M.width = Laya.stage.width;
+                Hint_M.height = 100;
+                Hint_M.pivotY = Hint_M.height / 2;
+                Hint_M.pivotX = Laya.stage.width / 2;
+                Hint_M.x = Laya.stage.width / 2;
+                Hint_M.y = Laya.stage.height / 2;
+                Hint_M.zOrder = 100;
+                let Pic = new Laya.Image();
+                Hint_M.addChild(Pic);
+                Pic.skin = Skin.blackBord;
+                Pic.width = Laya.stage.width;
+                Pic.pivotX = Laya.stage.width / 2;
+                Pic.height = 100;
+                Pic.pivotY = Pic.height / 2;
+                Pic.y = Hint_M.height / 2;
+                Pic.x = Laya.stage.width / 2;
+                Pic.alpha = 0.6;
+                let Dec = new Laya.Label();
+                Hint_M.addChild(Dec);
+                Dec.width = Laya.stage.width;
+                Dec.text = describe;
+                Dec.pivotX = Laya.stage.width / 2;
+                Dec.x = Laya.stage.width / 2;
+                Dec.height = 100;
+                Dec.pivotY = 50;
+                Dec.y = Hint_M.height / 2;
+                Dec.bold = true;
+                Dec.fontSize = 35;
+                Dec.color = '#ffffff';
+                Dec.align = 'center';
+                Dec.valign = 'middle';
+                Dec.alpha = 0;
+                Animation2D.scale_Alpha(Hint_M, 0, 1, 0, 1, 1, 1, 200, 0, f => {
+                    Animation2D.fadeOut(Dec, 0, 1, 150, 0, f => {
+                        Animation2D.fadeOut(Dec, 1, 0, 200, 800, f => {
+                            Animation2D.scale_Alpha(Hint_M, 1, 1, 1, 1, 0, 0, 200, 0, f => {
+                                Hint_M.removeSelf();
+                            });
+                        });
+                    });
+                });
+            }
+            Dialogue.createHint_Middle = createHint_Middle;
+            Dialogue._dialogContent = {
+                get Array() {
+                    return Laya.loader.getRes("GameData/Dialogue/Dialogue.json")['RECORDS'] !== null ? Laya.loader.getRes("GameData/Dialogue/Dialogue.json")['RECORDS'] : [];
+                },
+            };
+            function getDialogContent(useWhere, name) {
+                let dia;
+                for (let index = 0; index < Dialogue._dialogContent.Array.length; index++) {
+                    const element = Dialogue._dialogContent.Array[index];
+                    if (element['useWhere'] == useWhere && element['name'] == name) {
+                        dia = element;
+                        break;
+                    }
+                }
+                let arr = [];
+                for (const key in dia) {
+                    if (dia.hasOwnProperty(key)) {
+                        const value = dia[key];
+                        if (key.substring(0, 7) == 'content' || value !== -1) {
+                            arr.push(value);
+                        }
+                    }
+                }
+                return arr;
+            }
+            Dialogue.getDialogContent = getDialogContent;
+            function getDialogContent_Random(useWhere) {
+                let contentArr = [];
+                let whereArr = getUseWhere(useWhere);
+                let index = Math.floor(Math.random() * whereArr.length);
+                for (const key in whereArr[index]) {
+                    if (whereArr[index].hasOwnProperty(key)) {
+                        const value = whereArr[index][key];
+                        if (key.substring(0, 7) == 'content' && value !== "-1") {
+                            contentArr.push(value);
+                        }
+                    }
+                }
+                return contentArr;
+            }
+            Dialogue.getDialogContent_Random = getDialogContent_Random;
+            function getUseWhere(useWhere) {
+                let arr = [];
+                for (let index = 0; index < Dialogue._dialogContent.Array.length; index++) {
+                    const element = Dialogue._dialogContent.Array[index];
+                    if (element['useWhere'] == useWhere) {
+                        arr.push(element);
+                    }
+                }
+                return arr;
+            }
+            Dialogue.getUseWhere = getUseWhere;
+            let UseWhere;
+            (function (UseWhere) {
+                UseWhere["scene1"] = "scene1";
+                UseWhere["scene2"] = "scene2";
+                UseWhere["scene3"] = "scene3";
+            })(UseWhere = Dialogue.UseWhere || (Dialogue.UseWhere = {}));
+            let DialogProperty;
+            (function (DialogProperty) {
+                DialogProperty["name"] = "name";
+                DialogProperty["useWhere"] = "useWhere";
+                DialogProperty["content"] = "content";
+                DialogProperty["max"] = "max";
+            })(DialogProperty = Dialogue.DialogProperty || (Dialogue.DialogProperty = {}));
+            let PlayMode;
+            (function (PlayMode) {
+                PlayMode["voluntarily"] = "voluntarily";
+                PlayMode["manual"] = "manual";
+                PlayMode["clickContent"] = "clickContent";
+            })(PlayMode = Dialogue.PlayMode || (Dialogue.PlayMode = {}));
+            function createVoluntarilyDialogue(x, y, useWhere, startDelayed, delayed, parent, content) {
+                if (startDelayed == undefined) {
+                    startDelayed = 0;
+                }
+                Laya.timer.once(startDelayed, this, () => {
+                    let Pre_Dialogue;
+                    Laya.loader.load('Prefab/Dialogue_Common.json', Laya.Handler.create(this, function (prefab) {
+                        let _prefab = new Laya.Prefab();
+                        _prefab.json = prefab;
+                        Pre_Dialogue = Laya.Pool.getItemByCreateFun('Pre_Dialogue', _prefab.create, _prefab);
+                        if (parent) {
+                            parent.addChild(Pre_Dialogue);
+                        }
+                        else {
+                            Laya.stage.addChild(Pre_Dialogue);
+                        }
+                        Pre_Dialogue.x = x;
+                        Pre_Dialogue.y = y;
+                        let ContentLabel = Pre_Dialogue.getChildByName('Content');
+                        let contentArr;
+                        if (content !== undefined) {
+                            ContentLabel.text = content[0];
+                        }
+                        else {
+                            contentArr = getDialogContent_Random(useWhere);
+                            ContentLabel.text = contentArr[0];
+                        }
+                        Pre_Dialogue.zOrder = 100;
+                        if (delayed == undefined) {
+                            delayed = 1000;
+                        }
+                        Animation2D.scale_Alpha(Pre_Dialogue, 0, 0, 0, 1, 1, 1, 150, 1000, () => {
+                            for (let index = 0; index < contentArr.length; index++) {
+                                Laya.timer.once(index * delayed, this, () => {
+                                    ContentLabel.text = contentArr[index];
+                                    if (index == contentArr.length - 1) {
+                                        Laya.timer.once(delayed, this, () => {
+                                            Animation2D.scale_Alpha(Pre_Dialogue, 1, 1, 1, 0, 0, 0, 150, 1000, () => {
+                                                Pre_Dialogue.removeSelf();
+                                            });
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                        Dialogue.DialogueNode = Pre_Dialogue;
+                    }));
+                });
+            }
+            Dialogue.createVoluntarilyDialogue = createVoluntarilyDialogue;
+            function createCommonDialog(parent, x, y, content) {
+                let Dialogue_Common;
+                Laya.loader.load('Prefab/Dialogue_Common.json', Laya.Handler.create(this, function (prefab) {
+                    let _prefab = new Laya.Prefab();
+                    _prefab.json = prefab;
+                    Dialogue_Common = Laya.Pool.getItemByCreateFun('Dialogue_Common', _prefab.create, _prefab);
+                    parent.addChild(Dialogue_Common);
+                    Dialogue_Common.pos(x, y);
+                    let Content = Dialogue_Common.getChildByName('Dialogue_Common');
+                    Content.text = content;
+                }));
+            }
+            Dialogue.createCommonDialog = createCommonDialog;
+        })(Dialogue = lwg.Dialogue || (lwg.Dialogue = {}));
+        let Gold;
+        (function (Gold_1) {
+            Gold_1._num = {
+                get value() {
+                    return Laya.LocalStorage.getItem('GoldNum') ? Number(Laya.LocalStorage.getItem('GoldNum')) : 0;
+                },
+                set value(val) {
+                    Laya.LocalStorage.setItem('GoldNum', val.toString());
+                }
+            };
+            function _createGoldNode(x, y, parent) {
+                if (!parent) {
+                    parent = Laya.stage;
+                }
+                if (Gold_1.GoldNode) {
+                    Gold_1.GoldNode.removeSelf();
+                }
+                let sp;
+                Laya.loader.load('Prefab/LwgGold.json', Laya.Handler.create(this, function (prefab) {
+                    let _prefab = new Laya.Prefab();
+                    _prefab.json = prefab;
+                    sp = Laya.Pool.getItemByCreateFun('gold', _prefab.create, _prefab);
+                    let Num = sp.getChildByName('Num');
+                    Num.text = Tools._Format.formatNumber(Gold_1._num.value);
+                    parent.addChild(sp);
+                    sp.pos(x, y);
+                    sp.zOrder = 100;
+                    Gold_1.GoldNode = sp;
+                }));
+            }
+            Gold_1._createGoldNode = _createGoldNode;
+            function _add(number) {
+                Gold_1._num.value += Number(number);
+                let Num = Gold_1.GoldNode.getChildByName('Num');
+                Num.text = Tools._Format.formatNumber(Gold_1._num.value);
+            }
+            Gold_1._add = _add;
+            function _addDisPlay(number) {
+                let Num = Gold_1.GoldNode.getChildByName('Num');
+                Num.value = (Number(Num.value) + Number(number)).toString();
+            }
+            Gold_1._addDisPlay = _addDisPlay;
+            function _addNoDisPlay(number) {
+                Gold_1._num.value += Number(number);
+            }
+            Gold_1._addNoDisPlay = _addNoDisPlay;
+            function _nodeAppear(delayed, x, y) {
+                if (!Gold_1.GoldNode) {
+                    return;
+                }
+                if (delayed) {
+                    Animation2D.scale_Alpha(Gold_1.GoldNode, 0, 1, 1, 1, 1, 1, delayed, 0, f => {
+                        Gold_1.GoldNode.visible = true;
+                    });
+                }
+                else {
+                    Gold_1.GoldNode.visible = true;
+                }
+                if (x) {
+                    Gold_1.GoldNode.x = x;
+                }
+                if (y) {
+                    Gold_1.GoldNode.y = y;
+                }
+            }
+            Gold_1._nodeAppear = _nodeAppear;
+            function _nodeVinish(delayed) {
+                if (!Gold_1.GoldNode) {
+                    return;
+                }
+                if (delayed) {
+                    Animation2D.scale_Alpha(Gold_1.GoldNode, 1, 1, 1, 1, 1, 0, delayed, 0, f => {
+                        Gold_1.GoldNode.visible = false;
+                    });
+                }
+                else {
+                    Gold_1.GoldNode.visible = false;
+                }
+            }
+            Gold_1._nodeVinish = _nodeVinish;
+            let SkinUrl;
+            (function (SkinUrl) {
+                SkinUrl[SkinUrl["Frame/Effects/iconGold.png"] = 0] = "Frame/Effects/iconGold.png";
+            })(SkinUrl || (SkinUrl = {}));
+            function _createOne(width, height, url) {
+                let Gold = Laya.Pool.getItemByClass('addGold', Laya.Image);
+                Gold.name = 'addGold';
+                let num = Math.floor(Math.random() * 12);
+                Gold.alpha = 1;
+                Gold.zOrder = 60;
+                Gold.width = width;
+                Gold.height = height;
+                Gold.pivotX = width / 2;
+                Gold.pivotY = height / 2;
+                if (!url) {
+                    Gold.skin = SkinUrl[0];
+                }
+                else {
+                    Gold.skin = url;
+                }
+                if (Gold_1.GoldNode) {
+                    Gold.zOrder = Gold_1.GoldNode.zOrder + 10;
+                }
+                return Gold;
+            }
+            Gold_1._createOne = _createOne;
+            function _getAni_Single(parent, number, width, height, url, firstPoint, targetPoint, func1, func2) {
+                for (let index = 0; index < number; index++) {
+                    Laya.timer.once(index * 30, this, () => {
+                        let Gold = _createOne(width, height, url);
+                        parent.addChild(Gold);
+                        Animation2D.move_Scale(Gold, 1, firstPoint.x, firstPoint.y, targetPoint.x, targetPoint.y, 1, 350, 0, null, () => {
+                            AudioAdmin._playSound(AudioAdmin._voiceUrl.huodejinbi);
+                            if (index === number - 1) {
+                                Laya.timer.once(200, this, () => {
+                                    if (func2) {
+                                        func2();
+                                    }
+                                });
+                            }
+                            else {
+                                if (func1) {
+                                    func1();
+                                }
+                            }
+                            Gold.removeSelf();
+                        });
+                    });
+                }
+            }
+            Gold_1._getAni_Single = _getAni_Single;
+            function _getAni_Heap(parent, number, width, height, url, firstPoint, targetPoint, func1, func2) {
+                for (let index = 0; index < number; index++) {
+                    let Gold = _createOne(width ? width : 100, height ? height : 100, url ? url : SkinUrl[0]);
+                    parent = parent ? parent : Laya.stage;
+                    parent.addChild(Gold);
+                    firstPoint = firstPoint ? firstPoint : new Laya.Point(Laya.stage.width / 2, Laya.stage.height / 2);
+                    targetPoint = targetPoint ? targetPoint : new Laya.Point(Gold_1.GoldNode.x, Gold_1.GoldNode.y);
+                    let x = Math.floor(Math.random() * 2) == 1 ? firstPoint.x + Math.random() * 100 : firstPoint.x - Math.random() * 100;
+                    let y = Math.floor(Math.random() * 2) == 1 ? firstPoint.y + Math.random() * 100 : firstPoint.y - Math.random() * 100;
+                    Animation2D.move_Scale(Gold, 0.5, firstPoint.x, firstPoint.y, x, y, 1, 300, Math.random() * 100 + 100, Laya.Ease.expoIn, () => {
+                        Animation2D.move_Scale(Gold, 1, Gold.x, Gold.y, targetPoint.x, targetPoint.y, 1, 400, Math.random() * 200 + 100, Laya.Ease.cubicOut, () => {
+                            AudioAdmin._playSound(AudioAdmin._voiceUrl.huodejinbi);
+                            if (index === number - 1) {
+                                Laya.timer.once(200, this, () => {
+                                    if (func2) {
+                                        func2();
+                                    }
+                                });
+                            }
+                            else {
+                                if (func1) {
+                                    func1();
+                                }
+                            }
+                            Gold.removeSelf();
+                        });
+                    });
+                }
+            }
+            Gold_1._getAni_Heap = _getAni_Heap;
+        })(Gold = lwg.Gold || (lwg.Gold = {}));
+        let EventAdmin;
+        (function (EventAdmin) {
+            EventAdmin.dispatcher = new Laya.EventDispatcher();
+            function _register(type, caller, listener) {
+                if (!caller) {
+                    console.error("事件的执行域必须存在!");
+                }
+                EventAdmin.dispatcher.on(type.toString(), caller, listener);
+            }
+            EventAdmin._register = _register;
+            function _registerOnce(type, caller, listener) {
+                if (!caller) {
+                    console.error("事件的执行域必须存在!");
+                }
+                EventAdmin.dispatcher.once(type.toString(), caller, listener);
+            }
+            EventAdmin._registerOnce = _registerOnce;
+            function _notify(type, args) {
+                EventAdmin.dispatcher.event(type.toString(), args);
+            }
+            EventAdmin._notify = _notify;
+            function _off(type, caller, listener) {
+                EventAdmin.dispatcher.off(type.toString(), caller, listener);
+            }
+            EventAdmin._off = _off;
+            function _offAll(type) {
+                EventAdmin.dispatcher.offAll(type.toString());
+            }
+            EventAdmin._offAll = _offAll;
+            function _offCaller(caller) {
+                EventAdmin.dispatcher.offAllCaller(caller);
+            }
+            EventAdmin._offCaller = _offCaller;
+        })(EventAdmin = lwg.EventAdmin || (lwg.EventAdmin = {}));
+        let DateAdmin;
+        (function (DateAdmin) {
+            DateAdmin._date = {
+                get year() {
+                    return (new Date()).getFullYear();
+                },
+                get month() {
+                    return (new Date()).getMonth();
+                },
+                get date() {
+                    return (new Date()).getDate();
+                },
+                get day() {
+                    return (new Date()).getDay();
+                },
+                get hours() {
+                    return (new Date()).getHours();
+                },
+                get minutes() {
+                    return (new Date()).getMinutes();
+                },
+                get seconds() {
+                    return (new Date()).getSeconds();
+                },
+                get milliseconds() {
+                    return (new Date()).getMilliseconds();
+                },
+                get toLocaleDateString() {
+                    return (new Date()).toLocaleDateString();
+                },
+                get toLocaleTimeString() {
+                    return (new Date()).toLocaleTimeString();
+                }
+            };
+            function _init() {
+                let d = new Date;
+                DateAdmin._loginInfo = StorageAdmin._arrayArr('DateAdmin._loginInfo');
+                DateAdmin._loginInfo.value.push([d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getDay(), d.getHours(), d.getMinutes(), d.getSeconds()]);
+                let arr = [];
+                if (DateAdmin._loginInfo.value.length > 0) {
+                    for (let index = 0; index < DateAdmin._loginInfo.value.length; index++) {
+                        arr.push(DateAdmin._loginInfo.value[index]);
+                    }
+                }
+                arr.push([d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getDay(), d.getHours(), d.getMinutes(), d.getSeconds()]);
+                DateAdmin._loginInfo.value = arr;
+                DateAdmin._loginCount = StorageAdmin._mum('DateAdmin._loginCount');
+                DateAdmin._loginCount.value++;
+                DateAdmin._loginToday.num++;
+            }
+            DateAdmin._init = _init;
+            DateAdmin._loginToday = {
+                get num() {
+                    return Laya.LocalStorage.getItem('DateAdmin._loginToday') ? Number(Laya.LocalStorage.getItem('DateAdmin._loginToday')) : 0;
+                },
+                set num(val) {
+                    if (DateAdmin._date.date == DateAdmin._loginInfo.value[DateAdmin._loginInfo.value.length - 1][2]) {
+                        Laya.LocalStorage.setItem('DateAdmin._loginToday', val.toString());
+                    }
+                }
+            };
+            DateAdmin._last = {
+                get date() {
+                    if (DateAdmin._loginInfo.value.length > 1) {
+                        return DateAdmin._loginInfo.value[DateAdmin._loginInfo.value.length - 2][2];
+                    }
+                    else {
+                        return DateAdmin._loginInfo.value[DateAdmin._loginInfo.value.length - 1][2];
+                    }
+                },
+            };
+            DateAdmin._front = {
+                get date() {
+                    return DateAdmin._loginInfo.value[DateAdmin._loginInfo.value.length - 1][2];
+                },
+            };
+        })(DateAdmin = lwg.DateAdmin || (lwg.DateAdmin = {}));
+        let TimerAdmin;
+        (function (TimerAdmin) {
+            TimerAdmin._switch = true;
+            function _frameLoop(delay, caller, method, immediately, args, coverBefore) {
+                if (immediately) {
+                    if (TimerAdmin._switch) {
+                        method();
+                    }
+                }
+                Laya.timer.frameLoop(delay, caller, () => {
+                    if (TimerAdmin._switch) {
+                        method();
+                    }
+                }, args, coverBefore);
+            }
+            TimerAdmin._frameLoop = _frameLoop;
+            function _frameRandomLoop(delay1, delay2, caller, method, immediately, args, coverBefore) {
+                if (immediately) {
+                    if (TimerAdmin._switch) {
+                        method();
+                    }
+                }
+                var func = () => {
+                    let delay = Tools._Number.randomOneInt(delay1, delay2);
+                    Laya.timer.frameOnce(delay, caller, () => {
+                        if (TimerAdmin._switch) {
+                            method();
+                            func();
+                        }
+                    }, args, coverBefore);
+                };
+                func();
+            }
+            TimerAdmin._frameRandomLoop = _frameRandomLoop;
+            function _frameNumLoop(delay, num, caller, method, compeletMethod, immediately, args, coverBefore) {
+                if (immediately) {
+                    if (TimerAdmin._switch) {
+                        method();
+                    }
+                }
+                let num0 = 0;
+                var func = () => {
+                    if (TimerAdmin._switch) {
+                        num0++;
+                        if (num0 >= num) {
+                            method();
+                            if (compeletMethod) {
+                                compeletMethod();
+                            }
+                            Laya.timer.clear(caller, func);
+                        }
+                        else {
+                            method();
+                        }
+                    }
+                };
+                Laya.timer.frameLoop(delay, caller, func, args, coverBefore);
+            }
+            TimerAdmin._frameNumLoop = _frameNumLoop;
+            function _numRandomLoop(delay1, delay2, num, caller, method, compeletMethod, immediately, args, coverBefore) {
+                immediately && TimerAdmin._switch && method();
+                let num0 = 0;
+                var func = () => {
+                    let delay = Tools._Number.randomOneInt(delay1, delay2);
+                    Laya.timer.frameOnce(delay, caller, () => {
+                        if (TimerAdmin._switch) {
+                            num0++;
+                            if (num0 >= num) {
+                                method();
+                                compeletMethod();
+                            }
+                            else {
+                                method();
+                                func();
+                            }
+                        }
+                    }, args, coverBefore);
+                };
+                func();
+            }
+            TimerAdmin._numRandomLoop = _numRandomLoop;
+            function _frameNumRandomLoop(delay1, delay2, num, caller, method, compeletMethod, immediately, args, coverBefore) {
+                immediately && TimerAdmin._switch && method();
+                let num0 = 0;
+                var func = () => {
+                    let delay = Tools._Number.randomOneInt(delay1, delay2);
+                    Laya.timer.frameOnce(delay, caller, () => {
+                        if (TimerAdmin._switch) {
+                            num0++;
+                            if (num0 >= num) {
+                                method();
+                                compeletMethod && compeletMethod();
+                            }
+                            else {
+                                method();
+                                func();
+                            }
+                        }
+                    }, args, coverBefore);
+                };
+                func();
+            }
+            TimerAdmin._frameNumRandomLoop = _frameNumRandomLoop;
+            function _frameOnce(delay, caller, afterMethod, beforeMethod, args, coverBefore) {
+                beforeMethod && beforeMethod();
+                Laya.timer.frameOnce(delay, caller, () => {
+                    afterMethod();
+                }, args, coverBefore);
+            }
+            TimerAdmin._frameOnce = _frameOnce;
+            function _frameNumOnce(delay, num, caller, afterMethod, beforeMethod, args, coverBefore) {
+                for (let index = 0; index < num; index++) {
+                    if (beforeMethod) {
+                        beforeMethod();
+                    }
+                    Laya.timer.frameOnce(delay, caller, () => {
+                        afterMethod();
+                    }, args, coverBefore);
+                }
+            }
+            TimerAdmin._frameNumOnce = _frameNumOnce;
+            function _loop(delay, caller, method, immediately, args, coverBefore) {
+                if (immediately) {
+                    if (TimerAdmin._switch) {
+                        method();
+                    }
+                }
+                Laya.timer.loop(delay, caller, () => {
+                    if (TimerAdmin._switch) {
+                        method();
+                    }
+                }, args, coverBefore);
+            }
+            TimerAdmin._loop = _loop;
+            function _randomLoop(delay1, delay2, caller, method, immediately, args, coverBefore) {
+                if (immediately) {
+                    if (TimerAdmin._switch) {
+                        method();
+                    }
+                }
+                var func = () => {
+                    let delay = Tools._Number.randomOneInt(delay1, delay2);
+                    Laya.timer.once(delay, caller, () => {
+                        if (TimerAdmin._switch) {
+                            method();
+                            func();
+                        }
+                    }, args, coverBefore);
+                };
+                func();
+            }
+            TimerAdmin._randomLoop = _randomLoop;
+            function _numLoop(delay, num, caller, method, compeletMethod, immediately, args, coverBefore) {
+                if (immediately) {
+                    method();
+                }
+                let num0 = 0;
+                var func = () => {
+                    if (TimerAdmin._switch) {
+                        num0++;
+                        if (num0 > num) {
+                            method();
+                            if (compeletMethod) {
+                                compeletMethod();
+                            }
+                            Laya.timer.clear(caller, func);
+                        }
+                        else {
+                            method();
+                        }
+                    }
+                };
+                Laya.timer.loop(delay, caller, func, args, coverBefore);
+            }
+            TimerAdmin._numLoop = _numLoop;
+            function _once(delay, caller, afterMethod, beforeMethod, args, coverBefore) {
+                if (beforeMethod) {
+                    beforeMethod();
+                }
+                Laya.timer.once(delay, caller, () => {
+                    afterMethod();
+                }, args, coverBefore);
+            }
+            TimerAdmin._once = _once;
+            function _clearAll(arr) {
+                for (let index = 0; index < arr.length; index++) {
+                    Laya.timer.clearAll(arr[index]);
+                }
+            }
+            TimerAdmin._clearAll = _clearAll;
+            function _clear(arr) {
+                for (let index = 0; index < arr.length; index++) {
+                    Laya.timer.clear(arr[index][0], arr[index][1]);
+                }
+            }
+            TimerAdmin._clear = _clear;
+        })(TimerAdmin = lwg.TimerAdmin || (lwg.TimerAdmin = {}));
+        let Adaptive;
+        (function (Adaptive) {
+            Adaptive._Use = {
+                get value() {
+                    return this['Adaptive_value'] ? this['Adaptive_value'] : null;
+                },
+                set value(val) {
+                    this['Adaptive_value'] = val;
+                }
+            };
+            function _stageWidth(arr) {
+                for (let index = 0; index < arr.length; index++) {
+                    const element = arr[index];
+                    if (element.pivotX == 0 && element.width) {
+                        element.x = element.x / Adaptive._Use.value[0] * Laya.stage.width + element.width / 2;
+                    }
+                    else {
+                        element.x = element.x / Adaptive._Use.value[0] * Laya.stage.width;
+                    }
+                }
+            }
+            Adaptive._stageWidth = _stageWidth;
+            function _stageHeight(arr) {
+                for (let index = 0; index < arr.length; index++) {
+                    const element = arr[index];
+                    if (element.pivotY == 0 && element.height) {
+                        element.y = element.y / Adaptive._Use.value[1] * element.scaleX * Laya.stage.height + element.height / 2;
+                    }
+                    else {
+                        element.y = element.y / Adaptive._Use.value[1] * element.scaleX * Laya.stage.height;
+                    }
+                }
+            }
+            Adaptive._stageHeight = _stageHeight;
+            function _center(arr, target) {
+                for (let index = 0; index < arr.length; index++) {
+                    const element = arr[index];
+                    if (element.width > 0) {
+                        element.x = target.width / 2 - (element.width / 2 - element.pivotX) * element.scaleX;
+                    }
+                    else {
+                        element.x = target.width / 2;
+                    }
+                    if (element.height > 0) {
+                        element.y = target.height / 2 - (element.height / 2 - element.pivotY) * element.scaleY;
+                    }
+                    else {
+                        element.y = target.height / 2;
+                    }
+                }
+            }
+            Adaptive._center = _center;
+        })(Adaptive = lwg.Adaptive || (lwg.Adaptive = {}));
+        let Platform;
+        (function (Platform) {
+            Platform._Tpye = {
+                Bytedance: 'Bytedance',
+                WeChat: 'WeChat',
+                OPPO: 'OPPO',
+                OPPOTest: 'OPPOTest',
+                VIVO: 'VIVO',
+                General: 'General',
+                Web: 'Web',
+                WebTest: 'WebTest',
+                Research: 'Research',
+            };
+            Platform._Ues = {
+                get value() {
+                    return this['_platform_name'] ? this['_platform_name'] : null;
+                },
+                set value(val) {
+                    this['_platform_name'] = val;
+                    switch (val) {
+                        case Platform._Tpye.WebTest:
+                            Laya.LocalStorage.clear();
+                            Gold._num.value = 5000;
+                            break;
+                        case Platform._Tpye.Research:
+                            Gold._num.value = 50000000000000;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            };
+        })(Platform = lwg.Platform || (lwg.Platform = {}));
+        let SceneAnimation;
+        (function (SceneAnimation) {
+            SceneAnimation._Type = {
+                fadeOut: 'fadeOut',
+                stickIn: {
+                    randomstickIn: 'randomstickIn',
+                    upLeftDownLeft: 'upLeftDownRight',
+                    upRightDownLeft: 'upRightDownLeft',
+                },
+                shutters: {
+                    crosswise: 'crosswise',
+                    vertical: 'vertical',
+                    lSideling: 'lSideling',
+                    rSideling: 'rSideling',
+                    intersection1: 'intersection1',
+                    intersection2: 'intersection2',
+                    randomshutters: 'randomshutters',
+                },
+                leftMove: 'leftMove',
+                rightMove: 'rightMove',
+                centerRotate: 'centerRotate',
+                drawUp: 'drawUp',
+            };
+            SceneAnimation._openSwitch = true;
+            SceneAnimation._closeSwitch = false;
+            SceneAnimation._Use = {
+                get value() {
+                    return this['SceneAnimation_name'] ? this['SceneAnimation_name'] : null;
+                },
+                set value(val) {
+                    this['SceneAnimation_name'] = val;
+                }
+            };
+            function _commonOpenAni(Scene) {
+                let sumDelay = 0;
+                var afterAni = () => {
+                    Click._switch = true;
+                    if (Scene[Scene.name]) {
+                        Scene[Scene.name].lwgOpenAniAfter();
+                        Scene[Scene.name].lwgButton();
+                        Admin._SceneChange._close();
+                    }
+                };
+                if (!SceneAnimation._openSwitch) {
+                    afterAni();
+                    return 0;
+                }
+                switch (SceneAnimation._Use.value) {
+                    case SceneAnimation._Type.fadeOut:
+                        sumDelay = _fadeOut_Open(Scene);
+                        break;
+                    case SceneAnimation._Type.stickIn.randomstickIn:
+                        sumDelay = _stickIn(Scene, SceneAnimation._Type.stickIn.randomstickIn);
+                        break;
+                    case SceneAnimation._Type.stickIn.upLeftDownLeft:
+                        sumDelay = _stickIn(Scene, SceneAnimation._Type.stickIn.upLeftDownLeft);
+                        break;
+                    case SceneAnimation._Type.stickIn.upRightDownLeft:
+                        sumDelay = _stickIn(Scene, SceneAnimation._Type.stickIn.upRightDownLeft);
+                    case SceneAnimation._Type.stickIn.randomstickIn:
+                        sumDelay = _stickIn(Scene, SceneAnimation._Type.stickIn.randomstickIn);
+                    case SceneAnimation._Type.shutters.lSideling:
+                        sumDelay = _shutters_Open(Scene, SceneAnimation._Type.shutters.lSideling);
+                    default:
+                        sumDelay = _fadeOut_Open(Scene);
+                        break;
+                }
+                Laya.timer.once(sumDelay, this, () => {
+                    afterAni();
+                });
+                return sumDelay;
+            }
+            SceneAnimation._commonOpenAni = _commonOpenAni;
+            function _commonCloseAni(CloseScene, closeFunc) {
+                CloseScene[CloseScene.name].lwgBeforeCloseAni();
+                let sumDelay = 0;
+                switch (SceneAnimation._Use.value) {
+                    case SceneAnimation._Type.fadeOut:
+                        sumDelay = _fadeOut_Close(CloseScene);
+                        break;
+                    case SceneAnimation._Type.stickIn.upLeftDownLeft:
+                        break;
+                    case SceneAnimation._Type.stickIn.upRightDownLeft:
+                        break;
+                    case SceneAnimation._Type.stickIn.randomstickIn:
+                        break;
+                    case SceneAnimation._Type.shutters.vertical:
+                        sumDelay = _shutters_Close(CloseScene, SceneAnimation._Type.shutters.vertical);
+                        break;
+                    case SceneAnimation._Type.shutters.crosswise:
+                        sumDelay = _shutters_Close(CloseScene, SceneAnimation._Type.shutters.crosswise);
+                        break;
+                    case SceneAnimation._Type.shutters.lSideling:
+                        sumDelay = _shutters_Close(CloseScene, SceneAnimation._Type.shutters.lSideling);
+                        break;
+                    case SceneAnimation._Type.shutters.rSideling:
+                        sumDelay = _shutters_Close(CloseScene, SceneAnimation._Type.shutters.rSideling);
+                        break;
+                    case SceneAnimation._Type.shutters.intersection1:
+                        sumDelay = _shutters_Close(CloseScene, SceneAnimation._Type.shutters.intersection1);
+                        break;
+                    case SceneAnimation._Type.shutters.intersection2:
+                        sumDelay = _shutters_Close(CloseScene, SceneAnimation._Type.shutters.intersection2);
+                        break;
+                    case SceneAnimation._Type.shutters.randomshutters:
+                        sumDelay = _shutters_Close(CloseScene, SceneAnimation._Type.shutters.randomshutters);
+                        break;
+                    default:
+                        sumDelay = _fadeOut_Close(CloseScene);
+                        break;
+                }
+                Laya.timer.once(sumDelay, this, () => {
+                    closeFunc();
+                });
+            }
+            SceneAnimation._commonCloseAni = _commonCloseAni;
+            function _fadeOut_Open(Scene) {
+                let time = 400;
+                let delay = 300;
+                if (Scene['Background']) {
+                    Animation2D.fadeOut(Scene, 0, 1, time / 2, delay);
+                }
+                Animation2D.fadeOut(Scene, 0, 1, time, 0);
+                return time + delay;
+            }
+            function _fadeOut_Close(Scene) {
+                let time = 150;
+                let delay = 50;
+                if (Scene['Background']) {
+                    Animation2D.fadeOut(Scene, 1, 0, time / 2);
+                }
+                Animation2D.fadeOut(Scene, 1, 0, time, delay);
+                return time + delay;
+            }
+            function _shutters_Open(Scene, type) {
+                let num = 12;
+                let time = 500;
+                let delaye = 100;
+                let caller = {};
+                Scene.scale(1, 0);
+                Laya.timer.once(delaye, caller, () => {
+                    Scene.scale(1, 1);
+                    const tex = Scene.drawToTexture(Laya.stage.width, Laya.stage.height, 0, 0);
+                    Scene.scale(1, 0);
+                    for (let index = 0; index < num; index++) {
+                        let Sp = new Laya.Sprite;
+                        Laya.stage.addChild(Sp);
+                        Sp.width = Laya.stage.width;
+                        Sp.height = Laya.stage.height;
+                        Sp.pos(0, 0);
+                        Sp.zOrder = 100;
+                        Sp.name = 'shutters';
+                        Sp.texture = tex;
+                        let Mask = new Laya.Image;
+                        Mask.width = Sp.width;
+                        Mask.height = Laya.stage.height / num;
+                        Mask.pos(0, Laya.stage.height / num * index);
+                        Mask.skin = `Lwg/UI/ui_orthogon_cycn.png`;
+                        Sp.mask = Mask;
+                        Tools._Node.changePivot(Sp, Sp.width / 2, index * Sp.height / num + Sp.height / num / 2);
+                        Sp.scale(1, 0);
+                        Animation2D.scale(Sp, 1, 0, 1, 1, time, 0, () => {
+                            Scene.scale(1, 1);
+                            tex.destroy();
+                            Sp.destroy();
+                        });
+                    }
+                });
+                return time + delaye + 100;
+            }
+            function _shutters_Close(Scene, type) {
+                let num = 10;
+                let time = 600;
+                let delaye = 100;
+                let caller = {};
+                let ran = Tools._Array.randomGetOne([0, 1, 2, 3, 4, 5]);
+                Laya.timer.once(delaye, caller, () => {
+                    const tex = Scene.drawToTexture(Laya.stage.width, Laya.stage.height, 0, 0);
+                    Scene.scale(1, 0);
+                    for (let index = 0; index < num; index++) {
+                        let sp = new Laya.Sprite;
+                        Laya.stage.addChild(sp);
+                        sp.width = Laya.stage.width;
+                        sp.height = Laya.stage.height;
+                        sp.pos(0, 0);
+                        sp.zOrder = 100;
+                        sp.name = 'shutters';
+                        sp.texture = tex;
+                        let Mask = new Laya.Image;
+                        Mask.skin = `Lwg/UI/ui_orthogon_cycn.png`;
+                        Mask.sizeGrid = '12,12,12,12';
+                        sp.mask = Mask;
+                        var func1 = () => {
+                            Mask.width = Laya.stage.width;
+                            Mask.height = Math.round(Laya.stage.height / num);
+                            Mask.pos(0, Math.round(Laya.stage.height / num * index));
+                            Tools._Node.changePivot(sp, sp.width / 2, index * sp.height / num + sp.height / num / 2);
+                            Animation2D.scale(sp, 1, 1, 1, 0, time, 0, () => {
+                                tex.destroy();
+                                sp.destroy();
+                            });
+                        };
+                        var func2 = () => {
+                            Mask.width = Math.round(Laya.stage.width / num);
+                            Mask.height = Laya.stage.height;
+                            Mask.pos(Math.round(Laya.stage.width / num * index), 0);
+                            Tools._Node.changePivot(sp, index * sp.width / num + sp.width / num / 2, sp.height / 2);
+                            Animation2D.scale(sp, 1, 1, 0, 1, time, 0, () => {
+                                tex.destroy();
+                                sp.destroy();
+                            });
+                        };
+                        var func6 = () => {
+                            Mask.width = Laya.stage.width;
+                            Mask.height = Math.round(Laya.stage.height / num);
+                            Mask.pos(0, Math.round(Laya.stage.height / num * index));
+                            Tools._Node.changePivot(sp, sp.width / 2, index * sp.height / num + sp.height / num / 2);
+                            Animation2D.scale(sp, 1, 1, 1, 0, time, 0, () => {
+                                tex.destroy();
+                                sp.destroy();
+                            });
+                            if (index % 2 == 0) {
+                                let sp1 = new Laya.Sprite;
+                                Laya.stage.addChild(sp1);
+                                sp1.width = Laya.stage.width;
+                                sp1.height = Laya.stage.height;
+                                sp1.pos(0, 0);
+                                sp1.zOrder = 100;
+                                sp1.name = 'shutters';
+                                sp1.texture = tex;
+                                let Mask1 = new Laya.Image;
+                                Mask1.skin = `Lwg/UI/ui_orthogon_cycn.png`;
+                                Mask1.sizeGrid = '12,12,12,12';
+                                sp1.mask = Mask1;
+                                Mask1.width = Math.round(Laya.stage.width / num);
+                                Mask1.height = Laya.stage.height;
+                                Mask1.pos(Math.round(Laya.stage.width / num * index), 0);
+                                Tools._Node.changePivot(sp1, Math.round(index * sp1.width / num + sp1.width / num / 2), Math.round(sp1.height / 2));
+                                Animation2D.scale(sp1, 1, 1, 0, 1, time, 0, () => {
+                                    tex.destroy();
+                                    sp1.destroy();
+                                });
+                            }
+                        };
+                        var func3 = () => {
+                            Mask.width = Math.round(Laya.stage.width / num);
+                            Mask.height = Laya.stage.height + 1000;
+                            Mask.pos(Math.round(Laya.stage.width / num * index), -1000 / 2);
+                            Tools._Node.changePivot(Mask, Math.round(Mask.width / 2), Math.round(Mask.height / 2));
+                            Tools._Node.changePivot(sp, index * sp.width / num + sp.width / num / 2, sp.height / 2);
+                            Mask.rotation = 10;
+                            Animation2D.scale(sp, 1, 1, 0, 1, time, 0, () => {
+                                tex.destroy();
+                                sp.destroy();
+                            });
+                        };
+                        let addLen = 1000;
+                        var func4 = () => {
+                            Mask.width = Math.round(Laya.stage.width / num);
+                            Mask.height = Laya.stage.height + addLen;
+                            Mask.pos(Math.round(Laya.stage.width / num * index), Math.round(-addLen / 2));
+                            Tools._Node.changePivot(Mask, Math.round(Mask.width / 2), Math.round(Mask.height / 2));
+                            Tools._Node.changePivot(sp, index * sp.width / num + sp.width / num / 2, sp.height / 2);
+                            Mask.rotation = -10;
+                            Animation2D.scale(sp, 1, 1, 0, 1, time, 0, () => {
+                                tex.destroy();
+                                sp.destroy();
+                            });
+                        };
+                        var func5 = () => {
+                            Mask.width = Laya.stage.width / num;
+                            Mask.height = Laya.stage.height + addLen;
+                            Mask.pos(Laya.stage.width / num * index, -addLen / 2);
+                            Tools._Node.changePivot(Mask, Mask.width / 2, Mask.height / 2);
+                            Tools._Node.changePivot(sp, index * sp.width / num + sp.width / num / 2, sp.height / 2);
+                            Mask.rotation = -15;
+                            Animation2D.scale(sp, 1, 1, 0, 1, time, 0, () => {
+                                tex.destroy();
+                                sp.destroy();
+                            });
+                            let sp2 = new Laya.Sprite;
+                            Laya.stage.addChild(sp2);
+                            sp2.width = Laya.stage.width;
+                            sp2.height = Laya.stage.height;
+                            sp2.pos(0, 0);
+                            sp2.zOrder = 100;
+                            sp2.name = 'shutters';
+                            sp2.texture = tex;
+                            let Mask2 = new Laya.Image;
+                            Mask2.skin = `Lwg/UI/ui_orthogon_cycn.png`;
+                            Mask2.sizeGrid = '12,12,12,12';
+                            sp2.mask = Mask2;
+                            Mask2.width = Laya.stage.width / num;
+                            Mask2.height = Laya.stage.height + addLen;
+                            Mask2.pos(Laya.stage.width / num * index, -addLen / 2);
+                            Tools._Node.changePivot(Mask2, Mask2.width / 2, Mask2.height / 2);
+                            Tools._Node.changePivot(sp2, index * sp2.width / num + sp2.width / num / 2, sp2.height / 2);
+                            Mask2.rotation = 15;
+                            Animation2D.scale(sp2, 1, 1, 0, 1, time, 0, () => {
+                                tex.destroy();
+                                sp2.destroy();
+                            });
+                        };
+                        let arr = [func1, func2, func3, func4, func5, func6];
+                        switch (type) {
+                            case SceneAnimation._Type.shutters.crosswise:
+                                func1();
+                                break;
+                            case SceneAnimation._Type.shutters.vertical:
+                                func2();
+                                break;
+                            case SceneAnimation._Type.shutters.lSideling:
+                                func3();
+                                break;
+                            case SceneAnimation._Type.shutters.rSideling:
+                                func4();
+                                break;
+                            case SceneAnimation._Type.shutters.intersection1:
+                                func5();
+                                break;
+                            case SceneAnimation._Type.shutters.intersection2:
+                                func6();
+                            case SceneAnimation._Type.shutters.randomshutters:
+                                arr[ran]();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                });
+                return time + delaye;
+            }
+            function _stickIn(Scene, type) {
+                let sumDelay = 0;
+                let time = 700;
+                let delay = 100;
+                if (Scene.getChildByName('Background')) {
+                    Animation2D.fadeOut(Scene.getChildByName('Background'), 0, 1, time);
+                }
+                let stickInLeftArr = Tools._Node.zOrderByY(Scene, false);
+                for (let index = 0; index < stickInLeftArr.length; index++) {
+                    const element = stickInLeftArr[index];
+                    if (element.name !== 'Background' && element.name.substr(0, 5) !== 'NoAni') {
+                        let originalPovitX = element.pivotX;
+                        let originalPovitY = element.pivotY;
+                        switch (type) {
+                            case SceneAnimation._Type.stickIn.upLeftDownLeft:
+                                element.rotation = element.y > Laya.stage.height / 2 ? -180 : 180;
+                                Tools._Node.changePivot(element, 0, 0);
+                                break;
+                            case SceneAnimation._Type.stickIn.upRightDownLeft:
+                                element.rotation = element.y > Laya.stage.height / 2 ? -180 : 180;
+                                Tools._Node.changePivot(element, element.rotation == 180 ? element.width : 0, 0);
+                                break;
+                            case SceneAnimation._Type.stickIn.randomstickIn:
+                                element.rotation = Tools._Number.randomOneHalf() == 1 ? 180 : -180;
+                                Tools._Node.changePivot(element, Tools._Number.randomOneHalf() == 1 ? 0 : element.width, Tools._Number.randomOneHalf() == 1 ? 0 : element.height);
+                                break;
+                            default:
+                                break;
+                        }
+                        let originalX = element.x;
+                        let originalY = element.y;
+                        element.x = element.pivotX > element.width / 2 ? 800 + element.width : -800 - element.width;
+                        element.y = element.rotation > 0 ? element.y + 200 : element.y - 200;
+                        Animation2D.rotate(element, 0, time, delay * index);
+                        Animation2D.move(element, originalX, originalY, time, () => {
+                            Tools._Node.changePivot(element, originalPovitX, originalPovitY);
+                        }, delay * index);
+                    }
+                }
+                sumDelay = Scene.numChildren * delay + time + 200;
+                return sumDelay;
+            }
+        })(SceneAnimation = lwg.SceneAnimation || (lwg.SceneAnimation = {}));
+        let Admin;
+        (function (Admin) {
+            Admin._game = {
+                switch: true,
+                get level() {
+                    return Laya.LocalStorage.getItem('_gameLevel') ? Number(Laya.LocalStorage.getItem('_gameLevel')) : 1;
+                },
+                set level(val) {
+                    let diff = val - this.level;
+                    if (diff > 0) {
+                        this.maxLevel += diff;
+                    }
+                    if (val > this.loopLevel && this.loopLevel != -1) {
+                        Laya.LocalStorage.setItem('_gameLevel', (1).toString());
+                    }
+                    else {
+                        Laya.LocalStorage.setItem('_gameLevel', (val).toString());
+                    }
+                },
+                get maxLevel() {
+                    return Laya.LocalStorage.getItem('_game_maxLevel') ? Number(Laya.LocalStorage.getItem('_game_maxLevel')) : this.level;
+                },
+                set maxLevel(val) {
+                    Laya.LocalStorage.setItem('_game_maxLevel', val.toString());
+                },
+                get loopLevel() {
+                    return this['_gameloopLevel'] ? this['_gameloopLevel'] : -1;
+                },
+                set loopLevel(lev) {
+                    this['_gameloopLevel'] = lev;
+                },
+                LevelNode: new Laya.Sprite,
+                _createLevel(parent, x, y) {
+                    let sp;
+                    Laya.loader.load('prefab/LevelNode.json', Laya.Handler.create(this, function (prefab) {
+                        let _prefab = new Laya.Prefab();
+                        _prefab.json = prefab;
+                        sp = Laya.Pool.getItemByCreateFun('prefab', _prefab.create, _prefab);
+                        parent.addChild(sp);
+                        sp.pos(x, y);
+                        sp.zOrder = 0;
+                        let level = sp.getChildByName('level');
+                        Admin._game.LevelNode = sp;
+                    }));
+                },
+                pause: {
+                    get switch() {
+                        return Admin._game.switch;
+                    },
+                    set switch(bool) {
+                        this.bool = bool;
+                        if (bool) {
+                            Admin._game.switch = false;
+                            TimerAdmin._switch = false;
+                            Click._switch = true;
+                        }
+                        else {
+                            Admin._game.switch = true;
+                            TimerAdmin._switch = true;
+                            Click._switch = false;
+                        }
+                    }
+                }
+            };
+            Admin._GuideControl = {
+                switch: false,
+            };
+            Admin._SceneControl = {};
+            Admin._sceneScript = {};
+            Admin._Moudel = {};
+            let _SceneName;
+            (function (_SceneName) {
+                _SceneName["PreLoad"] = "PreLoad";
+                _SceneName["PreLoadCutIn"] = "PreLoadCutIn";
+                _SceneName["Guide"] = "Guide";
+                _SceneName["Start"] = "Start";
+                _SceneName["Shop"] = "Shop";
+                _SceneName["Task"] = "Task";
+                _SceneName["Set"] = "Set";
+                _SceneName["Skin"] = "Skin";
+                _SceneName["Puase"] = "Puase";
+                _SceneName["Share"] = "Share";
+                _SceneName["Game3D"] = "Game3D";
+                _SceneName["Victory"] = "Victory";
+                _SceneName["Defeated"] = "Defeated";
+                _SceneName["PassHint"] = "PassHint";
+                _SceneName["SkinTry"] = "SkinTry";
+                _SceneName["Redeem"] = "Redeem";
+                _SceneName["Turntable"] = "Turntable";
+                _SceneName["CaidanPifu"] = "CaidanPifu";
+                _SceneName["Operation"] = "Operation";
+                _SceneName["VictoryBox"] = "VictoryBox";
+                _SceneName["CheckIn"] = "CheckIn";
+                _SceneName["Resurgence"] = "Resurgence";
+                _SceneName["AdsHint"] = "AdsHint";
+                _SceneName["LwgInit"] = "LwgInit";
+                _SceneName["Game"] = "Game";
+                _SceneName["SmallHint"] = "SmallHint";
+                _SceneName["DrawCard"] = "DrawCard";
+                _SceneName["PropTry"] = "PropTry";
+                _SceneName["Card"] = "Card";
+                _SceneName["ExecutionHint"] = "ExecutionHint";
+                _SceneName["SkinQualified"] = "SkinQualified";
+                _SceneName["Eastereggister"] = "Eastereggister";
+                _SceneName["SelectLevel"] = "SelectLevel";
+                _SceneName["Settle"] = "Settle";
+                _SceneName["Special"] = "Special";
+                _SceneName["Compound"] = "Compound";
+            })(_SceneName = Admin._SceneName || (Admin._SceneName = {}));
+            Admin._PreLoadCutIn = {
+                openName: null,
+                closeName: null,
+                func: null,
+                zOrder: null,
+            };
+            function _preLoadOpenScene(openName, closeName, func, zOrder) {
+                _openScene(_SceneName.PreLoadCutIn, closeName, func);
+                Admin._PreLoadCutIn.openName = openName;
+                Admin._PreLoadCutIn.closeName = closeName;
+                Admin._PreLoadCutIn.func = func;
+                Admin._PreLoadCutIn.zOrder = zOrder;
+            }
+            Admin._preLoadOpenScene = _preLoadOpenScene;
+            class _SceneChange {
+                static _openZOderUp() {
+                    if (SceneAnimation._closeSwitch) {
+                        let num = 0;
+                        for (const key in Admin._SceneControl) {
+                            if (Object.prototype.hasOwnProperty.call(Admin._SceneControl, key)) {
+                                const Scene = Admin._SceneControl[key];
+                                if (Scene.parent) {
+                                    num++;
+                                }
+                            }
+                        }
+                        if (this._openScene) {
+                            this._openScene.zOrder = num;
+                            for (let index = 0; index < this._closeScene.length; index++) {
+                                const element = this._closeScene[index];
+                                if (element) {
+                                    element.zOrder = --num;
+                                }
+                                else {
+                                    this._closeScene.splice(index, 1);
+                                    index--;
+                                }
+                            }
+                        }
+                    }
+                }
+                ;
+                static _closeZOderUP(CloseScene) {
+                    if (SceneAnimation._closeSwitch) {
+                        let num = 0;
+                        for (const key in Admin._SceneControl) {
+                            if (Object.prototype.hasOwnProperty.call(Admin._SceneControl, key)) {
+                                const Scene = Admin._SceneControl[key];
+                                if (Scene.parent) {
+                                    num++;
+                                }
+                            }
+                        }
+                        if (CloseScene) {
+                            CloseScene.zOrder = num;
+                            if (this._openScene) {
+                                this._openScene.zOrder = num - 1;
+                            }
+                        }
+                    }
+                }
+                ;
+                static _open() {
+                    if (this._openScene) {
+                        if (this._openZOder) {
+                            Laya.stage.addChildAt(this._openScene, this._openZOder);
+                        }
+                        else {
+                            Laya.stage.addChild(this._openScene);
+                        }
+                        if (Admin._Moudel[`_${this._openScene.name}`]) {
+                            if (Admin._Moudel[`_${this._openScene.name}`][this._openScene.name]) {
+                                if (!this._openScene.getComponent(Admin._Moudel[`_${this._openScene.name}`][this._openScene.name])) {
+                                    this._openScene.addComponent(Admin._Moudel[`_${this._openScene.name}`][this._openScene.name]);
+                                }
+                            }
+                        }
+                        else {
+                            console.log(`${this._openScene.name}场景没有同名脚本！,需在LwgInit脚本中导入该模块！`);
+                        }
+                        this._openZOderUp();
+                        this._openFunc();
+                    }
+                }
+                ;
+                static _close() {
+                    if (this._closeScene.length > 0) {
+                        for (let index = 0; index < this._closeScene.length; index++) {
+                            let scene = this._closeScene[index];
+                            if (scene) {
+                                _closeScene(scene.name);
+                                this._closeScene.splice(index, 1);
+                                index--;
+                            }
+                        }
+                    }
+                    this._remake();
+                }
+                static _remake() {
+                    this._openScene = null;
+                    this._openZOder = 1;
+                    this._openFunc = null;
+                    this._closeZOder = 0;
+                }
+            }
+            _SceneChange._openScene = null;
+            _SceneChange._openZOder = 1;
+            _SceneChange._openFunc = null;
+            _SceneChange._closeScene = [];
+            _SceneChange._closeZOder = 0;
+            _SceneChange._sceneNum = 1;
+            Admin._SceneChange = _SceneChange;
+            function _openScene(openName, closeName, func, zOrder) {
+                Click._switch = false;
+                Laya.Scene.load('Scene/' + openName + '.json', Laya.Handler.create(this, function (scene) {
+                    if (Tools._Node.checkChildren(Laya.stage, openName)) {
+                        console.log(openName, '场景重复出现！请检查代码');
+                    }
+                    else {
+                        _SceneChange._openScene = Admin._SceneControl[scene.name = openName] = scene;
+                        _SceneChange._closeScene.push(Admin._SceneControl[closeName]);
+                        _SceneChange._closeZOder = closeName ? Admin._SceneControl[closeName].zOrder : 0;
+                        _SceneChange._openZOder = zOrder ? zOrder : null;
+                        _SceneChange._openFunc = func ? func : () => { };
+                        _SceneChange._open();
+                    }
+                }));
+            }
+            Admin._openScene = _openScene;
+            function _closeScene(closeName, func) {
+                if (!Admin._SceneControl[closeName]) {
+                    console.log('场景', closeName, '关闭失败！可能是名称不对！');
+                    return;
+                }
+                var closef = () => {
+                    func && func();
+                    Click._switch = true;
+                    Admin._SceneControl[closeName].close();
+                };
+                if (!SceneAnimation._closeSwitch) {
+                    closef();
+                    return;
+                }
+                _SceneChange._closeZOderUP(Admin._SceneControl[closeName]);
+                let script = Admin._SceneControl[closeName][Admin._SceneControl[closeName].name];
+                if (script) {
+                    if (script) {
+                        Click._switch = false;
+                        script.lwgBeforeCloseAni();
+                        let time0 = script.lwgCloseAni();
+                        if (time0 !== null) {
+                            Laya.timer.once(time0, this, () => {
+                                closef();
+                                Click._switch = true;
+                            });
+                        }
+                        else {
+                            SceneAnimation._commonCloseAni(Admin._SceneControl[closeName], closef);
+                        }
+                    }
+                }
+            }
+            Admin._closeScene = _closeScene;
+            class _ScriptBase extends Laya.Script {
+                constructor() {
+                    super(...arguments);
+                    this.ownerSceneName = '';
+                }
+                getFind(name, type) {
+                    if (!this[`_Scene${type}${name}`]) {
+                        let Node = Tools._Node.findChild2D(this.owner.scene, name);
+                        if (Node) {
+                            return this[`_Scene${type}${name}`] = Node;
+                        }
+                        else {
+                            console.log(`场景内不存在节点${name}`);
+                        }
+                    }
+                    else {
+                        return this[`_Scene${type}${name}`];
+                    }
+                }
+                _FindImg(name) {
+                    return this.getFind(name, '_FindImg');
+                }
+                _FindSp(name) {
+                    return this.getFind(name, '_FindSp');
+                }
+                _FindBox(name) {
+                    return this.getFind(name, '_FindBox');
+                }
+                _FindTap(name) {
+                    return this.getFind(name, '_FindTap');
+                }
+                _FindLabel(name) {
+                    return this.getFind(name, '_FindLabel');
+                }
+                _FindList(name) {
+                    return this.getFind(name, '_FindList');
+                }
+                _storeNum(name, _func, initial) {
+                    return StorageAdmin._mum(`${this.owner.name}/${name}`, _func, initial);
+                }
+                _storeStr(name, _func, initial) {
+                    return StorageAdmin._str(`${this.owner.name}/${name}`, _func, initial);
+                }
+                _storeBool(name, _func, initial) {
+                    return StorageAdmin._bool(`${this.owner.name}/${name}`, _func, initial);
+                }
+                _storeArray(name, _func, initial) {
+                    return StorageAdmin._array(`${this.owner.name}/${name}`, _func, initial);
+                }
+                lwgOnAwake() { }
+                ;
+                lwgAdaptive() { }
+                ;
+                lwgEvent() { }
+                ;
+                _evReg(name, func) {
+                    EventAdmin._register(name, this, func);
+                }
+                _evRegOne(name, func) {
+                    EventAdmin._registerOnce(name, this, func);
+                }
+                _evNotify(name, args) {
+                    EventAdmin._notify(name, args);
+                }
+                lwgOnEnable() { }
+                lwgOnStart() { }
+                lwgButton() { }
+                ;
+                _btnDown(target, down, effect) {
+                    Click._on(effect == undefined ? Click._Use.value : effect, target, this, (e) => {
+                        Click._switch && down && down(e);
+                    }, null, null, null);
+                }
+                _btnMove(target, move, effect) {
+                    Click._on(effect == undefined ? Click._Use.value : effect, target, this, null, (e) => {
+                        Click._switch && move && move(e);
+                    }, null, null);
+                }
+                _btnUp(target, up, effect) {
+                    Click._on(effect == undefined ? Click._Use.value : effect, target, this, null, null, (e) => {
+                        Click._switch && up && up(e);
+                    }, null);
+                }
+                _btnOut(target, out, effect) {
+                    Click._on(effect == undefined ? Click._Use.value : effect, target, this, null, null, null, (e) => { Click._switch && out && out(e); });
+                }
+                _btnFour(target, down, move, up, out, effect) {
+                    Click._on(effect == null ? effect : Click._Use.value, target, this, (e) => { Click._switch && down && down(e); }, (e) => { Click._switch && move && move(e); }, (e) => { Click._switch && up && up(e); }, (e) => { Click._switch && out && out(e); });
+                }
+                _openScene(openName, closeSelf, preLoadCutIn, func, zOrder) {
+                    let closeName;
+                    if (closeSelf == undefined || closeSelf == true) {
+                        closeName = this.ownerSceneName;
+                    }
+                    if (!preLoadCutIn) {
+                        Admin._openScene(openName, closeName, func, zOrder);
+                    }
+                    else {
+                        Admin._preLoadOpenScene(openName, closeName, func, zOrder);
+                    }
+                }
+                _closeScene(sceneName, func) {
+                    Admin._closeScene(sceneName ? sceneName : this.ownerSceneName, func);
+                }
+                lwgOnUpdate() { }
+                ;
+                lwgOnDisable() { }
+                ;
+                onStageMouseDown(e) { Click._switch && this.lwgOnStageDown(e); }
+                ;
+                onStageMouseMove(e) { Click._switch && this.lwgOnStageMove(e); }
+                ;
+                onStageMouseUp(e) { Click._switch && this.lwgOnStageUp(e); }
+                ;
+                lwgOnStageDown(e) { }
+                ;
+                lwgOnStageMove(e) { }
+                ;
+                lwgOnStageUp(e) { }
+                ;
+            }
+            Admin._ScriptBase = _ScriptBase;
+            class _SceneBase extends _ScriptBase {
+                constructor() {
+                    super();
+                    this._calssName = _SceneName.PreLoad;
+                }
+                get _Owner() {
+                    return this.owner;
+                }
+                getVar(name, type) {
+                    if (!this[`_Scene${type}${name}`]) {
+                        if (this._Owner[name]) {
+                            return this[`_Scene${type}${name}`] = this._Owner[name];
+                        }
+                        else {
+                            console.log('场景内不存在var节点：', name);
+                            return undefined;
+                        }
+                    }
+                    else {
+                        return this[`_Scene${type}${name}`];
+                    }
+                }
+                _SpriteVar(name) {
+                    return this.getVar(name, '_SpriteVar');
+                }
+                _AniVar(name) {
+                    return this.getVar(name, '_AniVar');
+                }
+                _BtnVar(name) {
+                    return this.getVar(name, '_BtnVar');
+                }
+                _BoxVar(name) {
+                    return this.getVar(name, '_BoxVar');
+                }
+                _ImgVar(name) {
+                    return this.getVar(name, '_ImgVar');
+                }
+                _LabelVar(name) {
+                    return this.getVar(name, '_LabelVar');
+                }
+                _ListVar(name) {
+                    return this.getVar(name, '_ListVar');
+                }
+                _TapVar(name) {
+                    return this.getVar(name, '_TapVar');
+                }
+                _TextVar(name) {
+                    return this.getVar(name, '_TextVar');
+                }
+                _TextInputVar(name) {
+                    return this.getVar(name, '_TextInputVar');
+                }
+                _FontClipVar(name) {
+                    return this.getVar(name, '_FontClipVar');
+                }
+                _FontBox(name) {
+                    return this.getVar(name, '_FontBox');
+                }
+                _FontTextInput(name) {
+                    return this.getVar(name, '_FontInput');
+                }
+                onAwake() {
+                    this._Owner.width = Laya.stage.width;
+                    this._Owner.height = Laya.stage.height;
+                    if (this._Owner.getChildByName('Background')) {
+                        this._Owner.getChildByName('Background')['width'] = Laya.stage.width;
+                        this._Owner.getChildByName('Background')['height'] = Laya.stage.height;
+                    }
+                    if (this._Owner.name == null) {
+                        console.log('场景名称失效，脚本赋值失败');
+                    }
+                    else {
+                        this.ownerSceneName = this._calssName = this._Owner.name;
+                        this._Owner[this._calssName] = this;
+                    }
+                    this.moduleOnAwake();
+                    this.lwgOnAwake();
+                    this.lwgAdaptive();
+                }
+                moduleOnAwake() { }
+                onEnable() {
+                    this.moduleEvent();
+                    this.lwgEvent();
+                    this.moduleOnEnable();
+                    this.lwgOnEnable();
+                }
+                moduleOnEnable() { }
+                ;
+                moduleEvent() { }
+                ;
+                onStart() {
+                    this.btnAndOpenAni();
+                    this.moduleOnStart();
+                    this.lwgOnStart();
+                }
+                moduleOnStart() { }
+                btnAndOpenAni() {
+                    let time = this.lwgOpenAni();
+                    if (time !== null) {
+                        Laya.timer.once(time, this, () => {
+                            Click._switch = true;
+                            this.lwgOpenAniAfter();
+                            this.lwgButton();
+                            _SceneChange._close();
+                        });
+                    }
+                    else {
+                        SceneAnimation._commonOpenAni(this._Owner);
+                    }
+                }
+                lwgOpenAni() { return null; }
+                ;
+                lwgOpenAniAfter() { }
+                ;
+                _adaHeight(arr) {
+                    Adaptive._stageHeight(arr);
+                }
+                ;
+                _adaWidth(arr) {
+                    Adaptive._stageWidth(arr);
+                }
+                ;
+                _adaptiveCenter(arr) {
+                    Adaptive._center(arr, Laya.stage);
+                }
+                ;
+                onUpdate() { this.lwgOnUpdate(); }
+                ;
+                lwgBeforeCloseAni() { }
+                lwgCloseAni() { return null; }
+                ;
+                onDisable() {
+                    Animation2D.fadeOut(this._Owner, 1, 0, 2000, 1);
+                    this.lwgOnDisable();
+                    Laya.timer.clearAll(this);
+                    Laya.Tween.clearAll(this);
+                    EventAdmin._offCaller(this);
+                }
+            }
+            Admin._SceneBase = _SceneBase;
+            class _ObjectBase extends _ScriptBase {
+                constructor() {
+                    super();
+                }
+                get _Owner() {
+                    return this.owner;
+                }
+                get _point() {
+                    return new Laya.Point(this._Owner.x, this._Owner.y);
+                }
+                get _Scene() {
+                    return this.owner.scene;
+                }
+                get _Parent() {
+                    if (this._Owner.parent) {
+                        return this.owner.parent;
+                    }
+                }
+                get _gPoint() {
+                    return this._Parent.localToGlobal(new Laya.Point(this._Owner.x, this._Owner.y));
+                }
+                get _RigidBody() {
+                    if (!this._Owner['_OwnerRigidBody']) {
+                        this._Owner['_OwnerRigidBody'] = this._Owner.getComponent(Laya.RigidBody);
+                    }
+                    return this._Owner['_OwnerRigidBody'];
+                }
+                get _BoxCollier() {
+                    if (!this._Owner['_OwnerBoxCollier']) {
+                        this._Owner['_OwnerBoxCollier'] = this._Owner.getComponent(Laya.BoxCollider);
+                    }
+                    return this._Owner['_OwnerBoxCollier'];
+                }
+                get _CilrcleCollier() {
+                    if (!this._Owner['_OwnerCilrcleCollier']) {
+                        return this._Owner['_OwnerCilrcleCollier'] = this._Owner.getComponent(Laya.BoxCollider);
+                    }
+                    return this._Owner['_OwnerCilrcleCollier'];
+                }
+                get _PolygonCollier() {
+                    if (!this._Owner['_OwnerPolygonCollier']) {
+                        return this._Owner['_OwnerPolygonCollier'] = this._Owner.getComponent(Laya.BoxCollider);
+                    }
+                    return this._Owner['_OwnerPolygonCollier'];
+                }
+                getSceneVar(name, type) {
+                    if (!this[`_Scene${type}${name}`]) {
+                        if (this._Scene[name]) {
+                            return this[`_Scene${type}${name}`] = this._Scene[name];
+                        }
+                        else {
+                            console.log(`场景内不存在var节点${name}`);
+                        }
+                    }
+                    else {
+                        return this[`_Scene${type}${name}`];
+                    }
+                }
+                _SceneSprite(name) {
+                    return this.getSceneVar(name, '_SceneSprite');
+                }
+                _SceneAni(name) {
+                    return this.getSceneVar(name, '_SceneAni');
+                }
+                _SceneImg(name) {
+                    return this.getSceneVar(name, '_SceneImg');
+                }
+                _SceneLabel(name) {
+                    return this.getSceneVar(name, '_SceneLabel');
+                }
+                _SceneList(name) {
+                    return this.getSceneVar(name, '_SceneList');
+                }
+                _SceneTap(name) {
+                    return this.getSceneVar(name, '_SceneTap');
+                }
+                _SceneText(name) {
+                    return this.getSceneVar(name, '_SceneText');
+                }
+                _SceneFontClip(name) {
+                    return this.getSceneVar(name, '_SceneFontClip');
+                }
+                _SceneBox(name) {
+                    return this.getSceneVar(name, '_SceneBox');
+                }
+                getChild(name, type) {
+                    if (!this[`${type}${name}`]) {
+                        if (this._Owner.getChildByName(name)) {
+                            return this[`${type}${name}`] = this._Owner.getChildByName(name);
+                        }
+                        else {
+                            console.log('场景内不存在子节点：', name);
+                            return null;
+                        }
+                    }
+                    else {
+                        return this[`${type}${name}`];
+                    }
+                }
+                _ImgChild(name) {
+                    return this.getChild(name, '_ImgChild');
+                }
+                _SpriteChild(name) {
+                    return this.getChild(name, '_SpriteChild');
+                }
+                _LableChild(name) {
+                    return this.getChild(name, '_LableChild');
+                }
+                _ListChild(name) {
+                    return this.getChild(name, '_ListChild');
+                }
+                _TapChild(name) {
+                    return this.getChild(name, '_TapChild');
+                }
+                _TapBox(name) {
+                    return this.getChild(name, '_TapBox');
+                }
+                _TapFontClip(name) {
+                    return this.getChild(name, '_TapFontClip');
+                }
+                onAwake() {
+                    this._Owner[this['__proto__']['constructor'].name] = this;
+                    this.ownerSceneName = this._Scene.name;
+                    this._fPoint = new Laya.Point(this._Owner.x, this._Owner.y);
+                    this._fGPoint = this._Parent.localToGlobal(new Laya.Point(this._Owner.x, this._Owner.y));
+                    this._fRotation = this._Owner.rotation;
+                    this.lwgOnAwake();
+                    this.lwgAdaptive();
+                }
+                onEnable() {
+                    this.lwgButton();
+                    this.lwgEvent();
+                    this.lwgOnEnable();
+                }
+                onStart() {
+                    this.lwgOnStart();
+                }
+                onUpdate() {
+                    this.lwgOnUpdate();
+                }
+                onDisable() {
+                    this.lwgOnDisable();
+                    Laya.timer.clearAll(this);
+                    EventAdmin._offCaller(this);
+                }
+            }
+            Admin._ObjectBase = _ObjectBase;
+        })(Admin = lwg.Admin || (lwg.Admin = {}));
+        let StorageAdmin;
+        (function (StorageAdmin) {
+            class admin {
+                removeSelf() { }
+                func() { }
+            }
+            class _NumVariable extends admin {
+                get value() { return; }
+                ;
+                set value(val) { }
+            }
+            StorageAdmin._NumVariable = _NumVariable;
+            class _StrVariable extends admin {
+                get value() { return; }
+                set value(val) { }
+            }
+            StorageAdmin._StrVariable = _StrVariable;
+            class _BoolVariable extends admin {
+                get value() { return; }
+                set value(val) { }
+            }
+            StorageAdmin._BoolVariable = _BoolVariable;
+            class _ArrayVariable extends admin {
+                get value() { return; }
+                set value(val) { }
+            }
+            StorageAdmin._ArrayVariable = _ArrayVariable;
+            class _ArrayArrVariable extends admin {
+                get value() { return; }
+                set value(val) { }
+            }
+            StorageAdmin._ArrayArrVariable = _ArrayArrVariable;
+            function _mum(name, _func, initial) {
+                if (!this[`_mum${name}`]) {
+                    this[`_mum${name}`] = {
+                        get value() {
+                            if (Laya.LocalStorage.getItem(name)) {
+                                return Number(Laya.LocalStorage.getItem(name));
+                            }
+                            else {
+                                initial = initial ? initial : 0;
+                                Laya.LocalStorage.setItem(name, initial.toString());
+                                return initial;
+                            }
+                        },
+                        set value(data) {
+                            Laya.LocalStorage.setItem(name, data.toString());
+                            this['func']();
+                        },
+                        removeSelf() {
+                            Laya.LocalStorage.removeItem(name);
+                        },
+                        func() {
+                            this['_func'] && this['_func']();
+                        }
+                    };
+                }
+                if (_func) {
+                    this[`_mum${name}`]['_func'] = _func;
+                }
+                return this[`_mum${name}`];
+            }
+            StorageAdmin._mum = _mum;
+            function _str(name, _func, initial) {
+                if (!this[`_str${name}`]) {
+                    this[`_str${name}`] = {
+                        get value() {
+                            if (Laya.LocalStorage.getItem(name)) {
+                                return Laya.LocalStorage.getItem(name);
+                            }
+                            else {
+                                initial = initial ? initial : null;
+                                Laya.LocalStorage.setItem(name, initial.toString());
+                                return initial;
+                            }
+                        },
+                        set value(data) {
+                            Laya.LocalStorage.setItem(name, data.toString());
+                            this['func']();
+                        },
+                        removeSelf() {
+                            Laya.LocalStorage.removeItem(name);
+                        },
+                        func() {
+                            _func && _func();
+                        }
+                    };
+                }
+                if (_func) {
+                    this[`_str${name}`]['_func'] = _func;
+                }
+                return this[`_str${name}`];
+            }
+            StorageAdmin._str = _str;
+            function _bool(name, _func, initial) {
+                if (!this[`_bool${name}`]) {
+                    this[`_bool${name}`] = {
+                        get value() {
+                            if (Laya.LocalStorage.getItem(name)) {
+                                if (Laya.LocalStorage.getItem(name) == "false") {
+                                    return false;
+                                }
+                                else if (Laya.LocalStorage.getItem(name) == "true") {
+                                    return true;
+                                }
+                            }
+                            else {
+                                if (initial) {
+                                    Laya.LocalStorage.setItem(name, "true");
+                                }
+                                else {
+                                    Laya.LocalStorage.setItem(name, "false");
+                                }
+                                this['func']();
+                                return initial;
+                            }
+                        },
+                        set value(bool) {
+                            bool = bool ? "true" : "false";
+                            Laya.LocalStorage.setItem(name, bool.toString());
+                        },
+                        removeSelf() {
+                            Laya.LocalStorage.removeItem(name);
+                        },
+                        func() {
+                            _func && _func();
+                        }
+                    };
+                }
+                if (_func) {
+                    this[`_bool${name}`]['_func'] = _func;
+                }
+                return this[`_bool${name}`];
+            }
+            StorageAdmin._bool = _bool;
+            function _array(name, _func, initial) {
+                if (!this[`_array${name}`]) {
+                    this[`_array${name}`] = {
+                        get value() {
+                            try {
+                                let data = Laya.LocalStorage.getJSON(name);
+                                if (data) {
+                                    return JSON.parse(data);
+                                    ;
+                                }
+                                else {
+                                    initial = initial ? initial : [];
+                                    Laya.LocalStorage.setItem(name, initial.toString());
+                                    this['func']();
+                                    return initial;
+                                }
+                            }
+                            catch (error) {
+                                return [];
+                            }
+                        },
+                        set value(array) {
+                            Laya.LocalStorage.setJSON(name, JSON.stringify(array));
+                        },
+                        removeSelf() {
+                            Laya.LocalStorage.removeItem(name);
+                        },
+                        func() {
+                            _func && _func();
+                        }
+                    };
+                }
+                if (_func) {
+                    this[`_array${name}`]['_func'] = _func;
+                }
+                return this[`_array${name}`];
+            }
+            StorageAdmin._array = _array;
+            function _arrayArr(name, _func, initial) {
+                if (!this[`_arrayArr${name}`]) {
+                    this[`_arrayArr${name}`] = {
+                        get value() {
+                            try {
+                                let data = Laya.LocalStorage.getJSON(name);
+                                if (data) {
+                                    return JSON.parse(data);
+                                    ;
+                                }
+                                else {
+                                    initial = initial ? initial : [];
+                                    Laya.LocalStorage.setItem(name, initial.toString());
+                                    return initial;
+                                }
+                            }
+                            catch (error) {
+                                return [];
+                            }
+                        },
+                        set value(array) {
+                            Laya.LocalStorage.setJSON(name, JSON.stringify(array));
+                            this['func']();
+                        },
+                        removeSelf() {
+                            Laya.LocalStorage.removeItem(name);
+                        },
+                        func() {
+                            _func && _func();
+                        }
+                    };
+                }
+                if (_func) {
+                    this[`_arrayArr${name}`]['_func'] = _func;
+                }
+                return this[`_arrayArr${name}`];
+            }
+            StorageAdmin._arrayArr = _arrayArr;
+        })(StorageAdmin = lwg.StorageAdmin || (lwg.StorageAdmin = {}));
+        let DataAdmin;
+        (function (DataAdmin) {
+            class _Table {
+                constructor(tableName, _tableArr, localStorage, lastVtableName) {
+                    this._property = {
+                        name: 'name',
+                        index: 'index',
+                        sort: 'sort',
+                        chName: 'chName',
+                        classify: 'classify',
+                        unlockWay: 'unlockWay',
+                        conditionNum: 'conditionNum',
+                        degreeNum: 'degreeNum',
+                        compelet: 'compelet',
+                        getAward: 'getAward',
+                        pitch: 'pitch',
+                    };
+                    this._unlockWay = {
+                        ads: 'ads',
+                        gold: 'gold',
+                        customs: 'customs',
+                        diamond: 'diamond',
+                        free: 'free',
+                    };
+                    this._tableName = 'name';
+                    this._lastArr = [];
+                    this._localStorage = false;
+                    if (tableName) {
+                        this._tableName = tableName;
+                        if (localStorage) {
+                            this._localStorage = localStorage;
+                            this._arr = addCompare(_tableArr, tableName, this._property.name);
+                            if (lastVtableName) {
+                                this._compareLastInfor(lastVtableName);
+                            }
+                        }
+                        else {
+                            this._arr = _tableArr;
+                        }
+                    }
+                }
+                get _arr() {
+                    return this[`_${this._tableName}arr`];
+                }
+                set _arr(arr) {
+                    this[`_${this._tableName}arr`] = arr;
+                }
+                get _List() {
+                    return this[`${this._tableName}_List`];
+                }
+                set _List(list) {
+                    this[`${this._tableName}_List`] = list;
+                    list.array = this._arr;
+                    list.selectEnable = false;
+                    list.vScrollBarSkin = "";
+                    list.renderHandler = new Laya.Handler(this, (Cell, index) => {
+                        this._listRender && this._listRender(Cell, index);
+                    });
+                    list.selectHandler = new Laya.Handler(this, (index) => {
+                        this._listSelect && this._listSelect(index);
+                    });
+                }
+                _refreshAndStorage() {
+                    if (this._localStorage) {
+                        Laya.LocalStorage.setJSON(this._tableName, JSON.stringify(this._arr));
+                    }
+                    if (this._List) {
+                        this._List.refresh();
+                    }
+                }
+                _compareLastInfor(lastVtableName) {
+                    this._lastArr = this._getlastVersion(lastVtableName);
+                    if (this._lastArr.length > 0) {
+                        for (let i = 0; i < this._lastArr.length; i++) {
+                            const _lastelement = this._lastArr[i];
+                            for (let j = 0; j < this._arr.length; j++) {
+                                const element = this._arr[j];
+                                if (_lastelement[this._property.compelet]) {
+                                    element[this._property.compelet] = true;
+                                }
+                                if (_lastelement[this._property.getAward]) {
+                                    element[this._property.getAward] = true;
+                                }
+                                if (_lastelement[this._property.degreeNum] > element[this._property.degreeNum]) {
+                                    element[this._property.getAward] = _lastelement[this._property.degreeNum];
+                                }
+                            }
+                        }
+                    }
+                }
+                _getlastVersion(lastVtableName) {
+                    let dataArr = [];
+                    try {
+                        if (Laya.LocalStorage.getJSON(lastVtableName)) {
+                            dataArr = JSON.parse(Laya.LocalStorage.getJSON(lastVtableName));
+                        }
+                    }
+                    catch (error) {
+                        console.log(lastVtableName + '前版本不存在！');
+                    }
+                    return dataArr;
+                }
+                _getProperty(name, pro) {
+                    let value;
+                    for (const key in this._arr) {
+                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                            const element = this._arr[key];
+                            if (element[this._property.name] == name) {
+                                value = element[pro];
+                                break;
+                            }
+                        }
+                    }
+                    return value;
+                }
+                ;
+                _getPitchIndexArr() {
+                    for (let index = 0; index < this._arr.length; index++) {
+                        const element = this._arr[index];
+                        if (element[this._property.name] === this._pitchName) {
+                            return index;
+                        }
+                    }
+                }
+                _getPitchIndexByList() {
+                    if (this._List) {
+                        for (let index = 0; index < this._List.array.length; index++) {
+                            const element = this._List.array[index];
+                            if (element[this._property.name] === this._pitchName) {
+                                return index;
+                            }
+                        }
+                    }
+                }
+                _listTweenToPitch(time, func) {
+                    const index = this._getPitchIndexByList();
+                    index && this._List.tweenTo(index, time, Laya.Handler.create(this, () => {
+                        func && func();
+                    }));
+                }
+                _listTweenToPitchChoose(diffIndex, time, func) {
+                    const index = this._getPitchIndexByList();
+                    index && this._List.tweenTo(index + diffIndex, time, Laya.Handler.create(this, () => {
+                        func && func();
+                    }));
+                }
+                _listScrollToLast() {
+                    const index = this._List.array.length - 1;
+                    index && this._List.scrollTo(index);
+                }
+                _setProperty(name, pro, value) {
+                    for (const key in this._arr) {
+                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                            const element = this._arr[key];
+                            if (element[this._property.name] == name) {
+                                element[pro] = value;
+                                this._refreshAndStorage();
+                                break;
+                            }
+                        }
+                    }
+                    return value;
+                }
+                ;
+                _getObjByName(name) {
+                    let obj = null;
+                    for (const key in this._arr) {
+                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                            const element = this._arr[key];
+                            if (element[this._property.name] == name) {
+                                obj = element;
+                                break;
+                            }
+                        }
+                    }
+                    return obj;
+                }
+                _setProSoleByClassify(name, pro, value) {
+                    const obj = this._getObjByName(name);
+                    const objArr = this._getArrByClassify(obj[this._property.classify]);
+                    for (const key in objArr) {
+                        if (Object.prototype.hasOwnProperty.call(objArr, key)) {
+                            const element = objArr[key];
+                            if (element[this._property.name] == name) {
+                                element[pro] = value;
+                            }
+                            else {
+                                element[pro] = !value;
+                            }
+                        }
+                    }
+                    this._refreshAndStorage();
+                }
+                _setAllProPerty(pro, value) {
+                    for (let index = 0; index < this._arr.length; index++) {
+                        const element = this._arr[index];
+                        element[pro] = value;
+                    }
+                    this._refreshAndStorage();
+                }
+                _addAllProPerty(pro, valueFunc) {
+                    for (let index = 0; index < this._arr.length; index++) {
+                        const element = this._arr[index];
+                        element[pro] += valueFunc();
+                    }
+                    this._refreshAndStorage();
+                }
+                _setPitchProperty(pro, value) {
+                    const obj = this._getPitchObj();
+                    obj[pro] = value;
+                    this._refreshAndStorage();
+                    return value;
+                }
+                ;
+                _getPitchProperty(pro) {
+                    const obj = this._getPitchObj();
+                    return obj[pro];
+                }
+                ;
+                _randomOneObj(proName, value) {
+                    let arr = [];
+                    for (const key in this._arr) {
+                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                            const element = this._arr[key];
+                            if (value) {
+                                if (element[proName] && element[proName] == value) {
+                                    arr.push(element);
+                                }
+                            }
+                            else {
+                                if (element[proName]) {
+                                    arr.push(element);
+                                }
+                            }
+                        }
+                    }
+                    if (arr.length == 0) {
+                        return null;
+                    }
+                    else {
+                        let any = Tools._Array.randomGetOne(arr);
+                        return any;
+                    }
+                }
+                _getArrByClassify(classify) {
+                    let arr = [];
+                    for (const key in this._arr) {
+                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                            const element = this._arr[key];
+                            if (element[this._property.classify] == classify) {
+                                arr.push(element);
+                            }
+                        }
+                    }
+                    return arr;
+                }
+                _getArrByPitchClassify() {
+                    let arr = [];
+                    for (const key in this._arr) {
+                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                            const element = this._arr[key];
+                            if (element[this._property.classify] == this._pitchClassify) {
+                                arr.push(element);
+                            }
+                        }
+                    }
+                    return arr;
+                }
+                _getArrByProperty(proName, value) {
+                    let arr = [];
+                    for (const key in this._arr) {
+                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                            const element = this._arr[key];
+                            if (element[proName] && element[proName] == value) {
+                                arr.push(element);
+                            }
+                        }
+                    }
+                    return arr;
+                }
+                _getPitchClassfiyName() {
+                    const obj = this._getObjByName(this._pitchName);
+                    return obj[this._property.classify];
+                }
+                _getArrByNoProperty(proName, value) {
+                    let arr = [];
+                    for (const key in this._arr) {
+                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                            const element = this._arr[key];
+                            if (element[proName] && element[proName] !== value) {
+                                arr.push(element);
+                            }
+                        }
+                    }
+                    return arr;
+                }
+                _setArrByProperty(proName, value) {
+                    let arr = [];
+                    for (const key in this._arr) {
+                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                            const element = this._arr[key];
+                            if (element[proName]) {
+                                element[proName] == value;
+                                arr.push(element);
+                            }
+                        }
+                    }
+                    this._refreshAndStorage();
+                    return arr;
+                }
+                _checkCondition(name, number, func) {
+                    let chek = null;
+                    number = number == undefined ? 1 : number;
+                    let degreeNum = this._getProperty(name, this._property.degreeNum);
+                    let condition = this._getProperty(name, this._property.conditionNum);
+                    let compelet = this._getProperty(name, this._property.compelet);
+                    if (!compelet) {
+                        if (condition <= degreeNum + number) {
+                            this._setProperty(name, this._property.degreeNum, condition);
+                            this._setProperty(name, this._property.compelet, true);
+                            chek = true;
+                        }
+                        else {
+                            this._setProperty(name, this._property.degreeNum, degreeNum + number);
+                            chek = false;
+                        }
+                    }
+                    else {
+                        chek = -1;
+                    }
+                    if (func) {
+                        func();
+                    }
+                    return chek;
+                }
+                _checkAllCompelet() {
+                    let bool = true;
+                    for (let index = 0; index < this._arr.length; index++) {
+                        const element = this._arr[index];
+                        if (!element[this._property.compelet]) {
+                            bool = false;
+                            return bool;
+                        }
+                    }
+                    return bool;
+                }
+                get _pitchClassify() {
+                    if (!this[`${this._tableName}/pitchClassify`]) {
+                        if (this._localStorage) {
+                            return Laya.LocalStorage.getItem(`${this._tableName}/pitchClassify`) ? Laya.LocalStorage.getItem(`${this._tableName}/pitchClassify`) : null;
+                        }
+                        else {
+                            return this[`${this._tableName}/pitchClassify`] = null;
+                        }
+                    }
+                    else {
+                        return this[`${this._tableName}/pitchClassify`];
+                    }
+                }
+                ;
+                set _pitchClassify(str) {
+                    this._lastPitchClassify = this[`${this._tableName}/pitchClassify`] ? this[`${this._tableName}/pitchClassify`] : null;
+                    this[`${this._tableName}/pitchClassify`] = str;
+                    if (this._localStorage) {
+                        Laya.LocalStorage.setItem(`${this._tableName}/pitchClassify`, str.toString());
+                    }
+                    this._refreshAndStorage();
+                }
+                ;
+                get _pitchName() {
+                    if (!this[`${this._tableName}/_pitchName`]) {
+                        if (this._localStorage) {
+                            return Laya.LocalStorage.getItem(`${this._tableName}/_pitchName`) ? Laya.LocalStorage.getItem(`${this._tableName}/_pitchName`) : null;
+                        }
+                        else {
+                            return this[`${this._tableName}/_pitchName`] = null;
+                        }
+                    }
+                    else {
+                        return this[`${this._tableName}/_pitchName`];
+                    }
+                }
+                ;
+                set _pitchName(str) {
+                    this._lastPitchName = this[`${this._tableName}/_pitchName`];
+                    this[`${this._tableName}/_pitchName`] = str;
+                    if (this._localStorage) {
+                        Laya.LocalStorage.setItem(`${this._tableName}/_pitchName`, str.toString());
+                    }
+                    this._refreshAndStorage();
+                }
+                ;
+                get _lastPitchClassify() {
+                    if (!this[`${this._tableName}/_lastPitchClassify`]) {
+                        if (this._localStorage) {
+                            return Laya.LocalStorage.getItem(`${this._tableName}/_lastPitchClassify`) ? Laya.LocalStorage.getItem(`${this._tableName}/_lastPitchClassify`) : null;
+                        }
+                        else {
+                            return this[`${this._tableName}/_lastPitchClassify`] = null;
+                        }
+                    }
+                    else {
+                        return this[`${this._tableName}/_lastPitchClassify`];
+                    }
+                }
+                ;
+                set _lastPitchClassify(str) {
+                    this[`${this._tableName}/_lastPitchClassify`] = str;
+                    if (this._localStorage && str) {
+                        Laya.LocalStorage.setItem(`${this._tableName}/_lastPitchClassify`, str.toString());
+                    }
+                }
+                ;
+                get _lastPitchName() {
+                    if (!this[`${this._tableName}/_lastPitchName`]) {
+                        if (this._localStorage) {
+                            return Laya.LocalStorage.getItem(`${this._tableName}/_lastPitchName`) ? Laya.LocalStorage.getItem(`${this._tableName}/_lastPitchName`) : null;
+                        }
+                        else {
+                            return this[`${this._tableName}/_lastPitchName`] = null;
+                        }
+                    }
+                    else {
+                        return this[`${this._tableName}/_lastPitchName`];
+                    }
+                }
+                set _lastPitchName(str) {
+                    this[`${this._tableName}/_lastPitchName`] = str;
+                    if (this._localStorage && str) {
+                        Laya.LocalStorage.setItem(`${this._tableName}/_lastPitchName`, str.toString());
+                    }
+                }
+                ;
+                _setPitch(name) {
+                    let _calssify;
+                    for (let index = 0; index < this._arr.length; index++) {
+                        const element = this._arr[index];
+                        if (element[this._property.name] == name) {
+                            element[this._property.pitch] = true;
+                            _calssify = element[this._property.classify];
+                        }
+                        else {
+                            element[this._property.pitch] = false;
+                        }
+                    }
+                    this._pitchClassify = _calssify;
+                    this._pitchName = name;
+                    this._refreshAndStorage();
+                }
+                _getPitchObj() {
+                    for (const key in this._arr) {
+                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                            const element = this._arr[key];
+                            if (element[this._property.name] === this._pitchName) {
+                                return element;
+                            }
+                        }
+                    }
+                }
+                _addObject(obj) {
+                    let _obj = Tools._ObjArray.objCopy(obj);
+                    for (let index = 0; index < this._arr.length; index++) {
+                        const element = this._arr[index];
+                        if (element[this._property.name] === _obj[this._property.name]) {
+                            this._arr[index] == _obj;
+                        }
+                    }
+                    this._refreshAndStorage();
+                }
+                _addObjectArr(objArr) {
+                    const _objArr = Tools._ObjArray.arrCopy(objArr);
+                    for (let i = 0; i < _objArr.length; i++) {
+                        const obj = _objArr[i];
+                        for (let j = 0; j < this._arr.length; j++) {
+                            const element = this._arr[j];
+                            if (obj[this._property.name] === element[this._property.name]) {
+                                this._arr[j] = obj;
+                                _objArr.splice(i, 1);
+                                i--;
+                                continue;
+                            }
+                        }
+                    }
+                    for (let k = 0; k < _objArr.length; k++) {
+                        const element = _objArr[k];
+                        this._arr.push(element);
+                    }
+                    this._refreshAndStorage();
+                }
+                _sortByProperty(pro, indexPro, inverted) {
+                    Tools._ObjArray.sortByProperty(this._arr, pro);
+                    if (inverted == undefined || inverted) {
+                        for (let index = this._arr.length - 1; index >= 0; index--) {
+                            const element = this._arr[index];
+                            element[indexPro] = this._arr.length - index;
+                        }
+                        this._arr.reverse();
+                    }
+                    else {
+                        for (let index = 0; index < this._arr.length; index++) {
+                            const element = this._arr[index];
+                            element[indexPro] = index + 1;
+                        }
+                    }
+                    this._refreshAndStorage();
+                }
+            }
+            DataAdmin._Table = _Table;
+            function addCompare(tableArr, storageName, propertyName) {
+                try {
+                    Laya.LocalStorage.getJSON(storageName);
+                }
+                catch (error) {
+                    Laya.LocalStorage.setJSON(storageName, JSON.stringify(tableArr));
+                    return tableArr;
+                }
+                let storeArr;
+                if (Laya.LocalStorage.getJSON(storageName)) {
+                    storeArr = JSON.parse(Laya.LocalStorage.getJSON(storageName));
+                    let diffArray = Tools._ObjArray.diffProByTwo(tableArr, storeArr, propertyName);
+                    console.log(`${storageName}新添加对象`, diffArray);
+                    Tools._Array.addToarray(storeArr, diffArray);
+                }
+                else {
+                    storeArr = tableArr;
+                }
+                Laya.LocalStorage.setJSON(storageName, JSON.stringify(storeArr));
+                return storeArr;
+            }
+            function _jsonCompare(url, storageName, propertyName) {
+                let dataArr;
+                try {
+                    Laya.LocalStorage.getJSON(storageName);
+                }
+                catch (error) {
+                    dataArr = Laya.loader.getRes(url)['RECORDS'];
+                    Laya.LocalStorage.setJSON(storageName, JSON.stringify(dataArr));
+                    return dataArr;
+                }
+                if (Laya.LocalStorage.getJSON(storageName)) {
+                    dataArr = JSON.parse(Laya.LocalStorage.getJSON(storageName));
+                    console.log(storageName + '从本地缓存中获取到数据,将和文件夹的json文件进行对比');
+                    try {
+                        let dataArr_0 = Laya.loader.getRes(url)['RECORDS'];
+                        if (dataArr_0.length >= dataArr.length) {
+                            let diffArray = Tools._ObjArray.diffProByTwo(dataArr_0, dataArr, propertyName);
+                            console.log('两个数据的差值为：', diffArray);
+                            Tools._Array.addToarray(dataArr, diffArray);
+                        }
+                        else {
+                            console.log(storageName + '数据表填写有误，长度不能小于之前的长度');
+                        }
+                    }
+                    catch (error) {
+                        console.log(storageName, '数据赋值失败！请检查数据表或者手动赋值！');
+                    }
+                }
+                else {
+                    try {
+                        dataArr = Laya.loader.getRes(url)['RECORDS'];
+                    }
+                    catch (error) {
+                        console.log(storageName + '数据赋值失败！请检查数据表或者手动赋值！');
+                    }
+                }
+                Laya.LocalStorage.setJSON(storageName, JSON.stringify(dataArr));
+                return dataArr;
+            }
+        })(DataAdmin = lwg.DataAdmin || (lwg.DataAdmin = {}));
+        let Color;
+        (function (Color) {
+            function RGBToHexString(r, g, b) {
+                return '#' + ("00000" + (r << 16 | g << 8 | b).toString(16)).slice(-6);
+            }
+            Color.RGBToHexString = RGBToHexString;
+            function HexStringToRGB(str) {
+                let arr = [];
+                return arr;
+            }
+            Color.HexStringToRGB = HexStringToRGB;
+            function _colour(node, RGBA, vanishtime) {
+                let cf = new Laya.ColorFilter();
+                node.blendMode = 'null';
+                if (!RGBA) {
+                    cf.color(Tools._Number.randomOneBySection(255, 100, true), Tools._Number.randomOneBySection(255, 100, true), Tools._Number.randomOneBySection(255, 100, true), 1);
+                }
+                else {
+                    cf.color(RGBA[0], RGBA[1], RGBA[2], RGBA[3]);
+                }
+                node.filters = [cf];
+                if (vanishtime) {
+                    Laya.timer.once(vanishtime, this, () => {
+                        for (let index = 0; index < node.filters.length; index++) {
+                            if (node.filters[index] == cf) {
+                                node.filters = [];
+                                break;
+                            }
+                        }
+                    });
+                }
+                return cf;
+            }
+            Color._colour = _colour;
+            function _changeOnce(node, RGBA, time, func) {
+                if (!node) {
+                    return;
+                }
+                let cf = new Laya.ColorFilter();
+                cf.color(0, 0, 0, 0);
+                let speedR = RGBA[0] / time;
+                let speedG = RGBA[1] / time;
+                let speedB = RGBA[2] / time;
+                let speedA = 0;
+                if (RGBA[3]) {
+                    speedA = RGBA[3] / time;
+                }
+                let caller = {
+                    add: true,
+                };
+                let R = 0, G = 0, B = 0, A = 0;
+                TimerAdmin._frameLoop(1, caller, () => {
+                    if (R < RGBA[0] && caller.add) {
+                        R += speedR;
+                        G += speedG;
+                        B += speedB;
+                        if (speedA !== 0)
+                            A += speedA;
+                        if (R >= RGBA[0]) {
+                            caller.add = false;
+                        }
+                    }
+                    else {
+                        R -= speedR;
+                        G -= speedG;
+                        B -= speedB;
+                        if (speedA !== 0)
+                            A -= speedA;
+                        if (R <= 0) {
+                            if (func) {
+                                func();
+                            }
+                            Laya.timer.clearAll(caller);
+                        }
+                    }
+                    cf.color(R, G, B, A);
+                    node.filters = [cf];
+                });
+            }
+            Color._changeOnce = _changeOnce;
+            function _changeConstant(node, RGBA1, RGBA2, frameTime) {
+                let cf;
+                let RGBA0 = [];
+                if (!node.filters) {
+                    cf = new Laya.ColorFilter();
+                    cf.color(RGBA1[0], RGBA1[1], RGBA1[2], RGBA1[3] ? RGBA1[3] : 1);
+                    RGBA0 = [RGBA1[0], RGBA1[1], RGBA1[2], RGBA1[3] ? RGBA1[3] : 1];
+                    node.filters = [cf];
+                }
+                else {
+                    cf = node.filters[0];
+                    RGBA0 = [node.filters[0]['_alpha'][0], node.filters[0]['_alpha'][1], node.filters[0]['_alpha'][2], node.filters[0]['_alpha'][3] ? node.filters[0]['_alpha'][3] : 1];
+                }
+                let RGBA = [Tools._Number.randomCountBySection(RGBA1[0], RGBA2[0])[0], Tools._Number.randomCountBySection(RGBA1[1], RGBA2[1])[0], Tools._Number.randomCountBySection(RGBA1[2], RGBA2[2])[0], Tools._Number.randomCountBySection(RGBA1[3] ? RGBA1[3] : 1, RGBA2[3] ? RGBA2[3] : 1)[0]];
+                let speedR = (RGBA[0] - RGBA0[0]) / frameTime;
+                let speedG = (RGBA[1] - RGBA0[1]) / frameTime;
+                let speedB = (RGBA[2] - RGBA0[2]) / frameTime;
+                let speedA = 0;
+                if (RGBA[3]) {
+                    speedA = (RGBA[3] - RGBA0[3]) / frameTime;
+                }
+                if (node['changeCaller']) {
+                    Laya.timer.clearAll(node['changeCaller']);
+                }
+                let changeCaller = {};
+                node['changeCaller'] = changeCaller;
+                let _time = 0;
+                TimerAdmin._frameLoop(1, changeCaller, () => {
+                    _time++;
+                    if (_time <= frameTime) {
+                        RGBA0[0] += speedR;
+                        RGBA0[1] += speedG;
+                        RGBA0[2] += speedB;
+                    }
+                    else {
+                        Laya.timer.clearAll(changeCaller);
+                    }
+                    cf.color(RGBA0[0], RGBA0[1], RGBA0[2], RGBA0[3]);
+                    node.filters = [cf];
+                });
+            }
+            Color._changeConstant = _changeConstant;
+        })(Color = lwg.Color || (lwg.Color = {}));
+        let Effects3D;
+        (function (Effects3D) {
+            Effects3D._tex2D = {
+                爱心2: {
+                    url: 'Lwg/Effects/3D/aixin2.png',
+                    tex: null,
+                }
+            };
+            let _Particle;
+            (function (_Particle) {
+                function _createBox(parent, position, sectionSize, sectionRotation, texArr, colorRGBA, multiple) {
+                    const _scaleX = sectionSize ? Tools._Number.randomOneBySection(sectionSize[0][0], sectionSize[1][0]) : Tools._Number.randomOneBySection(0.01, 0.03);
+                    const _scaleY = sectionSize ? Tools._Number.randomOneBySection(sectionSize[0][1], sectionSize[1][1]) : Tools._Number.randomOneBySection(0.01, 0.03);
+                    const _scaleZ = sectionSize ? Tools._Number.randomOneBySection(sectionSize[0][2], sectionSize[1][2]) : Tools._Number.randomOneBySection(0.01, 0.03);
+                    const box = parent.addChild(new Laya.MeshSprite3D(Laya.PrimitiveMesh.createBox(_scaleX, _scaleY, _scaleZ)));
+                    if (position) {
+                        box.transform.position.setValue(position.x, position.y, position.z);
+                    }
+                    else {
+                        box.transform.position.setValue(0, 0, 0);
+                    }
+                    box.transform.localRotationEulerX = sectionRotation ? Tools._Number.randomOneBySection(sectionRotation[0][0], sectionRotation[1][0]) : Tools._Number.randomOneBySection(0, 360);
+                    box.transform.localRotationEulerX = sectionRotation ? Tools._Number.randomOneBySection(sectionRotation[0][1], sectionRotation[1][1]) : Tools._Number.randomOneBySection(0, 360);
+                    box.transform.localRotationEulerX = sectionRotation ? Tools._Number.randomOneBySection(sectionRotation[0][2], sectionRotation[1][2]) : Tools._Number.randomOneBySection(0, 360);
+                    const mat = box.meshRenderer.material = new Laya.UnlitMaterial;
+                    mat.albedoTexture = texArr ? Tools._Array.randomGetOne(texArr) : Effects3D._tex2D.爱心2.tex;
+                    mat.renderMode = 2;
+                    mat.albedoColorR = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][0], colorRGBA[1][0]) : Tools._Number.randomOneBySection(180, 255);
+                    mat.albedoColorG = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][1], colorRGBA[1][1]) : Tools._Number.randomOneBySection(10, 180);
+                    mat.albedoColorB = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][2], colorRGBA[1][2]) : Tools._Number.randomOneBySection(10, 180);
+                    mat.albedoColorA = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][3], colorRGBA[1][3]) : Tools._Number.randomOneBySection(1, 1);
+                    return box;
+                }
+                _Particle._createBox = _createBox;
+                function _spiral(parent, position, sectionSize, sectionRotation, texArr, colorRGBA, liveTime) {
+                    const box = _createBox(parent, position, sectionSize, sectionRotation, texArr, colorRGBA);
+                    const mat = box.meshRenderer.material;
+                    const _liveTime = liveTime ? Tools._Number.randomOneBySection(liveTime[0], liveTime[1]) : Tools._Number.randomOneBySection(100, 200);
+                    let moveCaller = {
+                        time: 0,
+                        alpha: true,
+                        move: false,
+                        vinish: false,
+                    };
+                    box['moveCaller'] = moveCaller;
+                    mat.albedoColorA = 0;
+                    TimerAdmin._frameLoop(1, moveCaller, () => {
+                        moveCaller.time++;
+                        if (moveCaller.alpha) {
+                            mat.albedoColorA += 0.15;
+                            box.transform.localPositionY += 0.002;
+                            if (mat.albedoColorA >= 1) {
+                                moveCaller.alpha = false;
+                                moveCaller.move = true;
+                            }
+                        }
+                        if (moveCaller.move) {
+                            box.transform.localPositionY += 0.005;
+                            if (moveCaller.time > _liveTime) {
+                                moveCaller.move = false;
+                                moveCaller.vinish = true;
+                            }
+                        }
+                        if (moveCaller.vinish) {
+                            mat.albedoColorA -= 0.15;
+                            box.transform.localPositionY += 0.002;
+                            if (mat.albedoColorA <= 0) {
+                                box.removeSelf();
+                            }
+                        }
+                    });
+                    return box;
+                }
+                _Particle._spiral = _spiral;
+            })(_Particle = Effects3D._Particle || (Effects3D._Particle = {}));
+        })(Effects3D = lwg.Effects3D || (lwg.Effects3D = {}));
+        let Effects2D;
+        (function (Effects2D) {
+            let _SkinUrl;
+            (function (_SkinUrl) {
+                _SkinUrl["\u7231\u5FC31"] = "Lwg/Effects/aixin1.png";
+                _SkinUrl["\u7231\u5FC32"] = "Lwg/Effects/aixin2.png";
+                _SkinUrl["\u7231\u5FC33"] = "Lwg/Effects/aixin3.png";
+                _SkinUrl["\u82B11"] = "Lwg/Effects/hua1.png";
+                _SkinUrl["\u82B12"] = "Lwg/Effects/hua2.png";
+                _SkinUrl["\u82B13"] = "Lwg/Effects/hua3.png";
+                _SkinUrl["\u82B14"] = "Lwg/Effects/hua4.png";
+                _SkinUrl["\u661F\u661F1"] = "Lwg/Effects/star1.png";
+                _SkinUrl["\u661F\u661F2"] = "Lwg/Effects/star2.png";
+                _SkinUrl["\u661F\u661F3"] = "Lwg/Effects/star3.png";
+                _SkinUrl["\u661F\u661F4"] = "Lwg/Effects/star4.png";
+                _SkinUrl["\u661F\u661F5"] = "Lwg/Effects/star5.png";
+                _SkinUrl["\u661F\u661F6"] = "Lwg/Effects/star6.png";
+                _SkinUrl["\u661F\u661F7"] = "Lwg/Effects/star7.png";
+                _SkinUrl["\u661F\u661F8"] = "Lwg/Effects/star8.png";
+                _SkinUrl["\u83F1\u5F621"] = "Lwg/Effects/rhombus1.png";
+                _SkinUrl["\u83F1\u5F622"] = "Lwg/Effects/rhombus1.png";
+                _SkinUrl["\u83F1\u5F623"] = "Lwg/Effects/rhombus1.png";
+                _SkinUrl["\u77E9\u5F621"] = "Lwg/Effects/rectangle1.png";
+                _SkinUrl["\u77E9\u5F622"] = "Lwg/Effects/rectangle2.png";
+                _SkinUrl["\u77E9\u5F623"] = "Lwg/Effects/rectangle3.png";
+                _SkinUrl["\u96EA\u82B11"] = "Lwg/Effects/xuehua1.png";
+                _SkinUrl["\u53F6\u5B501"] = "Lwg/Effects/yezi1.png";
+                _SkinUrl["\u5706\u5F62\u53D1\u51491"] = "Lwg/Effects/yuanfaguang.png";
+                _SkinUrl["\u5706\u5F621"] = "Lwg/Effects/yuan1.png";
+                _SkinUrl["\u5149\u57081"] = "Lwg/Effects/guangquan1.png";
+                _SkinUrl["\u5149\u57082"] = "Lwg/Effects/guangquan2.png";
+                _SkinUrl["\u4E09\u89D2\u5F621"] = "Lwg/Effects/triangle1.png";
+                _SkinUrl["\u4E09\u89D2\u5F622"] = "Lwg/Effects/triangle2.png";
+            })(_SkinUrl = Effects2D._SkinUrl || (Effects2D._SkinUrl = {}));
+            let _Aperture;
+            (function (_Aperture) {
+                class _ApertureImage extends Laya.Image {
+                    constructor(parent, centerPoint, width, height, rotation, urlArr, colorRGBA, zOrder) {
+                        super();
+                        if (!parent.parent) {
+                            return;
+                        }
+                        parent.addChild(this);
+                        centerPoint ? this.pos(centerPoint.x, centerPoint.y) : this.pos(0, 0);
+                        this.width = width ? width : 100;
+                        this.height = height ? height : 100;
+                        this.pivotX = this.width / 2;
+                        this.pivotY = this.height / 2;
+                        this.rotation = rotation ? Tools._Number.randomOneBySection(rotation[0], rotation[1]) : Tools._Number.randomOneBySection(360);
+                        this.skin = urlArr ? Tools._Array.randomGetOne(urlArr) : _SkinUrl.花3;
+                        this.zOrder = zOrder ? zOrder : 0;
+                        this.alpha = 0;
+                        let RGBA = [];
+                        RGBA[0] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][0], colorRGBA[1][0]) : Tools._Number.randomOneBySection(0, 255);
+                        RGBA[1] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][1], colorRGBA[1][1]) : Tools._Number.randomOneBySection(0, 255);
+                        RGBA[2] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][2], colorRGBA[1][2]) : Tools._Number.randomOneBySection(0, 255);
+                        RGBA[3] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][3], colorRGBA[1][3]) : Tools._Number.randomOneBySection(0, 255);
+                        Color._colour(this, RGBA);
+                    }
+                }
+                _Aperture._ApertureImage = _ApertureImage;
+                function _continuous(parent, centerPoint, width, height, rotation, urlArr, colorRGBA, zOrder, scale, speed, accelerated) {
+                    let Img = new _ApertureImage(parent, centerPoint, width, height, rotation, urlArr, colorRGBA, zOrder);
+                    let _speed = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : 0.025;
+                    let _accelerated = accelerated ? Tools._Number.randomOneBySection(accelerated[0], accelerated[1]) : 0.0005;
+                    let _scale = scale ? Tools._Number.randomOneBySection(scale[0], scale[1]) : 2;
+                    let moveCaller = {
+                        alpha: true,
+                        scale: false,
+                        vanish: false
+                    };
+                    Img['moveCaller'] = moveCaller;
+                    let acc = 0;
+                    TimerAdmin._frameLoop(1, moveCaller, () => {
+                        if (moveCaller.alpha) {
+                            Img.alpha += 0.05;
+                            acc = 0;
+                            if (Img.alpha >= 1) {
+                                moveCaller.alpha = false;
+                                moveCaller.scale = true;
+                            }
+                        }
+                        else if (moveCaller.scale) {
+                            acc += _accelerated;
+                            if (Img.scaleX > _scale) {
+                                moveCaller.scale = false;
+                                moveCaller.vanish = true;
+                            }
+                        }
+                        else if (moveCaller.vanish) {
+                            acc -= _accelerated;
+                            if (acc < 0) {
+                                Img.alpha -= 0.015;
+                                if (Img.alpha <= 0) {
+                                    Img.removeSelf();
+                                    Laya.timer.clearAll(moveCaller);
+                                }
+                            }
+                        }
+                        Img.scaleX = Img.scaleY += (_speed + acc);
+                    });
+                }
+                _Aperture._continuous = _continuous;
+            })(_Aperture = Effects2D._Aperture || (Effects2D._Aperture = {}));
+            let _Particle;
+            (function (_Particle) {
+                class _ParticleImgBase extends Laya.Image {
+                    constructor(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder) {
+                        super();
+                        parent.addChild(this);
+                        let sectionWidth = sectionWH ? Tools._Number.randomOneBySection(sectionWH[0]) : Tools._Number.randomOneBySection(200);
+                        let sectionHeight = sectionWH ? Tools._Number.randomOneBySection(sectionWH[1]) : Tools._Number.randomOneBySection(50);
+                        sectionWidth = Tools._Number.randomOneHalf() == 0 ? sectionWidth : -sectionWidth;
+                        sectionHeight = Tools._Number.randomOneHalf() == 0 ? sectionHeight : -sectionHeight;
+                        this.x = centerPoint ? centerPoint.x + sectionWidth : sectionWidth;
+                        this.y = centerPoint ? centerPoint.y + sectionHeight : sectionHeight;
+                        this.width = width ? Tools._Number.randomOneBySection(width[0], width[1]) : Tools._Number.randomOneBySection(20, 50);
+                        this.height = height ? Tools._Number.randomOneBySection(height[0], height[1]) : this.width;
+                        this.pivotX = this.width / 2;
+                        this.pivotY = this.height / 2;
+                        this.skin = urlArr ? Tools._Array.randomGetOne(urlArr) : _SkinUrl.圆形1;
+                        this.rotation = rotation ? Tools._Number.randomOneBySection(rotation[0], rotation[1]) : 0;
+                        this.alpha = 0;
+                        this.zOrder = zOrder ? zOrder : 1000;
+                        let RGBA = [];
+                        RGBA[0] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][0], colorRGBA[1][0]) : Tools._Number.randomOneBySection(180, 255);
+                        RGBA[1] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][1], colorRGBA[1][1]) : Tools._Number.randomOneBySection(10, 180);
+                        RGBA[2] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][2], colorRGBA[1][2]) : Tools._Number.randomOneBySection(10, 180);
+                        RGBA[3] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][3], colorRGBA[1][3]) : Tools._Number.randomOneBySection(1, 1);
+                        Color._colour(this, RGBA);
+                    }
+                }
+                _Particle._ParticleImgBase = _ParticleImgBase;
+                function _snow(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder, distance, rotationSpeed, speed, windX) {
+                    let Img = new _ParticleImgBase(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder);
+                    let _rotationSpeed = rotationSpeed ? Tools._Number.randomOneBySection(rotationSpeed[0], rotationSpeed[1]) : Tools._Number.randomOneBySection(0, 1);
+                    _rotationSpeed = Tools._Number.randomOneHalf() == 0 ? _rotationSpeed : -_rotationSpeed;
+                    let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(1, 2.5);
+                    let _windX = windX ? Tools._Number.randomOneBySection(windX[0], windX[1]) : 0;
+                    let moveCaller = {
+                        alpha: true,
+                        move: false,
+                        vinish: false,
+                    };
+                    Img['moveCaller'] = moveCaller;
+                    let distance0 = 0;
+                    let distance1 = distance ? Tools._Number.randomOneBySection(distance[0], distance[1]) : Tools._Number.randomOneBySection(100, 300);
+                    TimerAdmin._frameLoop(1, moveCaller, () => {
+                        Img.x += _windX;
+                        Img.rotation += _rotationSpeed;
+                        if (Img.alpha < 1 && moveCaller.alpha) {
+                            Img.alpha += 0.05;
+                            distance0 = Img.y++;
+                            if (Img.alpha >= 1) {
+                                moveCaller.alpha = false;
+                                moveCaller.move = true;
+                            }
+                        }
+                        if (distance0 < distance1 && moveCaller.move) {
+                            distance0 = Img.y += speed0;
+                            if (distance0 >= distance1) {
+                                moveCaller.move = false;
+                                moveCaller.vinish = true;
+                            }
+                        }
+                        if (moveCaller.vinish) {
+                            Img.alpha -= 0.03;
+                            Img.y += speed0;
+                            if (Img.alpha <= 0 || speed0 <= 0) {
+                                Img.removeSelf();
+                                Laya.timer.clearAll(moveCaller);
+                            }
+                        }
+                    });
+                    return Img;
+                }
+                _Particle._snow = _snow;
+                function _fallingRotate(parent, centerPoint, sectionWH, width, height, urlArr, colorRGBA, distance, moveSpeed, scaleSpeed, skewSpeed, rotationSpeed, zOrder) {
+                    const Img = new _ParticleImgBase(parent, centerPoint, sectionWH, width, height, null, urlArr, colorRGBA, zOrder);
+                    let _rotationSpeed = rotationSpeed ? Tools._Number.randomOneBySection(rotationSpeed[0], rotationSpeed[1]) : Tools._Number.randomOneBySection(0, 1);
+                    _rotationSpeed = Tools._Number.randomOneHalf() == 0 ? _rotationSpeed : -_rotationSpeed;
+                    const _moveSpeed = moveSpeed ? Tools._Number.randomOneBySection(moveSpeed[0], moveSpeed[1]) : Tools._Number.randomOneBySection(1, 2.5);
+                    const _scaleSpeed = scaleSpeed ? Tools._Number.randomOneBySection(scaleSpeed[0], scaleSpeed[1]) : Tools._Number.randomOneBySection(0, 0.25);
+                    const _scaleDir = Tools._Number.randomOneHalf();
+                    let _skewSpeed = skewSpeed ? Tools._Number.randomOneBySection(skewSpeed[0], skewSpeed[1]) : Tools._Number.randomOneBySection(1, 10);
+                    _skewSpeed = Tools._Number.randomOneHalf() === 1 ? _skewSpeed : -_skewSpeed;
+                    const _skewDir = Tools._Number.randomOneHalf();
+                    const _scaleOrSkew = Tools._Number.randomOneHalf();
+                    let _distance0 = 0;
+                    const _distance = distance ? Tools._Number.randomOneBySection(distance[0], distance[1]) : Tools._Number.randomOneBySection(100, 300);
+                    const moveCaller = {
+                        appear: true,
+                        move: false,
+                        vinish: false,
+                        scaleSub: true,
+                        scaleAdd: false,
+                    };
+                    Img['moveCaller'] = moveCaller;
+                    TimerAdmin._frameLoop(1, moveCaller, () => {
+                        Img.rotation += _rotationSpeed;
+                        if (_scaleOrSkew === 1) {
+                            if (_skewDir === 1) {
+                                Img.skewX += _skewSpeed;
+                            }
+                            else {
+                                Img.skewY += _skewSpeed;
+                            }
+                        }
+                        else {
+                            if (_scaleDir === 1) {
+                                if (moveCaller.scaleSub) {
+                                    Img.scaleX -= _scaleSpeed;
+                                    if (Img.scaleX <= 0) {
+                                        moveCaller.scaleSub = false;
+                                    }
+                                }
+                                else {
+                                    Img.scaleX += _scaleSpeed;
+                                    if (Img.scaleX >= 1) {
+                                        moveCaller.scaleSub = true;
+                                    }
+                                }
+                            }
+                            else {
+                                if (moveCaller.scaleSub) {
+                                    Img.scaleY -= _scaleSpeed;
+                                    if (Img.scaleY <= 0) {
+                                        moveCaller.scaleSub = false;
+                                    }
+                                }
+                                else {
+                                    Img.scaleY += _scaleSpeed;
+                                    if (Img.scaleY >= 1) {
+                                        moveCaller.scaleSub = true;
+                                    }
+                                }
+                            }
+                        }
+                        if (moveCaller.appear) {
+                            Img.alpha += 0.05;
+                            Img.y += _moveSpeed / 2;
+                            if (Img.alpha >= 1) {
+                                moveCaller.appear = false;
+                                moveCaller.move = true;
+                            }
+                        }
+                        if (moveCaller.move) {
+                            Img.y += _moveSpeed;
+                            _distance0 += _moveSpeed;
+                            if (_distance0 >= _distance) {
+                                moveCaller.move = false;
+                                moveCaller.vinish = true;
+                            }
+                        }
+                        if (moveCaller.vinish) {
+                            Img.alpha -= 0.01;
+                            Img.y += _moveSpeed;
+                            if (Img.alpha <= 0) {
+                                Img.removeSelf();
+                                Laya.timer.clearAll(moveCaller);
+                            }
+                        }
+                    });
+                    return Img;
+                }
+                _Particle._fallingRotate = _fallingRotate;
+                function _fallingVertical(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder, distance, speed, accelerated) {
+                    let Img = new _ParticleImgBase(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder);
+                    let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(4, 8);
+                    let accelerated0 = accelerated ? Tools._Number.randomOneBySection(accelerated[0], accelerated[1]) : Tools._Number.randomOneBySection(0.25, 0.45);
+                    let acc = 0;
+                    let moveCaller = {
+                        alpha: true,
+                        move: false,
+                        vinish: false,
+                    };
+                    Img['moveCaller'] = moveCaller;
+                    let distance1 = distance ? Tools._Number.randomOneBySection(distance[0], distance[1]) : Tools._Number.randomOneBySection(100, 300);
+                    let fY = Img.y;
+                    TimerAdmin._frameLoop(1, moveCaller, () => {
+                        if (Img.alpha < 1 && moveCaller.alpha) {
+                            Img.alpha += 0.04;
+                            if (Img.alpha >= 1) {
+                                moveCaller.alpha = false;
+                                moveCaller.move = true;
+                            }
+                        }
+                        if (!moveCaller.alpha) {
+                            acc += accelerated0;
+                            Img.y += (speed0 + acc);
+                        }
+                        if (!moveCaller.alpha && moveCaller.move) {
+                            if (Img.y - fY >= distance1) {
+                                moveCaller.move = false;
+                                moveCaller.vinish = true;
+                            }
+                        }
+                        if (moveCaller.vinish) {
+                            Img.alpha -= 0.03;
+                            if (Img.alpha <= 0) {
+                                Laya.timer.clearAll(moveCaller);
+                                Img.removeSelf();
+                            }
+                        }
+                    });
+                    return Img;
+                }
+                _Particle._fallingVertical = _fallingVertical;
+                function _fallingVertical_Reverse(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder, distance, speed, accelerated) {
+                    let Img = new _ParticleImgBase(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder);
+                    let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(4, 8);
+                    let accelerated0 = accelerated ? Tools._Number.randomOneBySection(accelerated[0], accelerated[1]) : Tools._Number.randomOneBySection(0.25, 0.45);
+                    let acc = 0;
+                    let moveCaller = {
+                        alpha: true,
+                        move: false,
+                        vinish: false,
+                    };
+                    Img['moveCaller'] = moveCaller;
+                    let distance1 = distance ? Tools._Number.randomOneBySection(distance[0], distance[1]) : Tools._Number.randomOneBySection(100, 300);
+                    let fY = Img.y;
+                    TimerAdmin._frameLoop(1, moveCaller, () => {
+                        if (Img.alpha < 1 && moveCaller.alpha) {
+                            Img.alpha += 0.04;
+                            if (Img.alpha >= 1) {
+                                moveCaller.alpha = false;
+                                moveCaller.move = true;
+                            }
+                        }
+                        if (!moveCaller.alpha) {
+                            acc += accelerated0;
+                            Img.y += (speed0 + acc);
+                        }
+                        if (!moveCaller.alpha && moveCaller.move) {
+                            if (Img.y - fY <= distance1) {
+                                moveCaller.move = false;
+                                moveCaller.vinish = true;
+                            }
+                        }
+                        if (moveCaller.vinish) {
+                            Img.alpha -= 0.03;
+                            if (Img.alpha <= 0) {
+                                Laya.timer.clearAll(moveCaller);
+                                Img.removeSelf();
+                            }
+                        }
+                    });
+                    return Img;
+                }
+                _Particle._fallingVertical_Reverse = _fallingVertical_Reverse;
+                function _slowlyUp(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder, distance, speed, accelerated) {
+                    let Img = new _ParticleImgBase(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder);
+                    let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(1.5, 2);
+                    let accelerated0 = accelerated ? Tools._Number.randomOneBySection(accelerated[0], accelerated[1]) : Tools._Number.randomOneBySection(0.001, 0.005);
+                    let acc = 0;
+                    let moveCaller = {
+                        alpha: true,
+                        move: false,
+                        vinish: false,
+                    };
+                    Img['moveCaller'] = moveCaller;
+                    let fy = Img.y;
+                    let distance0 = 0;
+                    let distance1 = distance ? Tools._Number.randomOneBySection(distance[0], distance[1]) : Tools._Number.randomOneBySection(-250, -600);
+                    TimerAdmin._frameLoop(1, moveCaller, () => {
+                        if (Img.alpha < 1 && moveCaller.alpha) {
+                            Img.alpha += 0.03;
+                            if (Img.alpha >= 1) {
+                                moveCaller.alpha = false;
+                                moveCaller.move = true;
+                            }
+                        }
+                        if (distance0 > distance1 && moveCaller.move) {
+                        }
+                        else {
+                            moveCaller.move = false;
+                            moveCaller.vinish = true;
+                        }
+                        if (moveCaller.vinish) {
+                            Img.alpha -= 0.02;
+                            Img.scaleX -= 0.005;
+                            Img.scaleY -= 0.005;
+                            if (Img.alpha <= 0) {
+                                Img.removeSelf();
+                                Laya.timer.clearAll(moveCaller);
+                            }
+                        }
+                        acc += accelerated0;
+                        Img.y -= (speed0 + acc);
+                        distance0 = fy - Img.y;
+                    });
+                    return Img;
+                }
+                _Particle._slowlyUp = _slowlyUp;
+                function _sprayRound(parent, centerPoint, width, height, rotation, urlArr, colorRGBA, distance, time, moveAngle, rotationSpeed, zOrder) {
+                    let Img = new _ParticleImgBase(parent, centerPoint, [0, 0], width, height, rotation, urlArr, colorRGBA, zOrder);
+                    let centerPoint0 = centerPoint ? centerPoint : new Laya.Point(0, 0);
+                    let radius = 0;
+                    const _time = time ? Tools._Number.randomOneBySection(time[0], time[1]) : Tools._Number.randomOneBySection(30, 50);
+                    const _distance = distance ? Tools._Number.randomOneBySection(distance[0], distance[1]) : Tools._Number.randomOneBySection(100, 200);
+                    const _speed = _distance / _time;
+                    const _angle = moveAngle ? Tools._Number.randomOneBySection(moveAngle[0], moveAngle[1]) : Tools._Number.randomOneBySection(0, 360);
+                    let rotationSpeed0 = rotationSpeed ? Tools._Number.randomOneBySection(rotationSpeed[0], rotationSpeed[1]) : Tools._Number.randomOneBySection(0, 20);
+                    rotationSpeed0 = Tools._Number.randomOneHalf() == 0 ? rotationSpeed0 : -rotationSpeed0;
+                    const vinishTime = Tools._Number.randomOneInt(60);
+                    const subAlpha = 1 / vinishTime;
+                    let moveCaller = {
+                        alpha: true,
+                        move: false,
+                        vinish: false,
+                    };
+                    Img['moveCaller'] = moveCaller;
+                    TimerAdmin._frameLoop(1, moveCaller, () => {
+                        Img.rotation += rotationSpeed0;
+                        if (Img.alpha < 1 && moveCaller.alpha) {
+                            Img.alpha += 0.5;
+                            if (Img.alpha >= 1) {
+                                moveCaller.alpha = false;
+                                moveCaller.move = true;
+                            }
+                        }
+                        else {
+                            if (!moveCaller.vinish) {
+                                radius += _speed;
+                                let point = Tools._Point.getRoundPos(_angle, radius, centerPoint0);
+                                Img.pos(point.x, point.y);
+                                if (radius > _distance) {
+                                    moveCaller.move = false;
+                                    moveCaller.vinish = true;
+                                }
+                            }
+                            else {
+                                Img.alpha -= subAlpha;
+                                if (Img.alpha <= 0) {
+                                    Img.removeSelf();
+                                    Laya.timer.clearAll(moveCaller);
+                                }
+                                radius += _speed / 2;
+                                let point = Tools._Point.getRoundPos(_angle, radius, centerPoint0);
+                                Img.pos(point.x, point.y);
+                            }
+                        }
+                    });
+                    return Img;
+                }
+                _Particle._sprayRound = _sprayRound;
+                function _spray(parent, centerPoint, width, height, rotation, urlArr, colorRGBA, distance, moveAngle, rotationSpeed, speed, accelerated, zOrder) {
+                    let Img = new _ParticleImgBase(parent, centerPoint, [0, 0], width, height, rotation, urlArr, colorRGBA, zOrder);
+                    let centerPoint0 = centerPoint ? centerPoint : new Laya.Point(0, 0);
+                    let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(3, 10);
+                    let accelerated0 = accelerated ? Tools._Number.randomOneBySection(accelerated[0], accelerated[1]) : Tools._Number.randomOneBySection(0.25, 0.45);
+                    let acc = 0;
+                    let moveCaller = {
+                        alpha: true,
+                        move: false,
+                        vinish: false,
+                    };
+                    Img['moveCaller'] = moveCaller;
+                    let radius = 0;
+                    let distance1 = distance ? Tools._Number.randomOneBySection(distance[0], distance[1]) : Tools._Number.randomOneBySection(100, 200);
+                    let angle0 = moveAngle ? Tools._Number.randomOneBySection(moveAngle[0], moveAngle[1]) : Tools._Number.randomOneBySection(0, 360);
+                    let rotationSpeed0 = rotationSpeed ? Tools._Number.randomOneBySection(rotationSpeed[0], rotationSpeed[1]) : Tools._Number.randomOneBySection(0, 20);
+                    rotationSpeed0 = Tools._Number.randomOneHalf() == 0 ? rotationSpeed0 : -rotationSpeed0;
+                    TimerAdmin._frameLoop(1, moveCaller, () => {
+                        Img.rotation += rotationSpeed0;
+                        if (Img.alpha < 1 && moveCaller.alpha) {
+                            Img.alpha += 0.5;
+                            if (Img.alpha >= 1) {
+                                moveCaller.alpha = false;
+                                moveCaller.move = true;
+                            }
+                        }
+                        else {
+                            if (radius < distance1 && moveCaller.move) {
+                            }
+                            else {
+                                moveCaller.move = false;
+                                moveCaller.vinish = true;
+                            }
+                            if (moveCaller.vinish) {
+                                Img.alpha -= 0.05;
+                                if (Img.alpha <= 0.3) {
+                                    Img.removeSelf();
+                                    Laya.timer.clearAll(moveCaller);
+                                }
+                            }
+                            acc += accelerated0;
+                            radius += speed0 + acc;
+                            let point = Tools._Point.getRoundPos(angle0, radius, centerPoint0);
+                            Img.pos(point.x, point.y);
+                        }
+                    });
+                    return Img;
+                }
+                _Particle._spray = _spray;
+                function _outsideBox(parent, centerPoint, sectionWH, width, height, rotation, urlArr, colorRGBA, zOrder, curtailAngle, distance, rotateSpeed, speed, accelerated) {
+                    let Img = new _ParticleImgBase(parent, centerPoint, [0, 0], width, height, rotation, urlArr, colorRGBA, zOrder);
+                    let _angle = 0;
+                    sectionWH = sectionWH ? sectionWH : [100, 100];
+                    let fixedXY = Tools._Number.randomOneHalf() == 0 ? 'x' : 'y';
+                    curtailAngle = curtailAngle ? curtailAngle : 60;
+                    if (fixedXY == 'x') {
+                        if (Tools._Number.randomOneHalf() == 0) {
+                            Img.x += sectionWH[0];
+                            _angle = Tools._Number.randomOneHalf() == 0 ? Tools._Number.randomOneBySection(0, 90 - curtailAngle) : Tools._Number.randomOneBySection(0, -90 + curtailAngle);
+                        }
+                        else {
+                            Img.x -= sectionWH[0];
+                            _angle = Tools._Number.randomOneBySection(90 + curtailAngle, 270 - curtailAngle);
+                        }
+                        Img.y += Tools._Number.randomOneBySection(-sectionWH[1], sectionWH[1]);
+                    }
+                    else {
+                        if (Tools._Number.randomOneHalf() == 0) {
+                            Img.y -= sectionWH[1];
+                            _angle = Tools._Number.randomOneBySection(180 + curtailAngle, 360 - curtailAngle);
+                        }
+                        else {
+                            Img.y += sectionWH[1];
+                            _angle = Tools._Number.randomOneBySection(0 + curtailAngle, 180 - curtailAngle);
+                        }
+                        Img.x += Tools._Number.randomOneBySection(-sectionWH[0], sectionWH[0]);
+                    }
+                    let p = Tools._Point.angleByPoint(_angle);
+                    let _distance = distance ? Tools._Number.randomOneBySection(distance[0], distance[1]) : Tools._Number.randomOneBySection(20, 50);
+                    let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(0.5, 1);
+                    let accelerated0 = accelerated ? Tools._Number.randomOneBySection(accelerated[0], accelerated[1]) : Tools._Number.randomOneBySection(0.25, 0.45);
+                    let acc = 0;
+                    let rotationSpeed0 = rotateSpeed ? Tools._Number.randomOneBySection(rotateSpeed[0], rotateSpeed[1]) : Tools._Number.randomOneBySection(0, 20);
+                    let firstP = new Laya.Point(Img.x, Img.y);
+                    let moveCaller = {
+                        alpha: true,
+                        move: false,
+                        vinish: false,
+                    };
+                    Img['moveCaller'] = moveCaller;
+                    TimerAdmin._frameLoop(1, moveCaller, () => {
+                        Img.rotation += rotationSpeed0;
+                        if (moveCaller.alpha) {
+                            Img.alpha += 0.5;
+                            if (Img.alpha >= 1) {
+                                moveCaller.alpha = false;
+                                moveCaller.move = true;
+                            }
+                        }
+                        else if (moveCaller.move) {
+                            if (firstP.distance(Img.x, Img.y) >= _distance) {
+                                moveCaller.move = false;
+                                moveCaller.vinish = true;
+                            }
+                        }
+                        else if (moveCaller.vinish) {
+                            Img.alpha -= 0.05;
+                            if (Img.alpha <= 0.3) {
+                                Img.removeSelf();
+                                Laya.timer.clearAll(moveCaller);
+                            }
+                        }
+                        if (!moveCaller.alpha) {
+                            acc += accelerated0;
+                            Img.x += p.x * (speed0 + acc);
+                            Img.y += p.y * (speed0 + acc);
+                        }
+                    });
+                    return Img;
+                }
+                _Particle._outsideBox = _outsideBox;
+                function _moveToTargetToMove(parent, centerPoint, width, height, rotation, angle, urlArr, colorRGBA, zOrder, distance1, distance2, rotationSpeed, speed, accelerated) {
+                    let Img = new _ParticleImgBase(parent, centerPoint, [0, 0], width, height, rotation, urlArr, colorRGBA, zOrder);
+                    let centerPoint0 = centerPoint ? centerPoint : new Laya.Point(0, 0);
+                    let speed0 = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(5, 6);
+                    let accelerated0 = accelerated ? Tools._Number.randomOneBySection(accelerated[0], accelerated[1]) : Tools._Number.randomOneBySection(0.25, 0.45);
+                    let acc = 0;
+                    let moveCaller = {
+                        alpha: true,
+                        move1: false,
+                        stop: false,
+                        move2: false,
+                        vinish: false,
+                    };
+                    Img['moveCaller'] = moveCaller;
+                    let radius = 0;
+                    let dis1 = distance1 ? Tools._Number.randomOneBySection(distance1[0], distance1[1]) : Tools._Number.randomOneBySection(100, 200);
+                    let dis2 = distance2 ? Tools._Number.randomOneBySection(distance2[0], distance2[1]) : Tools._Number.randomOneBySection(100, 200);
+                    let angle0 = angle ? Tools._Number.randomOneBySection(angle[0], angle[1]) : Tools._Number.randomOneBySection(0, 360);
+                    Img.rotation = angle0 - 90;
+                    let rotationSpeed0 = rotationSpeed ? Tools._Number.randomOneBySection(rotationSpeed[0], rotationSpeed[1]) : Tools._Number.randomOneBySection(0, 20);
+                    TimerAdmin._frameLoop(1, moveCaller, () => {
+                        if (moveCaller.alpha) {
+                            acc += accelerated0;
+                            radius += speed0 + acc;
+                            Img.alpha += 0.5;
+                            if (Img.alpha >= 1) {
+                                moveCaller.alpha = false;
+                                moveCaller.move1 = true;
+                            }
+                        }
+                        else if (moveCaller.move1) {
+                            acc += accelerated0;
+                            radius += speed0 + acc;
+                            if (radius >= dis1) {
+                                moveCaller.move1 = false;
+                                moveCaller.stop = true;
+                            }
+                        }
+                        else if (moveCaller.stop) {
+                            acc -= 0.3;
+                            radius += 0.1;
+                            if (acc <= 0) {
+                                moveCaller.stop = false;
+                                moveCaller.move2 = true;
+                            }
+                        }
+                        else if (moveCaller.move2) {
+                            acc += accelerated0 / 2;
+                            radius += speed0 + acc;
+                            if (radius >= dis1 + dis2) {
+                                moveCaller.move2 = false;
+                                moveCaller.vinish = true;
+                            }
+                        }
+                        else if (moveCaller.vinish) {
+                            radius += 0.5;
+                            Img.alpha -= 0.05;
+                            if (Img.alpha <= 0) {
+                                Img.removeSelf();
+                                Laya.timer.clearAll(moveCaller);
+                            }
+                        }
+                        let point = Tools._Point.getRoundPos(angle0, radius, centerPoint0);
+                        Img.pos(point.x, point.y);
+                    });
+                    return Img;
+                }
+                _Particle._moveToTargetToMove = _moveToTargetToMove;
+                function _AnnularInhalation(parent, centerPoint, radius, rotation, width, height, urlArr, speed, accelerated, zOrder) {
+                    let Img = new Laya.Image();
+                    parent.addChild(Img);
+                    width = width ? width : [25, 50];
+                    Img.width = Tools._Number.randomCountBySection(width[0], width[1])[0];
+                    Img.height = height ? Tools._Number.randomCountBySection(height[0], height[1])[0] : Img.width;
+                    Img.pivotX = Img.width / 2;
+                    Img.pivotY = Img.height / 2;
+                    Img.skin = urlArr ? Tools._Array.randomGetOut(urlArr)[0] : _SkinUrl[Tools._Number.randomCountBySection(0, 12)[0]];
+                    let radius0 = Tools._Number.randomCountBySection(radius[0], radius[1])[0];
+                    Img.alpha = 0;
+                    let speed0 = speed ? Tools._Number.randomCountBySection(speed[0], speed[1])[0] : Tools._Number.randomCountBySection(5, 10)[0];
+                    let angle = rotation ? Tools._Number.randomCountBySection(rotation[0], rotation[1])[0] : Tools._Number.randomCountBySection(0, 360)[0];
+                    let caller = {};
+                    let acc = 0;
+                    accelerated = accelerated ? accelerated : 0.35;
+                    TimerAdmin._frameLoop(1, caller, () => {
+                        if (Img.alpha < 1) {
+                            Img.alpha += 0.05;
+                            acc += (accelerated / 5);
+                            radius0 -= (speed0 / 2 + acc);
+                        }
+                        else {
+                            acc += accelerated;
+                            radius0 -= (speed0 + acc);
+                        }
+                        let point = Tools._Point.getRoundPos(angle, radius0, centerPoint);
+                        Img.pos(point.x, point.y);
+                        if (point.distance(centerPoint.x, centerPoint.y) <= 20 || point.distance(centerPoint.x, centerPoint.y) >= 1000) {
+                            Img.removeSelf();
+                            Laya.timer.clearAll(caller);
+                        }
+                    });
+                    return Img;
+                }
+                _Particle._AnnularInhalation = _AnnularInhalation;
+            })(_Particle = Effects2D._Particle || (Effects2D._Particle = {}));
+            let _Glitter;
+            (function (_Glitter) {
+                class _GlitterImage extends Laya.Image {
+                    constructor(parent, centerPos, radiusXY, urlArr, colorRGBA, width, height, zOder) {
+                        super();
+                        if (!parent.parent) {
+                            return;
+                        }
+                        parent.addChild(this);
+                        this.skin = urlArr ? Tools._Array.randomGetOne(urlArr) : _SkinUrl.星星1;
+                        this.width = width ? Tools._Number.randomOneBySection(width[0], width[1]) : 80;
+                        this.height = height ? Tools._Number.randomOneBySection(height[0], height[1]) : this.width;
+                        this.pivotX = this.width / 2;
+                        this.pivotY = this.height / 2;
+                        let p = radiusXY ? Tools._Point.randomPointByCenter(centerPos, radiusXY[0], radiusXY[1], 1) : Tools._Point.randomPointByCenter(centerPos, 100, 100, 1);
+                        this.pos(p[0].x, p[0].y);
+                        let RGBA = [];
+                        RGBA[0] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][0], colorRGBA[1][0]) : Tools._Number.randomOneBySection(10, 255);
+                        RGBA[1] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][1], colorRGBA[1][1]) : Tools._Number.randomOneBySection(200, 255);
+                        RGBA[2] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][2], colorRGBA[1][2]) : Tools._Number.randomOneBySection(10, 255);
+                        RGBA[3] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][3], colorRGBA[1][3]) : Tools._Number.randomOneBySection(1, 1);
+                        Color._colour(this, RGBA);
+                        this.alpha = 0;
+                        this.zOrder = zOder ? zOder : 1000;
+                    }
+                }
+                _Glitter._GlitterImage = _GlitterImage;
+                function _blinkStar(parent, centerPos, radiusXY, urlArr, colorRGBA, width, height, scale, speed, rotateSpeed, zOder) {
+                    let Img = new _GlitterImage(parent, centerPos, radiusXY, urlArr, colorRGBA, width, height, zOder);
+                    Img.scaleX = 0;
+                    Img.scaleY = 0;
+                    let _scale = scale ? Tools._Number.randomOneBySection(scale[0], scale[1]) : Tools._Number.randomOneBySection(0.8, 1.2);
+                    let _speed = speed ? Tools._Number.randomOneBySection(speed[0], speed[1]) : Tools._Number.randomOneBySection(0.01, 0.02);
+                    let _rotateSpeed = rotateSpeed ? Tools._Number.randomOneInt(rotateSpeed[0], rotateSpeed[1]) : Tools._Number.randomOneInt(0, 5);
+                    _rotateSpeed = Tools._Number.randomOneHalf() == 0 ? -_rotateSpeed : _rotateSpeed;
+                    let moveCaller = {
+                        appear: true,
+                        scale: false,
+                        vanish: false,
+                    };
+                    Img['moveCaller'] = moveCaller;
+                    var ani = () => {
+                        if (moveCaller.appear) {
+                            Img.alpha += 0.1;
+                            Img.rotation += _rotateSpeed;
+                            Img.scaleX = Img.scaleY += _speed;
+                            if (Img.alpha >= 1) {
+                                moveCaller.appear = false;
+                                moveCaller.scale = true;
+                            }
+                        }
+                        else if (moveCaller.scale) {
+                            Img.rotation += _rotateSpeed;
+                            Img.scaleX = Img.scaleY += _speed;
+                            if (Img.scaleX > _scale) {
+                                moveCaller.scale = false;
+                                moveCaller.vanish = true;
+                            }
+                        }
+                        else if (moveCaller.vanish) {
+                            Img.rotation -= _rotateSpeed;
+                            Img.alpha -= 0.015;
+                            Img.scaleX -= 0.01;
+                            Img.scaleY -= 0.01;
+                            if (Img.scaleX <= 0) {
+                                Img.removeSelf();
+                                Laya.timer.clearAll(moveCaller);
+                            }
+                        }
+                    };
+                    Laya.timer.frameLoop(1, moveCaller, ani);
+                    return Img;
+                }
+                _Glitter._blinkStar = _blinkStar;
+                function _simpleInfinite(parent, x, y, width, height, zOrder, url, speed) {
+                    let Img = new Laya.Image();
+                    parent.addChild(Img);
+                    Img.width = width;
+                    Img.height = height;
+                    Img.pos(x, y);
+                    Img.skin = url ? url : _SkinUrl.光圈1;
+                    Img.alpha = 0;
+                    Img.zOrder = zOrder ? zOrder : 0;
+                    let add = true;
+                    let caller = {};
+                    let func = () => {
+                        if (!add) {
+                            Img.alpha -= speed ? speed : 0.01;
+                            if (Img.alpha <= 0) {
+                                if (caller['end']) {
+                                    Laya.timer.clearAll(caller);
+                                    Img.removeSelf();
+                                }
+                                else {
+                                    add = true;
+                                }
+                            }
+                        }
+                        else {
+                            Img.alpha += speed ? speed * 2 : 0.01 * 2;
+                            if (Img.alpha >= 1) {
+                                add = false;
+                                caller['end'] = true;
+                            }
+                        }
+                    };
+                    Laya.timer.frameLoop(1, caller, func);
+                    return Img;
+                }
+                _Glitter._simpleInfinite = _simpleInfinite;
+            })(_Glitter = Effects2D._Glitter || (Effects2D._Glitter = {}));
+            let _circulation;
+            (function (_circulation) {
+                class _circulationImage extends Laya.Image {
+                    constructor(parent, urlArr, colorRGBA, width, height, zOrder) {
+                        super();
+                        parent.addChild(this);
+                        this.skin = urlArr ? Tools._Array.randomGetOne(urlArr) : _SkinUrl.圆形发光1;
+                        this.width = width ? Tools._Number.randomOneBySection(width[0], width[1]) : 80;
+                        this.height = height ? Tools._Number.randomOneBySection(height[0], height[1]) : this.width;
+                        this.pivotX = this.width / 2;
+                        this.pivotY = this.height / 2;
+                        let RGBA = [];
+                        RGBA[0] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][0], colorRGBA[1][0]) : Tools._Number.randomOneBySection(0, 255);
+                        RGBA[1] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][1], colorRGBA[1][1]) : Tools._Number.randomOneBySection(0, 255);
+                        RGBA[2] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][2], colorRGBA[1][2]) : Tools._Number.randomOneBySection(0, 255);
+                        RGBA[3] = colorRGBA ? Tools._Number.randomOneBySection(colorRGBA[0][3], colorRGBA[1][3]) : Tools._Number.randomOneBySection(0, 255);
+                        Color._colour(this, RGBA);
+                        this.zOrder = zOrder ? zOrder : 0;
+                        this.alpha = 0;
+                        this.scaleX = 0;
+                        this.scaleY = 0;
+                    }
+                }
+                _circulation._circulationImage = _circulationImage;
+                function _corner(parent, posArray, urlArr, colorRGBA, width, height, zOrder, parallel, speed) {
+                    if (posArray.length <= 1) {
+                        return;
+                    }
+                    let Img = new _circulationImage(parent, urlArr, colorRGBA, width, height, zOrder);
+                    let Imgfootprint = new _circulationImage(parent, urlArr, colorRGBA, width, height, zOrder);
+                    Imgfootprint.filters = Img.filters;
+                    Img.pos(posArray[0][0], posArray[0][1]);
+                    Img.alpha = 1;
+                    let moveCaller = {
+                        num: 0,
+                        alpha: true,
+                        move: false,
+                    };
+                    Img['moveCaller'] = moveCaller;
+                    let _speed = speed ? speed : 3;
+                    let index = 0;
+                    Img.scale(1, 1);
+                    TimerAdmin._frameLoop(1, moveCaller, () => {
+                        let Imgfootprint = new _circulationImage(parent, urlArr, colorRGBA, width, height, zOrder);
+                        Imgfootprint.filters = Img.filters;
+                        Imgfootprint.x = Img.x;
+                        Imgfootprint.y = Img.y;
+                        Imgfootprint.rotation = Img.rotation;
+                        Imgfootprint.alpha = 1;
+                        Imgfootprint.zOrder = -1;
+                        Imgfootprint.scaleX = Img.scaleX;
+                        Imgfootprint.scaleY = Img.scaleY;
+                        Animation2D.fadeOut(Imgfootprint, 1, 0, 200, 0, () => {
+                            Imgfootprint.removeSelf();
+                        });
+                        if (Img.parent == null) {
+                            Laya.timer.clearAll(moveCaller);
+                        }
+                        moveCaller.num++;
+                        if (urlArr) {
+                            if (moveCaller.num > urlArr.length) {
+                                moveCaller.num = 0;
+                            }
+                            else {
+                                Img.skin = urlArr[moveCaller.num];
+                            }
+                        }
+                    });
+                    var func = () => {
+                        let targetXY = [posArray[index][0], posArray[index][1]];
+                        let distance = (new Laya.Point(Img.x, Img.y)).distance(targetXY[0], targetXY[1]);
+                        if (parallel) {
+                            Img.rotation = Tools._Point.pointByAngle(Img.x - targetXY[0], Img.y - targetXY[1]) + 180;
+                        }
+                        let time = speed * 100 + distance / 5;
+                        if (index == posArray.length + 1) {
+                            targetXY = [posArray[0][0], posArray[0][1]];
+                        }
+                        Animation2D.move(Img, targetXY[0], targetXY[1], time, () => {
+                            index++;
+                            if (index == posArray.length) {
+                                index = 0;
+                            }
+                            func();
+                        });
+                    };
+                    func();
+                    return Img;
+                }
+                _circulation._corner = _corner;
+            })(_circulation = Effects2D._circulation || (Effects2D._circulation = {}));
+        })(Effects2D = lwg.Effects2D || (lwg.Effects2D = {}));
+        let Click;
+        (function (Click) {
+            Click._switch = true;
+            function _createButton() {
+                let Btn = new Laya.Sprite();
+                let img = new Laya.Image();
+                let label = new Laya.Label();
+            }
+            Click._createButton = _createButton;
+            Click._Type = {
+                no: 'no',
+                largen: 'largen',
+                reduce: 'reduce',
+            };
+            Click._Use = {
+                get value() {
+                    return this['Click_name'] ? this['Click_name'] : null;
+                },
+                set value(val) {
+                    this['Click_name'] = val;
+                }
+            };
+            function _on(effect, target, caller, down, move, up, out) {
+                let btnEffect;
+                switch (effect) {
+                    case Click._Type.no:
+                        btnEffect = new _NoEffect();
+                        break;
+                    case Click._Type.largen:
+                        btnEffect = new _Largen();
+                        break;
+                    case Click._Type.reduce:
+                        btnEffect = new _Reduce();
+                        break;
+                    default:
+                        btnEffect = new _NoEffect();
+                        break;
+                }
+                target.on(Laya.Event.MOUSE_DOWN, caller, down);
+                target.on(Laya.Event.MOUSE_MOVE, caller, move);
+                target.on(Laya.Event.MOUSE_UP, caller, up);
+                target.on(Laya.Event.MOUSE_OUT, caller, out);
+                target.on(Laya.Event.MOUSE_DOWN, caller, btnEffect.down);
+                target.on(Laya.Event.MOUSE_MOVE, caller, btnEffect.move);
+                target.on(Laya.Event.MOUSE_UP, caller, btnEffect.up);
+                target.on(Laya.Event.MOUSE_OUT, caller, btnEffect.out);
+            }
+            Click._on = _on;
+            function _off(effect, target, caller, down, move, up, out) {
+                let btnEffect;
+                switch (effect) {
+                    case Click._Type.no:
+                        btnEffect = new _NoEffect();
+                        break;
+                    case Click._Type.largen:
+                        btnEffect = new _Largen();
+                        break;
+                    case Click._Type.reduce:
+                        btnEffect = new _Largen();
+                        break;
+                    default:
+                        btnEffect = new _NoEffect();
+                        break;
+                }
+                target._off(Laya.Event.MOUSE_DOWN, caller, down);
+                target._off(Laya.Event.MOUSE_MOVE, caller, move);
+                target._off(Laya.Event.MOUSE_UP, caller, up);
+                target._off(Laya.Event.MOUSE_OUT, caller, out);
+                target._off(Laya.Event.MOUSE_DOWN, caller, btnEffect.down);
+                target._off(Laya.Event.MOUSE_MOVE, caller, btnEffect.move);
+                target._off(Laya.Event.MOUSE_UP, caller, btnEffect.up);
+                target._off(Laya.Event.MOUSE_OUT, caller, btnEffect.out);
+            }
+            Click._off = _off;
+            class _NoEffect {
+                down() { }
+                move() { }
+                up() { }
+                out() { }
+            }
+            Click._NoEffect = _NoEffect;
+            class _Largen {
+                down(event) {
+                    event.currentTarget.scale(1.1, 1.1);
+                    AudioAdmin._playSound(Click._audioUrl);
+                }
+                move() { }
+                up(event) {
+                    event.currentTarget.scale(1, 1);
+                }
+                out(event) {
+                    event.currentTarget.scale(1, 1);
+                }
+            }
+            Click._Largen = _Largen;
+            class _Reduce {
+                down(event) {
+                    event.currentTarget.scale(0.9, 0.9);
+                    AudioAdmin._playSound(Click._audioUrl);
+                }
+                move() { }
+                up(event) {
+                    event.currentTarget.scale(1, 1);
+                }
+                out(event) {
+                    event.currentTarget.scale(1, 1);
+                }
+            }
+            Click._Reduce = _Reduce;
+        })(Click = lwg.Click || (lwg.Click = {}));
+        let Animation3D;
+        (function (Animation3D) {
+            Animation3D.tweenMap = {};
+            Animation3D.frameRate = 1;
+            function moveTo(target, toPos, duration, caller, ease, complete, delay = 0, coverBefore = true, update, frame) {
+                let position = target.transform.position.clone();
+                if (duration == 0 || duration === undefined || duration === null) {
+                    target.transform.position = toPos.clone();
+                    complete && complete.apply(caller);
+                    return;
+                }
+                if (frame <= 0 || frame === undefined || frame === null) {
+                    frame = Animation3D.frameRate;
+                }
+                let updateRenderPos = function () {
+                    if (target.transform) {
+                        target.transform.position = position;
+                    }
+                    update && update();
+                };
+                Laya.timer.once(delay, target, function () {
+                    Laya.timer.frameLoop(frame, target, updateRenderPos);
+                });
+                let endTween = function () {
+                    if (target.transform) {
+                        target.transform.position = toPos.clone();
+                        Laya.timer.clear(target, updateRenderPos);
+                    }
+                    complete && complete.apply(caller);
+                };
+                let tween = Laya.Tween.to(position, { x: toPos.x, y: toPos.y, z: toPos.z }, duration, ease, Laya.Handler.create(target, endTween), delay, coverBefore);
+                if (!Animation3D.tweenMap[target.id]) {
+                    Animation3D.tweenMap[target.id] = [];
+                }
+                Animation3D.tweenMap[target.id].push(tween);
+            }
+            Animation3D.moveTo = moveTo;
+            function rotateTo(target, toRotation, duration, caller, ease, complete, delay, coverBefore, update, frame) {
+                let rotation = target.transform.localRotationEuler.clone();
+                if (duration == 0 || duration === undefined || duration === null) {
+                    target.transform.localRotationEuler = toRotation.clone();
+                    complete && complete.apply(caller);
+                    return;
+                }
+                if (frame <= 0 || frame === undefined || frame === null) {
+                    frame = Animation3D.frameRate;
+                }
+                let updateRenderRotation = function () {
+                    if (target.transform) {
+                        target.transform.localRotationEuler = rotation;
+                    }
+                    update && update();
+                };
+                Laya.timer.once(delay, target, function () {
+                    Laya.timer.frameLoop(frame, target, updateRenderRotation);
+                });
+                let endTween = function () {
+                    if (target.transform) {
+                        target.transform.localRotationEuler = toRotation.clone();
+                        Laya.timer.clear(target, updateRenderRotation);
+                    }
+                    complete && complete.apply(caller);
+                };
+                let tween = Laya.Tween.to(rotation, { x: toRotation.x, y: toRotation.y, z: toRotation.z }, duration, ease, Laya.Handler.create(target, endTween), delay, coverBefore);
+                if (!Animation3D.tweenMap[target.id]) {
+                    Animation3D.tweenMap[target.id] = [];
+                }
+                Animation3D.tweenMap[target.id].push(tween);
+            }
+            Animation3D.rotateTo = rotateTo;
+            function scaleTo(target, toScale, duration, caller, ease, complete, delay, coverBefore, update, frame) {
+                let localScale = target.transform.localScale.clone();
+                if (duration == 0 || duration === undefined || duration === null) {
+                    target.transform.localScale = toScale.clone();
+                    complete && complete.apply(caller);
+                    return;
+                }
+                if (frame <= 0 || frame === undefined || frame === null) {
+                    frame = Animation3D.frameRate;
+                }
+                let updateRenderPos = function () {
+                    target.transform.localScale = localScale.clone();
+                    update && update();
+                };
+                Laya.timer.once(delay, this, function () {
+                    Laya.timer.frameLoop(frame, target, updateRenderPos);
+                });
+                let endTween = function () {
+                    target.transform.localScale = toScale.clone();
+                    Laya.timer.clear(target, updateRenderPos);
+                    complete && complete.apply(caller);
+                };
+                let tween = Laya.Tween.to(localScale, { x: toScale.x, y: toScale.y, z: toScale.z }, duration, ease, Laya.Handler.create(target, endTween), delay, coverBefore);
+                if (!Animation3D.tweenMap[target.id]) {
+                    Animation3D.tweenMap[target.id] = [];
+                }
+                Animation3D.tweenMap[target.id].push(tween);
+            }
+            Animation3D.scaleTo = scaleTo;
+            function ClearTween(target) {
+                let tweens = Animation3D.tweenMap[target.id];
+                if (tweens && tweens.length) {
+                    while (tweens.length > 0) {
+                        let tween = tweens.pop();
+                        tween.clear();
+                    }
+                }
+                Laya.timer.clearAll(target);
+            }
+            Animation3D.ClearTween = ClearTween;
+            function rock(target, range, duration, caller, func, delayed, ease) {
+                if (!delayed) {
+                    delayed = 0;
+                }
+                let v1 = new Laya.Vector3(target.transform.localRotationEulerX + range.x, target.transform.localRotationEulerY + range.y, target.transform.localRotationEulerZ + range.z);
+                rotateTo(target, v1, duration / 2, caller, ease, () => {
+                    let v2 = new Laya.Vector3(target.transform.localRotationEulerX - range.x * 2, target.transform.localRotationEulerY - range.y * 2, target.transform.localRotationEulerZ - range.z * 2);
+                    rotateTo(target, v2, duration, caller, ease, () => {
+                        let v3 = new Laya.Vector3(target.transform.localRotationEulerX + range.x, target.transform.localRotationEulerY + range.y, target.transform.localRotationEulerZ + range.z);
+                        rotateTo(target, v3, duration / 2, caller, ease, () => {
+                            if (func) {
+                                func();
+                            }
+                        });
+                    });
+                }, delayed);
+            }
+            Animation3D.rock = rock;
+            function moveRotateTo(Sp3d, Target, duration, caller, ease, complete, delay, coverBefore, update, frame) {
+                moveTo(Sp3d, Target.transform.position, duration, caller, ease, null, delay, coverBefore, update, frame);
+                rotateTo(Sp3d, Target.transform.localRotationEuler, duration, caller, ease, complete, delay, coverBefore, null, frame);
+            }
+            Animation3D.moveRotateTo = moveRotateTo;
+        })(Animation3D = lwg.Animation3D || (lwg.Animation3D = {}));
+        let Animation2D;
+        (function (Animation2D) {
+            function _clearAll(arr) {
+                for (let index = 0; index < arr.length; index++) {
+                    Laya.Tween.clearAll(arr[index]);
+                }
+            }
+            Animation2D._clearAll = _clearAll;
+            function circulation_scale(node, range, time, delayed, func) {
+                Laya.Tween.to(node, { scaleX: 1 + range, scaleY: 1 + range }, time, null, Laya.Handler.create(this, function () {
+                    Laya.Tween.to(node, { scaleX: 1 - range, scaleY: 1 - range }, time / 2, null, Laya.Handler.create(this, function () {
+                        Laya.Tween.to(node, { scaleX: 1, scaleY: 1 }, time / 2, null, Laya.Handler.create(this, function () {
+                            if (func) {
+                                func();
+                            }
+                        }), 0);
+                    }), 0);
+                }), delayed ? delayed : 0);
+            }
+            Animation2D.circulation_scale = circulation_scale;
+            function leftRight_Shake(node, range, time, delayed, func, click) {
+                if (!delayed) {
+                    delayed = 0;
+                }
+                if (!click) {
+                    Click._switch = false;
+                }
+                Laya.Tween.to(node, { x: node.x - range }, time, null, Laya.Handler.create(this, function () {
+                    Laya.Tween.to(node, { x: node.x + range * 2 }, time, null, Laya.Handler.create(this, function () {
+                        Laya.Tween.to(node, { x: node.x - range }, time, null, Laya.Handler.create(this, function () {
+                            if (func) {
+                                func();
+                            }
+                            if (!click) {
+                                Click._switch = true;
+                            }
+                        }));
+                    }));
+                }), delayed);
+            }
+            Animation2D.leftRight_Shake = leftRight_Shake;
+            function rotate(node, Erotate, time, delayed, func) {
+                Laya.Tween.to(node, { rotation: Erotate }, time, null, Laya.Handler.create(node, function () {
+                    if (func) {
+                        func();
+                    }
+                }), delayed ? delayed : 0);
+            }
+            Animation2D.rotate = rotate;
+            function upDown_Overturn(node, time, func) {
+                Laya.Tween.to(node, { scaleY: 0 }, time, null, Laya.Handler.create(this, function () {
+                    Laya.Tween.to(node, { scaleY: 1 }, time, null, Laya.Handler.create(this, function () {
+                        Laya.Tween.to(node, { scaleY: 0 }, time, null, Laya.Handler.create(this, function () {
+                            Laya.Tween.to(node, { scaleY: 1 }, time, null, Laya.Handler.create(this, function () {
+                                if (func !== null || func !== undefined) {
+                                    func();
+                                }
+                            }), 0);
+                        }), 0);
+                    }), 0);
+                }), 0);
+            }
+            Animation2D.upDown_Overturn = upDown_Overturn;
+            function leftRight_Overturn(node, time, func) {
+                Laya.Tween.to(node, { scaleX: 0 }, time, null, Laya.Handler.create(this, function () {
+                    Laya.Tween.to(node, { scaleX: 1 }, time, null, Laya.Handler.create(this, function () {
+                        Laya.Tween.to(node, { scaleX: 0 }, time, null, Laya.Handler.create(this, function () {
+                            Laya.Tween.to(node, { scaleX: 1 }, time, null, Laya.Handler.create(this, function () {
+                            }), 0);
+                            if (func !== null) {
+                                func();
+                            }
+                        }), 0);
+                    }), 0);
+                }), 0);
+            }
+            Animation2D.leftRight_Overturn = leftRight_Overturn;
+            function upDwon_Shake(node, range, time, delayed, func) {
+                Laya.Tween.to(node, { y: node.y + range }, time, null, Laya.Handler.create(this, function () {
+                    Laya.Tween.to(node, { y: node.y - range * 2 }, time, null, Laya.Handler.create(this, function () {
+                        Laya.Tween.to(node, { y: node.y + range }, time, null, Laya.Handler.create(this, function () {
+                            if (func !== null) {
+                                func();
+                            }
+                        }));
+                    }));
+                }), delayed);
+            }
+            Animation2D.upDwon_Shake = upDwon_Shake;
+            function fadeOut(node, alpha1, alpha2, time, delayed, func, stageClick) {
+                node.alpha = alpha1;
+                if (stageClick) {
+                    Click._switch = false;
+                }
+                Laya.Tween.to(node, { alpha: alpha2 }, time, null, Laya.Handler.create(this, function () {
+                    if (func) {
+                        func();
+                    }
+                    if (stageClick) {
+                        Click._switch = true;
+                    }
+                }), delayed ? delayed : 0);
+            }
+            Animation2D.fadeOut = fadeOut;
+            function fadeOut_KickBack(node, alpha1, alpha2, time, delayed, func) {
+                node.alpha = alpha1;
+                Laya.Tween.to(node, { alpha: alpha2 }, time, null, Laya.Handler.create(this, function () {
+                    if (func !== null) {
+                        func();
+                    }
+                }), delayed);
+            }
+            Animation2D.fadeOut_KickBack = fadeOut_KickBack;
+            function move_FadeOut(node, firstX, firstY, targetX, targetY, time, delayed, func) {
+                node.alpha = 0;
+                node.x = firstX;
+                node.y = firstY;
+                Laya.Tween.to(node, { alpha: 1, x: targetX, y: targetY }, time, null, Laya.Handler.create(this, function () {
+                    if (func !== null) {
+                        func();
+                    }
+                }), delayed);
+            }
+            Animation2D.move_FadeOut = move_FadeOut;
+            function move_Fade_Out(node, firstX, firstY, targetX, targetY, time, delayed, func) {
+                node.alpha = 1;
+                node.x = firstX;
+                node.y = firstY;
+                Laya.Tween.to(node, { alpha: 0, x: targetX, y: targetY }, time, null, Laya.Handler.create(this, function () {
+                    if (func !== null) {
+                        func();
+                    }
+                }), delayed);
+            }
+            Animation2D.move_Fade_Out = move_Fade_Out;
+            function move_FadeOut_Scale_01(node, firstX, firstY, targetX, targetY, time, delayed, func) {
+                node.alpha = 0;
+                node.targetX = 0;
+                node.targetY = 0;
+                node.x = firstX;
+                node.y = firstY;
+                Laya.Tween.to(node, { alpha: 1, x: targetX, y: targetY, scaleX: 1, scaleY: 1 }, time, null, Laya.Handler.create(this, function () {
+                    if (func !== null) {
+                        func();
+                    }
+                }), delayed);
+            }
+            Animation2D.move_FadeOut_Scale_01 = move_FadeOut_Scale_01;
+            function move_Scale(node, fScale, fX, fY, tX, tY, eScale, time, delayed, ease, func) {
+                node.scaleX = fScale;
+                node.scaleY = fScale;
+                node.x = fX;
+                node.y = fY;
+                Laya.Tween.to(node, { x: tX, y: tY, scaleX: eScale, scaleY: eScale }, time, ease ? null : ease, Laya.Handler.create(this, function () {
+                    if (func) {
+                        func();
+                    }
+                }), delayed ? delayed : 0);
+            }
+            Animation2D.move_Scale = move_Scale;
+            function move_rotate(Node, tRotate, tPoint, time, delayed, func) {
+                Laya.Tween.to(Node, { rotation: tRotate, x: tPoint.x, y: tPoint.y }, time, null, Laya.Handler.create(Node, () => {
+                    if (func) {
+                        func();
+                    }
+                }), delayed ? delayed : 0);
+            }
+            Animation2D.move_rotate = move_rotate;
+            function rotate_Scale(target, fRotate, fScaleX, fScaleY, eRotate, eScaleX, eScaleY, time, delayed, func) {
+                target.scaleX = fScaleX;
+                target.scaleY = fScaleY;
+                target.rotation = fRotate;
+                Laya.Tween.to(target, { rotation: eRotate, scaleX: eScaleX, scaleY: eScaleY }, time, null, Laya.Handler.create(this, () => {
+                    if (func) {
+                        func();
+                    }
+                    target.rotation = 0;
+                }), delayed ? delayed : 0);
+            }
+            Animation2D.rotate_Scale = rotate_Scale;
+            function drop_Simple(node, fY, tY, rotation, time, delayed, func) {
+                node.y = fY;
+                Laya.Tween.to(node, { y: tY, rotation: rotation }, time, Laya.Ease.circOut, Laya.Handler.create(this, function () {
+                    if (func !== null) {
+                        func();
+                    }
+                }), delayed);
+            }
+            Animation2D.drop_Simple = drop_Simple;
+            function drop_KickBack(target, fAlpha, firstY, targetY, extendY, time1, delayed, func) {
+                target.alpha = fAlpha;
+                target.y = firstY;
+                if (!delayed) {
+                    delayed = 0;
+                }
+                Laya.Tween.to(target, { alpha: 1, y: targetY + extendY }, time1, null, Laya.Handler.create(this, function () {
+                    Laya.Tween.to(target, { y: targetY - extendY / 2 }, time1 / 2, null, Laya.Handler.create(this, function () {
+                        Laya.Tween.to(target, { y: targetY }, time1 / 4, null, Laya.Handler.create(this, function () {
+                            if (func) {
+                                func();
+                            }
+                        }), 0);
+                    }), 0);
+                }), delayed);
+            }
+            Animation2D.drop_KickBack = drop_KickBack;
+            function drop_Excursion(node, targetY, targetX, rotation, time, delayed, func) {
+                Laya.Tween.to(node, { x: node.x + targetX, y: node.y + targetY * 1 / 6 }, time, Laya.Ease.expoIn, Laya.Handler.create(this, function () {
+                    Laya.Tween.to(node, { x: node.x + targetX + 50, y: targetY, rotation: rotation }, time, null, Laya.Handler.create(this, function () {
+                        if (func !== null) {
+                            func();
+                        }
+                    }), 0);
+                }), delayed);
+            }
+            Animation2D.drop_Excursion = drop_Excursion;
+            function goUp_Simple(node, initialY, initialR, targetY, time, delayed, func) {
+                node.y = initialY;
+                node.rotation = initialR;
+                Laya.Tween.to(node, { y: targetY, rotation: 0 }, time, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+                    if (func !== null) {
+                        func();
+                    }
+                }), delayed);
+            }
+            Animation2D.goUp_Simple = goUp_Simple;
+            function cardRotateX_TowFace(node, time, func1, delayed, func2) {
+                Laya.Tween.to(node, { scaleX: 0 }, time, null, Laya.Handler.create(this, function () {
+                    Tools._Node.childrenVisible2D(node, false);
+                    if (func1) {
+                        func1();
+                    }
+                    Laya.Tween.to(node, { scaleX: 1 }, time * 0.9, null, Laya.Handler.create(this, function () {
+                        Laya.Tween.to(node, { scaleX: 0 }, time * 0.8, null, Laya.Handler.create(this, function () {
+                            Tools._Node.childrenVisible2D(node, true);
+                            Laya.Tween.to(node, { scaleX: 1 }, time * 0.7, null, Laya.Handler.create(this, function () {
+                                if (func2) {
+                                    func2();
+                                }
+                            }), 0);
+                        }), 0);
+                    }), 0);
+                }), delayed);
+            }
+            Animation2D.cardRotateX_TowFace = cardRotateX_TowFace;
+            function cardRotateX_OneFace(node, func1, time, delayed, func2) {
+                Laya.Tween.to(node, { scaleX: 0 }, time, null, Laya.Handler.create(this, function () {
+                    if (func1 !== null) {
+                        func1();
+                    }
+                    Laya.Tween.to(node, { scaleX: 1 }, time, null, Laya.Handler.create(this, function () {
+                        if (func2 !== null) {
+                            func2();
+                        }
+                    }), 0);
+                }), delayed);
+            }
+            Animation2D.cardRotateX_OneFace = cardRotateX_OneFace;
+            function cardRotateY_TowFace(node, time, func1, delayed, func2) {
+                Laya.Tween.to(node, { scaleY: 0 }, time, null, Laya.Handler.create(this, function () {
+                    Tools._Node.childrenVisible2D(node, false);
+                    if (func1) {
+                        func1();
+                    }
+                    Laya.Tween.to(node, { scaleY: 1 }, time, null, Laya.Handler.create(this, function () {
+                        Laya.Tween.to(node, { scaleY: 0 }, time, null, Laya.Handler.create(this, function () {
+                            Laya.Tween.to(node, { scaleY: 1 }, time * 1 / 2, null, Laya.Handler.create(this, function () {
+                                Tools._Node.childrenVisible2D(node, true);
+                                if (func2) {
+                                    func2();
+                                }
+                            }), 0);
+                        }), 0);
+                    }), 0);
+                }), delayed);
+            }
+            Animation2D.cardRotateY_TowFace = cardRotateY_TowFace;
+            function cardRotateY_OneFace(node, func1, time, delayed, func2) {
+                Laya.Tween.to(node, { scaleY: 0 }, time, null, Laya.Handler.create(this, function () {
+                    if (func1) {
+                        func1();
+                    }
+                    Laya.Tween.to(node, { scaleY: 1 }, time, null, Laya.Handler.create(this, function () {
+                        if (func2) {
+                            func2();
+                        }
+                    }), 0);
+                }), delayed ? delayed : 0);
+            }
+            Animation2D.cardRotateY_OneFace = cardRotateY_OneFace;
+            function move_changeRotate(node, targetX, targetY, per, rotation_pe, time, func) {
+                let targetPerX = targetX * per + node.x * (1 - per);
+                let targetPerY = targetY * per + node.y * (1 - per);
+                Laya.Tween.to(node, { x: targetPerX, y: targetPerY, rotation: 45 }, time, null, Laya.Handler.create(this, function () {
+                    Laya.Tween.to(node, { x: targetX, y: targetY, rotation: 0 }, time, null, Laya.Handler.create(this, function () {
+                        if (func !== null) {
+                            func();
+                        }
+                    }), 0);
+                }), 0);
+            }
+            Animation2D.move_changeRotate = move_changeRotate;
+            function bomb_LeftRight(node, MaxScale, time, func, delayed) {
+                Laya.Tween.to(node, { scaleX: MaxScale }, time, Laya.Ease.cubicInOut, Laya.Handler.create(this, function () {
+                    Laya.Tween.to(node, { scaleX: 0.85 }, time * 0.5, null, Laya.Handler.create(this, function () {
+                        Laya.Tween.to(node, { scaleX: MaxScale * 0.9 }, time * 0.55, null, Laya.Handler.create(this, function () {
+                            Laya.Tween.to(node, { scaleX: 0.95 }, time * 0.6, null, Laya.Handler.create(this, function () {
+                                Laya.Tween.to(node, { scaleX: 1 }, time * 0.65, null, Laya.Handler.create(this, function () {
+                                    if (func)
+                                        func();
+                                }), 0);
+                            }), 0);
+                        }), 0);
+                    }), 0);
+                }), delayed);
+            }
+            Animation2D.bomb_LeftRight = bomb_LeftRight;
+            function bombs_Appear(node, firstAlpha, endScale, maxScale, rotation, time, func, delayed) {
+                node.scale(0, 0);
+                node.alpha = firstAlpha;
+                Laya.Tween.to(node, { scaleX: maxScale, scaleY: maxScale, alpha: 1, rotation: rotation }, time, Laya.Ease.cubicInOut, Laya.Handler.create(this, function () {
+                    Laya.Tween.to(node, { scaleX: endScale, scaleY: endScale, rotation: 0 }, time / 2, null, Laya.Handler.create(this, function () {
+                        Laya.Tween.to(node, { scaleX: endScale + (maxScale - endScale) / 3, scaleY: endScale + (maxScale - endScale) / 3, rotation: 0 }, time / 3, null, Laya.Handler.create(this, function () {
+                            Laya.Tween.to(node, { scaleX: endScale, scaleY: endScale, rotation: 0 }, time / 4, null, Laya.Handler.create(this, function () {
+                                if (func) {
+                                    func();
+                                }
+                            }), 0);
+                        }), 0);
+                    }), 0);
+                }), delayed ? delayed : 0);
+            }
+            Animation2D.bombs_Appear = bombs_Appear;
+            function bombs_AppearAllChild(node, firstAlpha, endScale, scale1, rotation1, time1, interval, func, audioType) {
+                let de1 = 0;
+                if (!interval) {
+                    interval = 100;
+                }
+                for (let index = 0; index < node.numChildren; index++) {
+                    let Child = node.getChildAt(index);
+                    Child.alpha = 0;
+                    Laya.timer.once(de1, this, () => {
+                        Child.alpha = 1;
+                        if (index !== node.numChildren - 1) {
+                            func == null;
+                        }
+                        bombs_Appear(Child, firstAlpha, endScale, scale1, rotation1, time1, func);
+                    });
+                    de1 += interval;
+                }
+            }
+            Animation2D.bombs_AppearAllChild = bombs_AppearAllChild;
+            function bombs_VanishAllChild(node, endScale, alpha, rotation, time, interval, func) {
+                let de1 = 0;
+                if (!interval) {
+                    interval = 100;
+                }
+                for (let index = 0; index < node.numChildren; index++) {
+                    let Child = node.getChildAt(index);
+                    Laya.timer.once(de1, this, () => {
+                        if (index !== node.numChildren - 1) {
+                            func == null;
+                        }
+                        bombs_Vanish(node, endScale, alpha, rotation, time, func);
+                    });
+                    de1 += interval;
+                }
+            }
+            Animation2D.bombs_VanishAllChild = bombs_VanishAllChild;
+            function bombs_Vanish(node, scale, alpha, rotation, time, func, delayed) {
+                Laya.Tween.to(node, { scaleX: scale, scaleY: scale, alpha: alpha, rotation: rotation }, time, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+                    if (func) {
+                        func();
+                    }
+                }), delayed ? delayed : 0);
+            }
+            Animation2D.bombs_Vanish = bombs_Vanish;
+            function swell_shrink(node, firstScale, scale1, time, delayed, func) {
+                if (!delayed) {
+                    delayed = 0;
+                }
+                Laya.Tween.to(node, { scaleX: scale1, scaleY: scale1, alpha: 1, }, time, Laya.Ease.cubicInOut, Laya.Handler.create(this, function () {
+                    Laya.Tween.to(node, { scaleX: firstScale, scaleY: firstScale, rotation: 0 }, time, null, Laya.Handler.create(this, function () {
+                        Laya.Tween.to(node, { scaleX: firstScale + (scale1 - firstScale) * 0.5, scaleY: firstScale + (scale1 - firstScale) * 0.5, rotation: 0 }, time * 0.5, null, Laya.Handler.create(this, function () {
+                            Laya.Tween.to(node, { scaleX: firstScale, scaleY: firstScale, rotation: 0 }, time, null, Laya.Handler.create(this, function () {
+                                if (func) {
+                                    func();
+                                }
+                            }), 0);
+                        }), 0);
+                    }), 0);
+                }), delayed);
+            }
+            Animation2D.swell_shrink = swell_shrink;
+            function move(node, targetX, targetY, time, func, delayed, ease) {
+                Laya.Tween.to(node, { x: targetX, y: targetY }, time, ease ? ease : null, Laya.Handler.create(this, function () {
+                    if (func) {
+                        func();
+                    }
+                }), delayed ? delayed : 0);
+            }
+            Animation2D.move = move;
+            function move_Deform_X(node, firstX, firstR, targetX, scaleX, scaleY, time, delayed, func) {
+                node.alpha = 0;
+                node.x = firstX;
+                node.rotation = firstR;
+                Laya.Tween.to(node, { x: targetX, scaleX: 1 + scaleX, scaleY: 1 + scaleY, rotation: firstR / 3, alpha: 1 }, time, null, Laya.Handler.create(this, function () {
+                    Laya.Tween.to(node, { scaleX: 1, scaleY: 1, rotation: 0 }, time, null, Laya.Handler.create(this, function () {
+                        if (func !== null) {
+                            func();
+                        }
+                    }), 0);
+                }), delayed);
+            }
+            Animation2D.move_Deform_X = move_Deform_X;
+            function move_Deform_Y(target, firstY, firstR, targeY, scaleX, scaleY, time, delayed, func) {
+                target.alpha = 0;
+                if (firstY) {
+                    target.y = firstY;
+                }
+                target.rotation = firstR;
+                Laya.Tween.to(target, { y: targeY, scaleX: 1 + scaleX, scaleY: 1 + scaleY, rotation: firstR / 3, alpha: 1 }, time, null, Laya.Handler.create(this, function () {
+                    Laya.Tween.to(target, { scaleX: 1, scaleY: 1, rotation: 0 }, time, null, Laya.Handler.create(this, function () {
+                        if (func !== null) {
+                            func();
+                        }
+                    }), 0);
+                }), delayed);
+            }
+            Animation2D.move_Deform_Y = move_Deform_Y;
+            function blink_FadeOut_v(target, minAlpha, maXalpha, time, delayed, func) {
+                target.alpha = minAlpha;
+                Laya.Tween.to(target, { alpha: maXalpha }, time, null, Laya.Handler.create(this, function () {
+                    Laya.Tween.to(target, { alpha: minAlpha }, time, null, Laya.Handler.create(this, function () {
+                        if (func !== null) {
+                            func();
+                        }
+                    }), 0);
+                }), delayed);
+            }
+            Animation2D.blink_FadeOut_v = blink_FadeOut_v;
+            function blink_FadeOut(target, minAlpha, maXalpha, time, delayed, func) {
+                target.alpha = minAlpha;
+                if (!delayed) {
+                    delayed = 0;
+                }
+                Laya.Tween.to(target, { alpha: minAlpha }, time, null, Laya.Handler.create(this, function () {
+                    Laya.Tween.to(target, { alpha: maXalpha }, time, null, Laya.Handler.create(this, function () {
+                        if (func) {
+                            func();
+                        }
+                    }), 0);
+                }), delayed);
+            }
+            Animation2D.blink_FadeOut = blink_FadeOut;
+            function shookHead_Simple(target, rotate, time, delayed, func) {
+                let firstR = target.rotation;
+                Laya.Tween.to(target, { rotation: firstR + rotate }, time, null, Laya.Handler.create(this, function () {
+                    Laya.Tween.to(target, { rotation: firstR - rotate * 2 }, time, null, Laya.Handler.create(this, function () {
+                        Laya.Tween.to(target, { rotation: firstR + rotate }, time, null, Laya.Handler.create(this, function () {
+                            Laya.Tween.to(target, { rotation: firstR }, time, null, Laya.Handler.create(this, function () {
+                                if (func) {
+                                    func();
+                                }
+                            }), 0);
+                        }), 0);
+                    }), 0);
+                }), delayed ? delayed : 0);
+            }
+            Animation2D.shookHead_Simple = shookHead_Simple;
+            function HintAni_01(target, upNum, time1, stopTime, downNum, time2, func) {
+                target.alpha = 0;
+                Laya.Tween.to(target, { alpha: 1, y: target.y - upNum }, time1, null, Laya.Handler.create(this, function () {
+                    Laya.Tween.to(target, { y: target.y - 15 }, stopTime, null, Laya.Handler.create(this, function () {
+                        Laya.Tween.to(target, { alpha: 0, y: target.y + upNum + downNum }, time2, null, Laya.Handler.create(this, function () {
+                            if (func !== null) {
+                                func();
+                            }
+                        }), 0);
+                    }), 0);
+                }), 0);
+            }
+            Animation2D.HintAni_01 = HintAni_01;
+            function scale_Alpha(target, fAlpha, fScaleX, fScaleY, eScaleX, eScaleY, eAlpha, time, delayed, func, ease) {
+                if (!delayed) {
+                    delayed = 0;
+                }
+                if (!ease) {
+                    ease = null;
+                }
+                target.alpha = fAlpha;
+                target.scaleX = fScaleX;
+                target.scaleY = fScaleY;
+                Laya.Tween.to(target, { scaleX: eScaleX, scaleY: eScaleY, alpha: eAlpha }, time, ease, Laya.Handler.create(this, function () {
+                    if (func) {
+                        func();
+                    }
+                }), delayed);
+            }
+            Animation2D.scale_Alpha = scale_Alpha;
+            function scale(target, fScaleX, fScaleY, eScaleX, eScaleY, time, delayed, func, ease) {
+                target.scaleX = fScaleX;
+                target.scaleY = fScaleY;
+                Laya.Tween.to(target, { scaleX: eScaleX, scaleY: eScaleY }, time, ease ? ease : null, Laya.Handler.create(this, function () {
+                    if (func) {
+                        func();
+                    }
+                }), delayed ? delayed : 0);
+            }
+            Animation2D.scale = scale;
+            function rotate_Magnify_KickBack(node, eAngle, eScale, time1, time2, delayed1, delayed2, func) {
+                node.alpha = 0;
+                node.scaleX = 0;
+                node.scaleY = 0;
+                Laya.Tween.to(node, { alpha: 1, rotation: 360 + eAngle, scaleX: 1 + eScale, scaleY: 1 + eScale }, time1, null, Laya.Handler.create(this, function () {
+                    Laya.Tween.to(node, { rotation: 360 - eAngle / 2, scaleX: 1 + eScale / 2, scaleY: 1 + eScale / 2 }, time2, null, Laya.Handler.create(this, function () {
+                        Laya.Tween.to(node, { rotation: 360 + eAngle / 3, scaleX: 1 + eScale / 5, scaleY: 1 + eScale / 5 }, time2, null, Laya.Handler.create(this, function () {
+                            Laya.Tween.to(node, { rotation: 360, scaleX: 1, scaleY: 1 }, time2, null, Laya.Handler.create(this, function () {
+                                node.rotation = 0;
+                                if (func !== null) {
+                                    func();
+                                }
+                            }), 0);
+                        }), delayed2);
+                    }), 0);
+                }), delayed1);
+            }
+            Animation2D.rotate_Magnify_KickBack = rotate_Magnify_KickBack;
+        })(Animation2D = lwg.Animation2D || (lwg.Animation2D = {}));
+        let Setting;
+        (function (Setting) {
+            Setting._sound = {
+                get switch() {
+                    return Laya.LocalStorage.getItem('Setting_sound') == '0' ? false : true;
+                },
+                set switch(value) {
+                    let val;
+                    if (value) {
+                        val = 1;
+                    }
+                    else {
+                        val = 0;
+                    }
+                    Laya.LocalStorage.setItem('Setting_sound', val.toString());
+                }
+            };
+            Setting._bgMusic = {
+                get switch() {
+                    return Laya.LocalStorage.getItem('Setting_bgMusic') == '0' ? false : true;
+                },
+                set switch(value) {
+                    let val;
+                    if (value) {
+                        val = 1;
+                        Laya.LocalStorage.setItem('Setting_bgMusic', val.toString());
+                        AudioAdmin._playMusic();
+                    }
+                    else {
+                        val = 0;
+                        Laya.LocalStorage.setItem('Setting_bgMusic', val.toString());
+                        AudioAdmin._stopMusic();
+                    }
+                }
+            };
+            Setting._shake = {
+                get switch() {
+                    return Laya.LocalStorage.getItem('Setting_shake') == '0' ? false : true;
+                },
+                set switch(value) {
+                    let val;
+                    if (value) {
+                        val = 1;
+                    }
+                    else {
+                        val = 0;
+                    }
+                    Laya.LocalStorage.setItem('Setting_shake', val.toString());
+                }
+            };
+            function _createBtnSet(x, y, width, height, skin, parent, ZOder) {
+                let btn = new Laya.Image;
+                btn.width = width ? width : 100;
+                btn.height = width ? width : 100;
+                btn.skin = skin ? skin : 'Frame/UI/icon_set.png';
+                if (parent) {
+                    parent.addChild(btn);
+                }
+                else {
+                    Laya.stage.addChild(btn);
+                }
+                btn.pivotX = btn.width / 2;
+                btn.pivotY = btn.height / 2;
+                btn.x = x;
+                btn.y = y;
+                btn.zOrder = ZOder ? ZOder : 100;
+                var btnSetUp = function (e) {
+                    e.stopPropagation();
+                    Admin._openScene(Admin._SceneName.Set);
+                };
+                Click._on(Click._Type.largen, btn, null, null, btnSetUp, null);
+                Setting._BtnSet = btn;
+                Setting._BtnSet.name = 'BtnSetNode';
+                return btn;
+            }
+            Setting._createBtnSet = _createBtnSet;
+            function btnSetAppear(delayed, x, y) {
+                if (!Setting._BtnSet) {
+                    return;
+                }
+                if (delayed) {
+                    Animation2D.scale_Alpha(Setting._BtnSet, 0, 1, 1, 1, 1, 1, delayed, 0, f => {
+                        Setting._BtnSet.visible = true;
+                    });
+                }
+                else {
+                    Setting._BtnSet.visible = true;
+                }
+                if (x) {
+                    Setting._BtnSet.x = x;
+                }
+                if (y) {
+                    Setting._BtnSet.y = y;
+                }
+            }
+            Setting.btnSetAppear = btnSetAppear;
+            function btnSetVinish(delayed) {
+                if (!Setting._BtnSet) {
+                    return;
+                }
+                if (delayed) {
+                    Animation2D.scale_Alpha(Setting._BtnSet, 1, 1, 1, 1, 1, 0, delayed, 0, f => {
+                        Setting._BtnSet.visible = false;
+                    });
+                }
+                else {
+                    Setting._BtnSet.visible = false;
+                }
+            }
+            Setting.btnSetVinish = btnSetVinish;
+        })(Setting = lwg.Setting || (lwg.Setting = {}));
+        let AudioAdmin;
+        (function (AudioAdmin) {
+            let _voiceUrl;
+            (function (_voiceUrl) {
+                _voiceUrl["btn"] = "Lwg/Voice/btn.wav";
+                _voiceUrl["bgm"] = "Lwg/Voice/bgm.mp3";
+                _voiceUrl["victory"] = "Lwg/Voice/guoguan.wav";
+                _voiceUrl["defeated"] = "Lwg/Voice/wancheng.wav";
+                _voiceUrl["huodejinbi"] = "Lwg/Voice/huodejinbi.wav";
+            })(_voiceUrl = AudioAdmin._voiceUrl || (AudioAdmin._voiceUrl = {}));
+            function _playSound(url, number, func) {
+                if (!url) {
+                    url = _voiceUrl.btn;
+                }
+                if (!number) {
+                    number = 1;
+                }
+                if (Setting._sound.switch) {
+                    Laya.SoundManager.playSound(url, number, Laya.Handler.create(this, function () {
+                        if (func) {
+                            func();
+                        }
+                    }));
+                }
+            }
+            AudioAdmin._playSound = _playSound;
+            function _playDefeatedSound(url, number, func) {
+                if (!url) {
+                    url = _voiceUrl.defeated;
+                }
+                if (!number) {
+                    number = 1;
+                }
+                if (Setting._sound.switch) {
+                    Laya.SoundManager.playSound(url, number, Laya.Handler.create(this, function () {
+                        if (func) {
+                            func();
+                        }
+                    }));
+                }
+            }
+            AudioAdmin._playDefeatedSound = _playDefeatedSound;
+            function _playVictorySound(url, number, func) {
+                if (!url) {
+                    url = _voiceUrl.victory;
+                }
+                if (!number) {
+                    number = 1;
+                }
+                if (Setting._sound.switch) {
+                    Laya.SoundManager.playSound(url, number, Laya.Handler.create(this, function () {
+                        if (func) {
+                            func();
+                        }
+                    }));
+                }
+            }
+            AudioAdmin._playVictorySound = _playVictorySound;
+            function _playMusic(url, number, delayed) {
+                if (!url) {
+                    url = _voiceUrl.bgm;
+                }
+                if (!number) {
+                    number = 0;
+                }
+                if (!delayed) {
+                    delayed = 0;
+                }
+                if (Setting._bgMusic.switch) {
+                    Laya.SoundManager.playMusic(url, number, Laya.Handler.create(this, function () { }), delayed);
+                }
+            }
+            AudioAdmin._playMusic = _playMusic;
+            function _stopMusic() {
+                Laya.SoundManager.stopMusic();
+            }
+            AudioAdmin._stopMusic = _stopMusic;
+        })(AudioAdmin = lwg.AudioAdmin || (lwg.AudioAdmin = {}));
+        let Tools;
+        (function (Tools) {
+            function color_RGBtoHexString(r, g, b) {
+                return '#' + ("00000" + (r << 16 | g << 8 | b).toString(16)).slice(-6);
+            }
+            Tools.color_RGBtoHexString = color_RGBtoHexString;
+            let _Format;
+            (function (_Format) {
+                function formatNumber(crc, fixNum = 0) {
+                    let textTemp;
+                    if (crc >= 1e27) {
+                        textTemp = (crc / 1e27).toFixed(fixNum) + "ae";
+                    }
+                    else if (crc >= 1e24) {
+                        textTemp = (crc / 1e24).toFixed(fixNum) + "ad";
+                    }
+                    else if (crc >= 1e21) {
+                        textTemp = (crc / 1e21).toFixed(fixNum) + "ac";
+                    }
+                    else if (crc >= 1e18) {
+                        textTemp = (crc / 1e18).toFixed(fixNum) + "ab";
+                    }
+                    else if (crc >= 1e15) {
+                        textTemp = (crc / 1e15).toFixed(fixNum) + "aa";
+                    }
+                    else if (crc >= 1e12) {
+                        textTemp = (crc / 1e12).toFixed(fixNum) + "t";
+                    }
+                    else if (crc >= 1e9) {
+                        textTemp = (crc / 1e9).toFixed(fixNum) + "b";
+                    }
+                    else if (crc >= 1e6) {
+                        textTemp = (crc / 1e6).toFixed(fixNum) + "m";
+                    }
+                    else if (crc >= 1e3) {
+                        textTemp = (crc / 1e3).toFixed(fixNum) + "k";
+                    }
+                    else {
+                        textTemp = Math.round(crc).toString();
+                    }
+                    return textTemp;
+                }
+                _Format.formatNumber = formatNumber;
+                function strAddNum(str, num) {
+                    return (Number(str) + num).toString();
+                }
+                _Format.strAddNum = strAddNum;
+                function NumAddStr(num, str) {
+                    return Number(str) + num;
+                }
+                _Format.NumAddStr = NumAddStr;
+            })(_Format = Tools._Format || (Tools._Format = {}));
+            let _Node;
+            (function (_Node) {
+                function tieByParent(Node) {
+                    const Parent = Node.parent;
+                    if (Node.x > Parent.width - Node.width / 2) {
+                        Node.x = Parent.width - Node.width / 2;
+                    }
+                    if (Node.x < Node.width / 2) {
+                        Node.x = Node.width / 2;
+                    }
+                    if (Node.y > Parent.height - Node.height / 2) {
+                        Node.y = Parent.height - Node.height / 2;
+                    }
+                    if (Node.y < Node.height / 2) {
+                        Node.y = Node.height / 2;
+                    }
+                }
+                _Node.tieByParent = tieByParent;
+                function tieByStage(Node, center) {
+                    const Parent = Node.parent;
+                    const gPoint = Parent.localToGlobal(new Laya.Point(Node.x, Node.y));
+                    if (!center) {
+                        if (gPoint.x > Laya.stage.width) {
+                            gPoint.x = Laya.stage.width;
+                        }
+                    }
+                    else {
+                        if (gPoint.x > Laya.stage.width - Node.width / 2) {
+                            gPoint.x = Laya.stage.width - Node.width / 2;
+                        }
+                    }
+                    if (!center) {
+                        if (gPoint.x < 0) {
+                            gPoint.x = 0;
+                        }
+                    }
+                    else {
+                        if (gPoint.x < Node.width / 2) {
+                            gPoint.x = Node.width / 2;
+                        }
+                    }
+                    if (!center) {
+                        if (gPoint.y > Laya.stage.height) {
+                            gPoint.y = Laya.stage.height;
+                        }
+                    }
+                    else {
+                        if (gPoint.y > Laya.stage.height - Node.height / 2) {
+                            gPoint.y = Laya.stage.height - Node.height / 2;
+                        }
+                    }
+                    if (!center) {
+                        if (gPoint.y < 0) {
+                            gPoint.y = 0;
+                        }
+                    }
+                    else {
+                        if (gPoint.y < Node.height / 2) {
+                            gPoint.y = Node.height / 2;
+                        }
+                    }
+                    const lPoint = Parent.globalToLocal(gPoint);
+                    Node.pos(lPoint.x, lPoint.y);
+                }
+                _Node.tieByStage = tieByStage;
+                function simpleCopyImg(Target) {
+                    let Img = new Laya.Image;
+                    Img.skin = Target.skin;
+                    Img.width = Target.width;
+                    Img.height = Target.height;
+                    Img.pivotX = Target.pivotX;
+                    Img.pivotY = Target.pivotY;
+                    Img.scaleX = Target.scaleX;
+                    Img.scaleY = Target.scaleY;
+                    Img.skewX = Target.skewX;
+                    Img.skewY = Target.skewY;
+                    Img.rotation = Target.rotation;
+                    Img.x = Target.x;
+                    Img.y = Target.y;
+                    return Img;
+                }
+                _Node.simpleCopyImg = simpleCopyImg;
+                function leaveStage(_Sprite, func) {
+                    let Parent = _Sprite.parent;
+                    let gPoint = Parent.localToGlobal(new Laya.Point(_Sprite.x, _Sprite.y));
+                    if (gPoint.x > Laya.stage.width + 10 || gPoint.x < -10) {
+                        if (func) {
+                            func();
+                        }
+                        return true;
+                    }
+                    if (gPoint.y > Laya.stage.height + 10 || gPoint.y < -10) {
+                        if (func) {
+                            func();
+                        }
+                        return true;
+                    }
+                }
+                _Node.leaveStage = leaveStage;
+                function checkTwoDistance(_Sprite1, _Sprite2, distance, func) {
+                    let Parent1 = _Sprite1.parent;
+                    let gPoint1 = Parent1.localToGlobal(new Laya.Point(_Sprite1.x, _Sprite1.y));
+                    let Parent2 = _Sprite2.parent;
+                    let gPoint2 = Parent2.localToGlobal(new Laya.Point(_Sprite2.x, _Sprite2.y));
+                    if (gPoint1.distance(gPoint2.x, gPoint2.y) < distance) {
+                        if (func) {
+                            func();
+                        }
+                    }
+                    return gPoint1.distance(gPoint2.x, gPoint2.y);
+                }
+                _Node.checkTwoDistance = checkTwoDistance;
+                function zOrderByY(sp, zOrder, along) {
+                    let arr = [];
+                    if (sp.numChildren == 0) {
+                        return arr;
+                    }
+                    ;
+                    for (let index = 0; index < sp.numChildren; index++) {
+                        const element = sp.getChildAt(index);
+                        arr.push(element);
+                    }
+                    _ObjArray.sortByProperty(arr, 'y');
+                    if (zOrder) {
+                        for (let index = 0; index < arr.length; index++) {
+                            const element = arr[index];
+                            element['zOrder'] = index;
+                        }
+                    }
+                    if (along) {
+                        let arr0 = [];
+                        for (let index = arr.length - 1; index >= 0; index--) {
+                            const element = arr[index];
+                            console.log(element);
+                            element['zOrder'] = arr.length - index;
+                            arr0.push(element);
+                        }
+                        return arr0;
+                    }
+                    else {
+                        return arr;
+                    }
+                }
+                _Node.zOrderByY = zOrderByY;
+                function changePivot(sp, _pivotX, _pivotY, int) {
+                    let originalPovitX = sp.pivotX;
+                    let originalPovitY = sp.pivotY;
+                    if (int) {
+                        _pivotX = Math.round(_pivotX);
+                        _pivotY = Math.round(_pivotY);
+                    }
+                    if (sp.width) {
+                        sp.pivot(_pivotX, _pivotY);
+                        sp.x += (sp.pivotX - originalPovitX);
+                        sp.y += (sp.pivotY - originalPovitY);
+                    }
+                }
+                _Node.changePivot = changePivot;
+                function changePivotCenter(sp, int) {
+                    let originalPovitX = sp.pivotX;
+                    let originalPovitY = sp.pivotY;
+                    let _pivotX;
+                    let _pivotY;
+                    if (int) {
+                        _pivotX = Math.round(sp.width / 2);
+                        _pivotY = Math.round(sp.height / 2);
+                    }
+                    if (sp.width) {
+                        sp.pivot(sp.width / 2, sp.height / 2);
+                        sp.x += (sp.pivotX - originalPovitX);
+                        sp.y += (sp.pivotY - originalPovitY);
+                    }
+                }
+                _Node.changePivotCenter = changePivotCenter;
+                function getChildArrByProperty(node, property, value) {
+                    let childArr = [];
+                    for (let index = 0; index < node.numChildren; index++) {
+                        const element = node.getChildAt(index);
+                        if (element[property] == value) {
+                            childArr.push(element);
+                        }
+                    }
+                    return childArr;
+                }
+                _Node.getChildArrByProperty = getChildArrByProperty;
+                function randomChildren(node, num) {
+                    let childArr = [];
+                    let indexArr = [];
+                    for (let i = 0; i < node.numChildren; i++) {
+                        indexArr.push(i);
+                    }
+                    let randomIndex = Tools._Array.randomGetOut(indexArr, num);
+                    for (let j = 0; j < randomIndex.length; j++) {
+                        childArr.push(node.getChildAt(randomIndex[j]));
+                    }
+                    return childArr;
+                }
+                _Node.randomChildren = randomChildren;
+                function removeAllChildren(node) {
+                    if (node.numChildren > 0) {
+                        node.removeChildren(0, node.numChildren - 1);
+                    }
+                }
+                _Node.removeAllChildren = removeAllChildren;
+                function removeOneChildren(node, nodeName) {
+                    for (let index = 0; index < node.numChildren; index++) {
+                        const element = node.getChildAt(index);
+                        if (element.name == nodeName) {
+                            element.removeSelf();
+                        }
+                    }
+                }
+                _Node.removeOneChildren = removeOneChildren;
+                function checkChildren(node, nodeName) {
+                    let bool = false;
+                    for (let index = 0; index < node.numChildren; index++) {
+                        const element = node.getChildAt(index);
+                        if (element.name == nodeName) {
+                            bool = true;
+                        }
+                    }
+                    return bool;
+                }
+                _Node.checkChildren = checkChildren;
+                function showExcludedChild2D(node, childNameArr, bool) {
+                    for (let i = 0; i < node.numChildren; i++) {
+                        let Child = node.getChildAt(i);
+                        for (let j = 0; j < childNameArr.length; j++) {
+                            if (Child.name == childNameArr[j]) {
+                                if (bool || bool == undefined) {
+                                    Child.visible = true;
+                                }
+                                else {
+                                    Child.visible = false;
+                                }
+                            }
+                            else {
+                                if (bool || bool == undefined) {
+                                    Child.visible = false;
+                                }
+                                else {
+                                    Child.visible = true;
+                                }
+                            }
+                        }
+                    }
+                }
+                _Node.showExcludedChild2D = showExcludedChild2D;
+                function showExcludedChild3D(node, childNameArr, bool) {
+                    for (let i = 0; i < node.numChildren; i++) {
+                        let Child = node.getChildAt(i);
+                        for (let j = 0; j < childNameArr.length; j++) {
+                            if (Child.name == childNameArr[j]) {
+                                if (bool || bool == undefined) {
+                                    Child.active = true;
+                                }
+                                else {
+                                    Child.active = false;
+                                }
+                            }
+                            else {
+                                if (bool || bool == undefined) {
+                                    Child.active = false;
+                                }
+                                else {
+                                    Child.active = true;
+                                }
+                            }
+                        }
+                    }
+                }
+                _Node.showExcludedChild3D = showExcludedChild3D;
+                function createPrefab(prefab, Parent, point, zOrder, name) {
+                    let Sp = Laya.Pool.getItemByCreateFun(name ? name : prefab.json['props']['name'], prefab.create, prefab);
+                    Parent && Parent.addChild(Sp);
+                    point && Sp.pos(point[0], point[1]);
+                    if (zOrder) {
+                        Sp.zOrder = zOrder;
+                    }
+                    return Sp;
+                }
+                _Node.createPrefab = createPrefab;
+                function childrenVisible2D(node, bool) {
+                    for (let index = 0; index < node.numChildren; index++) {
+                        const element = node.getChildAt(index);
+                        if (bool) {
+                            element.visible = true;
+                        }
+                        else {
+                            element.visible = false;
+                        }
+                    }
+                }
+                _Node.childrenVisible2D = childrenVisible2D;
+                function childrenVisible3D(node, bool) {
+                    for (let index = 0; index < node.numChildren; index++) {
+                        const element = node.getChildAt(index);
+                        if (bool) {
+                            element.active = true;
+                        }
+                        else {
+                            element.active = false;
+                        }
+                    }
+                }
+                _Node.childrenVisible3D = childrenVisible3D;
+                function findChild3D(parent, name) {
+                    var item = null;
+                    item = parent.getChildByName(name);
+                    if (item != null)
+                        return item;
+                    var go = null;
+                    for (var i = 0; i < parent.numChildren; i++) {
+                        go = findChild3D(parent.getChildAt(i), name);
+                        if (go != null)
+                            return go;
+                    }
+                    return null;
+                }
+                _Node.findChild3D = findChild3D;
+                function findChild2D(parent, name) {
+                    var item = null;
+                    item = parent.getChildByName(name);
+                    if (item != null)
+                        return item;
+                    var go = null;
+                    for (var i = 0; i < parent.numChildren; i++) {
+                        go = findChild2D(parent.getChildAt(i), name);
+                        if (go != null)
+                            return go;
+                    }
+                    return null;
+                }
+                _Node.findChild2D = findChild2D;
+                function findChildByName2D(parent, name) {
+                    let arr = [];
+                    return arr;
+                }
+                _Node.findChildByName2D = findChildByName2D;
+            })(_Node = Tools._Node || (Tools._Node = {}));
+            let _Number;
+            (function (_Number) {
+                function randomOneHalf() {
+                    let number;
+                    number = Math.floor(Math.random() * 2);
+                    return number;
+                }
+                _Number.randomOneHalf = randomOneHalf;
+                function randomOneInt(section1, section2) {
+                    if (section2) {
+                        return Math.round(Math.random() * (section2 - section1)) + section1;
+                    }
+                    else {
+                        return Math.round(Math.random() * section1);
+                    }
+                }
+                _Number.randomOneInt = randomOneInt;
+                function randomCountBySection(section1, section2, count, intSet) {
+                    let arr = [];
+                    if (!count) {
+                        count = 1;
+                    }
+                    if (section2) {
+                        while (count > arr.length) {
+                            let num;
+                            if (intSet || intSet == undefined) {
+                                num = Math.floor(Math.random() * (section2 - section1)) + section1;
+                            }
+                            else {
+                                num = Math.random() * (section2 - section1) + section1;
+                            }
+                            arr.push(num);
+                            _Array.unique01(arr);
+                        }
+                        ;
+                        return arr;
+                    }
+                    else {
+                        while (count > arr.length) {
+                            let num;
+                            if (intSet || intSet == undefined) {
+                                num = Math.floor(Math.random() * section1);
+                            }
+                            else {
+                                num = Math.random() * section1;
+                            }
+                            arr.push(num);
+                            _Array.unique01(arr);
+                        }
+                        return arr;
+                    }
+                }
+                _Number.randomCountBySection = randomCountBySection;
+                function randomOneBySection(section1, section2, intSet) {
+                    let chage;
+                    if (section1 > section2) {
+                        chage = section1;
+                        section1 = section2;
+                        section2 = chage;
+                    }
+                    if (section2) {
+                        let num;
+                        if (intSet) {
+                            num = Math.round(Math.random() * (section2 - section1)) + section1;
+                        }
+                        else {
+                            num = Math.random() * (section2 - section1) + section1;
+                        }
+                        return num;
+                    }
+                    else {
+                        let num;
+                        if (intSet) {
+                            num = Math.round(Math.random() * section1);
+                        }
+                        else {
+                            num = Math.random() * section1;
+                        }
+                        return num;
+                    }
+                }
+                _Number.randomOneBySection = randomOneBySection;
+            })(_Number = Tools._Number || (Tools._Number = {}));
+            let _Point;
+            (function (_Point) {
+                function getOtherLocal(element, Other) {
+                    let Parent = element.parent;
+                    let gPoint = Parent.localToGlobal(new Laya.Point(element.x, element.y));
+                    return Other.globalToLocal(gPoint);
+                }
+                _Point.getOtherLocal = getOtherLocal;
+                function angleByRad(angle) {
+                    return angle / 180 * Math.PI;
+                }
+                _Point.angleByRad = angleByRad;
+                function twoNodeDistance(obj1, obj2) {
+                    let point = new Laya.Point(obj1.x, obj1.y);
+                    let len = point.distance(obj2.x, obj2.y);
+                    return len;
+                }
+                _Point.twoNodeDistance = twoNodeDistance;
+                function pointByAngle(x, y) {
+                    let radian = Math.atan2(x, y);
+                    let angle = 90 - radian * (180 / Math.PI);
+                    if (angle <= 0) {
+                        angle = 270 + (90 + angle);
+                    }
+                    return angle - 90;
+                }
+                _Point.pointByAngle = pointByAngle;
+                ;
+                function angleByPoint(angle) {
+                    let radian = (90 - angle) / (180 / Math.PI);
+                    let p = new Laya.Point(Math.sin(radian), Math.cos(radian));
+                    p.normalize();
+                    return p;
+                }
+                _Point.angleByPoint = angleByPoint;
+                ;
+                function dotRotatePoint(x0, y0, x1, y1, angle) {
+                    let x2 = x0 + (x1 - x0) * Math.cos(angle * Math.PI / 180) - (y1 - y0) * Math.sin(angle * Math.PI / 180);
+                    let y2 = y0 + (x1 - x0) * Math.sin(angle * Math.PI / 180) + (y1 - y0) * Math.cos(angle * Math.PI / 180);
+                    return new Laya.Point(x2, y2);
+                }
+                _Point.dotRotatePoint = dotRotatePoint;
+                function angleAndLenByPoint(angle, len) {
+                    if (angle % 90 === 0 || !angle) {
+                    }
+                    const speedXY = { x: 0, y: 0 };
+                    speedXY.x = len * Math.cos(angle * Math.PI / 180);
+                    speedXY.y = len * Math.sin(angle * Math.PI / 180);
+                    return new Laya.Point(speedXY.x, speedXY.y);
+                }
+                _Point.angleAndLenByPoint = angleAndLenByPoint;
+                function getRoundPos(angle, radius, centerPos) {
+                    var center = centerPos;
+                    var radius = radius;
+                    var hudu = (2 * Math.PI / 360) * angle;
+                    var X = center.x + Math.sin(hudu) * radius;
+                    var Y = center.y - Math.cos(hudu) * radius;
+                    return new Laya.Point(X, Y);
+                }
+                _Point.getRoundPos = getRoundPos;
+                function randomPointByCenter(centerPos, radiusX, radiusY, count) {
+                    if (!count) {
+                        count = 1;
+                    }
+                    let arr = [];
+                    for (let index = 0; index < count; index++) {
+                        let x0 = Tools._Number.randomCountBySection(0, radiusX, 1, false);
+                        let y0 = Tools._Number.randomCountBySection(0, radiusY, 1, false);
+                        let diffX = Tools._Number.randomOneHalf() == 0 ? x0[0] : -x0[0];
+                        let diffY = Tools._Number.randomOneHalf() == 0 ? y0[0] : -y0[0];
+                        let p = new Laya.Point(centerPos.x + diffX, centerPos.y + diffY);
+                        arr.push(p);
+                    }
+                    return arr;
+                }
+                _Point.randomPointByCenter = randomPointByCenter;
+                function getPArrBetweenTwoP(p1, p2, num) {
+                    let arr = [];
+                    let x0 = p2.x - p1.x;
+                    let y0 = p2.y - p1.y;
+                    for (let index = 0; index < num; index++) {
+                        arr.push(new Laya.Point(p1.x + (x0 / num) * index, p1.y + (y0 / num) * index));
+                    }
+                    if (arr.length >= 1) {
+                        arr.unshift();
+                    }
+                    if (arr.length >= 1) {
+                        arr.pop();
+                    }
+                    return arr;
+                }
+                _Point.getPArrBetweenTwoP = getPArrBetweenTwoP;
+                function reverseVector(Vecoter1, Vecoter2, normalizing) {
+                    let p;
+                    p = new Laya.Point(Vecoter1.x - Vecoter2.x, Vecoter1.y - Vecoter2.y);
+                    if (normalizing) {
+                        p.normalize();
+                    }
+                    return p;
+                }
+                _Point.reverseVector = reverseVector;
+            })(_Point = Tools._Point || (Tools._Point = {}));
+            let _3D;
+            (function (_3D) {
+                function getMeshSize(MSp3D) {
+                    if (MSp3D.meshRenderer) {
+                        let v3;
+                        let extent = MSp3D.meshRenderer.bounds.getExtent();
+                        return v3 = new Laya.Vector3(extent.x * 2, extent.y * 2, extent.z * 2);
+                    }
+                }
+                _3D.getMeshSize = getMeshSize;
+                function getSkinMeshSize(MSp3D) {
+                    if (MSp3D.skinnedMeshRenderer) {
+                        let v3;
+                        let extent = MSp3D.skinnedMeshRenderer.bounds.getExtent();
+                        return v3 = new Laya.Vector3(extent.x * 2, extent.y * 2, extent.z * 2);
+                    }
+                }
+                _3D.getSkinMeshSize = getSkinMeshSize;
+                function twoNodeDistance(obj1, obj2) {
+                    let obj1V3 = obj1.transform.position;
+                    let obj2V3 = obj2.transform.position;
+                    let p = new Laya.Vector3();
+                    Laya.Vector3.subtract(obj1V3, obj2V3, p);
+                    let lenp = Laya.Vector3.scalarLength(p);
+                    return lenp;
+                }
+                _3D.twoNodeDistance = twoNodeDistance;
+                function twoPositionDistance(v1, v2) {
+                    let p = twoSubV3(v1, v2);
+                    let lenp = Laya.Vector3.scalarLength(p);
+                    return lenp;
+                }
+                _3D.twoPositionDistance = twoPositionDistance;
+                function twoSubV3(V31, V32, normalizing) {
+                    let p = new Laya.Vector3();
+                    Laya.Vector3.subtract(V31, V32, p);
+                    if (normalizing) {
+                        let p1 = new Laya.Vector3();
+                        Laya.Vector3.normalize(p, p1);
+                        return p1;
+                    }
+                    else {
+                        return p;
+                    }
+                }
+                _3D.twoSubV3 = twoSubV3;
+                function maximumDistanceLimi(originV3, obj, length) {
+                    let subP = new Laya.Vector3();
+                    let objP = obj.transform.position;
+                    Laya.Vector3.subtract(objP, originV3, subP);
+                    let lenP = Laya.Vector3.scalarLength(subP);
+                    if (lenP >= length) {
+                        let normalizP = new Laya.Vector3();
+                        Laya.Vector3.normalize(subP, normalizP);
+                        let x = originV3.x + normalizP.x * length;
+                        let y = originV3.y + normalizP.y * length;
+                        let z = originV3.z + normalizP.z * length;
+                        let p = new Laya.Vector3(x, y, z);
+                        obj.transform.position = p;
+                        return p;
+                    }
+                }
+                _3D.maximumDistanceLimi = maximumDistanceLimi;
+                function posToScreen(v3, camera) {
+                    let ScreenV4 = new Laya.Vector4();
+                    camera.viewport.project(v3, camera.projectionViewMatrix, ScreenV4);
+                    let point = new Laya.Vector2();
+                    point.x = ScreenV4.x / Laya.stage.clientScaleX;
+                    point.y = ScreenV4.y / Laya.stage.clientScaleY;
+                    return point;
+                }
+                _3D.posToScreen = posToScreen;
+                function reverseVector(Vecoter1, Vecoter2, normalizing) {
+                    let p = new Laya.Vector3(Vecoter1.x - Vecoter2.x, Vecoter1.y - Vecoter2.y, Vecoter1.z - Vecoter2.z);
+                    if (normalizing) {
+                        let returnP = new Laya.Vector3();
+                        Laya.Vector3.normalize(p, returnP);
+                        return returnP;
+                    }
+                    else {
+                        return p;
+                    }
+                }
+                _3D.reverseVector = reverseVector;
+                function rayScanning(camera, scene3D, vector2, filtrateName) {
+                    let _ray = new Laya.Ray(new Laya.Vector3(0, 0, 0), new Laya.Vector3(0, 0, 0));
+                    let outs = new Array();
+                    camera.viewportPointToRay(vector2, _ray);
+                    scene3D.physicsSimulation.rayCastAll(_ray, outs);
+                    if (filtrateName) {
+                        let chek;
+                        for (let i = 0; i < outs.length; i++) {
+                            let Sp3d = outs[i].collider.owner;
+                            if (Sp3d.name == filtrateName) {
+                                chek = outs[i];
+                            }
+                        }
+                        return chek;
+                    }
+                    else {
+                        return outs;
+                    }
+                }
+                _3D.rayScanning = rayScanning;
+                function animatorPlay(Sp3D, aniName, normalizedTime, layerIndex) {
+                    let sp3DAni = Sp3D.getComponent(Laya.Animator);
+                    if (!sp3DAni) {
+                        console.log(Sp3D.name, '没有动画组件');
+                        return;
+                    }
+                    if (!layerIndex) {
+                        layerIndex = 0;
+                    }
+                    sp3DAni.play(aniName, layerIndex, normalizedTime);
+                    return sp3DAni;
+                }
+                _3D.animatorPlay = animatorPlay;
+            })(_3D = Tools._3D || (Tools._3D = {}));
+            let _Skeleton;
+            (function (_Skeleton) {
+                function sk_indexControl(sk, name) {
+                    sk.play(name, true);
+                    sk.player.currentTime = 15 * 1000 / sk.player.cacheFrameRate;
+                }
+                _Skeleton.sk_indexControl = sk_indexControl;
+            })(_Skeleton = Tools._Skeleton || (Tools._Skeleton = {}));
+            let _Draw;
+            (function (_Draw) {
+                function drawPieMask(parent, startAngle, endAngle) {
+                    parent.cacheAs = "bitmap";
+                    let drawPieSpt = new Laya.Sprite();
+                    drawPieSpt.blendMode = "destination-out";
+                    parent.addChild(drawPieSpt);
+                    let drawPie = drawPieSpt.graphics.drawPie(parent.width / 2, parent.height / 2, parent.width / 2 + 10, startAngle, endAngle, "#000000");
+                    return drawPie;
+                }
+                _Draw.drawPieMask = drawPieMask;
+                function screenshot(Sp, quality) {
+                    const htmlCanvas = Sp.drawToCanvas(Sp.width, Sp.height, Sp.x, Sp.y);
+                    const base64 = htmlCanvas.toBase64("image/png", quality ? quality : 1);
+                    return base64;
+                }
+                _Draw.screenshot = screenshot;
+                _Draw._texArr = [];
+                function cameraToSprite(camera, sprite, clear) {
+                    const _camera = camera.clone();
+                    camera.scene.addChild(_camera);
+                    _camera.transform.position = camera.transform.position;
+                    _camera.transform.localRotationEuler = camera.transform.localRotationEuler;
+                    _camera.renderTarget = new Laya.RenderTexture(sprite.width, sprite.height);
+                    _camera.renderingOrder = -1;
+                    _camera.clearFlag = Laya.CameraClearFlags.Sky;
+                    const ptex = new Laya.Texture(_camera.renderTarget, Laya.Texture.DEF_UV);
+                    sprite.graphics.drawTexture(ptex, sprite.x, sprite.y, sprite.width, sprite.height);
+                    _Draw._texArr.push(ptex);
+                    if (_Draw._texArr.length > 3) {
+                        _Draw._texArr[0].destroy();
+                        _Draw._texArr.shift();
+                    }
+                    TimerAdmin._frameOnce(5, this, () => {
+                        _camera.destroy();
+                    });
+                }
+                _Draw.cameraToSprite = cameraToSprite;
+                function drawToTex(Sp, quality) {
+                    let tex = Sp.drawToTexture(Sp.width, Sp.height, Sp.x, Sp.y);
+                    return tex;
+                }
+                _Draw.drawToTex = drawToTex;
+                function reverseRoundMask(node, x, y, radius, eliminate) {
+                    if (eliminate == undefined || eliminate == true) {
+                        _Node.removeAllChildren(node);
+                    }
+                    let interactionArea = new Laya.Sprite();
+                    interactionArea.name = 'reverseRoundMask';
+                    interactionArea.blendMode = "destination-out";
+                    node.cacheAs = "bitmap";
+                    node.addChild(interactionArea);
+                    interactionArea.graphics.drawCircle(0, 0, radius, "#000000");
+                    interactionArea.pos(x, y);
+                    return interactionArea;
+                }
+                _Draw.reverseRoundMask = reverseRoundMask;
+                function reverseRoundrectMask(node, x, y, width, height, round, eliminate) {
+                    if (eliminate == undefined || eliminate == true) {
+                        _Node.removeAllChildren(node);
+                    }
+                    let interactionArea = new Laya.Sprite();
+                    interactionArea.name = 'reverseRoundrectMask';
+                    interactionArea.blendMode = "destination-out";
+                    node.cacheAs = "bitmap";
+                    node.addChild(interactionArea);
+                    interactionArea.graphics.drawPath(0, 0, [["moveTo", 5, 0], ["lineTo", width - round, 0], ["arcTo", width, 0, width, round, round], ["lineTo", width, height - round], ["arcTo", width, height, width - round, height, round], ["lineTo", height - round, height], ["arcTo", 0, height, 0, height - round, round], ["lineTo", 0, round], ["arcTo", 0, 0, round, 0, round], ["closePath"]], { fillStyle: "#000000" });
+                    interactionArea.width = width;
+                    interactionArea.height = height;
+                    interactionArea.pivotX = width / 2;
+                    interactionArea.pivotY = height / 2;
+                    interactionArea.pos(x, y);
+                }
+                _Draw.reverseRoundrectMask = reverseRoundrectMask;
+            })(_Draw = Tools._Draw || (Tools._Draw = {}));
+            let _ObjArray;
+            (function (_ObjArray) {
+                function sortByProperty(array, property) {
+                    var compare = function (obj1, obj2) {
+                        var val1 = obj1[property];
+                        var val2 = obj2[property];
+                        if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
+                            val1 = Number(val1);
+                            val2 = Number(val2);
+                        }
+                        if (val1 < val2) {
+                            return -1;
+                        }
+                        else if (val1 > val2) {
+                            return 1;
+                        }
+                        else {
+                            return 0;
+                        }
+                    };
+                    array.sort(compare);
+                    return array;
+                }
+                _ObjArray.sortByProperty = sortByProperty;
+                function diffProByTwo(objArr1, objArr2, property) {
+                    var result = [];
+                    for (var i = 0; i < objArr1.length; i++) {
+                        var obj1 = objArr1[i];
+                        var obj1Name = obj1[property];
+                        var isExist = false;
+                        for (var j = 0; j < objArr2.length; j++) {
+                            var obj2 = objArr2[j];
+                            var obj2Name = obj2[property];
+                            if (obj2Name == obj1Name) {
+                                isExist = true;
+                                break;
+                            }
+                        }
+                        if (!isExist) {
+                            let _obj1 = _ObjArray.objCopy(obj1);
+                            result.push(_obj1);
+                        }
+                    }
+                    return result;
+                }
+                _ObjArray.diffProByTwo = diffProByTwo;
+                function identicalPropertyObjArr(data1, data2, property) {
+                    var result = [];
+                    for (var i = 0; i < data1.length; i++) {
+                        var obj1 = data1[i];
+                        var obj1Name = obj1[property];
+                        var isExist = false;
+                        for (var j = 0; j < data2.length; j++) {
+                            var obj2 = data2[j];
+                            var obj2Name = obj2[property];
+                            if (obj2Name == name) {
+                                isExist = true;
+                                break;
+                            }
+                        }
+                        if (isExist) {
+                            result.push(obj1);
+                        }
+                    }
+                    return result;
+                }
+                _ObjArray.identicalPropertyObjArr = identicalPropertyObjArr;
+                function objArrUnique(arr, property) {
+                    for (var i = 0, len = arr.length; i < len; i++) {
+                        for (var j = i + 1, len = arr.length; j < len; j++) {
+                            if (arr[i][property] === arr[j][property]) {
+                                arr.splice(j, 1);
+                                j--;
+                                len--;
+                            }
+                        }
+                    }
+                    return arr;
+                }
+                _ObjArray.objArrUnique = objArrUnique;
+                function getArrByValue(objArr, property) {
+                    let arr = [];
+                    for (let i = 0; i < objArr.length; i++) {
+                        if (objArr[i][property]) {
+                            arr.push(objArr[i][property]);
+                        }
+                    }
+                    return arr;
+                }
+                _ObjArray.getArrByValue = getArrByValue;
+                function arrCopy(ObjArray) {
+                    var sourceCopy = ObjArray instanceof Array ? [] : {};
+                    for (var item in ObjArray) {
+                        sourceCopy[item] = typeof ObjArray[item] === 'object' ? objCopy(ObjArray[item]) : ObjArray[item];
+                    }
+                    return sourceCopy;
+                }
+                _ObjArray.arrCopy = arrCopy;
+                function modifyProValue(objArr, pro, value) {
+                    for (const key in objArr) {
+                        if (Object.prototype.hasOwnProperty.call(objArr, key)) {
+                            const element = objArr[key];
+                            if (element[pro]) {
+                                element[pro] = value;
+                            }
+                        }
+                    }
+                    return objArr;
+                }
+                _ObjArray.modifyProValue = modifyProValue;
+                function objCopy(obj) {
+                    var _copyObj = {};
+                    for (const item in obj) {
+                        if (obj.hasOwnProperty(item)) {
+                            const element = obj[item];
+                            if (typeof element === 'object') {
+                                if (Array.isArray(element)) {
+                                    let arr1 = _Array.copy(element);
+                                    _copyObj[item] = arr1;
+                                }
+                                else {
+                                    objCopy(element);
+                                }
+                            }
+                            else {
+                                _copyObj[item] = element;
+                            }
+                        }
+                    }
+                    return _copyObj;
+                }
+                _ObjArray.objCopy = objCopy;
+            })(_ObjArray = Tools._ObjArray || (Tools._ObjArray = {}));
+            let _Array;
+            (function (_Array) {
+                function addToarray(array1, array2) {
+                    for (let index = 0; index < array2.length; index++) {
+                        const element = array2[index];
+                        array1.push(element);
+                    }
+                    return array1;
+                }
+                _Array.addToarray = addToarray;
+                function inverted(array) {
+                    let arr = [];
+                    for (let index = array.length - 1; index >= 0; index--) {
+                        const element = array[index];
+                        arr.push(element);
+                    }
+                    array = arr;
+                    return array;
+                }
+                _Array.inverted = inverted;
+                function randomGetOut(arr, num) {
+                    if (!num) {
+                        num = 1;
+                    }
+                    let arrCopy = _Array.copy(arr);
+                    let arr0 = [];
+                    if (num > arrCopy.length) {
+                        return '数组长度小于取出的数！';
+                    }
+                    else {
+                        for (let index = 0; index < num; index++) {
+                            let ran = Math.round(Math.random() * (arrCopy.length - 1));
+                            let a1 = arrCopy[ran];
+                            arrCopy.splice(ran, 1);
+                            arr0.push(a1);
+                        }
+                        return arr0;
+                    }
+                }
+                _Array.randomGetOut = randomGetOut;
+                function randomGetOne(arr) {
+                    let arrCopy = copy(arr);
+                    let ran = Math.round(Math.random() * (arrCopy.length - 1));
+                    return arrCopy[ran];
+                }
+                _Array.randomGetOne = randomGetOne;
+                function copy(arr1) {
+                    var arr = [];
+                    for (var i = 0; i < arr1.length; i++) {
+                        arr.push(arr1[i]);
+                    }
+                    return arr;
+                }
+                _Array.copy = copy;
+                function unique01(arr) {
+                    for (var i = 0, len = arr.length; i < len; i++) {
+                        for (var j = i + 1, len = arr.length; j < len; j++) {
+                            if (arr[i] === arr[j]) {
+                                arr.splice(j, 1);
+                                j--;
+                                len--;
+                            }
+                        }
+                    }
+                    return arr;
+                }
+                _Array.unique01 = unique01;
+                function unique02(arr) {
+                    arr = arr.sort();
+                    var arr1 = [arr[0]];
+                    for (var i = 1, len = arr.length; i < len; i++) {
+                        if (arr[i] !== arr[i - 1]) {
+                            arr1.push(arr[i]);
+                        }
+                    }
+                    return arr1;
+                }
+                _Array.unique02 = unique02;
+                function unique03(arr) {
+                    return Array.from(new Set(arr));
+                }
+                _Array.unique03 = unique03;
+                function oneExcludeOtherOne(arr1, arr2) {
+                    let arr1Capy = _Array.copy(arr1);
+                    let arr2Capy = _Array.copy(arr2);
+                    for (let i = 0; i < arr1Capy.length; i++) {
+                        for (let j = 0; j < arr2Capy.length; j++) {
+                            if (arr1Capy[i] == arr2Capy[j]) {
+                                arr1Capy.splice(i, 1);
+                                i--;
+                            }
+                        }
+                    }
+                    return arr1Capy;
+                }
+                _Array.oneExcludeOtherOne = oneExcludeOtherOne;
+                function moreExclude(arrays, exclude) {
+                    let arr0 = [];
+                    for (let i = 0; i < arrays.length; i++) {
+                        for (let j = 0; j < arrays[i].length; j++) {
+                            arr0.push(arrays[i][j]);
+                        }
+                    }
+                    let arr1 = copy(arr0);
+                    let arr2 = copy(arr1);
+                    let arrNum = [];
+                    for (let k = 0; k < arr2.length; k++) {
+                        arrNum.push({
+                            name: arr2[k],
+                            num: 0,
+                        });
+                    }
+                    for (let l = 0; l < arr0.length; l++) {
+                        for (let m = 0; m < arrNum.length; m++) {
+                            if (arr0[l] == arrNum[m]['name']) {
+                                arrNum[m]['num']++;
+                            }
+                        }
+                    }
+                    let arrAllHave = [];
+                    let arrDiffHave = [];
+                    for (let n = 0; n < arrNum.length; n++) {
+                        const element = arrNum[n];
+                        if (arrNum[n]['num'] == arrays.length) {
+                            arrAllHave.push(arrNum[n]['name']);
+                        }
+                        else {
+                            arrDiffHave.push(arrNum[n]['name']);
+                        }
+                    }
+                    if (!exclude) {
+                        return arrAllHave;
+                    }
+                    else {
+                        return arrDiffHave;
+                    }
+                }
+                _Array.moreExclude = moreExclude;
+            })(_Array = Tools._Array || (Tools._Array = {}));
+        })(Tools = lwg.Tools || (lwg.Tools = {}));
+        let LwgPreLoad;
+        (function (LwgPreLoad) {
+            let _scene3D = [];
+            let _prefab3D = [];
+            let _mesh3D = [];
+            let _material = [];
+            let _texture = [];
+            let _texture2D = [];
+            let _pic2D = [];
+            let _scene2D = [];
+            let _prefab2D = [];
+            let _json = [];
+            let _skeleton = [];
+            LwgPreLoad._sumProgress = 0;
+            LwgPreLoad._loadOrder = [];
+            LwgPreLoad._loadOrderIndex = 0;
+            LwgPreLoad._loadType = Admin._SceneName.PreLoad;
+            let _ListName;
+            (function (_ListName) {
+                _ListName["scene3D"] = "scene3D";
+                _ListName["prefab3D"] = "prefab3D";
+                _ListName["mesh3D"] = "mesh3D";
+                _ListName["material"] = "material";
+                _ListName["texture"] = "texture";
+                _ListName["texture2D"] = "texture2D";
+                _ListName["pic2D"] = "pic2D";
+                _ListName["scene2D"] = "scene2D";
+                _ListName["prefab2D"] = "prefab2D";
+                _ListName["json"] = "json";
+                _ListName["skeleton"] = "skeleton";
+            })(_ListName = LwgPreLoad._ListName || (LwgPreLoad._ListName = {}));
+            LwgPreLoad._currentProgress = {
+                get value() {
+                    return this['len'] ? this['len'] : 0;
+                },
+                set value(val) {
+                    this['len'] = val;
+                    if (this['len'] >= LwgPreLoad._sumProgress) {
+                        if (LwgPreLoad._sumProgress == 0) {
+                            return;
+                        }
+                        console.log('当前进度条进度为:', LwgPreLoad._currentProgress.value / LwgPreLoad._sumProgress);
+                        console.log('所有资源加载完成！此时所有资源可通过例如 Laya.loader.getRes("url")获取');
+                        EventAdmin._notify(LwgPreLoad._Event.complete);
+                    }
+                    else {
+                        let number = 0;
+                        for (let index = 0; index <= LwgPreLoad._loadOrderIndex; index++) {
+                            number += LwgPreLoad._loadOrder[index].length;
+                        }
+                        if (this['len'] == number) {
+                            LwgPreLoad._loadOrderIndex++;
+                        }
+                        EventAdmin._notify(LwgPreLoad._Event.stepLoding);
+                    }
+                },
+            };
+            let _Event;
+            (function (_Event) {
+                _Event["importList"] = "_PreLoad_importList";
+                _Event["complete"] = "_PreLoad_complete";
+                _Event["stepLoding"] = "_PreLoad_startLoding";
+                _Event["progress"] = "_PreLoad_progress";
+            })(_Event = LwgPreLoad._Event || (LwgPreLoad._Event = {}));
+            function _remakeLode() {
+                _scene3D = [];
+                _prefab3D = [];
+                _mesh3D = [];
+                _material = [];
+                _texture2D = [];
+                _pic2D = [];
+                _scene2D = [];
+                _prefab2D = [];
+                _json = [];
+                _skeleton = [];
+                LwgPreLoad._loadOrder = [];
+                LwgPreLoad._sumProgress = 0;
+                LwgPreLoad._loadOrderIndex = 0;
+                LwgPreLoad._currentProgress.value = 0;
+            }
+            LwgPreLoad._remakeLode = _remakeLode;
+            class _PreLoadScene extends Admin._SceneBase {
+                moduleOnAwake() {
+                    LwgPreLoad._remakeLode();
+                }
+                lwgStartLoding(any) {
+                    EventAdmin._notify(LwgPreLoad._Event.importList, (any));
+                }
+                moduleEvent() {
+                    EventAdmin._registerOnce(_Event.importList, this, (listObj) => {
+                        for (const key in listObj) {
+                            if (Object.prototype.hasOwnProperty.call(listObj, key)) {
+                                for (const key1 in listObj[key]) {
+                                    if (Object.prototype.hasOwnProperty.call(listObj[key], key1)) {
+                                        const element = listObj[key][key1];
+                                        switch (key) {
+                                            case _ListName.json:
+                                                _json.push(element);
+                                                break;
+                                            case _ListName.material:
+                                                _material.push(element);
+                                                break;
+                                            case _ListName.mesh3D:
+                                                _mesh3D.push(element);
+                                                break;
+                                            case _ListName.pic2D:
+                                                _pic2D.push(element);
+                                                break;
+                                            case _ListName.prefab2D:
+                                                _prefab2D.push(element);
+                                                break;
+                                            case _ListName.prefab3D:
+                                                _prefab3D.push(element);
+                                                break;
+                                            case _ListName.scene2D:
+                                                _scene2D.push(element);
+                                                break;
+                                            case _ListName.scene3D:
+                                                _scene3D.push(element);
+                                                break;
+                                            case _ListName.texture2D:
+                                                _texture2D.push(element);
+                                                break;
+                                            case _ListName.skeleton:
+                                                _skeleton.push(element);
+                                                break;
+                                            case _ListName.texture:
+                                                _texture.push(element);
+                                                break;
+                                            default:
+                                                break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        LwgPreLoad._loadOrder = [_pic2D, _scene2D, _prefab2D, _prefab3D, _json, _texture, _texture2D, _mesh3D, _material, _skeleton, _scene3D];
+                        for (let index = 0; index < LwgPreLoad._loadOrder.length; index++) {
+                            LwgPreLoad._sumProgress += LwgPreLoad._loadOrder[index].length;
+                            if (LwgPreLoad._loadOrder[index].length <= 0) {
+                                LwgPreLoad._loadOrder.splice(index, 1);
+                                index--;
+                            }
+                        }
+                        let time = this.lwgOpenAni();
+                        Laya.timer.once(time ? time : 0, this, () => {
+                            EventAdmin._notify(LwgPreLoad._Event.stepLoding);
+                        });
+                    });
+                    EventAdmin._register(_Event.stepLoding, this, () => { this.startLodingRule(); });
+                    EventAdmin._registerOnce(_Event.complete, this, () => {
+                        Laya.timer.once(this.lwgAllComplete(), this, () => {
+                            Admin._SceneControl[LwgPreLoad._loadType] = this._Owner;
+                            if (LwgPreLoad._loadType !== Admin._SceneName.PreLoad) {
+                                Admin._PreLoadCutIn.openName && this._openScene(Admin._PreLoadCutIn.openName);
+                            }
+                            else {
+                                for (const key in Admin._Moudel) {
+                                    if (Object.prototype.hasOwnProperty.call(Admin._Moudel, key)) {
+                                        const element = Admin._Moudel[key];
+                                        if (element['_init']) {
+                                            element['_init']();
+                                        }
+                                        else {
+                                            console.log(element, '模块没有初始化函数！');
+                                        }
+                                    }
+                                }
+                                AudioAdmin._playMusic();
+                                if (Admin._GuideControl.switch) {
+                                    this._openScene(_SceneName.Guide, true, false, () => {
+                                        LwgPreLoad._loadType = Admin._SceneName.PreLoadCutIn;
+                                    });
+                                }
+                                else {
+                                    this._openScene(_SceneName.Start, true, false, () => {
+                                        LwgPreLoad._loadType = Admin._SceneName.PreLoadCutIn;
+                                    });
+                                }
+                            }
+                        });
+                    });
+                    EventAdmin._register(_Event.progress, this, () => {
+                        LwgPreLoad._currentProgress.value++;
+                        if (LwgPreLoad._currentProgress.value < LwgPreLoad._sumProgress) {
+                            console.log('当前进度条进度为:', LwgPreLoad._currentProgress.value / LwgPreLoad._sumProgress);
+                            this.lwgStepComplete();
+                        }
+                    });
+                }
+                moduleOnEnable() {
+                    LwgPreLoad._loadOrderIndex = 0;
+                }
+                startLodingRule() {
+                    if (LwgPreLoad._loadOrder.length <= 0) {
+                        console.log('没有加载项');
+                        EventAdmin._notify(LwgPreLoad._Event.complete);
+                        return;
+                    }
+                    let alreadyPro = 0;
+                    for (let i = 0; i < LwgPreLoad._loadOrderIndex; i++) {
+                        alreadyPro += LwgPreLoad._loadOrder[i].length;
+                    }
+                    let index = LwgPreLoad._currentProgress.value - alreadyPro;
+                    switch (LwgPreLoad._loadOrder[LwgPreLoad._loadOrderIndex]) {
+                        case _pic2D:
+                            Laya.loader.load(_pic2D[index], Laya.Handler.create(this, (any) => {
+                                if (any == null) {
+                                    console.log('XXXXXXXXXXX2D资源' + _pic2D[index] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
+                                }
+                                else {
+                                    console.log('2D图片' + _pic2D[index] + '加载完成！', '数组下标为：', index);
+                                }
+                                EventAdmin._notify(_Event.progress);
+                            }));
+                            break;
+                        case _scene2D:
+                            Laya.loader.load(_scene2D[index], Laya.Handler.create(this, (any) => {
+                                if (any == null) {
+                                    console.log('XXXXXXXXXXX数据表' + _scene2D[index] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
+                                }
+                                else {
+                                    console.log('2D场景' + _scene2D[index] + '加载完成！', '数组下标为：', index);
+                                }
+                                EventAdmin._notify(_Event.progress);
+                            }), null, Laya.Loader.JSON);
+                            break;
+                        case _scene3D:
+                            Laya.Scene3D.load(_scene3D[index]['url'], Laya.Handler.create(this, (Scene) => {
+                                if (Scene == null) {
+                                    console.log('XXXXXXXXXXX3D场景' + _scene3D[index]['url'] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
+                                }
+                                else {
+                                    _scene3D[index]['Scene'] = Scene;
+                                    console.log('3D场景' + _scene3D[index]['url'] + '加载完成！', '数组下标为：', index);
+                                }
+                                EventAdmin._notify(_Event.progress);
+                            }));
+                            break;
+                        case _prefab3D:
+                            Laya.Sprite3D.load(_prefab3D[index]['url'], Laya.Handler.create(this, (Sp) => {
+                                if (Sp == null) {
+                                    console.log('XXXXXXXXXXX3D预设体' + _prefab3D[index]['url'] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
+                                }
+                                else {
+                                    _prefab3D[index]['Prefab'] = Sp;
+                                    console.log('3D预制体' + _prefab3D[index]['url'] + '加载完成！', '数组下标为：', index);
+                                }
+                                EventAdmin._notify(_Event.progress);
+                            }));
+                            break;
+                        case _mesh3D:
+                            Laya.Mesh.load(_mesh3D[index]['url'], Laya.Handler.create(this, (any) => {
+                                if (any == null) {
+                                    console.log('XXXXXXXXXXX3D网格' + _mesh3D[index]['url'] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
+                                }
+                                else {
+                                    console.log('3D网格' + _mesh3D[index]['url'] + '加载完成！', '数组下标为：', index);
+                                }
+                                EventAdmin._notify(_Event.progress);
+                            }));
+                            break;
+                        case _texture:
+                            Laya.loader.load(_texture[index]['url'], Laya.Handler.create(this, (tex) => {
+                                if (tex == null) {
+                                    console.log('XXXXXXXXXXX2D纹理' + _texture[index]['url'] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
+                                }
+                                else {
+                                    _texture[index]['texture'] = tex;
+                                    console.log('纹理' + _texture[index]['url'] + '加载完成！', '数组下标为：', index);
+                                }
+                                EventAdmin._notify(_Event.progress);
+                            }));
+                            break;
+                        case _texture2D:
+                            Laya.Texture2D.load(_texture2D[index]['url'], Laya.Handler.create(this, function (tex) {
+                                if (tex == null) {
+                                    console.log('XXXXXXXXXXX2D纹理' + _texture2D[index]['url'] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
+                                }
+                                else {
+                                    _texture2D[index]['texture2D'] = tex;
+                                    console.log('3D纹理' + _texture2D[index]['url'] + '加载完成！', '数组下标为：', index);
+                                }
+                                EventAdmin._notify(_Event.progress);
+                            }));
+                            break;
+                        case _material:
+                            Laya.Material.load(_material[index]['url'], Laya.Handler.create(this, (any) => {
+                                if (any == null) {
+                                    console.log('XXXXXXXXXXX材质' + _material[index]['url'] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
+                                }
+                                else {
+                                    console.log('材质' + _material[index]['url'] + '加载完成！', '数组下标为：', index);
+                                }
+                                EventAdmin._notify(_Event.progress);
+                            }));
+                            break;
+                        case _json:
+                            Laya.loader.load(_json[index]['url'], Laya.Handler.create(this, (data) => {
+                                if (data == null) {
+                                    console.log('XXXXXXXXXXX数据表' + _json[index]['url'] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
+                                }
+                                else {
+                                    _json[index]['dataArr'] = data["RECORDS"];
+                                    console.log('数据表' + _json[index]['url'] + '加载完成！', '数组下标为：', index);
+                                }
+                                EventAdmin._notify(_Event.progress);
+                            }), null, Laya.Loader.JSON);
+                            break;
+                        case _skeleton:
+                            _skeleton[index]['templet'].on(Laya.Event.ERROR, this, () => {
+                                console.log('XXXXXXXXXXX骨骼动画' + _skeleton[index] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
+                                EventAdmin._notify(_Event.progress);
+                            });
+                            _skeleton[index]['templet'].on(Laya.Event.COMPLETE, this, () => {
+                                console.log('骨骼动画', _skeleton[index]['templet']['url'], '加载完成！', '数组下标为：', index);
+                                EventAdmin._notify(_Event.progress);
+                            });
+                            _skeleton[index]['templet'].loadAni(_skeleton[index]['url']);
+                            break;
+                        case _prefab2D:
+                            Laya.loader.load(_prefab2D[index]['url'], Laya.Handler.create(this, (prefab) => {
+                                if (prefab == null) {
+                                    console.log('XXXXXXXXXXX数据表' + _prefab2D[index]['url'] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
+                                }
+                                else {
+                                    let _prefab = new Laya.Prefab();
+                                    _prefab.json = prefab;
+                                    _prefab2D[index]['prefab'] = _prefab;
+                                    console.log('2D预制体' + _prefab2D[index]['url'] + '加载完成！', '数组下标为：', index);
+                                }
+                                EventAdmin._notify(_Event.progress);
+                            }));
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                lwgStepComplete() { }
+                lwgAllComplete() { return 0; }
+                ;
+            }
+            LwgPreLoad._PreLoadScene = _PreLoadScene;
+        })(LwgPreLoad = lwg.LwgPreLoad || (lwg.LwgPreLoad = {}));
+        let _LwgInit;
+        (function (_LwgInit) {
+            _LwgInit._pkgStep = 0;
+            _LwgInit._pkgInfo = [
+                { name: "sp1", root: "res" },
+                { name: "sp2", root: "3DScene" },
+                { name: "sp3", root: "3DPrefab" },
+            ];
+            let _Event;
+            (function (_Event) {
+                _Event["start"] = "_ResPrepare_start";
+                _Event["nextStep"] = "_ResPrepare_nextStep";
+                _Event["compelet"] = "_ResPrepare_compelet";
+            })(_Event = _LwgInit._Event || (_LwgInit._Event = {}));
+            function _init() {
+                switch (Platform._Ues.value) {
+                    case Platform._Tpye.WeChat:
+                        _loadPkg_Wechat();
+                        break;
+                    case Platform._Tpye.OPPO || Platform._Tpye.VIVO:
+                        _loadPkg_VIVO();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            _LwgInit._init = _init;
+            function _loadPkg_VIVO() {
+                if (_LwgInit._pkgStep !== _LwgInit._pkgInfo.length) {
+                    let info = _LwgInit._pkgInfo[_LwgInit._pkgStep];
+                    let name = info.name;
+                    Laya.Browser.window.qg.loadSubpackage({
+                        name: name,
+                        success: (res) => {
+                            _LwgInit._pkgStep++;
+                            _loadPkg_VIVO();
+                        },
+                        fail: (res) => {
+                            console.error(`load ${name} err: `, res);
+                        },
+                    });
+                }
+            }
+            _LwgInit._loadPkg_VIVO = _loadPkg_VIVO;
+            function _loadPkg_Wechat() {
+                if (_LwgInit._pkgStep !== _LwgInit._pkgInfo.length) {
+                    let info = _LwgInit._pkgInfo[_LwgInit._pkgStep];
+                    let name = info.name;
+                    let root = info.root;
+                    Laya.Browser.window.wx.loadSubpackage({
+                        name: name,
+                        success: (res) => {
+                            console.log(`load ${name} suc`);
+                            Laya.MiniAdpter.subNativeFiles[name] = root;
+                            Laya.MiniAdpter.nativefiles.push(root);
+                            _LwgInit._pkgStep++;
+                            console.log("加载次数", _LwgInit._pkgStep);
+                            _loadPkg_Wechat();
+                        },
+                        fail: (res) => {
+                            console.error(`load ${name} err: `, res);
+                        },
+                    });
+                }
+            }
+            _LwgInit._loadPkg_Wechat = _loadPkg_Wechat;
+            class _LwgInitScene extends Admin._SceneBase {
+                lwgOpenAni() {
+                    return 1;
+                }
+                moduleOnAwake() {
+                }
+                moduleOnStart() {
+                    _init();
+                    DateAdmin._init();
+                    this._openScene(_SceneName.PreLoad);
+                    this._Owner.close();
+                }
+                ;
+            }
+            _LwgInit._LwgInitScene = _LwgInitScene;
+        })(_LwgInit = lwg._LwgInit || (lwg._LwgInit = {}));
+        let Execution;
+        (function (Execution) {
+            Execution._execution = {
+                get value() {
+                    if (!this['_Execution_executionNum']) {
+                        return Laya.LocalStorage.getItem('_Execution_executionNum') ? Number(Laya.LocalStorage.getItem('_Execution_executionNum')) : 15;
+                    }
+                    return this['_Execution_executionNum'];
+                },
+                set value(val) {
+                    console.log(val);
+                    this['_Execution_executionNum'] = val;
+                    Laya.LocalStorage.setItem('_Execution_executionNum', val.toString());
+                }
+            };
+            Execution._addExDate = {
+                get value() {
+                    if (!this['_Execution_addExDate']) {
+                        return Laya.LocalStorage.getItem('_Execution_addExDate') ? Number(Laya.LocalStorage.getItem('_Execution_addExDate')) : (new Date()).getDay();
+                    }
+                    return this['_Execution_addExDate'];
+                },
+                set value(val) {
+                    this['_Execution_addExDate'] = val;
+                    Laya.LocalStorage.setItem('_Execution_addExDate', val.toString());
+                }
+            };
+            Execution._addExHours = {
+                get value() {
+                    if (!this['_Execution_addExHours']) {
+                        return Laya.LocalStorage.getItem('_Execution_addExHours') ? Number(Laya.LocalStorage.getItem('_Execution_addExHours')) : (new Date()).getHours();
+                    }
+                    return this['_Execution_addExHours'];
+                },
+                set value(val) {
+                    this['_Execution_addExHours'] = val;
+                    Laya.LocalStorage.setItem('_Execution_addExHours', val.toString());
+                }
+            };
+            Execution._addMinutes = {
+                get value() {
+                    if (!this['_Execution_addMinutes']) {
+                        return Laya.LocalStorage.getItem('_Execution_addMinutes') ? Number(Laya.LocalStorage.getItem('_Execution_addMinutes')) : (new Date()).getMinutes();
+                    }
+                    return this['_Execution_addMinutes'];
+                },
+                set value(val) {
+                    this['_Execution_addMinutes'] = val;
+                    Laya.LocalStorage.setItem('_Execution_addMinutes', val.toString());
+                }
+            };
+            function _createExecutionNode(parent) {
+                let sp;
+                Laya.loader.load('prefab/ExecutionNum.json', Laya.Handler.create(this, function (prefab) {
+                    let _prefab = new Laya.Prefab();
+                    _prefab.json = prefab;
+                    sp = Laya.Pool.getItemByCreateFun('prefab', _prefab.create, _prefab);
+                    parent.addChild(sp);
+                    let num = sp.getChildByName('Num');
+                    num.value = Execution._execution.value.toString();
+                    sp.pos(297, 90);
+                    sp.zOrder = 50;
+                    Execution._ExecutionNode = sp;
+                    Execution._ExecutionNode.name = '_ExecutionNode';
+                }));
+            }
+            Execution._createExecutionNode = _createExecutionNode;
+            function _addExecution(x, y, func) {
+                let sp;
+                Laya.loader.load('prefab/execution.json', Laya.Handler.create(this, function (prefab) {
+                    let _prefab = new Laya.Prefab();
+                    _prefab.json = prefab;
+                    sp = Laya.Pool.getItemByCreateFun('prefab', _prefab.create, _prefab);
+                    Laya.stage.addChild(sp);
+                    sp.x = Laya.stage.width / 2;
+                    sp.y = Laya.stage.height / 2;
+                    sp.zOrder = 50;
+                    if (Execution._ExecutionNode) {
+                        Animation2D.move(sp, Execution._ExecutionNode.x, Execution._ExecutionNode.y, 800, () => {
+                            Animation2D.fadeOut(sp, 1, 0, 200, 0, () => {
+                                Animation2D.upDwon_Shake(Execution._ExecutionNode, 10, 80, 0, null);
+                                if (func) {
+                                    func();
+                                }
+                            });
+                        }, 100);
+                    }
+                }));
+            }
+            Execution._addExecution = _addExecution;
+            function createConsumeEx(subEx) {
+                let label = Laya.Pool.getItemByClass('label', Laya.Label);
+                label.name = 'label';
+                Laya.stage.addChild(label);
+                label.text = '-2';
+                label.fontSize = 40;
+                label.bold = true;
+                label.color = '#59245c';
+                label.x = Execution._ExecutionNode.x + 100;
+                label.y = Execution._ExecutionNode.y - label.height / 2 + 4;
+                label.zOrder = 100;
+                Animation2D.fadeOut(label, 0, 1, 200, 150, () => {
+                    Animation2D.leftRight_Shake(Execution._ExecutionNode, 15, 60, 0, null);
+                    Animation2D.fadeOut(label, 1, 0, 600, 400, () => {
+                    });
+                });
+            }
+            Execution.createConsumeEx = createConsumeEx;
+            class ExecutionNode extends Admin._ObjectBase {
+                constructor() {
+                    super(...arguments);
+                    this.time = 0;
+                    this.countNum = 59;
+                    this.timeSwitch = true;
+                }
+                lwgOnAwake() {
+                    this.Num = this._Owner.getChildByName('Num');
+                    this.CountDown = this._Owner.getChildByName('CountDown');
+                    this.CountDown_board = this._Owner.getChildByName('CountDown_board');
+                    this.countNum = 59;
+                    this.CountDown.text = '00:' + this.countNum;
+                    this.CountDown_board.text = this.CountDown.text;
+                    let d = new Date;
+                    if (d.getDate() !== Execution._addExDate.value) {
+                        Execution._execution.value = 15;
+                    }
+                    else {
+                        if (d.getHours() == Execution._addExHours.value) {
+                            console.log(d.getMinutes(), Execution._addMinutes.value);
+                            Execution._execution.value += (d.getMinutes() - Execution._addMinutes.value);
+                            if (Execution._execution.value > 15) {
+                                Execution._execution.value = 15;
+                            }
+                        }
+                        else {
+                            Execution._execution.value = 15;
+                        }
+                    }
+                    this.Num.value = Execution._execution.value.toString();
+                    Execution._addExDate.value = d.getDate();
+                    Execution._addExHours.value = d.getHours();
+                    Execution._addMinutes.value = d.getMinutes();
+                }
+                countDownAddEx() {
+                    this.time++;
+                    if (this.time % 60 == 0) {
+                        this.countNum--;
+                        if (this.countNum < 0) {
+                            this.countNum = 59;
+                            Execution._execution.value += 1;
+                            this.Num.value = Execution._execution.value.toString();
+                            let d = new Date;
+                            Execution._addExHours.value = d.getHours();
+                            Execution._addMinutes.value = d.getMinutes();
+                        }
+                        if (this.countNum >= 10 && this.countNum <= 59) {
+                            this.CountDown.text = '00:' + this.countNum;
+                            this.CountDown_board.text = this.CountDown.text;
+                        }
+                        else if (this.countNum >= 0 && this.countNum < 10) {
+                            this.CountDown.text = '00:0' + this.countNum;
+                            this.CountDown_board.text = this.CountDown.text;
+                        }
+                    }
+                }
+                lwgOnUpdate() {
+                    if (Number(this.Num.value) >= 15) {
+                        if (this.timeSwitch) {
+                            Execution._execution.value = 15;
+                            this.Num.value = Execution._execution.value.toString();
+                            this.CountDown.text = '00:00';
+                            this.CountDown_board.text = this.CountDown.text;
+                            this.countNum = 60;
+                            this.timeSwitch = false;
+                        }
+                    }
+                    else {
+                        this.timeSwitch = true;
+                        this.countDownAddEx();
+                    }
+                }
+            }
+            Execution.ExecutionNode = ExecutionNode;
+        })(Execution = lwg.Execution || (lwg.Execution = {}));
+    })(lwg || (lwg = {}));
+    var lwg$1 = lwg;
+    let Admin = lwg.Admin;
+    let _SceneBase = Admin._SceneBase;
+    let _ObjectBase = Admin._ObjectBase;
+    let _SceneName = Admin._SceneName;
+    let Platform = lwg.Platform;
+    let SceneAnimation = lwg.SceneAnimation;
+    let Adaptive = lwg.Adaptive;
+    let StorageAdmin = lwg.StorageAdmin;
+    let DataAdmin = lwg.DataAdmin;
+    let EventAdmin = lwg.EventAdmin;
+    let DateAdmin = lwg.DateAdmin;
+    let TimerAdmin = lwg.TimerAdmin;
+    let Execution = lwg.Execution;
+    let Gold = lwg.Gold;
+    let Setting = lwg.Setting;
+    let AudioAdmin = lwg.AudioAdmin;
+    let Click = lwg.Click;
+    let Color = lwg.Color;
+    let Effects2D = lwg.Effects2D;
+    let Effects3D = lwg.Effects3D;
+    let Dialogue = lwg.Dialogue;
+    let Animation2D = lwg.Animation2D;
+    let Animation3D = lwg.Animation3D;
+    let Tools = lwg.Tools;
+    let _LwgPreLoad = lwg.LwgPreLoad;
+    let _PreLoadScene = lwg.LwgPreLoad._PreLoadScene;
+    let _LwgInit = lwg._LwgInit;
+    let _LwgInitScene = lwg._LwgInit._LwgInitScene;
+
+    var _LwgEvent;
+    (function (_LwgEvent) {
+        let PreLoad;
+        (function (PreLoad) {
+        })(PreLoad = _LwgEvent.PreLoad || (_LwgEvent.PreLoad = {}));
+        let Guide;
+        (function (Guide) {
+        })(Guide = _LwgEvent.Guide || (_LwgEvent.Guide = {}));
+        let Game;
+        (function (Game) {
+            Game["heroBlood"] = "_Game_calculateBlood";
+            Game["closeScene"] = "_Game_closeScene";
+            Game["launch"] = "_Game_launch";
+            Game["enemyBlood"] = "_Game_enemyBlood";
+            Game["addBuff"] = "_Game_addBuff";
+            Game["creatBoss"] = "_Game_creatBoss";
+            Game["treeBlood"] = "_Game_treeBlood";
+        })(Game = _LwgEvent.Game || (_LwgEvent.Game = {}));
+        let Task;
+        (function (Task) {
+        })(Task = _LwgEvent.Task || (_LwgEvent.Task = {}));
+    })(_LwgEvent || (_LwgEvent = {}));
+
+    var _Res;
+    (function (_Res) {
+        _Res._list = {
+            prefab2D: {
+                LwgGold: {
+                    url: 'Prefab/LwgGold.json',
+                    prefab: null,
+                },
+                Weapon: {
+                    url: 'Prefab/Weapon.json',
+                    prefab: null,
+                },
+                Enemy: {
+                    url: 'Prefab/Enemy.json',
+                    prefab: null,
+                },
+                EnemyBullet: {
+                    url: 'Prefab/EnemyBullet.json',
+                    prefab: null,
+                },
+                Boss: {
+                    url: 'Prefab/Boss.json',
+                    prefab: null,
+                },
+                Buff: {
+                    url: 'Prefab/Buff.json',
+                    prefab: null,
+                }
+            },
+            scene2D: {
+                UIStart: "Scene/" + _SceneName.Start + '.json',
+                GameScene: "Scene/" + _SceneName.Game + '.json',
+            },
+            json: {
+                Boss: {
+                    url: "_LwgData" + "/_Game/Boss" + ".json",
+                    dataArr: null,
+                },
+                Enemy: {
+                    url: "_LwgData" + "/_Game/Enemy" + ".json",
+                    dataArr: null,
+                },
+                HeroLevel: {
+                    url: "_LwgData" + "/_Game/HeroLevel" + ".json",
+                    dataArr: null,
+                },
+                HeroType: {
+                    url: "_LwgData" + "/_Game/HeroType" + ".json",
+                    dataArr: null,
+                }
+            },
+        };
+    })(_Res || (_Res = {}));
+    var _PreLoad;
+    (function (_PreLoad) {
+        class PreLoad extends _LwgPreLoad._PreLoadScene {
+            lwgOnStart() {
+                this._evNotify(_LwgPreLoad._Event.importList, [_Res._list]);
+            }
+            lwgOpenAni() { return 1; }
+            lwgStepComplete() {
+            }
+            lwgAllComplete() {
+                return 1000;
+            }
+        }
+        _PreLoad.PreLoad = PreLoad;
+    })(_PreLoad || (_PreLoad = {}));
+    var _PreLoad$1 = _PreLoad.PreLoad;
+
+    class _EnemyBullet extends Admin._ObjectBase {
+        constructor() {
+            super(...arguments);
+            this.speed = 2;
+        }
+        lwgOnStart() {
+            this.checkHeroAndLevel();
+        }
+        move() {
+            this[`moveType${this._Owner['_moveType']['moveNum']}`]();
+        }
+        moveType1() {
+            TimerAdmin._frameLoop(1, this, () => {
+                let point = Tools._Point.getRoundPos(this._Owner['_moveType']['angle'], this.speed += 2, this._Owner['_moveType']['point']);
+                this._Owner.pos(point.x, point.y);
+            });
+        }
+        moveType2() {
+            TimerAdmin._frameLoop(1, this, () => {
+                this._Owner.y += 3;
+            });
+        }
+        moveType3() {
+        }
+        checkHeroAndLevel() {
+            TimerAdmin._frameLoop(1, this, () => {
+                !Tools._Node.leaveStage(this._Owner, () => {
+                    this._Owner.removeSelf();
+                }) && Tools._Node.checkTwoDistance(this._Owner, this._SceneImg('Hero'), 40, () => {
+                    this._Owner.removeSelf();
+                    this._evNotify(_LwgEvent.Game.heroBlood, [1]);
+                });
+            });
+        }
+    }
+
+    class _ObjGeneral extends Admin._ObjectBase {
+        bloodInit(bloodSum) {
+            this.bloodPresnt = this.bloodSum = bloodSum;
+            this.bloodPic = this._Owner.getChildByName('Blood').getChildByName('Pic');
+            this.bloodWidth = this.bloodPic.width;
+        }
+        subBlood(Obj, num, func, deathFunc) {
+            if (Obj == this._Owner) {
+                this.bloodPresnt -= num;
+                this.bloodPic.width = this.bloodWidth * this.bloodPresnt / this.bloodSum;
+                if (this.bloodPresnt <= 0) {
+                    deathFunc && deathFunc();
+                    this._Owner.destroy();
+                }
+                else {
+                    func && func();
+                }
+            }
+        }
+    }
+
+    class _EnemyData extends DataAdmin._Table {
+        constructor(_EnemyParent) {
+            super();
+            this._otherPro = {
+                quantity: "quantity",
+                shellNum: "shellNum",
+                blood: 'blood',
+                boss: 'boss',
+                speed: 'speed',
+            };
+            this.EnemyParent = _EnemyParent;
+            this._arr = _Res._list.json.Enemy.dataArr;
+            this.levelData = this._getObjByName(`level${Admin._game.level}`);
+            this.quantity = this.levelData['quantity'];
+            this.presentQuantity = 0;
+            EventAdmin._register('presentQuantity', this, () => {
+                this.presentQuantity--;
+            });
+        }
+        get presentQuantity() {
+            return this['_presentQuantity'];
+        }
+        ;
+        set presentQuantity(val) {
+            this['_presentQuantity'] = val;
+            if (val < 10) {
+                this.createEnmey();
+            }
+            if (val === 0 && this.quantity === 0) {
+                EventAdmin._notify(_LwgEvent.Game.creatBoss);
+            }
+        }
+        ;
+        createEnmey() {
+            this.quantity--;
+            if (this.quantity < 0) {
+                this.quantity = 0;
+                return;
+            }
+            this.presentQuantity++;
+            const shellNum = this.levelData[this._otherPro.shellNum];
+            let shellNumTime = 0;
+            const element = Tools._Node.createPrefab(_Res._list.prefab2D.Enemy.prefab, this.EnemyParent);
+            shellNumTime++;
+            const color = Tools._Array.randomGetOne(['blue', 'yellow', 'red']);
+            element.name = `${color}${color}`;
+            let speed = Tools._Number.randomOneBySection(this.levelData[this._otherPro.speed][0], this.levelData[this._otherPro.speed][1]);
+            speed = Tools._Number.randomOneHalf() == 0 ? -speed : speed;
+            element['_EnemyData'] = {
+                shell: shellNumTime <= shellNum ? true : false,
+                blood: this.levelData['blood'],
+                angle: Tools._Number.randomOneBySection(0, 360),
+                speed: speed,
+                color: color,
+            };
+            element.addComponent(_Enemy);
+        }
+    }
+    class _Enemy extends _ObjGeneral {
+        lwgOnAwake() {
+            this.generalProInit();
+            this.bloodInit(this._Owner['_EnemyData']['blood']);
+            this.ranAttackNum = Tools._Number.randomOneBySection(1, 2, true);
+        }
+        generalProInit() {
+            this._Owner.pos(this._SceneImg('Land').width / 2, this._SceneImg('Land').height / 2);
+            const shell = this._Owner['_EnemyData']['shell'];
+            this.Shell = this._Owner.getChildByName('Shell');
+            this.Shell.removeSelf();
+            this.Pic = this._Owner.getChildByName('Pic');
+            if (this._Owner['_EnemyData']['color']) {
+                this.Pic.skin = `Game/UI/Game/Enemy/enemy_01_${this._Owner['_EnemyData']['color']}.png`;
+            }
+            const angle = this._Owner['_EnemyData']['angle'];
+            this._Owner.rotation = angle;
+            this.speed = this._Owner['_EnemyData']['speed'];
+            this.groundRadius = 200;
+        }
+        lwgOnStart() {
+            this.attack();
+            this.appear(() => {
+                this.move();
+            });
+        }
+        appear(func) {
+            let radius = 0;
+            const radiusSpeed = 2;
+            const time = 220 / radiusSpeed;
+            TimerAdmin._frameNumLoop(1, time, this, () => {
+                radius += radiusSpeed;
+                let point = Tools._Point.getRoundPos(this._Owner.rotation, radius, new Laya.Point(this._SceneImg('Land').width / 2, this._SceneImg('Land').height / 2));
+                this._Owner.x = point.x;
+                this._Owner.y = point.y;
+            }, () => {
+                func();
+            });
+        }
+        attack() {
+            this[`attackType${this.ranAttackNum}`]();
+        }
+        move() {
+            TimerAdmin._frameLoop(1, this, () => {
+                let point = Tools._Point.getRoundPos(this._Owner.rotation += this.speed, 220, new Laya.Point(this._SceneImg('Land').width / 2, this._SceneImg('Land').height / 2));
+                this._Owner.x = point.x;
+                this._Owner.y = point.y;
+            });
+        }
+        lwgEvent() {
+            this._evReg(_LwgEvent.Game.enemyBlood, (Enemy, num) => {
+                this.subBlood(Enemy, num, null, () => {
+                    for (let index = 0; index < 20; index++) {
+                        Effects2D._Particle._spray(Laya.stage, this._gPoint, [10, 30]);
+                    }
+                    this._evNotify('presentQuantity');
+                    if (this._Owner.name === 'Boss') {
+                        Admin._openScene('Victory');
+                    }
+                });
+            });
+        }
+        attackType1() {
+            const angleSpeed = 15;
+            TimerAdmin._frameRandomLoop(120, 300, this, () => {
+                for (let index = 0; index < 3; index++) {
+                    const bullet = Tools._Node.createPrefab(_Res._list.prefab2D.EnemyBullet.prefab);
+                    this._SceneImg('EBparrent').addChild(bullet);
+                    bullet.pos(this._gPoint.x, this._gPoint.y);
+                    bullet.addComponent(_EnemyBullet);
+                    let speed = 0;
+                    const gPoint = new Laya.Point(this._gPoint.x, this._gPoint.y);
+                    TimerAdmin._frameLoop(1, _EnemyBullet, () => {
+                        let point = Tools._Point.getRoundPos(index * angleSpeed + 180 - angleSpeed, speed += 2, gPoint);
+                        bullet.pos(point.x, point.y);
+                    });
+                }
+            });
+        }
+        attackType2() {
+            TimerAdmin._frameRandomLoop(50, 100, this, () => {
+                let bullet = Tools._Node.createPrefab(_Res._list.prefab2D.EnemyBullet.prefab);
+                this._SceneImg('EBparrent').addChild(bullet);
+                bullet.pos(this._gPoint.x, this._gPoint.y);
+                bullet.addComponent(_EnemyBullet);
+                TimerAdmin._frameLoop(1, _EnemyBullet, () => {
+                    bullet.y += 3;
+                });
+            });
+        }
+        attack3() {
+            TimerAdmin._frameRandomLoop(100, 1000, this, () => {
+                let bullet = Tools._Node.createPrefab(_Res._list.prefab2D.EnemyBullet.prefab);
+                bullet.addComponent(_EnemyBullet);
+                this._SceneImg('EBparrent').addChild(bullet);
+                bullet.pos(this._gPoint.x, this._gPoint.y);
+            });
+        }
+    }
+
+    class BossBullet extends _EnemyBullet {
+        lwgOnStart() {
+            this.move();
+            this.checkHeroAndLevel();
+        }
+        move() {
+            TimerAdmin._frameLoop(1, this, () => {
+                let point = Tools._Point.getRoundPos(this._Owner.rotation, this.speed += 2, this._fGPoint);
+                this._Owner.x = point.x;
+                this._Owner.y = point.y;
+            });
+        }
+    }
+    class Skill {
+        static _ins() {
+            if (!this.ins) {
+                this.ins = new Skill();
+            }
+            return this.ins;
+        }
+        round() {
+            for (let index = 0; index < 20; index++) {
+                const bullet = Tools._Node.createPrefab(_Res._list.prefab2D.EnemyBullet.prefab);
+                bullet;
+            }
+        }
+    }
+
+    var _Boss;
+    (function (_Boss) {
+        class _BossData extends DataAdmin._Table {
+            constructor() {
+                super();
+                this._otherPro = {
+                    blood: 'blood',
+                    specials: 'specials',
+                    speed: 'speed',
+                    skills: 'skills',
+                    bulletPower: 'bulletPower',
+                };
+                this._arr = _Res._list.json.Boss.dataArr;
+            }
+            static _ins() {
+                if (!this.ins) {
+                    this.ins = new _BossData();
+                    this.ins._arr = _Res._list.json.Boss.dataArr;
+                    this.ins.levelData = this.ins._getObjByName(`Boss${Admin._game.level}`);
+                }
+                return this.ins;
+            }
+            getLevelSkill() {
+                return this.levelData['skills'];
+            }
+            getLevelSpeed() {
+                return this.levelData['speed'];
+            }
+            getLevelblood() {
+                return this.levelData['blood'];
+            }
+            getOtherBossSkill() {
+                return;
+            }
+            createLevelBoss(Parent) {
+                const element = Tools._Node.createPrefab(_Res._list.prefab2D.Enemy.prefab, Parent);
+                element.name = `Boss`;
+                let speed = Tools._Number.randomOneBySection(_BossData._ins().getLevelSpeed()[0], _BossData._ins().getLevelSpeed()[1]);
+                speed = Tools._Number.randomOneHalf() == 0 ? -speed : speed;
+                element['_EnemyData'] = {
+                    blood: _BossData._ins().getLevelblood(),
+                    angle: Tools._Number.randomOneBySection(0, 360),
+                    speed: speed,
+                    sikllNameArr: _BossData._ins().getLevelSkill(),
+                };
+                element.addComponent(Boss);
+                return element;
+            }
+        }
+        _Boss._BossData = _BossData;
+        class Boss extends _Enemy {
+            lwgOnAwake() {
+                this.generalProInit();
+                this._Owner.pos(this._SceneImg('Content').x, this._SceneImg('Content').y);
+                this._Owner.rotation = 0;
+                this._SceneImg('Content').removeSelf();
+                this.bloodInit(this._Owner['_EnemyData']['blood']);
+            }
+            lwgOnStart() {
+                this.attack();
+                this.move();
+            }
+            move() {
+                let dir = 'left';
+                TimerAdmin._frameLoop(1, this, () => {
+                    if (dir == 'right') {
+                        this._Owner.x++;
+                        if (this._Owner.x > Laya.stage.width - 100) {
+                            dir = 'left';
+                        }
+                    }
+                    else {
+                        this._Owner.x--;
+                        if (this._Owner.x < 100) {
+                            dir = 'right';
+                        }
+                    }
+                });
+            }
+            appear() {
+            }
+            attack() {
+                let time = 0;
+                const num = 20;
+                TimerAdmin._frameRandomLoop(50, 100, this, () => {
+                    time++;
+                    for (let index = 0; index < num; index++) {
+                        const bullet = Tools._Node.createPrefab(_Res._list.prefab2D.EnemyBullet.prefab);
+                        this._SceneImg('EBparrent').addChild(bullet);
+                        bullet.pos(this._gPoint.x, this._gPoint.y);
+                        bullet.rotation = 360 / num * index + time * 10;
+                        bullet.addComponent(BossBullet);
+                    }
+                }, true);
+            }
+        }
+        _Boss.Boss = Boss;
+    })(_Boss || (_Boss = {}));
+
+    class _HeroWeapon extends Admin._ObjectBase {
+        constructor() {
+            super(...arguments);
+            this.launchAcc = 0;
+            this.dropAcc = 0;
+            this.stateType = {
+                launch: 'launch',
+                free: 'free',
+            };
+        }
+        get state() {
+            return this['Statevalue'] ? this['Statevalue'] : 'launch';
+        }
+        ;
+        set state(_state) {
+            this['Statevalue'] = _state;
+        }
+        ;
+        getSpeed() {
+            return 20 + 0.1;
+        }
+        getDropSpeed() {
+            return this.dropAcc += 0.5;
+        }
+        lwgOnAwake() {
+            this.Pic = this._Owner.getChildByName('Pic');
+            TimerAdmin._frameLoop(1, this, () => {
+                this.move();
+            });
+        }
+        move() {
+            if (this.getSpeed() > 0) {
+                let p = Tools._Point.angleAndLenByPoint(this._Owner.rotation - 90, this.getSpeed());
+                this._Owner.x += p.x;
+                this._Owner.y += p.y;
+            }
+            else {
+                this._Owner.y += this.getDropSpeed();
+            }
+            const leave = Tools._Node.leaveStage(this._Owner, () => {
+                this._Owner.destroy();
+            });
+            if (!leave) {
+                if (!this._SceneImg('Content').parent) {
+                    this.checkBoss();
+                }
+                else {
+                    this.checkEnemy();
+                }
+            }
+        }
+        checkBoss() {
+            for (let index = 0; index < this._SceneImg('BossParent').numChildren; index++) {
+                const Enemy = this._SceneImg('BossParent').getChildAt(index);
+                if (this.displayArrow(Enemy, 50)) {
+                    return;
+                }
+            }
+        }
+        drop() {
+            this.state = this.stateType.free;
+            Laya.timer.clearAll(this);
+            TimerAdmin._frameLoop(1, this, () => {
+                this._Owner.y += 40;
+                this._Owner.rotation += 10;
+                Tools._Node.leaveStage(this._Owner, () => {
+                    this._Owner.destroy();
+                });
+            });
+        }
+        displayArrow(Ele, dis) {
+            const EleParent = Ele.parent;
+            const elementGP = EleParent.localToGlobal(new Laya.Point(Ele.x, Ele.y));
+            if (elementGP.distance(this._gPoint.x, this._gPoint.y) < dis) {
+                this.state = this.stateType.free;
+                Laya.timer.clearAll(this);
+                const lP = Ele.globalToLocal(this._gPoint);
+                Ele.addChild(this._Owner);
+                this._Owner.pos(lP.x, lP.y);
+                if (EleParent == this._SceneImg('Land') || EleParent == this._SceneImg('MiddleScenery') || EleParent == this._SceneImg('EnemyParent')) {
+                    this._Owner.rotation -= Ele.rotation;
+                    this._Owner.rotation -= this._SceneImg('Land').rotation;
+                }
+                else if (EleParent == this._SceneImg('Land')) {
+                    this._Owner.rotation -= Ele.rotation;
+                }
+                this.Pic = this._Owner.getChildByName('Pic');
+                const mask = new Laya.Sprite;
+                mask.size(200, 300);
+                mask.loadImage('Lwg/UI/ui_l_orthogon_white.png');
+                this._Owner.mask = mask;
+                this.Pic.pos(0, -Tools._Number.randomOneBySection(30));
+                mask.pos(0, Tools._Number.randomOneBySection(20, 30));
+                if (Ele.name == 'Tree') {
+                    this._evNotify(_LwgEvent.Game.treeBlood, [Ele, 1]);
+                }
+                else if (EleParent.name == 'EnemyParent' || EleParent.name == 'BossParent') {
+                    if (this._Owner) {
+                        this.Pic.pos(0, -Tools._Number.randomOneBySection(30, 50));
+                        mask.pos(0, Tools._Number.randomOneBySection(5, 10));
+                    }
+                    this._evNotify(_LwgEvent.Game.enemyBlood, [Ele, 1]);
+                }
+                Laya.timer.once(200, this, () => {
+                    this._Owner.destroy();
+                });
+                return true;
+            }
+        }
+        checkEnemy() {
+            if (this.state == this.stateType.free) {
+                return;
+            }
+            for (let index = 0; index < this._SceneImg('MiddleScenery').numChildren; index++) {
+                const element = this._SceneImg('MiddleScenery').getChildAt(index);
+                if (element.name == 'Tree') {
+                    if (this.displayArrow(element, 30)) {
+                        return;
+                    }
+                }
+            }
+            if (this._SceneImg('FrontScenery').getChildByName('Stone')) {
+                for (let index = 0; index < this._SceneImg('FrontScenery').numChildren; index++) {
+                    const element = this._SceneImg('FrontScenery').getChildAt(index);
+                    if (element.name == 'Stone') {
+                        let gPStone = this._SceneImg('FrontScenery').localToGlobal(new Laya.Point(element.x, element.y));
+                        if (gPStone.distance(this._gPoint.x, this._gPoint.y) < 30) {
+                            this.drop();
+                            return;
+                        }
+                    }
+                }
+            }
+            for (let index = 0; index < this._SceneImg('EnemyParent').numChildren; index++) {
+                const Enemy = this._SceneImg('EnemyParent').getChildAt(index);
+                let gPEnemy = this._SceneImg('EnemyParent').localToGlobal(new Laya.Point(Enemy.x, Enemy.y));
+                if (gPEnemy.distance(this._gPoint.x, this._gPoint.y) < 20) {
+                    let Shell = Enemy.getChildByName('Shell');
+                    if (Shell) {
+                        const landContentGP = this._SceneImg('Content').localToGlobal(new Laya.Point(this._SceneImg('Land').x, this._SceneImg('Land').y));
+                        let angle = Tools._Point.pointByAngle(landContentGP.x - this._gPoint.x, landContentGP.y - this._gPoint.y) + 90;
+                        if (210 < angle && angle < 330) {
+                            this.drop();
+                        }
+                        else {
+                            this.displayArrow(Enemy, 50);
+                        }
+                    }
+                    else {
+                        this.displayArrow(Enemy, 50);
+                    }
+                    return;
+                }
+            }
+            this.checkLand();
+        }
+        checkLand() {
+            let Ground;
+            const ran = Tools._Number.randomOneInt(0, 2);
+            const FrontGround = this._SceneImg('Land').getChildByName('FrontGround');
+            if (ran == 0) {
+                Ground = FrontGround;
+            }
+            else if (ran == 1) {
+                Ground = this._SceneImg('Land').getChildByName('MiddleGround');
+                if (!Ground) {
+                    Ground = new Laya.Image;
+                    Ground.name = 'MiddleGround';
+                    this._SceneImg('Land').addChild(Ground);
+                    Ground.zOrder = 14;
+                }
+            }
+            else if (ran == 2) {
+                Ground = this._SceneImg('Land').getChildByName('BehindGround');
+                if (!Ground) {
+                    Ground = new Laya.Image;
+                    Ground.name = 'BehindGround';
+                    this._SceneImg('Land').addChild(Ground);
+                    Ground.zOrder = 4;
+                }
+            }
+            Ground.size(FrontGround.width, FrontGround.height);
+            Ground.anchorX = Ground.anchorY = 0.5;
+            Ground.pos(FrontGround.x, FrontGround.y);
+            this.displayArrow(Ground, 160);
+        }
+    }
+
+    class _Hero extends Admin._ObjectBase {
+        lwgOnAwake() {
+            this.Blood = this._Owner.getChildByName('Blood');
+            this.bloodNum = 100;
+            this.attackInterval = 10;
+            this.ballisticNum = 1;
+            this.ballisticPos = [
+                [[0, 0]],
+                [[-20, 0], [20, 0]],
+                [[-20, 0], [0, 0], [20, 0]],
+                [[-30, 0], [-10, 0], [10, 0], [30, 0]],
+                [[-40, 0], [-20, 0], [0, 0], [20, 0], [40, 0]],
+                [[-50, 0], [-30, 0], [-10, 0], [10, 0], [30, 0], [50, 0]],
+                [[-60, 0], [-40, 0], [-20, 0], [0, 0], [20, 0], [40, 0], [60, 0]],
+            ];
+            this.time = 0;
+        }
+        lwgOnStart() {
+            TimerAdmin._frameLoop(this.attackInterval, this, () => {
+                if (this.mouseP) {
+                    for (let index = 1; index < this.ballisticPos[this.ballisticNum].length; index++) {
+                        const pos = this.ballisticPos[this.ballisticNum][index];
+                        if (pos) {
+                            this.createWeapon(Tools._Array.randomGetOne(['blue', 'yellow', 'red']), this._Owner.x + pos[0], this._Owner.y + pos[1]);
+                        }
+                    }
+                }
+            });
+        }
+        lwgEvent() {
+            const Pro = this.Blood.getChildAt(0);
+            const _Prowidth = Pro.width;
+            this._evReg(_LwgEvent.Game.heroBlood, (number) => {
+                Pro.width = Pro.width - _Prowidth / this.bloodNum;
+                this.bloodNum -= number;
+                if (!this['bloodNumSwitch']) {
+                    if (this.bloodNum <= 0) {
+                        this['bloodNumSwitch'] = true;
+                        this._openScene(_SceneName.Defeated, false);
+                    }
+                }
+            });
+            this._evReg(_LwgEvent.Game.addBuff, (type) => {
+                switch (type) {
+                    case 0:
+                        this.ballisticNum++;
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    default:
+                        break;
+                }
+            });
+        }
+        createWeapon(color, x, y) {
+            const Weapon = Tools._Node.createPrefab(_Res._list.prefab2D.Weapon.prefab);
+            this._SceneImg('WeaponParent').addChild(Weapon);
+            Weapon.addComponent(_HeroWeapon);
+            Weapon.pos(x, y);
+            const Pic = Weapon.getChildByName('Pic');
+            Pic.skin = `Game/UI/Game/Hero/Hero_01_weapon_${color}.png`;
+            Weapon.name = color;
+            return Weapon;
+        }
+        ;
+        move(e) {
+            if (this.mouseP) {
+                let diffX = e.stageX - this.mouseP.x;
+                let diffY = e.stageY - this.mouseP.y;
+                this._Owner.x += diffX;
+                this._Owner.y += diffY;
+                this.mouseP = new Laya.Point(e.stageX, e.stageY);
+                if (this._Owner.x > Laya.stage.width) {
+                    this._Owner.x = Laya.stage.width;
+                }
+                if (this._Owner.x < 0) {
+                    this._Owner.x = 0;
+                }
+                if (this._Owner.y <= 0) {
+                    this._Owner.y = 0;
+                }
+                if (this._Owner.y > Laya.stage.height) {
+                    this._Owner.y = Laya.stage.height;
+                }
+            }
+        }
+        ;
+        lwgOnStageDown(e) {
+            this.mouseP = new Laya.Point(e.stageX, e.stageY);
+        }
+        lwgOnStageMove(e) {
+            this.move(e);
+        }
+        lwgOnStageUp() {
+            this.mouseP = null;
+        }
+    }
+
+    class _BuffData extends DataAdmin._Table {
+        constructor() {
+            super(...arguments);
+            this.type = {
+                ballisticNum: 'ballisticNum',
+            };
+        }
+        static _ins() {
+            if (!this.ins) {
+                this.ins = new _BuffData();
+            }
+            return this.ins;
+        }
+        createBuff(type, Parent, x, y) {
+            const Buff = Tools._Node.createPrefab(_Res._list.prefab2D.Buff.prefab, Parent, [x, y]);
+            Buff['buffType'] = type;
+            Buff.addComponent(_Buff);
+            return Buff;
+        }
+    }
+    class _Buff extends Admin._ObjectBase {
+        lwgOnStart() {
+            this.checkHero();
+        }
+        checkHero() {
+            TimerAdmin._frameLoop(1, this, () => {
+                this._Owner.y += 5;
+                !Tools._Node.leaveStage(this._Owner, () => {
+                    this._Owner.removeSelf();
+                }) && Tools._Node.checkTwoDistance(this._Owner, this._SceneImg('Hero'), 60, () => {
+                    this._Owner.removeSelf();
+                    this._evNotify(_LwgEvent.Game.addBuff, [this._Owner['buffType']]);
+                });
+            });
+        }
+    }
+    class Tree extends _ObjGeneral {
+        lwgOnAwake() {
+            this.bloodInit(20);
+        }
+        lwgEvent() {
+            this._evReg(_LwgEvent.Game.treeBlood, (Tree, num) => {
+                this.subBlood(Tree, num, null, () => {
+                    _BuffData._ins().createBuff(0, this._Scene, this._gPoint.x, this._gPoint.y);
+                });
+            });
+        }
+    }
+
+    var _Game;
+    (function (_Game) {
+        _Game._texArr = [];
+        _Game._arrowParentArr = [];
+        class Game extends Admin._SceneBase {
+            lwgOnAwake() {
+                this.EnemyData = new _EnemyData(this._ImgVar('EnemyParent'));
+                this.EnemyData.createEnmey();
+                this._ImgVar('Hero').addComponent(_Hero);
+                for (let index = 0; index < this._ImgVar('MiddleScenery').numChildren; index++) {
+                    const element = this._ImgVar('MiddleScenery').getChildAt(index);
+                    if (element.name == 'Tree') {
+                        element.addComponent(Tree);
+                    }
+                }
+            }
+            lwgOnStart() {
+                TimerAdmin._frameLoop(1, this, () => {
+                    this._ImgVar('Land').rotation += 0.1;
+                });
+            }
+            lwgEvent() {
+                this._evReg(_LwgEvent.Game.closeScene, () => {
+                    for (let index = 0; index < _Game._texArr.length; index++) {
+                        const element = _Game._texArr[index];
+                        element.destroy(true);
+                        _Game._texArr.splice(index, 1);
+                        index--;
+                    }
+                    for (let index = 0; index < _Game._arrowParentArr.length; index++) {
+                        const element = _Game._arrowParentArr[index];
+                        element.destroy(true);
+                        _Game._arrowParentArr.splice(index, 1);
+                        index--;
+                    }
+                    this._closeScene();
+                });
+                this._evReg(_LwgEvent.Game.creatBoss, () => {
+                    _Boss._BossData._ins().createLevelBoss(this._ImgVar('BossParent'));
+                });
+            }
+        }
+        _Game.Game = Game;
+    })(_Game || (_Game = {}));
+    var _Game$1 = _Game.Game;
+
+    var _Guide;
+    (function (_Guide) {
+        _Guide._complete = {
+            get bool() {
+                if (Laya.LocalStorage.getItem('_Guide_complete')) {
+                    if (Number(Laya.LocalStorage.getItem('_Guide_complete')) == 0) {
+                        return false;
+                    }
+                    else {
+                        return true;
+                    }
+                }
+                else {
+                    return false;
+                }
+            },
+            set bool(bol) {
+                if (bol == true) {
+                    bol = 1;
+                }
+                Laya.LocalStorage.setItem('_Guide_complete', bol.toString());
+            }
+        };
+        _Guide._whichStep = {
+            get num() {
+                return Laya.LocalStorage.getItem('_Guide_whichStep') ? Number(Laya.LocalStorage.getItem('_Guide_whichStep')) : 1;
+            },
+            set num(num0) {
+                Laya.LocalStorage.setItem('_Guide_whichStep', num0.toString());
+            }
+        };
+        _Guide._whichStepNum = 1;
+        let _Event;
+        (function (_Event) {
+            _Event["onStep"] = "_Guide_onStep";
+            _Event["stepComplete"] = "_Guide_stepComplete";
+            _Event["appear"] = "_Guide_appear";
+            _Event["start"] = "_Guide_start";
+            _Event["complete"] = "_Guide_complete";
+        })(_Event = _Guide._Event || (_Guide._Event = {}));
+        function _init() {
+        }
+        _Guide._init = _init;
+        class Guide extends Admin._SceneBase {
+            lwgOnStart() {
+                this._openScene('Start');
+            }
+            lwgOnEnable() {
+            }
+        }
+        _Guide.Guide = Guide;
+    })(_Guide || (_Guide = {}));
+    var _Guide$1 = _Guide.Guide;
+
+    var _PreLoadCutIn;
+    (function (_PreLoadCutIn) {
+        let _Event;
+        (function (_Event) {
+            _Event["animation1"] = "_PreLoadCutIn_animation1";
+            _Event["preLoad"] = "_PreLoadCutIn_preLoad";
+            _Event["animation2"] = "_PreLoadCutIn_animation2";
+        })(_Event = _PreLoadCutIn._Event || (_PreLoadCutIn._Event = {}));
+        class PreLoadCutIn extends _LwgPreLoad._PreLoadScene {
+            lwgOnStart() {
+                EventAdmin._notify(_Event.animation1);
+            }
+            lwgEventRegister() {
+                EventAdmin._register(_Event.animation1, this, () => {
+                    let time = 0;
+                    TimerAdmin._frameNumLoop(1, 30, this, () => {
+                        time++;
+                        this._LabelVar('Schedule').text = `${time}`;
+                    }, () => {
+                        EventAdmin._notify(_LwgPreLoad._Event.importList, [{}]);
+                    });
+                });
+            }
+            lwgOpenAni() {
+                return 100;
+            }
+            lwgStepComplete() {
+            }
+            lwgAllComplete() {
+                return 1000;
+            }
+        }
+        _PreLoadCutIn.PreLoadCutIn = PreLoadCutIn;
+    })(_PreLoadCutIn || (_PreLoadCutIn = {}));
+    ;
+    var _PreLoadCutIn$1 = _PreLoadCutIn.PreLoadCutIn;
+
+    var _Start;
+    (function (_Start) {
+        function _init() {
+            console.log(_Start);
+        }
+        _Start._init = _init;
+        class Start extends Admin._SceneBase {
+            lwgOnAwake() {
+                Setting._bgMusic.switch = false;
+            }
+            lwgButton() {
+                this._btnUp(this._ImgVar('BtnStart'), () => {
+                    let levelName = _SceneName.Game + 1;
+                    this._openScene(levelName, true, false, () => {
+                        if (!Admin._SceneControl[levelName].getComponent(_Game.Game)) {
+                            Admin._SceneControl[levelName].addComponent(_Game.Game);
+                        }
+                    });
+                });
+            }
+        }
+        _Start.Start = Start;
+        class StartItem extends Admin._ObjectBase {
+        }
+        _Start.StartItem = StartItem;
+    })(_Start || (_Start = {}));
+    var _Start$1 = _Start.Start;
+
+    var _Victory;
+    (function (_Victory) {
+        class _data {
+        }
+        _Victory._data = _data;
+        function _init() {
+        }
+        _Victory._init = _init;
+        class Victory extends Admin._SceneBase {
+            lwgButton() {
+                this._btnUp(this._ImgVar('BtnGet'), () => {
+                    this._openScene(_SceneName.Start);
+                    EventAdmin._notify(_LwgEvent.Game.closeScene);
+                });
+            }
+        }
+        _Victory.Victory = Victory;
+    })(_Victory || (_Victory = {}));
+    var _Victory$1 = _Victory.Victory;
+
+    var _Defeated;
+    (function (_Defeated) {
+        class _data {
+        }
+        _Defeated._data = _data;
+        function _init() {
+        }
+        _Defeated._init = _init;
+        class Defeated extends Admin._SceneBase {
+            lwgButton() {
+                this._btnUp(this._ImgVar('BtnBack'), () => {
+                    this._openScene(_SceneName.Start);
+                    EventAdmin._notify(_LwgEvent.Game.closeScene);
+                });
+            }
+        }
+        _Defeated.Defeated = Defeated;
+    })(_Defeated || (_Defeated = {}));
+    var _Defeated$1 = _Defeated.Defeated;
+
+    class LwgInit extends _LwgInitScene {
+        lwgOnAwake() {
+            _LwgInit._pkgInfo = [];
+            Platform._Ues.value = Platform._Tpye.Web;
+            Laya.Stat.show();
+            SceneAnimation._Use.value = SceneAnimation._Type.fadeOut;
+            SceneAnimation._closeSwitch = true;
+            SceneAnimation._openSwitch = false;
+            Click._Use.value = Click._Type.reduce;
+            Adaptive._Use.value = [1280, 720];
+            Admin._GuideControl.switch = false;
+            Admin._Moudel = {
+                _PreLoad: _PreLoad,
+                _PreLoadCutIn: _PreLoadCutIn,
+                _Guide: _Guide,
+                _Start: _Start,
+                _Game: _Game,
+                _Victory: _Victory,
+                _Defeated: _Defeated,
+            };
+        }
+    }
+
+    class GameConfig {
+        constructor() {
+        }
+        static init() {
+            var reg = Laya.ClassUtils.regClass;
+            reg("script/Frame/LwgInit.ts", LwgInit);
+        }
+    }
+    GameConfig.width = 720;
+    GameConfig.height = 1280;
+    GameConfig.scaleMode = "fixedwidth";
+    GameConfig.screenMode = "vertical";
+    GameConfig.alignV = "top";
+    GameConfig.alignH = "left";
+    GameConfig.startScene = "Scene/Lwginit.scene";
+    GameConfig.sceneRoot = "";
+    GameConfig.debug = false;
+    GameConfig.stat = false;
+    GameConfig.physicsDebug = true;
+    GameConfig.exportSceneToJson = true;
+    GameConfig.init();
+
+    class Main {
+        constructor() {
+            if (window["Laya3D"])
+                Laya3D.init(GameConfig.width, GameConfig.height);
+            else
+                Laya.init(GameConfig.width, GameConfig.height, Laya["WebGL"]);
+            Laya["Physics"] && Laya["Physics"].enable();
+            Laya["DebugPanel"] && Laya["DebugPanel"].enable();
+            Laya.stage.scaleMode = GameConfig.scaleMode;
+            Laya.stage.screenMode = GameConfig.screenMode;
+            Laya.stage.alignV = GameConfig.alignV;
+            Laya.stage.alignH = GameConfig.alignH;
+            Laya.URL.exportSceneToJson = GameConfig.exportSceneToJson;
+            if (GameConfig.debug || Laya.Utils.getQueryString("debug") == "true")
+                Laya.enableDebugPanel();
+            if (GameConfig.physicsDebug && Laya["PhysicsDebugDraw"])
+                Laya["PhysicsDebugDraw"].enable();
+            if (GameConfig.stat)
+                Laya.Stat.show();
+            Laya.alertGlobalError = true;
+            Laya.ResourceVersion.enable("version.json", Laya.Handler.create(this, this.onVersionLoaded), Laya.ResourceVersion.FILENAME_VERSION);
+        }
+        onVersionLoaded() {
+            Laya.AtlasInfoManager.enable("fileconfig.json", Laya.Handler.create(this, this.onConfigLoaded));
+        }
+        onConfigLoaded() {
+            GameConfig.startScene && Laya.Scene.open(GameConfig.startScene);
+        }
+    }
+    new Main();
+
+}());

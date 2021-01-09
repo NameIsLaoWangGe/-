@@ -8,7 +8,7 @@ export class BossBullet extends _EnemyBullet {
     }
     move(): void {
         TimerAdmin._frameLoop(1, this, () => {
-            let point = Tools._Point.getRoundPos(this._Owner.rotation, this.speed += 2, this._fPoint);
+            let point = Tools._Point.getRoundPos(this._Owner.rotation, this.speed += 2, this._fGPoint);
             this._Owner.x = point.x;
             this._Owner.y = point.y;
         })

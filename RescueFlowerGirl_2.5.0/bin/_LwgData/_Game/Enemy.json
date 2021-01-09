@@ -1,173 +1,172 @@
-{ 
-"RECORDS": 
-[
-  {
-    "index": 1,
-    "name": "level1",
-    "quantity": 50,
-    "shellNum": 4,
-    "speed": [
-      0.2,
-      0.5
-    ],
-    "blood": 10,
-    "boss": [
-      "Boss1，Boss1"
-    ]
-  },
-  {
-    "index": 2,
-    "name": "level2",
-    "quantity": 8,
-    "shellNum": 5,
-    "speed": [
-      0.2,
-      0.6
-    ],
-    "blood": 11,
-    "boss": [
-      "Boss2"
-    ]
-  },
-  {
-    "index": 3,
-    "name": "level3",
-    "quantity": 8,
-    "shellNum": 6,
-    "speed": [
-      0.2,
-      0.7
-    ],
-    "blood": 12,
-    "boss": [
-      "Boss3"
-    ]
-  },
-  {
-    "index": 4,
-    "name": "level4",
-    "quantity": 8,
-    "shellNum": 7,
-    "speed": [
-      0.2,
-      0.8
-    ],
-    "blood": 13,
-    "boss": [
-      "Boss4"
-    ]
-  },
-  {
-    "index": 5,
-    "name": "level5",
-    "quantity": 8,
-    "shellNum": 8,
-    "speed": [
-      0.2,
-      0.9
-    ],
-    "blood": 14,
-    "boss": [
-      "Boss5"
-    ]
-  },
-  {
-    "index": 6,
-    "name": "level6",
-    "quantity": 8,
-    "shellNum": 9,
-    "speed": [
-      0.2,
-      0.1
-    ],
-    "blood": 15,
-    "boss": [
-      "Boss6"
-    ]
-  },
-  {
-    "index": 7,
-    "name": "level7",
-    "quantity": 8,
-    "shellNum": 10,
-    "speed": [
-      0.2,
-      0.11
-    ],
-    "blood": 16,
-    "boss": [
-      "Boss7"
-    ]
-  },
-  {
-    "index": 8,
-    "name": "level8",
-    "quantity": 8,
-    "shellNum": 11,
-    "speed": [
-      0.2,
-      0.12
-    ],
-    "blood": 17,
-    "boss": [
-      "Boss8"
-    ]
-  },
-  {
-    "index": 9,
-    "name": "level9",
-    "quantity": 8,
-    "shellNum": 12,
-    "speed": [
-      0.2,
-      0.13
-    ],
-    "blood": 18,
-    "boss": [
-      "Boss9"
-    ]
-  },
-  {
-    "index": 10,
-    "name": "level10",
-    "quantity": 8,
-    "shellNum": 13,
-    "speed": [
-      0.2,
-      0.14
-    ],
-    "blood": 19,
-    "boss": [
-      "Boss10"
-    ]
-  },
-  {
-    "index": 11,
-    "name": "level11",
-    "quantity": 8,
-    "shellNum": 14,
-    "speed": [
-      0.2,
-      0.15
-    ],
-    "blood": 20,
-    "boss": [
-      "Boss11"
-    ]
-  },
-  {
-    "index": 12,
-    "name": "level12",
-    "quantity": 9,
-    "shellNum": 15,
-    "speed": [
-      0.2,
-      0.16
-    ],
-    "blood": 21,
-    "boss": [
-      "Boss12"
-    ]
-  }
-]
+{
+  "RECORDS": [
+    {
+      "index": 1,
+      "name": "level1",
+      "quantity": 50,
+      "shellNum": 4,
+      "speed": [
+        0.2,
+        0.5
+      ],
+      "blood": 10,
+      "boss": [
+        "Boss1，Boss1"
+      ]
+    },
+    {
+      "index": 2,
+      "name": "level2",
+      "quantity": 8,
+      "shellNum": 5,
+      "speed": [
+        0.2,
+        0.6
+      ],
+      "blood": 11,
+      "boss": [
+        "Boss2"
+      ]
+    },
+    {
+      "index": 3,
+      "name": "level3",
+      "quantity": 8,
+      "shellNum": 6,
+      "speed": [
+        0.2,
+        0.7
+      ],
+      "blood": 12,
+      "boss": [
+        "Boss3"
+      ]
+    },
+    {
+      "index": 4,
+      "name": "level4",
+      "quantity": 8,
+      "shellNum": 7,
+      "speed": [
+        0.2,
+        0.8
+      ],
+      "blood": 13,
+      "boss": [
+        "Boss4"
+      ]
+    },
+    {
+      "index": 5,
+      "name": "level5",
+      "quantity": 8,
+      "shellNum": 8,
+      "speed": [
+        0.2,
+        0.9
+      ],
+      "blood": 14,
+      "boss": [
+        "Boss5"
+      ]
+    },
+    {
+      "index": 6,
+      "name": "level6",
+      "quantity": 8,
+      "shellNum": 9,
+      "speed": [
+        0.2,
+        0.1
+      ],
+      "blood": 15,
+      "boss": [
+        "Boss6"
+      ]
+    },
+    {
+      "index": 7,
+      "name": "level7",
+      "quantity": 8,
+      "shellNum": 10,
+      "speed": [
+        0.2,
+        0.11
+      ],
+      "blood": 16,
+      "boss": [
+        "Boss7"
+      ]
+    },
+    {
+      "index": 8,
+      "name": "level8",
+      "quantity": 8,
+      "shellNum": 11,
+      "speed": [
+        0.2,
+        0.12
+      ],
+      "blood": 17,
+      "boss": [
+        "Boss8"
+      ]
+    },
+    {
+      "index": 9,
+      "name": "level9",
+      "quantity": 8,
+      "shellNum": 12,
+      "speed": [
+        0.2,
+        0.13
+      ],
+      "blood": 18,
+      "boss": [
+        "Boss9"
+      ]
+    },
+    {
+      "index": 10,
+      "name": "level10",
+      "quantity": 8,
+      "shellNum": 13,
+      "speed": [
+        0.2,
+        0.14
+      ],
+      "blood": 19,
+      "boss": [
+        "Boss10"
+      ]
+    },
+    {
+      "index": 11,
+      "name": "level11",
+      "quantity": 8,
+      "shellNum": 14,
+      "speed": [
+        0.2,
+        0.15
+      ],
+      "blood": 20,
+      "boss": [
+        "Boss11"
+      ]
+    },
+    {
+      "index": 12,
+      "name": "level12",
+      "quantity": 9,
+      "shellNum": 15,
+      "speed": [
+        0.2,
+        0.16
+      ],
+      "blood": 21,
+      "boss": [
+        "Boss12"
+      ]
+    }
+  ]
 }

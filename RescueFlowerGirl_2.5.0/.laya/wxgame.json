@@ -3,7 +3,7 @@
         "../bin/**/*.*"
     ],
     "openDataZone": false,
-    "compressJson": false,
+    "compressJson": true,
     "compressJsonFilter": [
         "$basePath/**/*.{json,atlas}"
     ],
@@ -17,7 +17,7 @@
     "compressImageNoteList": [
         ""
     ],
-    "compressJs": true,
+    "compressJs": false,
     "compressJsFilter": [
         "$basePath/**/*.js"
     ],
@@ -61,12 +61,12 @@
         ""
     ],
     "clearReleaseDir": true,
-    "compile": false,
+    "compile": true,
     "forceCompile": false,
     "onlyIndexJS": true,
     "es6toes5": false,
     "projectType": "ts",
-    "pubTime": 1609592852946,
+    "pubTime": 1610198283146,
     "uesEnginePlugin": false,
     "wxOptimize": {
         "useOptimizeOpen": false,

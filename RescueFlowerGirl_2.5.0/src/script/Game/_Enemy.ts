@@ -36,19 +36,20 @@ export class _EnemyData extends DataAdmin._Table {
     public set presentQuantity(val: number) {
         this['_presentQuantity'] = val;
         if (val < 10) {
-            if (this.quantity > 0) {
-                this.createEnmey();
-            }
+            this.createEnmey();
         }
         if (val === 0 && this.quantity === 0) {
             EventAdmin._notify(_LwgEvent.Game.creatBoss);
         }
-
     };
 
     createEnmey(): void {
-        this.presentQuantity++;
         this.quantity--;
+        if (this.quantity < 0) {
+            this.quantity = 0;
+            return;
+        }
+        this.presentQuantity++;
         // const quantity = obj[this._otherPro.quantity];
         const shellNum = this.levelData[this._otherPro.shellNum];
         let shellNumTime = 0;
@@ -74,9 +75,11 @@ export default class _Enemy extends _ObjGeneral {
     Shell: Laya.Image;
     speed: number;
     groundRadius: number;
+    private ranAttackNum: number;
     lwgOnAwake(): void {
         this.generalProInit();
         this.bloodInit(this._Owner['_EnemyData']['blood']);
+        this.ranAttackNum = Tools._Number.randomOneBySection(1, 2, true);
     }
     generalProInit(): void {
         this._Owner.pos(this._SceneImg('Land').width / 2, this._SceneImg('Land').height / 2);
@@ -115,12 +118,7 @@ export default class _Enemy extends _ObjGeneral {
         })
     }
     attack(): void {
-        TimerAdmin._frameRandomLoop(100, 1000, this, () => {
-            let bullet = Tools._Node.createPrefab(_Res._list.prefab2D.EnemyBullet.prefab)
-            bullet.addComponent(_EnemyBullet);
-            this._SceneImg('EBparrent').addChild(bullet);
-            bullet.pos(this._gPoint.x, this._gPoint.y);
-        })
+        this[`attackType${this.ranAttackNum}`]();
     }
     move(): void {
         TimerAdmin._frameLoop(1, this, () => {
@@ -143,20 +141,32 @@ export default class _Enemy extends _ObjGeneral {
             })
         })
     }
-    private attack1(): void {
-        TimerAdmin._frameRandomLoop(100, 1000, this, () => {
-            let bullet = Tools._Node.createPrefab(_Res._list.prefab2D.EnemyBullet.prefab)
-            bullet.addComponent(_EnemyBullet);
-            this._SceneImg('EBparrent').addChild(bullet);
-            bullet.pos(this._gPoint.x, this._gPoint.y);
+    private attackType1(): void {
+        const angleSpeed = 15;
+        TimerAdmin._frameRandomLoop(120, 300, this, () => {
+            for (let index = 0; index < 3; index++) {
+                const bullet = Tools._Node.createPrefab(_Res._list.prefab2D.EnemyBullet.prefab)
+                this._SceneImg('EBparrent').addChild(bullet);
+                bullet.pos(this._gPoint.x, this._gPoint.y);
+                bullet.addComponent(_EnemyBullet);
+                let speed = 0;
+                const gPoint = new Laya.Point(this._gPoint.x, this._gPoint.y);
+                TimerAdmin._frameLoop(1, _EnemyBullet, () => {
+                    let point = Tools._Point.getRoundPos(index * angleSpeed + 180 - angleSpeed, speed += 2, gPoint);
+                    bullet.pos(point.x, point.y);
+                })
+            }
         })
     }
-    private attack2(): void {
-        TimerAdmin._frameRandomLoop(100, 1000, this, () => {
+    private attackType2(): void {
+        TimerAdmin._frameRandomLoop(50, 100, this, () => {
             let bullet = Tools._Node.createPrefab(_Res._list.prefab2D.EnemyBullet.prefab)
-            bullet.addComponent(_EnemyBullet);
             this._SceneImg('EBparrent').addChild(bullet);
             bullet.pos(this._gPoint.x, this._gPoint.y);
+            bullet.addComponent(_EnemyBullet);
+            TimerAdmin._frameLoop(1, _EnemyBullet, () => {
+                bullet.y += 3;
+            })
         })
     }
     private attack3(): void {

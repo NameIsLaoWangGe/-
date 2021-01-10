@@ -1,5 +1,5 @@
 import { Admin, EventAdmin, _SceneName } from "./Lwg";
-import { _LwgEvent } from "./LwgEvent";
+import { _GameEvent } from "../Game/_GameEvent";
 import { _Game } from "../Game/_Game";
 
 export module _Defeated {
@@ -11,7 +11,7 @@ export module _Defeated {
         lwgButton(): void {
             this._btnUp(this._ImgVar('BtnBack'), () => {
                 this._openScene(_SceneName.Start);
-                EventAdmin._notify(_LwgEvent.Game.closeScene);
+                EventAdmin._notify(_GameEvent.Game.closeScene);
             })
         }
     }

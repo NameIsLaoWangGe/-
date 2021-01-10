@@ -1,10 +1,11 @@
 import { Admin, DataAdmin, Effects2D, EventAdmin, TimerAdmin, Tools, _SceneBase, _SceneName } from "../Frame/Lwg";
-import { _LwgEvent } from "../Frame/LwgEvent";
-import { _Boss } from "./_Boss";
-import { _EnemyData } from "./_Enemy";
-import _Hero from "./_Hero";
+import { _GameEvent } from "./_GameEvent";
+import { Boss, _BossData } from "./Boss";
+import { _EnemyData } from "./Enemy";
+import Hero from "./Hero";
 import { _Res } from "../Frame/_PreLoad";
-import { Tree } from "./_Buff";
+import { Tree } from "./Buff";
+import Land from "./Land";
 /**游戏场景模块*/
 export module _Game {
     /**剩余贴图的集合，游戏结束时一并销毁*/
@@ -14,10 +15,12 @@ export module _Game {
     export class Game extends Admin._SceneBase {
         EnemyData: _EnemyData
         lwgOnAwake(): void {
+            // 设置主角
+            this._Owner['Hero'] = Tools._Node.createPrefab(_Res._list.prefab2D.Hero.prefab, this._Owner, [Laya.stage.width / 2, Laya.stage.height * 2 / 3]);
+            this._ImgVar('Hero').addComponent(Hero);
             //设置敌人
             this.EnemyData = new _EnemyData(this._ImgVar('EnemyParent'));
             this.EnemyData.createEnmey();
-            this._ImgVar('Hero').addComponent(_Hero);
 
             // 树
             for (let index = 0; index < this._ImgVar('MiddleScenery').numChildren; index++) {
@@ -26,6 +29,8 @@ export module _Game {
                     element.addComponent(Tree);
                 }
             }
+            // 陆地
+            this._ImgVar('Land').addComponent(Land);
         }
         lwgOnStart(): void {
             TimerAdmin._frameLoop(1, this, () => {
@@ -33,7 +38,7 @@ export module _Game {
             })
         }
         lwgEvent(): void {
-            this._evReg(_LwgEvent.Game.closeScene, () => {
+            this._evReg(_GameEvent.Game.closeScene, () => {
                 for (let index = 0; index < _texArr.length; index++) {
                     const element = _texArr[index] as Laya.Texture;
                     element.destroy(true);
@@ -49,8 +54,8 @@ export module _Game {
                 // Laya.Resource.destroyUnusedResources();
                 this._closeScene();
             });
-            this._evReg(_LwgEvent.Game.creatBoss, () => {
-                _Boss._BossData._ins().createLevelBoss(this._ImgVar('BossParent'));
+            this._evReg(_GameEvent.Game.creatBoss, () => {
+                _BossData._ins().createLevelBoss(this._ImgVar('BossParent'));
             });
         }
     }

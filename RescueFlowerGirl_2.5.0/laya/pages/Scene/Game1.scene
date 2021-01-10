@@ -2,11 +2,11 @@
     "x":0,
     "type":"View",
     "selectedBox":2,
-    "selecteID":32,
+    "selecteID":29,
     "searchKey":"View",
     "props":{"y":0,"x":0,"width":720,"sceneColor":"#000000","height":1280},
     "nodeParent":-1,
-    "maxID":187,
+    "maxID":190,
     "label":"View",
     "isOpen":true,
     "isDirectory":true,
@@ -46,7 +46,7 @@
             "x":15,
             "type":"Image",
             "searchKey":"Image,Yun2",
-            "props":{"y":442,"x":617,"skin":"Game/UI/Game/SceneStyle_01/yun_02.png","name":"Yun2"},
+            "props":{"y":442,"x":617,"skin":"Game/UI/Game/SceneStyle_01/yun_02.png","rotation":0,"name":"Yun2"},
             "nodeParent":2,
             "label":"Yun2",
             "isDirectory":false,
@@ -59,65 +59,8 @@
         {
             "x":15,
             "type":"Image",
-            "searchKey":"Image,Hero,Hero",
-            "props":{"y":1061,"x":371,"width":109,"var":"Hero","pivotY":54,"pivotX":53,"name":"Hero","height":108},
-            "nodeParent":2,
-            "label":"Hero",
-            "isOpen":true,
-            "isDirectory":true,
-            "isAniNode":true,
-            "hasChild":true,
-            "compId":32,
-            "child":[
-                {
-                    "x":30,
-                    "type":"Image",
-                    "searchKey":"Image,Blood,Blood",
-                    "props":{"y":4,"width":62,"var":"Blood","sizeGrid":"10,20,12,16","name":"Blood","height":16,"centerX":0},
-                    "nodeParent":32,
-                    "label":"Blood",
-                    "isOpen":true,
-                    "isDirectory":true,
-                    "isAniNode":true,
-                    "hasChild":true,
-                    "compId":76,
-                    "child":[
-                        {
-                            "x":45,
-                            "type":"Image",
-                            "searchKey":"Image",
-                            "props":{"y":2,"x":2,"width":57,"skin":"Lwg/UI/ui_orthogon_green.png","sizeGrid":"1,1,1,1","height":12},
-                            "nodeParent":76,
-                            "label":"Image",
-                            "isDirectory":false,
-                            "isAniNode":true,
-                            "hasChild":false,
-                            "compId":77,
-                            "child":[
-                                ]
-                        }]
-                },
-                {
-                    "x":30,
-                    "type":"Image",
-                    "searchKey":"Image,Pic,Pic",
-                    "props":{"y":65,"x":55,"width":82,"var":"Pic","skin":"Game/UI/Game/Hero/Hero_01.png","pivotY":45,"pivotX":41,"name":"Pic","height":89},
-                    "nodeParent":32,
-                    "label":"Pic",
-                    "isOpen":true,
-                    "isDirectory":false,
-                    "isAniNode":true,
-                    "hasChild":false,
-                    "compId":48,
-                    "child":[
-                        ]
-                }]
-        },
-        {
-            "x":15,
-            "type":"Image",
             "searchKey":"Image,Content,Content",
-            "props":{"y":300,"x":348,"width":559,"var":"Content","name":"Content","height":532,"anchorY":0.5,"anchorX":0.5},
+            "props":{"y":300,"x":348,"width":559,"var":"Content","rotation":0,"name":"Content","height":532,"anchorY":0.5,"anchorX":0.5},
             "nodeParent":2,
             "label":"Content",
             "isOpen":true,
@@ -212,14 +155,13 @@
                             "props":{"zOrder":15,"y":0,"x":0,"width":472,"var":"MiddleScenery","name":"MiddleScenery","height":479},
                             "nodeParent":30,
                             "label":"MiddleScenery",
-                            "isOpen":true,
+                            "isOpen":false,
                             "isDirectory":true,
                             "isAniNode":true,
                             "hasChild":true,
                             "compId":53,
                             "child":[
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,Tree",
                                     "props":{"y":444,"x":167,"width":245,"scaleY":1,"scaleX":1,"rotation":-159,"name":"Tree","height":283,"anchorY":0.5,"anchorX":0.5},
@@ -232,7 +174,6 @@
                                     "compId":140,
                                     "child":[
                                         {
-                                            "x":75,
                                             "type":"Sprite",
                                             "searchKey":"Sprite",
                                             "props":{"y":103,"x":85,"texture":"Game/UI/Game/SceneStyle_01/botany_02.png","scaleY":0.8,"scaleX":0.8},
@@ -246,7 +187,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image,Blood",
                                             "props":{"zOrder":50,"y":88,"width":49,"sizeGrid":"4,4,4,4","name":"Blood","height":10,"centerX":7},
@@ -259,7 +199,6 @@
                                             "compId":172,
                                             "child":[
                                                 {
-                                                    "x":90,
                                                     "type":"Image",
                                                     "searchKey":"Image,Pic",
                                                     "props":{"y":2,"x":2,"width":45,"skin":"Lwg/UI/ui_orthogon_red.png","sizeGrid":"1,1,1,1","name":"Pic","height":6},
@@ -275,7 +214,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,Tree",
                                     "props":{"y":280,"x":19,"width":213,"scaleY":1,"scaleX":1,"rotation":-109,"name":"Tree","height":259,"anchorY":0.5,"anchorX":0.5},
@@ -288,7 +226,6 @@
                                     "compId":158,
                                     "child":[
                                         {
-                                            "x":75,
                                             "type":"Sprite",
                                             "searchKey":"Sprite",
                                             "props":{"y":76,"x":65,"texture":"Game/UI/Game/SceneStyle_01/botany_02.png","scaleY":0.8,"scaleX":0.8},
@@ -302,7 +239,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image,Blood",
                                             "props":{"zOrder":50,"y":58,"width":49,"sizeGrid":"4,4,4,4","name":"Blood","height":10,"centerX":0},
@@ -315,7 +251,6 @@
                                             "compId":174,
                                             "child":[
                                                 {
-                                                    "x":90,
                                                     "type":"Image",
                                                     "searchKey":"Image,Pic",
                                                     "props":{"y":2,"x":2,"width":45,"skin":"Lwg/UI/ui_orthogon_red.png","sizeGrid":"1,1,1,1","name":"Pic","height":6},
@@ -331,7 +266,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,Tree",
                                     "props":{"y":338,"x":412,"width":228,"scaleY":1,"scaleX":1,"rotation":-241,"name":"Tree","height":257,"anchorY":0.5,"anchorX":0.5},
@@ -344,7 +278,6 @@
                                     "compId":160,
                                     "child":[
                                         {
-                                            "x":75,
                                             "type":"Sprite",
                                             "searchKey":"Sprite",
                                             "props":{"y":73,"x":73,"texture":"Game/UI/Game/SceneStyle_01/botany_02.png","scaleY":0.8,"scaleX":0.8},
@@ -358,7 +291,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image,Blood",
                                             "props":{"zOrder":50,"y":62,"width":49,"sizeGrid":"4,4,4,4","name":"Blood","height":10,"centerX":1},
@@ -371,7 +303,6 @@
                                             "compId":176,
                                             "child":[
                                                 {
-                                                    "x":90,
                                                     "type":"Image",
                                                     "searchKey":"Image,Pic",
                                                     "props":{"y":2,"x":2,"width":45,"skin":"Lwg/UI/ui_orthogon_red.png","sizeGrid":"1,1,1,1","name":"Pic","height":6},
@@ -387,7 +318,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,Tree",
                                     "props":{"y":274.5,"x":456.5,"width":217,"scaleY":1,"scaleX":1,"rotation":-255,"pivotY":110,"pivotX":109,"name":"Tree","height":270},
@@ -400,7 +330,6 @@
                                     "compId":162,
                                     "child":[
                                         {
-                                            "x":75,
                                             "type":"Sprite",
                                             "searchKey":"Sprite",
                                             "props":{"y":33,"x":56,"texture":"Game/UI/Game/SceneStyle_01/botany_03.png","scaleY":1,"scaleX":1},
@@ -414,7 +343,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image,Blood",
                                             "props":{"zOrder":50,"y":21,"width":49,"sizeGrid":"4,4,4,4","name":"Blood","height":10,"centerX":-1},
@@ -427,7 +355,6 @@
                                             "compId":178,
                                             "child":[
                                                 {
-                                                    "x":90,
                                                     "type":"Image",
                                                     "searchKey":"Image,Pic",
                                                     "props":{"y":2,"x":2,"width":45,"skin":"Lwg/UI/ui_orthogon_red.png","sizeGrid":"1,1,1,1","name":"Pic","height":6},
@@ -443,7 +370,6 @@
                                         }]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,Tree",
                                     "props":{"y":70,"x":374,"width":222,"scaleY":1,"scaleX":1,"rotation":-314,"name":"Tree","height":257,"anchorY":0.5,"anchorX":0.5},
@@ -456,7 +382,6 @@
                                     "compId":164,
                                     "child":[
                                         {
-                                            "x":75,
                                             "type":"Sprite",
                                             "searchKey":"Sprite",
                                             "props":{"y":71,"x":74,"texture":"Game/UI/Game/SceneStyle_01/botany_02.png","scaleY":0.8,"scaleX":0.8},
@@ -470,7 +395,6 @@
                                                 ]
                                         },
                                         {
-                                            "x":75,
                                             "type":"Image",
                                             "searchKey":"Image,Blood",
                                             "props":{"zOrder":50,"y":57,"width":49,"sizeGrid":"4,4,4,4","name":"Blood","height":10,"centerX":1},
@@ -483,7 +407,6 @@
                                             "compId":180,
                                             "child":[
                                                 {
-                                                    "x":90,
                                                     "type":"Image",
                                                     "searchKey":"Image,Pic",
                                                     "props":{"y":2,"x":2,"width":45,"skin":"Lwg/UI/ui_orthogon_red.png","sizeGrid":"1,1,1,1","name":"Pic","height":6},
@@ -502,29 +425,18 @@
                         {
                             "x":45,
                             "type":"Image",
-                            "searchKey":"Image,FrontGround",
-                            "props":{"zOrder":20,"width":500,"name":"FrontGround","height":500,"centerY":0,"centerX":0,"anchorY":0.5,"anchorX":0.5},
+                            "searchKey":"Image,Pic",
+                            "props":{"zOrder":20,"visible":true,"skin":"Game/UI/Game/SceneStyle_01/land.png","name":"Pic","centerY":0,"centerX":0,"anchorY":0.5,"anchorX":0.5},
                             "nodeParent":30,
-                            "label":"FrontGround",
-                            "isOpen":false,
-                            "isDirectory":true,
+                            "label":"Pic",
+                            "isOpen":true,
+                            "isDirectory":false,
                             "isAniNode":true,
-                            "hasChild":true,
-                            "compId":45,
+                            "hasChild":false,
+                            "compId":188,
                             "child":[
-                                {
-                                    "type":"Image",
-                                    "searchKey":"Image",
-                                    "props":{"skin":"Game/UI/Game/SceneStyle_01/land.png","centerY":0,"centerX":0},
-                                    "nodeParent":45,
-                                    "label":"Image",
-                                    "isDirectory":false,
-                                    "isAniNode":true,
-                                    "hasChild":false,
-                                    "compId":132,
-                                    "child":[
-                                        ]
-                                }]
+                                ],
+                            "$HIDDEN":false
                         },
                         {
                             "x":45,
@@ -567,6 +479,35 @@
                             "compId":41,
                             "child":[
                                 ]
+                        },
+                        {
+                            "x":45,
+                            "type":"Image",
+                            "searchKey":"Image,Blood,Blood",
+                            "props":{"y":4,"x":0,"width":62,"visible":false,"var":"Blood","sizeGrid":"10,20,12,16","name":"Blood","height":16,"centerX":0},
+                            "nodeParent":30,
+                            "label":"Blood",
+                            "isOpen":true,
+                            "isDirectory":true,
+                            "isAniNode":true,
+                            "hasChild":true,
+                            "compId":187,
+                            "child":[
+                                {
+                                    "x":60,
+                                    "type":"Image",
+                                    "searchKey":"Image,Pic",
+                                    "props":{"y":2,"x":2,"width":57,"skin":"Lwg/UI/ui_orthogon_green.png","sizeGrid":"1,1,1,1","name":"Pic","height":12},
+                                    "nodeParent":187,
+                                    "label":"Pic",
+                                    "isDirectory":false,
+                                    "isAniNode":true,
+                                    "hasChild":false,
+                                    "compId":189,
+                                    "child":[
+                                        ]
+                                }],
+                            "$HIDDEN":true
                         }]
                 },
                 {

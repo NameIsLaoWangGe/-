@@ -26,6 +26,10 @@ export module _Res {
                 url: 'Prefab/LwgGold.json',
                 prefab: null as Laya.Prefab,
             },
+            Hero: {
+                url: 'Prefab/Hero.json',
+                prefab: null as Laya.Prefab,
+            },
             Weapon: {
                 url: 'Prefab/Weapon.json',
                 prefab: null as Laya.Prefab,

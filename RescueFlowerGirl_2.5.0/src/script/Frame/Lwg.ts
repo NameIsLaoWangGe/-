@@ -2181,7 +2181,7 @@ export module lwg {
                 this.ownerSceneName = this._Scene.name;
                 /**初始位置*/
                 this._fPoint = new Laya.Point(this._Owner.x, this._Owner.y);
-                this._fGPoint =this._Parent.localToGlobal(new Laya.Point(this._Owner.x, this._Owner.y)) ;
+                this._fGPoint = this._Parent.localToGlobal(new Laya.Point(this._Owner.x, this._Owner.y));
                 /**初始角度*/
                 this._fRotation = this._Owner.rotation;
                 this.lwgOnAwake();
@@ -6266,15 +6266,19 @@ export module lwg {
             * @param distance 距离
             * @param func 回调函数
             */
-            export function checkTwoDistance(_Sprite1: Laya.Sprite, _Sprite2: Laya.Sprite, distance: number, func: Function): number {
+            export function checkTwoDistance(_Sprite1: Laya.Sprite, _Sprite2: Laya.Sprite, distance: number, func?: Function): number {
+                if (!_Sprite1 || !_Sprite2) {
+                    return;
+                }
                 let Parent1 = _Sprite1.parent as Laya.Sprite;
-                let gPoint1 = Parent1.localToGlobal(new Laya.Point(_Sprite1.x, _Sprite1.y));
                 let Parent2 = _Sprite2.parent as Laya.Sprite;
+                if (!_Sprite1.parent || !_Sprite2.parent) {
+                    return;
+                }
+                let gPoint1 = Parent1.localToGlobal(new Laya.Point(_Sprite1.x, _Sprite1.y));
                 let gPoint2 = Parent2.localToGlobal(new Laya.Point(_Sprite2.x, _Sprite2.y));
-                if (gPoint1.distance(gPoint2.x, gPoint2.y) < distance) {
-                    if (func) {
-                        func();
-                    }
+                if (gPoint1.distance(gPoint2.x, gPoint2.y) <= distance) {
+                    func && func();
                 }
                 return gPoint1.distance(gPoint2.x, gPoint2.y);
             }
@@ -6480,18 +6484,19 @@ export module lwg {
             /**
              *通过prefab创建一个实例
              * @param {Laya.Prefab} prefab 预制体
-             * @param {string} [name] 名称
              * @param {Laya.Node} [Parent] 父节点
              * @param { [number, number]} [point] 坐标
+             * @param { [any]} [script] 添加组件
+             * @param { [number]} [zOrder] 添加脚本
+             * @param {string} [name] 名称
              * @return {*}  {Laya.Sprite}
              */
-            export function createPrefab(prefab: Laya.Prefab, Parent?: Laya.Node, point?: [number, number], zOrder?: number, name?: string): Laya.Sprite {
+            export function createPrefab(prefab: Laya.Prefab, Parent?: Laya.Node, point?: [number, number], script?: any, zOrder?: number, name?: string): Laya.Sprite {
                 let Sp: Laya.Sprite = Laya.Pool.getItemByCreateFun(name ? name : prefab.json['props']['name'], prefab.create, prefab);
                 Parent && Parent.addChild(Sp);
                 point && Sp.pos(point[0], point[1]);
-                if (zOrder) {
-                    Sp.zOrder = zOrder;
-                }
+                script && Sp.addComponent(script);
+                if (zOrder) Sp.zOrder = zOrder;
                 return Sp;
             }
             /**

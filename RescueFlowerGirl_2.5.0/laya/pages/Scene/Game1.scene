@@ -1,12 +1,12 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":2,
-    "selecteID":29,
+    "selectedBox":123,
+    "selecteID":31,
     "searchKey":"View",
     "props":{"y":0,"x":0,"width":720,"sceneColor":"#000000","height":1280},
     "nodeParent":-1,
-    "maxID":190,
+    "maxID":197,
     "label":"View",
     "isOpen":true,
     "isDirectory":true,
@@ -483,61 +483,48 @@
                         {
                             "x":45,
                             "type":"Image",
-                            "searchKey":"Image,Blood,Blood",
-                            "props":{"y":4,"x":0,"width":62,"visible":false,"var":"Blood","sizeGrid":"10,20,12,16","name":"Blood","height":16,"centerX":0},
+                            "searchKey":"Image,Blood",
+                            "props":{"zOrder":30,"y":411,"width":103,"visible":true,"sizeGrid":"10,20,12,16","name":"Blood","height":16,"centerX":11},
                             "nodeParent":30,
                             "label":"Blood",
                             "isOpen":true,
                             "isDirectory":true,
                             "isAniNode":true,
                             "hasChild":true,
-                            "compId":187,
+                            "compId":190,
                             "child":[
                                 {
                                     "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,Pic",
-                                    "props":{"y":2,"x":2,"width":57,"skin":"Lwg/UI/ui_orthogon_green.png","sizeGrid":"1,1,1,1","name":"Pic","height":12},
-                                    "nodeParent":187,
+                                    "props":{"y":2,"x":3,"width":96,"skin":"Lwg/UI/ui_l_orthogon_red.png","sizeGrid":"1,3,1,3","name":"Pic","height":12},
+                                    "nodeParent":190,
                                     "label":"Pic",
                                     "isDirectory":false,
                                     "isAniNode":true,
                                     "hasChild":false,
-                                    "compId":189,
+                                    "compId":191,
                                     "child":[
                                         ]
                                 }],
-                            "$HIDDEN":true
+                            "$HIDDEN":false
                         }]
                 },
                 {
                     "x":30,
                     "type":"Image",
-                    "searchKey":"Image,Heroine,Heroine",
-                    "props":{"width":80,"var":"Heroine","skin":"Game/UI/Game/Heroine/heroine_01.png","pivotY":37,"pivotX":40,"name":"Heroine","height":73,"centerY":0,"centerX":0},
+                    "searchKey":"Image,EnemyHouse,EnemyHouse",
+                    "props":{"zOrder":30,"y":263,"x":280,"width":88,"var":"EnemyHouse","skin":"Lwg/UI/ui_square_c_009.png","pivotY":41,"pivotX":44,"name":"EnemyHouse","height":81},
                     "nodeParent":123,
-                    "label":"Heroine",
-                    "isDirectory":false,
-                    "isAniNode":true,
-                    "hasChild":false,
-                    "compId":31,
-                    "child":[
-                        ]
-                },
-                {
-                    "x":30,
-                    "type":"Image",
-                    "searchKey":"Image, EnemyRoom, EnemyRoom",
-                    "props":{"zOrder":30,"y":263,"x":280,"width":88,"var":" EnemyRoom","skin":"Lwg/UI/ui_square_c_009.png","pivotY":41,"pivotX":44,"name":" EnemyRoom","height":81},
-                    "nodeParent":123,
-                    "label":" EnemyRoom",
-                    "isOpen":false,
+                    "label":"EnemyHouse",
+                    "isOpen":true,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
                     "compId":184,
                     "child":[
                         {
+                            "x":45,
                             "type":"Label",
                             "searchKey":"Label",
                             "props":{"width":77,"valign":"middle","text":"房屋","italic":false,"height":49,"fontSize":30,"centerY":0,"centerX":0,"bold":true,"align":"center"},
@@ -549,6 +536,35 @@
                             "compId":185,
                             "child":[
                                 ]
+                        },
+                        {
+                            "x":45,
+                            "type":"Image",
+                            "searchKey":"Image,Blood",
+                            "props":{"zOrder":30,"y":92,"width":103,"visible":true,"sizeGrid":"10,20,12,16","name":"Blood","height":16,"centerX":0},
+                            "nodeParent":184,
+                            "label":"Blood",
+                            "isOpen":true,
+                            "isDirectory":true,
+                            "isAniNode":true,
+                            "hasChild":true,
+                            "compId":192,
+                            "child":[
+                                {
+                                    "x":60,
+                                    "type":"Image",
+                                    "searchKey":"Image,Pic",
+                                    "props":{"y":2,"x":3,"width":96,"skin":"Lwg/UI/ui_l_orthogon_red.png","sizeGrid":"1,3,1,3","name":"Pic","height":12},
+                                    "nodeParent":192,
+                                    "label":"Pic",
+                                    "isDirectory":false,
+                                    "isAniNode":true,
+                                    "hasChild":false,
+                                    "compId":193,
+                                    "child":[
+                                        ]
+                                }],
+                            "$HIDDEN":false
                         }]
                 }]
         },

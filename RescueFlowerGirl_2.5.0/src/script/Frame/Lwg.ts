@@ -4973,13 +4973,12 @@ export module lwg {
         /**
           * 按中心点旋转动画
           * @param node 节点
-          * @param Frotate 初始角度
           * @param Erotate 最终角度
           * @param time 花费时间
           * @param delayed 延时时间
           * @param func 回调函数
         */
-        export function rotate(node, Erotate: number, time: number, delayed?: number, func?: Function): void {
+        export function rotate(node: Laya.Sprite, Erotate: number, time: number, delayed?: number, func?: Function): void {
             Laya.Tween.to(node, { rotation: Erotate }, time, null, Laya.Handler.create(node, function () {
                 if (func) {
                     func();

@@ -1,12 +1,10 @@
 import { Admin, TimerAdmin, Tools } from "../Frame/Lwg";
 import { _GameEvent } from "./_GameEvent";
-import { _BuffData } from "./Buff";
 import { _Game } from "./_Game";
 
 export class HeroWeapon extends Admin._ObjectBase {
     launchAcc: number = 0;
     dropAcc: number = 0;
-    Pic: Laya.Image;
     get state(): string {
         return this['Statevalue'] ? this['Statevalue'] : 'launch';
     };
@@ -18,20 +16,20 @@ export class HeroWeapon extends Admin._ObjectBase {
         free: 'free',
     }
     getSpeed(): number {
-        return 20 + 0.1;
+        return 15 + 0.1;
     }
     getDropSpeed(): number {
         return this.dropAcc += 0.5;
     }
     lwgOnAwake(): void {
-        this.Pic = this._Owner.getChildByName('Pic') as Laya.Image;
         TimerAdmin._frameLoop(1, this, () => {
             this.move();
         })
     }
     move(): void {
         if (this.getSpeed() > 0) {
-            let p = Tools._Point.angleAndLenByPoint(this._Owner.rotation - 90, this.getSpeed()); this._Owner.x += p.x;
+            let p = Tools._Point.angleAndLenByPoint(this._Owner.rotation - 90, this.getSpeed());
+            this._Owner.x += p.x;
             this._Owner.y += p.y;
         } else {
             this._Owner.y += this.getDropSpeed();
@@ -60,6 +58,4 @@ export class HeroWeapon extends Admin._ObjectBase {
             });
         })
     }
-
-
 }

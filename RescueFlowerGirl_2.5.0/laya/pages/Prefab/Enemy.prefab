@@ -2,7 +2,6 @@
     "x":0,
     "type":"Image",
     "selectedBox":125,
-    "selecteID":129,
     "searchKey":"Image,Enemy",
     "props":{"y":0,"x":0,"width":250,"scaleY":1,"scaleX":1,"presetID":1,"preset":"laya/pages/Prefab/Enemy.prefab","name":"Enemy","isPresetRoot":true,"height":250,"anchorY":0.5,"anchorX":0.5},
     "nodeParent":-1,

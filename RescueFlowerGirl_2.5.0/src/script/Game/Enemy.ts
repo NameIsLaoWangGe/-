@@ -172,16 +172,16 @@ export default class Enemy extends BloodBase {
     /**
      * 在随机方向上随意发射一个子弹
      * */
-    private attackType3(): void {
-        TimerAdmin._frameLoop(80, this, () => {
-            const bullet = this.createBullet();
-            const gPoint = new Laya.Point(this._gPoint.x, this._gPoint.y);
-            const angle = Tools._Number.randomOneBySection(45, 135) + 90;
-            let speed = 5;
-            TimerAdmin._frameLoop(1, bullet, () => {
-                let point = Tools._Point.getRoundPos(angle, speed += 5, gPoint);
-                bullet.pos(point.x, point.y);
-            })
-        })
-    }
+    // private attackType3(): void {
+    //     TimerAdmin._frameLoop(80, this, () => {
+    //         const bullet = this.createBullet();
+    //         const gPoint = new Laya.Point(this._gPoint.x, this._gPoint.y);
+    //         const angle = Tools._Number.randomOneBySection(45, 135) + 90;
+    //         let speed = 5;
+    //         TimerAdmin._frameLoop(1, bullet, () => {
+    //             let point = Tools._Point.getRoundPos(angle, speed += 5, gPoint);
+    //             bullet.pos(point.x, point.y);
+    //         })
+    //     })
+    // }
 }

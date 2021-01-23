@@ -9,6 +9,9 @@ export module record {
     export enum Engine {
 
         'atlas' = '当图集不在索引中，或者无法更新打包时，可以在bin文件夹下手动添加需要用到的图片和文件夹，这样的用以就是不打包，直接用',
+
+        '修改文件夹名字' = '在左边修改文件夹名称不会导致图片资源丢失，会直接映射到游戏中，所以增删改查都在左边进入，下面制作展示和拖入',
+
         'spine_01(骨骼动画)' = '不知道为什么添加了spine(骨骼动画)，然后骨骼动画的图片设置成不打包之后，fileconfig.json文件就不更新打包信息了',
 
         'skeleton(骨骼动画)' = '骨骼动画所用到的图片是不可以打包的，否则取图片时候图片会错乱',
@@ -35,16 +38,38 @@ export module record {
         'mask遮罩问题1' = '节点如果为Image,那么它的遮罩必须为mask，否则可能会导致一些显示问题',
         'mask遮罩问题2' = '有遮罩的图片的坐标必须是整数，不能有小数，否则可能导致遮罩有一根细线的存在，可能是遮罩只会遮罩整数坐标，导致计算错误',
 
-        '截屏对应源码修改' = '截屏  var htmlCanvas: Laya.HTMLCanvas = this.Owner.drawToCanvas(this.Owner.width, this.Owner.height, 0, 0);htmlCanvas.toBase64("image/png"),对应core中的源码修改，才可以上传平台，被平台识别，搜索‘ImageData’，如下:// var imgdata=/*__JS__ */new ImageData(canvasWidth,canvasHeight); //注释这一句，这句是报错的地方;   var canvx = new HTMLCanvas(true); //创建一个canvas,canvx.size(canvasWidth, canvasHeight); //设置宽高;这个和ImageData保持一致;  var ctx2dx = canvx.getContext(`2d`); //获取上下文;var imgdata = ctx2dx.getImageData(0,0,canvasWidth,canvasHeight); //获取imageData，来替代ImageData;',
+        '截屏对应源码修改' = '截屏  var htmlCanvas: Laya.HTMLCanvas = this.Owner.drawToCanvas(this.Owner.width, this.Owner.height, 0, 0);htmlCanvas.toBase64("image/png"),对应core中的源码修改，才可以上传平台，被平台识别，core中搜索‘var imgdata’，修改如下:',
+        // // var imgdata = new ImageData(canvasWidth, canvasHeight);
+        // var canvx = new HTMLCanvas(true); //创建一个canvas
+        // canvx.size(canvasWidth, canvasHeight); //设置宽高，这个和ImageData保持一致
+        // var ctx2dx = canvx.getContext('2d'); //获取上下文
+        // var imgdata = ctx2dx.getImageData(0, 0, canvasWidth, canvasHeight); //获取imageData，来替代ImageData
 
         '2Dtexture' = '2Dtexture不需要打包，一般在unity中导出，如果在laya中也要设置不打包',
 
         'drawToTexture()和drawToCanvas()' = '这两个截图方法都是在新建的canves对象上进行绘制的，这个canves应该默认是舞台或者是设计宽度，所以其中的偏移量应该恰好是绘制的sprite的x，y，才能够刚好进行截图，所以根据sprite的宽高即可控制截图的大小，有时候截不到图，应该是x，y的偏移量问题，宽高和坐标都是sprite的即可',
 
-        '每次赋值新贴图Texture/Texture2D的时候，旧的贴图要删掉'='destroy()掉，否则内存增加很快，尤其是用drawToTexture()和drawToCanvas()绘制的行的贴图',
+        '每次赋值新贴图Texture/Texture2D的时候，旧的贴图要删掉' = 'destroy()掉，否则内存增加很快，尤其是用drawToTexture()和drawToCanvas()绘制的行的贴图',
 
-        'texture/texture2D的引用属性'='贴图如果不new出一个的话，多个sprite用同一个贴图的时候，销毁其中一个贴图必然会引发其他贴图消失，因为是引用关系',
+        'texture/texture2D的引用属性' = '贴图如果不new出一个的话，多个sprite用同一个贴图的时候，销毁其中一个贴图必然会引发其他贴图消失，因为是引用关系',
 
+        '非必要截图保存的图片用tex临时保存' = '只有需要存储的用base64，否则可能导致内存泄漏，经过测试base64字符串所占用的内存大多时候释放不掉',
+
+        mouseEnabled = '节点上的这个属性为true时，可以注册点击事件，为false时，不触发点击事件！',
+        '节点的长宽' = '节点的属性面板中，无论是sprite还是img只要在游戏中需要改变其图片，并且图片的大小发生了变化，只需要把节点的长宽变为空值auto即可，如果不变为auto，无论怎么换图片都是一样的大小，会压缩或者拉伸',
+
+        'povit和anchor作为中心点的区别' = '其实这两个区别很简单，而且分情况使用将会更加强大，povit是具体中心点的xy数值，如果用了povit，那么缩放的时候不会改变这个数值，导致中心点是浮动的，位置是改变的，如果使用anchor作为中心点，是比例，那么无论进行怎么样的缩放都不会改变其中心点的比例位置，但是其位置也不会改变，所以这两种依情况而定',
+
+        '节点的mask' = '规定节点的遮罩的大小和坐标必须为整数，如果有0.5这样的值出现，大概率出现遮罩不完全',
+        '大面积固定遮罩panel' = 'panel可以在固定排布的界面中使用，遮罩更完美',
+    }
+    /**内存*/
+    export enum memory {
+        '节点太多' = '当节点很多并且都处于显示状态时，解决办法：及时影藏显示销毁节点。做好节点管理',
+        '每帧中计算量过大' = '多重循环，或者计算逻辑太过复杂，解决办法：分解计算步骤，拆分for循环，分解计算步骤到前后步骤',
+        '单帧创建大量节点' = '同时创建大量节点也会增加内存负担，解决办法：减少或者分布到两三帧创建，肉眼很难分辨',
+        '提前加载资源' = '如果资源需要的时候在加载，那么依然会出现延时或卡顿，解决办法：提前加载，并且管理起来',
+        '内存泄露' = '如果游戏过程中创建的一些对象，例如贴图，截图，各种动态创建的资源，操作完毕后，依然存在，那么内存会一直占用，导致内存占用越来越大，解决办法：动态创建的对象，必须是在可控范围内，不需要时及时销毁或者，从某个界面出来后统一销毁',
     }
     /**
      * 关于2d物理引擎
@@ -64,17 +89,12 @@ export module record {
     export enum Unity {
         size = '一个模型真实大小测量方法，1、给一个模型增加一个boxCollider组件，此时会自动计算物体的长宽高，并且显示在boxcollider中;2、如果需要调整模型的大小，用scale，这时候会自动调整boxcollider的大小，无需手动调整，但是boxcollider的长宽高数字并不会发生改变，不需要改变这个值。那么此时模型的大小就是boxcollider.size*scale;3.如果物体的父节点也发生了scale缩放，则模型的真实大小为boxcollider.size*scale*parent.size；4、如果父节点还有父节点发生了缩放，那么逐级进行*parent.size',
 
-        IsTrigger = '在box中，这个IsTrigger表示是否为触发器，如果IsTrigger=true，则不受物理属性影响，并且需要用onTriggerEnter进行碰撞检测，如果为false，则用onCollisionEnter方法检测碰撞；如果一个为true另一个为false的两个物体碰撞，那么在他们的挂载的脚本中，检测碰撞也是不一样的，必须和IsTrigger所匹配'
+        IsTrigger = '在box中，这个IsTrigger表示是否为触发器，如果IsTrigger=true，则不受物理属性影响，并且需要用onTriggerEnter进行碰撞检测，如果为false，则用onCollisionEnter方法检测碰撞；如果一个为true另一个为false的两个物体碰撞，那么在他们的挂载的脚本中，检测碰撞也是不一样的，必须和IsTrigger所匹配',
     }
-
-    /**一些变量的初始化*/
-    export enum Init {
-        new = '声明引用变量，必须初始化，否则无法直接赋值，例如 provide point ：Laya.point,可以直接写成provide point ：Laya.Point = new Laya.Point();'
-    }
-
     /**一些变量的初始化*/
     export enum Script {
         parentClass = '目前脚本内部很多通用方法，例如开场动画，消失动画，时间注册，self节点属性，等一些通用属性和方法，需要写个父类，然后开始直接运行父类的这些方法，就可以起到整合作用，不用每次都声明',
+        new = '声明引用变量，必须初始化，否则无法直接赋值，例如 provide point ：Laya.point,可以直接写成provide point ：Laya.Point = new Laya.Point();'
     }
 
     /**解谜游戏中需要注意的问题*/
@@ -134,22 +154,12 @@ export module record {
      * 打双引号的说明已解决或者解决后没有复现
     */
     export enum RiddleBug {
-        'bug_01' = '连接过于平凡的时候，角色可能会掉下去，因为连接属于瞬间移动，那么这一帧当中，产生的距离如果过大，那么可能导致角色脱离地板，状态为空，下一帧补不回来，则直接掉下',
+        'bug_01' = '连接过于频繁的时候，角色可能会掉下去，因为连接属于瞬间移动，那么这一帧当中，产生的距离如果过大，那么可能导致角色脱离地板，状态为空，下一帧补不回来，则直接掉下',
 
         bug_01Pre = '这个问题可以做一个房间范围控制，下一帧的时候，拉回来,碰到地板即可',
 
         bug_02Pre = '左右频繁连接断开，概率性出现角色掉下，大概复现方法，左右频繁连接后，来到第二个房间，此时第二个房间的通道断开了，然后碰到了这个通道，发现关闭后立即反向，直接出房间。原因可能是状态置空没做好，或者是和down通道一样，碰撞宽度要拉长到房间内，这样保持进入房间依然属于通道连接状态，不会发生再次碰撞，然后走了一段路才会离开通道，这样刚开始不会再和通道碰撞',
     }
-
-    /**
-     * 游戏中为解决bug
-     * 打双引号的说明已解决或者解决后没有复现
-     */
-    export enum Node {
-        mouseEnabled = '节点上的这个属性为true时，可以注册点击事件，为false时，不触发点击事件！',
-        '节点的长宽' = '节点的属性面板中，无论是sprite还是img只要在游戏中需要改变其图片，并且图片的大小发生了变化，只需要把节点的长宽变为空值auto即可，如果不变为auto，无论怎么换图片都是一样的大小，会压缩或者拉伸'
-    }
-
 
     export enum Laya3D {
         '_defaultPhysicsMemory' = '如果出现内存不够的情况‘abort Cannot enlarge memory arrays’，在Laya.d3.js中的构造函数中改变this._defaultPhysicsMemory = 512;',
@@ -173,23 +183,13 @@ export module record {
         '资源加载不出来——01' = '分包后，依然需要把分包的一些资源例如场景json、图片等进行预加载，否则可能会出现丢失的情况',
         '资源加载不出来——02' = '上传平台是，如果还有写资源包括文件夹，因为大小写对不上而加载不出来，但是在浏览器中可能会忽略大小写',
     }
-
-    /**语法*/
-    export enum TypeScript {
+    export enum TS {
         " if(0)" = 'false',
         " if(1)" = 'true',
-        '单例模式' = '防止当前类出现多个对象，故称之为单例模式，单例过后和模块差不多，是唯一的，如下：'
-        // export class Img extends Laya.Image {
-        //     private static _instance: Img;
-        //     public static getInstance(): Img {
-        //         if (this._instance == null) {
-        //             this._instance = new Img(Posx, 0);
-        //         }
-        //         return this._instance;
-        //     }
-        // }
-        ,
-        'obj={}和obj：{}的区别' = 'obj={}是属于赋值阶段，里面的任何属性都是一个值，obj：{}是声明阶段，可以不赋值，可以只有类型声明,最好用obj={}',
+    }
+    export enum JS {
+        '优化变量内存1' = '最佳办法是将相对来说是全局变量的值初始化为null，很多类和对象也是全局的或者是一直存在的，里面的属性都可以为null，用过之后也为null，节点，变量都可以这么做，接触引用关系',
+        '优化变量内存2' = 'let,const是局部变量声明，会加快内存处理机制介入，var有时候是垮作用于的，所以某种意义上来说，相对清理较晚',
     }
 
     export enum ObjArray {
@@ -202,17 +202,6 @@ export module record {
         '数据表或者类中方法名称2' = "方法名称首字母小写，如果涉及到了一些验证检查试用check开头",
         '数据表或者类中方法名称3' = "方法名称首字母小写，如果涉及到了一些特殊修改的可有用add，delete，change，find",
 
-        '数据表的管理方法' = '可以将数据表数组当做一个对象，利用其中的get，set方法去修改和获取我们需要的数据表中的各种内容，这样我们更加能清楚的看到get，set方法是属于哪一个数据表，否则如果表过多则会混乱,这里不是内置的get，set方法参考如下：',
-        // export let arr = {
-        //     value: [],
-        //     getName(name): string {
-        //         let str;
-        //         return str;
-        //     },
-        //    setName(): void {
-        //         let str;
-        //     },
-        // }
         '当前页面被多出界面通知事件时的事件名称' = '多个页面通知同一个页面，用事件通知的时候，事件名称为当前页面名称加上被调用也面名称，多种事件则在家上一个字符串，uiname1+uiname2+‘string’，这种写法方便查找，也不用重新枚举事件名称',
 
         '模块中的全局变量名称' = '模块中的全局变量名称用_name命名形式，一看到这样的命名方式则是模块中的全局变量',
@@ -222,7 +211,7 @@ export module record {
         '工具模块方法头名称含义' = '代表了当前分类和作用例如，node开头则是节点相关，random开头是随机，draw开头表示绘制矢量图，d2开头表示2维方面的工具，d3表示3d中的工具，dAll是2d和3d都可用，point表示坐标相关，number表示数字，obj表示处理对象，array表示处理数组，objArray表示处理对象数组，json表示处理json',
 
         '没有声明的变量赋值[name]' = '这样的变量赋值必须只用在当前页面，否则会发生找不到的情况。',
-        '模块中同类型的方法可以重新内置一个模块' = '也可以用类把他们框在一起，方便使用'
+        '模块中同类型的方法可以重新内置一个模块' = '也可以用类把他们框在一起，方便使用',
     }
 
     export enum VSCode {
@@ -230,10 +219,26 @@ export module record {
     }
 
     /**发布和调试*/
-    export enum Issue {
-        '发布OPPO和VIVO包' = '如果出现一些类似于npm、cmd、node-modoul、VIVO-minigame等问题，很有可能是nodejs、npm出现问题，卸载安装nodejs，有时候也有必要安装一下VIVO-minigame，网上搜索‘VIVO-minigame’即可通过npm安装',
+    export let Issue = {
+        OV: {
+            1:'如果出现一些类似于npm、cmd、node-modoul、VIVO-minigame等问题，很有可能是nodejs、npm出现问题，卸载安装nodejs，有时候也有必要安装一下VIVO-minigame，网上搜索‘VIVO-minigame’即可通过npm安装',
+            2: '网上教程可以用eclipse连接手机进行调试，如果控制面板中的安卓连接出现问题，可能是没有驱动，可以通过豌豆荚app，他会自动安装连接的驱动',
+            3:'手机上快应用调试器如果消失了，可以通过设置->应用->显示系统进程找到，卸载重装也是个方法',
+            4:'eclipse和手机连接不上可以尝试拔出usb再插入，或者关闭eclipse再打开',
+            5:'不分包的文件在games文件夹中',
+            分包:{
+                1:'配置分包名与分包路径的字段，分包的对应文件夹下加main.js文件（注：main.js文件不能为空，加一段log就可以了',
+                2:'分包文件夹只能是bin目录下的一级目录，不能二级目录下，否则分包之后会找不到文件路径。name的取名与需要分包的文件夹root名字统一',
+                3:'分包出的rpk文件中，纯分包的总大小（主包+分包）不能超过12M；其中主包不超过4M，单个分包不超过4M，所有分包的总和不超过8M。（不用分包的话：总大小不超过4M）。如下图是分包出的文件，自行检测是否超过大小',
+                4:'分包成功后的小游戏 rpk 需拷贝到手机的 Android/data/com.nearme.instant.platform/files/subPkg 中，subPkg 是自己新建的， 之后便可打开 OPPO 小游戏调试器在 GAME分包 标签页下打开对应小游戏。注：原先games文件的rpk文件最好全都删掉，防止测包时出现读取错误。',
+                5:'有时候电脑上没有com.nearme.instant.platform，可以将包复制到手机上，然后再手机上黏贴进去',
+                6:'分包生成的rpk在和不分生成的rpk只能存在一个包文件，否则不能找到最新的',
+            },
+        }
 
-        '发布OPPO和VIVO包调试' = '网上教程可以用eclipse连接手机进行调试，如果控制面板中的安卓连接出现问题，可能是没有驱动，可以通过豌豆荚app，他会自动安装连接的驱动',
+    }
 
+    export enum Table {
+        'wps表格数字输入逗号自动消失' = '右键单元格设置，数字设置为文本'
     }
 }

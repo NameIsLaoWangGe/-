@@ -4,10 +4,6 @@ import { HeroWeapon } from "./HeroWeapon";
 import { _Res } from "../Frame/_PreLoad";
 import BloodBase from "./BloodBase";
 export default class Hero extends BloodBase {
-    bloodSum: number;
-    bloodPresnt: number;
-    bloodPic: Laya.Image;
-    bloodWidth: number;
     /**攻击间隔*/
     attackInterval: number;
     /**弹道数量*/
@@ -34,12 +30,7 @@ export default class Hero extends BloodBase {
     lwgOnStart(): void {
         TimerAdmin._frameLoop(this.attackInterval, this, () => {
             if (this.mouseP) {
-                for (let index = 1; index < this.ballisticPos[this.ballisticNum].length; index++) {
-                    const pos = this.ballisticPos[this.ballisticNum][index];
-                    if (pos) {
-                        this.createWeapon(Tools._Array.randomGetOne(['blue', 'yellow', 'red']), this._Owner.x + pos[0], this._Owner.y + pos[1]);
-                    }
-                }
+                this.attack_S();
             }
         })
     }
@@ -69,16 +60,7 @@ export default class Hero extends BloodBase {
             }
         })
     }
-    createWeapon(color: string, x: number, y: number): Laya.Image {
-        const Weapon = Tools._Node.createPrefab(_Res._list.prefab2D.Weapon.prefab) as Laya.Image;
-        this._SceneImg('WeaponParent').addChild(Weapon);
-        Weapon.addComponent(HeroWeapon);
-        Weapon.pos(x, y);
-        const Pic = Weapon.getChildByName('Pic') as Laya.Image;
-        Pic.skin = `Game/UI/Game/Hero/Hero_01_weapon_${color}.png`;
-        Weapon.name = color;
-        return Weapon;
-    };
+
     mouseP: Laya.Point;
     move(e: Laya.Event) {
         if (this.mouseP) {
@@ -109,5 +91,45 @@ export default class Hero extends BloodBase {
     }
     lwgOnStageUp(): void {
         this.mouseP = null;
+    }
+    createWeapon(style: string, x: number, y: number): Laya.Image {
+        const Weapon = Tools._Node.createPrefab(_Res._list.prefab2D.Weapon.prefab) as Laya.Image;
+        this._SceneImg('WeaponParent').addChild(Weapon);
+        Weapon.addComponent(HeroWeapon);
+        Weapon.pos(x, y);
+        const Pic = Weapon.getChildByName('Pic') as Laya.Image;
+        Pic.skin = style ? `Game/UI/Game/Hero/Hero_01_weapon_${style}.png` : `Lwg/UI/ui_circle_c_007.png`;
+        Weapon.name = style;
+        return Weapon;
+    };
+
+    /**S型弹幕*/
+    attack_General(): void {
+        const posArr = this.ballisticPos[this.ballisticNum - 1];
+        for (let index = 1; index < posArr.length; index++) {
+            const pos = posArr[index];
+            if (pos) {
+                this.createWeapon(null, this._Owner.x + pos[0], this._Owner.y + pos[1]);
+            }
+        }
+    }
+
+    attack_S_Angle = [
+        [0],
+        [-5, 5],
+        [-10, 0, 10],
+        [-15, -5, 5, 15],
+        [-20, -10, 0, 10, 20],
+        [-25, -15, 5, 5, 15, 25],
+        [-30, -20, -10, 0, 10, 20, 30],
+        [-35, -25, -15, 5, 5, 15, 25, 35]
+    ];
+    /**S型弹幕*/
+    attack_S(): void {
+        const angleArr = this.attack_S_Angle[this.ballisticNum - 1];
+        for (let index = 0; index < angleArr.length; index++) {
+            const weapon = this.createWeapon(null, this._Owner.x, this._Owner.y);
+            weapon.rotation = angleArr[index];
+        }
     }
 }

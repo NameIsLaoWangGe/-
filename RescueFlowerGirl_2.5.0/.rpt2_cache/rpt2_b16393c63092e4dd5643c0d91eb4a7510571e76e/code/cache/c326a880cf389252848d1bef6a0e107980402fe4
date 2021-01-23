@@ -1,0 +1,12 @@
+{
+  "code": "import { Animation2D, TimerAdmin } from \"../Frame/Lwg\";\r\nimport BloodBase from \"./BloodBase\";\r\nimport { _GameEvent } from \"./_GameEvent\";\r\nexport default class EnemyLand extends BloodBase {\r\n    constructor() {\r\n        super(...arguments);\r\n        this.landStage = false;\r\n    }\r\n    lwgOnAwake() {\r\n        this.bloodInit(50);\r\n        this._ImgChild('Blood').visible = false;\r\n        TimerAdmin._frameLoop(1, this, () => {\r\n            this._Owner.rotation += 0.1;\r\n        });\r\n    }\r\n    lwgEvent() {\r\n        this._evReg(_GameEvent.Game.enemyLandStage, () => {\r\n            Laya.timer.clearAll(this);\r\n            this.attack();\r\n            const time = Math.abs(this._Owner.rotation % 360) * 10;\r\n            Animation2D.rotate(this._Owner, 0, time, 0, () => {\r\n                this._Owner.rotation = 0;\r\n                this._ImgChild('Blood').visible = true;\r\n                this.landStage = true;\r\n            });\r\n        });\r\n        this._evReg(_GameEvent.Game.enemyLandCheckWeapon, (Weapon, numBlood) => {\r\n            this.checkOtherRule(Weapon, 160, this.landStage ? numBlood : 0);\r\n        });\r\n    }\r\n    deathFunc() {\r\n        this._evNotify(_GameEvent.Game.enemyHouseStage);\r\n    }\r\n}\r\n",
+  "references": [
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Frame/Lwg.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Frame/_PreLoad.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Game/BloodBase.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Game/Boss.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Game/BossBullet.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Game/_Game.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Game/_GameEvent.ts"
+  ]
+}

@@ -1,4 +1,4 @@
-import { Adaptive, Admin, Click, Platform, SceneAnimation, _LwgInit, _LwgInitScene } from "./Lwg";
+import { Adaptive, Admin, Click, Platform, SceneAnimation, _LwgInit, _LwgInitScene, _SceneName } from "./Lwg";
 import { _Game } from "../Game/_Game";
 import { _Guide } from "./_Guide";
 import { _PreLoad } from "./_PreLoad";
@@ -17,13 +17,13 @@ export default class LwgInit extends _LwgInitScene {
 
         Platform._Ues.value = Platform._Tpye.Web;
         Laya.Stat.show();
-        SceneAnimation._Use.value = SceneAnimation._Type.fadeOut;
-        SceneAnimation._closeSwitch = true;
-        SceneAnimation._openSwitch = false;
-
+        SceneAnimation._openSwitch.value = true;
+        SceneAnimation._Use.value = {
+            class: SceneAnimation._fadeOut.Open,
+            type: null,
+        };
         Click._Use.value = Click._Type.reduce;
         Adaptive._Use.value = [1280, 720];
-        Admin._GuideControl.switch = false;
         Admin._Moudel = {
             _PreLoad: _PreLoad,
             _PreLoadCutIn: _PreLoadCutIn,
@@ -40,6 +40,10 @@ export default class LwgInit extends _LwgInitScene {
             // _Compound: _Compound,
         };
         // new ZJADMgr();
+    }
+
+    lwgOnStart(): void {
+        this._openScene(_SceneName.PreLoad);
     }
 }
 

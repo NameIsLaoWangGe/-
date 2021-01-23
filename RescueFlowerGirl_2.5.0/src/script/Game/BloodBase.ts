@@ -2,7 +2,9 @@ import { Admin, Effects2D, TimerAdmin, Tools } from "../Frame/Lwg";
 import { _Res } from "../Frame/_PreLoad";
 import { Boss } from "./Boss";
 import { BossBullet } from "./BossBullet";
+import EnemyBullet from "./EnemyBullet";
 export default class BloodBase extends Admin._ObjectBase {
+    BloodNode: Laya.Image;
     bloodSum: number;
     bloodPresnt: number;
     bloodPic: Laya.Image;
@@ -34,7 +36,7 @@ export default class BloodBase extends Admin._ObjectBase {
         if (this.bloodPresnt <= 0) {
             this.deathFunc();
             this.deathEffect();
-            this._Owner.destroy();
+            this._ownerDestroy();
         } else {
             this.subOnceFunc();
         }
@@ -58,7 +60,9 @@ export default class BloodBase extends Admin._ObjectBase {
             Effects2D._Particle._spray(Laya.stage, this._gPoint, [10, 30])
         }
     }
-    attack():void{
+
+    /**环形攻击*/
+    attack(): void {
         let time = 0;
         const num = 20;
         TimerAdmin._frameRandomLoop(50, 100, this, () => {
@@ -71,5 +75,24 @@ export default class BloodBase extends Admin._ObjectBase {
                 bullet.addComponent(BossBullet);
             }
         }, true);
+    }
+    createBullet(): Laya.Image {
+        const bullet = Tools._Node.createPrefab(_Res._list.prefab2D.EnemyBullet.prefab, this._SceneImg('EBparrent'), [this._gPoint.x, this._gPoint.y], EnemyBullet) as Laya.Image;
+        return bullet;
+    }
+    /**
+     * 在随机方向上随意发射一个子弹
+     * */
+    attackType3(): void {
+        TimerAdmin._frameLoop(80, this, () => {
+            const bullet = this.createBullet();
+            const gPoint = new Laya.Point(this._gPoint.x, this._gPoint.y);
+            const angle = Tools._Number.randomOneBySection(45, 135) + 90;
+            let speed = 5;
+            TimerAdmin._frameLoop(1, bullet, () => {
+                let point = Tools._Point.getRoundPos(angle, speed += 5, gPoint);
+                bullet.pos(point.x, point.y);
+            })
+        })
     }
 }

@@ -1,0 +1,8 @@
+{
+  "code": "import { TimerAdmin, Tools } from \"../Frame/Lwg\";\r\nimport _EnemyBullet from \"./EnemyBullet\";\r\nimport { _Res } from \"../Frame/_PreLoad\";\r\nexport class BossBullet extends _EnemyBullet {\r\n    lwgOnStart() {\r\n        this.move();\r\n        this.checkHeroAndLevel();\r\n    }\r\n    move() {\r\n        TimerAdmin._frameLoop(1, this, () => {\r\n            let point = Tools._Point.getRoundPos(this._Owner.rotation, this.speed += 2, this._fGPoint);\r\n            this._Owner.x = point.x;\r\n            this._Owner.y = point.y;\r\n        });\r\n    }\r\n}\r\nexport class Skill {\r\n    static _ins() {\r\n        if (!this.ins) {\r\n            this.ins = new Skill();\r\n        }\r\n        return this.ins;\r\n    }\r\n    round() {\r\n        for (let index = 0; index < 20; index++) {\r\n            const bullet = Tools._Node.createPrefab(_Res._list.prefab2D.EnemyBullet.prefab);\r\n            bullet;\r\n        }\r\n    }\r\n}\r\n",
+  "references": [
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Frame/Lwg.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Game/EnemyBullet.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Frame/_PreLoad.ts"
+  ]
+}

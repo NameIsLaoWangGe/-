@@ -1,0 +1,10 @@
+{
+  "code": "import { Admin, EventAdmin, _SceneName } from \"./Lwg\";\r\nimport { _GameEvent } from \"../Game/_GameEvent\";\r\nexport var _Victory;\r\n(function (_Victory) {\r\n    class _data {\r\n    }\r\n    _Victory._data = _data;\r\n    function _init() {\r\n    }\r\n    _Victory._init = _init;\r\n    class Victory extends Admin._SceneBase {\r\n        lwgButton() {\r\n            this._btnUp(this._ImgVar('BtnGet'), () => {\r\n                this._openScene(_SceneName.Start);\r\n                EventAdmin._notify(_GameEvent.Game.closeScene);\r\n            });\r\n        }\r\n    }\r\n    _Victory.Victory = Victory;\r\n})(_Victory || (_Victory = {}));\r\nexport default _Victory.Victory;\r\n",
+  "references": [
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/TJ/Admanager.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Frame/Lwg.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Game/_GameEvent.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Game/_Game.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Frame/_Share.ts"
+  ]
+}

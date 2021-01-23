@@ -1,0 +1,7 @@
+{
+  "code": "import { Admin, TimerAdmin, Tools } from \"../Frame/Lwg\";\r\nimport { GameEvent } from \"./GameEvent\";\r\nexport default class EnemyBullet extends Admin._ObjectBase {\r\n    constructor() {\r\n        super(...arguments);\r\n        this.speed = 2;\r\n    }\r\n    lwgOnStart() {\r\n        this.checkHeroAndLevel();\r\n    }\r\n    move() {\r\n        this[`moveType${this._Owner['_moveType']['moveNum']}`]();\r\n    }\r\n    moveType1() {\r\n        TimerAdmin._frameLoop(1, this, () => {\r\n            let point = Tools._Point.getRoundPos(this._Owner['_moveType']['angle'], this.speed += 2, this._Owner['_moveType']['point']);\r\n            this._Owner.pos(point.x, point.y);\r\n        });\r\n    }\r\n    moveType2() {\r\n        TimerAdmin._frameLoop(1, this, () => {\r\n            this._Owner.y += 3;\r\n        });\r\n    }\r\n    moveType3() {\r\n    }\r\n    checkHeroAndLevel() {\r\n        TimerAdmin._frameLoop(1, this, () => {\r\n            !Tools._Node.leaveStage(this._Owner, () => {\r\n                this._Owner.removeSelf();\r\n            }) && Tools._Node.checkTwoDistance(this._Owner, this._SceneImg('Hero'), 40, () => {\r\n                this._Owner.removeSelf();\r\n                this._evNotify(GameEvent.Game.heroBlood, [1]);\r\n            });\r\n        });\r\n    }\r\n}\r\n",
+  "references": [
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Frame/Lwg.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Game/GameEvent.ts"
+  ]
+}

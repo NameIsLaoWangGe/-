@@ -1,0 +1,8 @@
+{
+  "code": "import EnemyBase from \"./EnemyBase\";\r\nimport { _GameEvent } from \"./_GameEvent\";\r\nexport default class Land extends EnemyBase {\r\n    lwgOnAwake() {\r\n        this.bloodInit(1);\r\n    }\r\n    lwgEvent() {\r\n        this._evReg(_GameEvent.Game.landCheckWeapon, (Weapon, numBlood) => {\r\n            this.checkWeaponRule(Weapon, 160, 0);\r\n        });\r\n    }\r\n}\r\n",
+  "references": [
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Game/EnemyBase.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Game/_Game.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Game/_GameEvent.ts"
+  ]
+}

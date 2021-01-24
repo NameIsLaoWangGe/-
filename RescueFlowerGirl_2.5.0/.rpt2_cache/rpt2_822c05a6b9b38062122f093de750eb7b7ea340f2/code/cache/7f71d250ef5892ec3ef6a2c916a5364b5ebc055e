@@ -1,7 +1,0 @@
-{
-  "code": "import { DataAdmin, Tools } from \"../Frame/Lwg\";\r\nimport { _Res } from \"../Frame/_PreLoad\";\r\nexport var _GameData;\r\n(function (_GameData) {\r\n    class _Buff extends DataAdmin._Table {\r\n        constructor() {\r\n            super(...arguments);\r\n            this.type = {\r\n                Num: 'Num',\r\n                S: 'S',\r\n            };\r\n        }\r\n        static _ins() {\r\n            if (!this.ins) {\r\n                this.ins = new _Buff();\r\n            }\r\n            return this.ins;\r\n        }\r\n        createBuff(type, Parent, x, y, script) {\r\n            const Buff = Tools._Node.createPrefab(_Res._list.prefab2D.Buff.prefab, Parent, [x, y], script);\r\n            Buff['buffType'] = type;\r\n            return Buff;\r\n        }\r\n    }\r\n    _GameData._Buff = _Buff;\r\n})(_GameData || (_GameData = {}));\r\n",
-  "references": [
-    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Frame/Lwg.ts",
-    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Frame/_PreLoad.ts"
-  ]
-}

@@ -7065,58 +7065,26 @@
         })(Guide = _GameEvent.Guide || (_GameEvent.Guide = {}));
         let Game;
         (function (Game) {
-            Game["checkEnemyBullet"] = "_Game_bulletCheckHero";
-            Game["closeScene"] = "_Game_closeScene";
-            Game["checkBuff"] = "_Game_checkBuff";
-            Game["treeCheckWeapon"] = "_Game_treeCheckWeapon";
-            Game["enemyCheckWeapon"] = "_Game_enemyCheckWeapon";
-            Game["enemyLandCheckWeapon"] = "_Game_enemyLandCheckWeapon";
-            Game["enemyHouseCheckWeapon"] = "_Game_enemyHouseCheckWeapon";
-            Game["bossCheckWeapon"] = "_Game_bossCheckWeapon";
-            Game["heroineCheckWeapon"] = "_Game_heroineCheckWeapon";
-            Game["enemyStage"] = "_Game_enemyStage";
-            Game["enemyLandStage"] = "_Game_landStage";
-            Game["enemyHouseStage"] = "_Game_enemyHouseStage";
-            Game["bossStage"] = "_Game_bossStage";
-            Game["heroineStage"] = "_Game_heroineStage";
+            Game["checkEnemyBullet"] = "Game_bulletCheckHero";
+            Game["closeScene"] = "Game_closeScene";
+            Game["checkBuff"] = "GamecheckBuff";
+            Game["treeCheckWeapon"] = "GametreeCheckWeapon";
+            Game["enemyCheckWeapon"] = "GameenemyCheckWeapon";
+            Game["enemyLandCheckWeapon"] = "GameenemyLandCheckWeapon";
+            Game["enemyHouseCheckWeapon"] = "GameenemyHouseCheckWeapon";
+            Game["bossCheckWeapon"] = "GamebossCheckWeapon";
+            Game["heroineCheckWeapon"] = "GameheroineCheckWeapon";
+            Game["enemyStage"] = "GameenemyStage";
+            Game["enemyLandStage"] = "GamelandStage";
+            Game["enemyHouseStage"] = "GameenemyHouseStage";
+            Game["bossStage"] = "GamebossStage";
+            Game["heroineStage"] = "GameheroineStage";
+            Game["addEnemy"] = "GameaddEnemy";
         })(Game = _GameEvent.Game || (_GameEvent.Game = {}));
         let Task;
         (function (Task) {
         })(Task = _GameEvent.Task || (_GameEvent.Task = {}));
     })(_GameEvent || (_GameEvent = {}));
-
-    class EnemyBullet extends Admin._ObjectBase {
-        constructor() {
-            super(...arguments);
-            this.speed = 2;
-        }
-        lwgOnStart() {
-            this.checkHeroAndLevel();
-        }
-        move() {
-            this[`moveType${this._Owner['_moveType']['moveNum']}`]();
-        }
-        moveType1() {
-            TimerAdmin._frameLoop(1, this, () => {
-                let point = Tools._Point.getRoundPos(this._Owner['_moveType']['angle'], this.speed += 2, this._Owner['_moveType']['point']);
-                this._Owner.pos(point.x, point.y);
-            });
-        }
-        moveType2() {
-            TimerAdmin._frameLoop(1, this, () => {
-                this._Owner.y += 3;
-            });
-        }
-        moveType3() {
-        }
-        checkHeroAndLevel() {
-            TimerAdmin._frameLoop(1, this, () => {
-                !Tools._Node.leaveStage(this._Owner, () => {
-                    this._Owner.removeSelf();
-                }) && this._evNotify(_GameEvent.Game.checkEnemyBullet, [this._Owner, 1]);
-            });
-        }
-    }
 
     var _Res;
     (function (_Res) {
@@ -7195,6 +7163,39 @@
         _PreLoad.PreLoad = PreLoad;
     })(_PreLoad || (_PreLoad = {}));
     var _PreLoad$1 = _PreLoad.PreLoad;
+
+    class EnemyBullet extends Admin._ObjectBase {
+        constructor() {
+            super(...arguments);
+            this.speed = 2;
+        }
+        lwgOnStart() {
+            this.checkHeroAndLevel();
+        }
+        move() {
+            this[`moveType${this._Owner['_moveType']['moveNum']}`]();
+        }
+        moveType1() {
+            TimerAdmin._frameLoop(1, this, () => {
+                let point = Tools._Point.getRoundPos(this._Owner['_moveType']['angle'], this.speed += 2, this._Owner['_moveType']['point']);
+                this._Owner.pos(point.x, point.y);
+            });
+        }
+        moveType2() {
+            TimerAdmin._frameLoop(1, this, () => {
+                this._Owner.y += 3;
+            });
+        }
+        moveType3() {
+        }
+        checkHeroAndLevel() {
+            TimerAdmin._frameLoop(1, this, () => {
+                !Tools._Node.leaveStage(this._Owner, () => {
+                    this._Owner.removeSelf();
+                }) && this._evNotify(_GameEvent.Game.checkEnemyBullet, [this._Owner, 1]);
+            });
+        }
+    }
 
     class BossBullet extends EnemyBullet {
         lwgOnStart() {
@@ -7282,170 +7283,6 @@
         }
     }
 
-    class Heroine extends BloodBase {
-        constructor() {
-            super(...arguments);
-            this.heroineStage = true;
-        }
-        lwgOnAwake() {
-            this.bloodInit(50);
-            this.attack();
-        }
-        lwgEvent() {
-            this._evReg(_GameEvent.Game.heroineCheckWeapon, (Weapon, numBlood) => {
-                this.checkOtherRule(Weapon, 50, this.heroineStage ? numBlood : 0);
-            });
-        }
-        deathFunc() {
-            this._openScene('Victory', false);
-        }
-    }
-
-    class _EnemyData extends DataAdmin._Table {
-        constructor(_EnemyParent) {
-            super();
-            this._otherPro = {
-                quantity: "quantity",
-                shellNum: "shellNum",
-                blood: 'blood',
-                boss: 'boss',
-                speed: 'speed',
-            };
-            this.EnemyParent = _EnemyParent;
-            this._arr = _Res._list.json.Enemy.dataArr;
-            this.levelData = this._getObjByName(`level${Admin._game.level}`);
-            this.quantity = this.levelData['quantity'];
-            this.presentQuantity = 0;
-            EventAdmin._register('presentQuantity', this, () => {
-                this.presentQuantity--;
-            });
-        }
-        get presentQuantity() {
-            return this['_presentQuantity'];
-        }
-        ;
-        set presentQuantity(val) {
-            this['_presentQuantity'] = val;
-            if (val < 10) {
-                this.createEnmey();
-            }
-            if (val === 0 && this.quantity === 0) {
-                EventAdmin._notify(_GameEvent.Game.enemyLandStage);
-            }
-        }
-        ;
-        createEnmey() {
-            this.quantity--;
-            if (this.quantity < 0) {
-                this.quantity = 0;
-                return;
-            }
-            this.presentQuantity++;
-            const shellNum = this.levelData[this._otherPro.shellNum];
-            let shellNumTime = 0;
-            const element = Tools._Node.createPrefab(_Res._list.prefab2D.Enemy.prefab, this.EnemyParent);
-            shellNumTime++;
-            const color = Tools._Array.randomGetOne(['blue', 'yellow', 'red']);
-            element.name = `${color}${color}`;
-            let speed = Tools._Number.randomOneBySection(this.levelData[this._otherPro.speed][0], this.levelData[this._otherPro.speed][1]);
-            speed = Tools._Number.randomOneHalf() == 0 ? -speed : speed;
-            element['_EnemyData'] = {
-                shell: shellNumTime <= shellNum ? true : false,
-                blood: this.levelData['blood'],
-                angle: Tools._Number.randomOneBySection(0, 360),
-                speed: speed,
-                color: color,
-            };
-            element.addComponent(Enemy);
-        }
-    }
-    class Enemy extends BloodBase {
-        lwgOnAwake() {
-            this.generalProInit();
-            this.bloodInit(this._Owner['_EnemyData']['blood']);
-            this.ranAttackNum = Tools._Number.randomOneBySection(1, 3, true);
-        }
-        generalProInit() {
-            this._Owner.pos(this._SceneImg('Land').width / 2, this._SceneImg('Land').height / 2);
-            this.Shell = this._Owner.getChildByName('Shell');
-            this.Shell.removeSelf();
-            this.Pic = this._Owner.getChildByName('Pic');
-            if (this._Owner['_EnemyData']['color']) {
-                this.Pic.skin = `Game/UI/Game/Enemy/enemy_01_${this._Owner['_EnemyData']['color']}.png`;
-            }
-            const angle = this._Owner['_EnemyData']['angle'];
-            this._Owner.rotation = angle;
-            this.speed = this._Owner['_EnemyData']['speed'];
-            this.groundRadius = 200;
-        }
-        lwgOnStart() {
-            this.attack();
-            this.appear(() => {
-                this.move();
-            });
-        }
-        appear(func) {
-            let radius = 0;
-            const radiusSpeed = 2;
-            const time = 220 / radiusSpeed;
-            TimerAdmin._frameNumLoop(1, time, this, () => {
-                radius += radiusSpeed;
-                let point = Tools._Point.getRoundPos(this._Owner.rotation, radius, new Laya.Point(this._SceneImg('Land').width / 2, this._SceneImg('Land').height / 2));
-                this._Owner.x = point.x;
-                this._Owner.y = point.y;
-            }, () => {
-                func();
-            });
-        }
-        attack() {
-            this[`attackType${this.ranAttackNum}`]();
-        }
-        move() {
-            TimerAdmin._frameLoop(1, this, () => {
-                let point = Tools._Point.getRoundPos(this._Owner.rotation += this.speed, 220, new Laya.Point(this._SceneImg('Land').width / 2, this._SceneImg('Land').height / 2));
-                this._Owner.x = point.x;
-                this._Owner.y = point.y;
-            });
-        }
-        deathFunc() {
-            this._evNotify('presentQuantity');
-            if (this._Owner.name === 'Boss') {
-                Tools._Node.createPrefab(_Res._list.prefab2D.Heroine.prefab, this._Parent, [this._Owner.x, this._Owner.y], Heroine);
-            }
-        }
-        lwgEvent() {
-            this._evReg(_GameEvent.Game.enemyCheckWeapon, (Weapon, numBlood) => {
-                this.checkOtherRule(Weapon, 30, numBlood);
-            });
-        }
-        createBullet() {
-            const bullet = Tools._Node.createPrefab(_Res._list.prefab2D.EnemyBullet.prefab, this._SceneImg('EBparrent'), [this._gPoint.x, this._gPoint.y], EnemyBullet);
-            return bullet;
-        }
-        attackType1() {
-            const angleSpeed = 15;
-            TimerAdmin._frameRandomLoop(120, 300, this, () => {
-                for (let index = 0; index < 3; index++) {
-                    const bullet = this.createBullet();
-                    let speed = 0;
-                    const gPoint = new Laya.Point(this._gPoint.x, this._gPoint.y);
-                    TimerAdmin._frameLoop(1, bullet, () => {
-                        let point = Tools._Point.getRoundPos(index * angleSpeed + 180 - angleSpeed, speed += 2, gPoint);
-                        bullet.pos(point.x, point.y);
-                    });
-                }
-            });
-        }
-        attackType2() {
-            TimerAdmin._frameRandomLoop(50, 100, this, () => {
-                const bullet = this.createBullet();
-                TimerAdmin._frameLoop(1, bullet, () => {
-                    bullet.y += 3;
-                });
-            });
-        }
-    }
-
     class HeroWeapon extends Admin._ObjectBase {
         constructor() {
             super(...arguments);
@@ -7509,23 +7346,8 @@
         }
     }
 
-    class Hero extends BloodBase {
-        constructor() {
-            super(...arguments);
-            this.attack_S_Angle = [
-                [0],
-                [-5, 5],
-                [-10, 0, 10],
-                [-15, -5, 5, 15],
-                [-20, -10, 0, 10, 20],
-                [-25, -15, 5, 5, 15, 25],
-                [-30, -20, -10, 0, 10, 20, 30],
-                [-35, -25, -15, 5, 5, 15, 25, 35]
-            ];
-        }
-        lwgOnAwake() {
-            this.bloodInit(50);
-            this.attackInterval = 10;
+    class HeroAttack {
+        constructor(_WeaponParent, _Hero) {
             this.ballisticNum = 1;
             this.ballisticPos = [
                 [[0, 0]],
@@ -7536,12 +7358,59 @@
                 [[-50, 0], [-30, 0], [-10, 0], [10, 0], [30, 0], [50, 0]],
                 [[-60, 0], [-40, 0], [-20, 0], [0, 0], [20, 0], [40, 0], [60, 0]],
             ];
-            this.time = 0;
+            this.attack_S_Angle = [
+                [0],
+                [-5, 5],
+                [-10, 0, 10],
+                [-15, -5, 5, 15],
+                [-20, -10, 0, 10, 20],
+                [-25, -15, -5, 5, 15, 25],
+                [-30, -20, -10, 0, 10, 20, 30],
+                [-35, -25, -15, 5, 5, 15, 25, 35],
+            ];
+            this.WeaponParent = _WeaponParent;
+            this.Hero = _Hero;
+        }
+        createWeapon(style, x, y) {
+            const Weapon = Tools._Node.createPrefab(_Res._list.prefab2D.Weapon.prefab);
+            this.WeaponParent.addChild(Weapon);
+            Weapon.addComponent(HeroWeapon);
+            Weapon.pos(x, y);
+            const Pic = Weapon.getChildByName('Pic');
+            Pic.skin = style ? `Game/UI/Game/Hero/Hero_01_weapon_${style}.png` : `Lwg/UI/ui_circle_c_007.png`;
+            Weapon.name = style;
+            return Weapon;
+        }
+        ;
+        attack_General() {
+            const posArr = this.ballisticPos[this.ballisticNum - 1];
+            for (let index = 1; index < posArr.length; index++) {
+                const pos = posArr[index];
+                if (pos) {
+                    this.createWeapon(null, this.Hero.x + pos[0], this.Hero.y + pos[1]);
+                }
+            }
+        }
+        attack_S() {
+            const angleArr = this.attack_S_Angle[this.ballisticNum - 1];
+            for (let index = 0; index < angleArr.length; index++) {
+                const weapon = this.createWeapon(null, this.Hero.x, this.Hero.y);
+                weapon.rotation = angleArr[index];
+            }
+        }
+    }
+
+    class Hero extends BloodBase {
+        lwgOnAwake() {
+            this.bloodInit(50);
+            this.attackInterval = 10;
+            this._HeroAttack = new HeroAttack(this._SceneImg('WeaponParent'), this._Owner);
+            this._HeroAttack.ballisticNum = 1;
         }
         lwgOnStart() {
             TimerAdmin._frameLoop(this.attackInterval, this, () => {
                 if (this.mouseP) {
-                    this.attack_S();
+                    this._HeroAttack.attack_S();
                 }
             });
         }
@@ -7555,7 +7424,7 @@
             this._evReg(_GameEvent.Game.checkBuff, (type) => {
                 switch (type) {
                     case 0:
-                        this.ballisticNum++;
+                        this._HeroAttack.ballisticNum++;
                         break;
                     case 1:
                         break;
@@ -7599,32 +7468,156 @@
         lwgOnStageUp() {
             this.mouseP = null;
         }
-        createWeapon(style, x, y) {
-            const Weapon = Tools._Node.createPrefab(_Res._list.prefab2D.Weapon.prefab);
-            this._SceneImg('WeaponParent').addChild(Weapon);
-            Weapon.addComponent(HeroWeapon);
-            Weapon.pos(x, y);
-            const Pic = Weapon.getChildByName('Pic');
-            Pic.skin = style ? `Game/UI/Game/Hero/Hero_01_weapon_${style}.png` : `Lwg/UI/ui_circle_c_007.png`;
-            Weapon.name = style;
-            return Weapon;
+    }
+
+    class Heroine extends BloodBase {
+        constructor() {
+            super(...arguments);
+            this.heroineStage = true;
         }
-        ;
-        attack_General() {
-            const posArr = this.ballisticPos[this.ballisticNum - 1];
-            for (let index = 1; index < posArr.length; index++) {
-                const pos = posArr[index];
-                if (pos) {
-                    this.createWeapon(null, this._Owner.x + pos[0], this._Owner.y + pos[1]);
+        lwgOnAwake() {
+            this.bloodInit(50);
+            this.attack();
+        }
+        lwgEvent() {
+            this._evReg(_GameEvent.Game.heroineCheckWeapon, (Weapon, numBlood) => {
+                this.checkOtherRule(Weapon, 50, this.heroineStage ? numBlood : 0);
+            });
+        }
+        deathFunc() {
+            this._openScene('Victory', false);
+        }
+    }
+
+    class Enemy extends BloodBase {
+        lwgOnAwake() {
+            this.generalProInit();
+            this.bloodInit(this._Owner['_EnemyData']['blood']);
+            this.ranAttackNum = Tools._Number.randomOneBySection(1, 3, true);
+        }
+        generalProInit() {
+            this._Owner.pos(this._SceneImg('Land').width / 2, this._SceneImg('Land').height / 2);
+            this._ImgChild('Shell').removeSelf();
+            if (this._Owner['_EnemyData']['color']) {
+                this._ImgChild('Pic').skin = `Game/UI/Game/Enemy/enemy_01_${this._Owner['_EnemyData']['color']}.png`;
+            }
+            const angle = this._Owner['_EnemyData']['angle'];
+            this._Owner.rotation = angle;
+            this.speed = this._Owner['_EnemyData']['speed'];
+            this.groundRadius = 200;
+        }
+        lwgOnStart() {
+            this.attack();
+            this.appear(() => {
+                this.move();
+            });
+        }
+        appear(func) {
+            let radius = 0;
+            const radiusSpeed = 2;
+            const time = 220 / radiusSpeed;
+            TimerAdmin._frameNumLoop(1, time, this, () => {
+                radius += radiusSpeed;
+                let point = Tools._Point.getRoundPos(this._Owner.rotation, radius, new Laya.Point(this._SceneImg('Land').width / 2, this._SceneImg('Land').height / 2));
+                this._Owner.x = point.x;
+                this._Owner.y = point.y;
+            }, () => {
+                func();
+            });
+        }
+        attack() {
+            this[`attackType${this.ranAttackNum}`]();
+        }
+        move() {
+            TimerAdmin._frameLoop(1, this, () => {
+                let point = Tools._Point.getRoundPos(this._Owner.rotation += this.speed, 220, new Laya.Point(this._SceneImg('Land').width / 2, this._SceneImg('Land').height / 2));
+                this._Owner.x = point.x;
+                this._Owner.y = point.y;
+            });
+        }
+        deathFunc() {
+            this._evNotify(_GameEvent.Game.addEnemy);
+            if (this._Owner.name === 'Boss') {
+                Tools._Node.createPrefab(_Res._list.prefab2D.Heroine.prefab, this._Parent, [this._Owner.x, this._Owner.y], Heroine);
+            }
+        }
+        lwgEvent() {
+            this._evReg(_GameEvent.Game.enemyCheckWeapon, (Weapon, numBlood) => {
+                this.checkOtherRule(Weapon, 30, numBlood);
+            });
+        }
+        createBullet() {
+            const bullet = Tools._Node.createPrefab(_Res._list.prefab2D.EnemyBullet.prefab, this._SceneImg('EBparrent'), [this._gPoint.x, this._gPoint.y], EnemyBullet);
+            return bullet;
+        }
+        attackType1() {
+            const angleSpeed = 15;
+            TimerAdmin._frameRandomLoop(120, 300, this, () => {
+                for (let index = 0; index < 3; index++) {
+                    const bullet = this.createBullet();
+                    let speed = 0;
+                    const gPoint = new Laya.Point(this._gPoint.x, this._gPoint.y);
+                    TimerAdmin._frameLoop(1, bullet, () => {
+                        let point = Tools._Point.getRoundPos(index * angleSpeed + 180 - angleSpeed, speed += 2, gPoint);
+                        bullet.pos(point.x, point.y);
+                    });
                 }
-            }
+            });
         }
-        attack_S() {
-            const angleArr = this.attack_S_Angle[this.ballisticNum - 1];
-            for (let index = 0; index < angleArr.length; index++) {
-                const weapon = this.createWeapon(null, this._Owner.x, this._Owner.y);
-                weapon.rotation = angleArr[index];
-            }
+        attackType2() {
+            TimerAdmin._frameRandomLoop(50, 100, this, () => {
+                const bullet = this.createBullet();
+                TimerAdmin._frameLoop(1, bullet, () => {
+                    bullet.y += 3;
+                });
+            });
+        }
+    }
+
+    class Boss extends Enemy {
+        lwgOnAwake() {
+            this.generalProInit();
+            this._Owner.pos(this._SceneImg('Content').x, this._SceneImg('Content').y);
+            this._Owner.rotation = 0;
+            this._SceneImg('Content').removeSelf();
+            this.bloodInit(this._Owner['_EnemyData']['blood']);
+        }
+        lwgOnStart() {
+            this.attack();
+            this.move();
+        }
+        move() {
+            let dir = 'left';
+            TimerAdmin._frameLoop(1, this, () => {
+                if (dir == 'right') {
+                    this._Owner.x++;
+                    if (this._Owner.x > Laya.stage.width - 100) {
+                        dir = 'left';
+                    }
+                }
+                else {
+                    this._Owner.x--;
+                    if (this._Owner.x < 100) {
+                        dir = 'right';
+                    }
+                }
+            });
+        }
+        appear() {
+        }
+        attack() {
+            let time = 0;
+            const num = 20;
+            TimerAdmin._frameRandomLoop(50, 100, this, () => {
+                time++;
+                for (let index = 0; index < num; index++) {
+                    const bullet = Tools._Node.createPrefab(_Res._list.prefab2D.EnemyBullet.prefab);
+                    this._SceneImg('EBparrent').addChild(bullet);
+                    bullet.pos(this._gPoint.x, this._gPoint.y);
+                    bullet.rotation = 360 / num * index + time * 10;
+                    bullet.addComponent(BossBullet);
+                }
+            }, true);
         }
     }
 
@@ -7651,6 +7644,75 @@
             }
         }
         _GameData._Buff = _Buff;
+        class _Enemy extends DataAdmin._Table {
+            constructor(_Parent) {
+                super();
+                this._otherPro = {
+                    quantity: "quantity",
+                    shellNum: "shellNum",
+                    blood: 'blood',
+                    boss: 'boss',
+                    speed: 'speed',
+                };
+                this._arr = _Res._list.json.Enemy.dataArr;
+                this.levelData = this._getObjByName(`level${Admin._game.level}`);
+                this.quantity = this.levelData['quantity'];
+                this.Parent = _Parent;
+            }
+            createEnmey() {
+                this.quantity--;
+                const shellNum = this.levelData[this._otherPro.shellNum];
+                let shellNumTime = 0;
+                const element = Tools._Node.createPrefab(_Res._list.prefab2D.Enemy.prefab, this.Parent);
+                shellNumTime++;
+                const color = Tools._Array.randomGetOne(['blue', 'yellow', 'red']);
+                element.name = `${color}${color}`;
+                let speed = Tools._Number.randomOneBySection(this.levelData[this._otherPro.speed][0], this.levelData[this._otherPro.speed][1]);
+                speed = Tools._Number.randomOneHalf() == 0 ? -speed : speed;
+                element['_EnemyData'] = {
+                    shell: shellNumTime <= shellNum ? true : false,
+                    blood: this.levelData['blood'],
+                    angle: Tools._Number.randomOneBySection(0, 360),
+                    speed: speed,
+                    color: color,
+                };
+                element.addComponent(Enemy);
+            }
+        }
+        _GameData._Enemy = _Enemy;
+        class _Boss extends DataAdmin._Table {
+            constructor(Parent) {
+                super();
+                this._otherPro = {
+                    blood: 'blood',
+                    specials: 'specials',
+                    speed: 'speed',
+                    skills: 'skills',
+                    bulletPower: 'bulletPower',
+                };
+                this._arr = _Res._list.json.Boss.dataArr;
+                this.levelData = this._getObjByName(`Boss${Admin._game.level}`);
+                this.skills = this.levelData['skills'];
+                this.speed = this.levelData['speed'];
+                this.blood = this.levelData['blood'];
+                this.createLevelBoss(Parent);
+            }
+            createLevelBoss(Parent) {
+                const element = Tools._Node.createPrefab(_Res._list.prefab2D.Enemy.prefab, Parent);
+                element.name = `Boss`;
+                let speed = Tools._Number.randomOneBySection(this.speed[0], this.speed[1]);
+                speed = Tools._Number.randomOneHalf() == 0 ? -speed : speed;
+                element['_EnemyData'] = {
+                    blood: this.blood,
+                    angle: Tools._Number.randomOneBySection(0, 360),
+                    speed: speed,
+                    sikllNameArr: this.skills,
+                };
+                element.addComponent(Boss);
+                return element;
+            }
+        }
+        _GameData._Boss = _Boss;
     })(_GameData || (_GameData = {}));
 
     class _Buff extends Admin._ObjectBase {
@@ -7727,100 +7789,6 @@
         }
     }
 
-    class _BossData extends DataAdmin._Table {
-        constructor() {
-            super();
-            this._otherPro = {
-                blood: 'blood',
-                specials: 'specials',
-                speed: 'speed',
-                skills: 'skills',
-                bulletPower: 'bulletPower',
-            };
-            this._arr = _Res._list.json.Boss.dataArr;
-        }
-        static _ins() {
-            if (!this.ins) {
-                this.ins = new _BossData();
-                this.ins._arr = _Res._list.json.Boss.dataArr;
-                this.ins.levelData = this.ins._getObjByName(`Boss${Admin._game.level}`);
-            }
-            return this.ins;
-        }
-        getLevelSkill() {
-            return this.levelData['skills'];
-        }
-        getLevelSpeed() {
-            return this.levelData['speed'];
-        }
-        getLevelblood() {
-            return this.levelData['blood'];
-        }
-        getOtherBossSkill() {
-            return;
-        }
-        createLevelBoss(Parent) {
-            const element = Tools._Node.createPrefab(_Res._list.prefab2D.Enemy.prefab, Parent);
-            element.name = `Boss`;
-            let speed = Tools._Number.randomOneBySection(_BossData._ins().getLevelSpeed()[0], _BossData._ins().getLevelSpeed()[1]);
-            speed = Tools._Number.randomOneHalf() == 0 ? -speed : speed;
-            element['_EnemyData'] = {
-                blood: _BossData._ins().getLevelblood(),
-                angle: Tools._Number.randomOneBySection(0, 360),
-                speed: speed,
-                sikllNameArr: _BossData._ins().getLevelSkill(),
-            };
-            element.addComponent(Boss);
-            return element;
-        }
-    }
-    class Boss extends Enemy {
-        lwgOnAwake() {
-            this.generalProInit();
-            this._Owner.pos(this._SceneImg('Content').x, this._SceneImg('Content').y);
-            this._Owner.rotation = 0;
-            this._SceneImg('Content').removeSelf();
-            this.bloodInit(this._Owner['_EnemyData']['blood']);
-        }
-        lwgOnStart() {
-            this.attack();
-            this.move();
-        }
-        move() {
-            let dir = 'left';
-            TimerAdmin._frameLoop(1, this, () => {
-                if (dir == 'right') {
-                    this._Owner.x++;
-                    if (this._Owner.x > Laya.stage.width - 100) {
-                        dir = 'left';
-                    }
-                }
-                else {
-                    this._Owner.x--;
-                    if (this._Owner.x < 100) {
-                        dir = 'right';
-                    }
-                }
-            });
-        }
-        appear() {
-        }
-        attack() {
-            let time = 0;
-            const num = 20;
-            TimerAdmin._frameRandomLoop(50, 100, this, () => {
-                time++;
-                for (let index = 0; index < num; index++) {
-                    const bullet = Tools._Node.createPrefab(_Res._list.prefab2D.EnemyBullet.prefab);
-                    this._SceneImg('EBparrent').addChild(bullet);
-                    bullet.pos(this._gPoint.x, this._gPoint.y);
-                    bullet.rotation = 360 / num * index + time * 10;
-                    bullet.addComponent(BossBullet);
-                }
-            }, true);
-        }
-    }
-
     class EnemyHouse extends BloodBase {
         constructor() {
             super(...arguments);
@@ -7841,7 +7809,7 @@
             });
         }
         deathFunc() {
-            _BossData._ins().createLevelBoss(this._SceneImg('BossParent'));
+            new _GameData._Boss(this._SceneImg('BossParent'));
         }
     }
 
@@ -7867,8 +7835,21 @@
             }
             lwgEvent() {
                 this._evReg(_GameEvent.Game.enemyStage, () => {
-                    this.EnemyData = new _EnemyData(this._ImgVar('EnemyParent'));
-                    this.EnemyData.createEnmey();
+                    this._Enemy = new _GameData._Enemy(this._ImgVar('EnemyParent'));
+                    const num = 10;
+                    for (let index = 0; index < num; index++) {
+                        this._Enemy.createEnmey();
+                    }
+                });
+                this._evReg(_GameEvent.Game.addEnemy, () => {
+                    if (this._Enemy.quantity > 0) {
+                        this._Enemy.createEnmey();
+                    }
+                    else {
+                        if (this._ImgVar('EnemyParent').numChildren <= 1) {
+                            this._evNotify(_GameEvent.Game.enemyLandStage);
+                        }
+                    }
                 });
                 this._evReg(_GameEvent.Game.closeScene, () => {
                     for (let index = 0; index < _Game._texArr.length; index++) {

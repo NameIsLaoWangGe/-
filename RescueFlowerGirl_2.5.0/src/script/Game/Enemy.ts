@@ -2,82 +2,13 @@ import { Admin, DataAdmin, Effects2D, EventAdmin, TimerAdmin, Tools } from "../F
 import { _GameEvent } from "./_GameEvent";
 import _EnemyBullet from "./EnemyBullet";
 import { _Res } from "../Frame/_PreLoad";
-import { BossBullet } from "./BossBullet";
 import BloodBase from "./BloodBase";
 import { _Game } from "./_Game";
 import { Heroine } from "./Heroine";
-export class _EnemyData extends DataAdmin._Table {
-    constructor(_EnemyParent: Laya.Image) {
-        super();
-        this.EnemyParent = _EnemyParent;
-        this._arr = _Res._list.json.Enemy.dataArr;
-        this.levelData = this._getObjByName(`level${Admin._game.level}`);
-        this.quantity = this.levelData['quantity'];
-        this.presentQuantity = 0;
-        EventAdmin._register('presentQuantity', this, () => {
-            this.presentQuantity--;
-        })
-    }
-    _otherPro = {
-        quantity: "quantity",
-        shellNum: "shellNum",
-        blood: 'blood',
-        boss: 'boss',
-        speed: 'speed',
-    }
-    EnemyParent: Laya.Image;
-    levelData: any;
-    /**剩余可创建怪物数量，初始化时也是本关敌人总数*/
-    quantity: number;
-    /**当前有头盔的怪物数量*/
-    shellNum: number;
-    /**当前剩余怪物总数*/
-    public get presentQuantity(): number {
-        return this['_presentQuantity'];
-    };
-    public set presentQuantity(val: number) {
-        this['_presentQuantity'] = val;
-        if (val < 10) {
-            this.createEnmey();
-        }
-        if (val === 0 && this.quantity === 0) {
-            EventAdmin._notify(_GameEvent.Game.enemyLandStage);
-        }
-    };
-
-    createEnmey(): void {
-        this.quantity--;
-        if (this.quantity < 0) {
-            this.quantity = 0;
-            return;
-        }
-        this.presentQuantity++;
-        // const quantity = obj[this._otherPro.quantity];
-        const shellNum = this.levelData[this._otherPro.shellNum];
-        let shellNumTime = 0;
-        const element = Tools._Node.createPrefab(_Res._list.prefab2D.Enemy.prefab, this.EnemyParent) as Laya.Image;
-        shellNumTime++;
-        const color = Tools._Array.randomGetOne(['blue', 'yellow', 'red'])
-        element.name = `${color}${color}`;
-        let speed = Tools._Number.randomOneBySection(this.levelData[this._otherPro.speed][0], this.levelData[this._otherPro.speed][1]);
-        speed = Tools._Number.randomOneHalf() == 0 ? -speed : speed;
-        element['_EnemyData'] = {
-            shell: shellNumTime <= shellNum ? true : false,
-            blood: this.levelData['blood'],
-            angle: Tools._Number.randomOneBySection(0, 360),
-            speed: speed,
-            color: color,
-        };
-        element.addComponent(Enemy);
-    }
-}
-
 export default class Enemy extends BloodBase {
-    Pic: Laya.Image;
-    Shell: Laya.Image;
     speed: number;
     groundRadius: number;
-    private ranAttackNum: number;
+    ranAttackNum: number;
     lwgOnAwake(): void {
         this.generalProInit();
         this.bloodInit(this._Owner['_EnemyData']['blood']);
@@ -85,12 +16,10 @@ export default class Enemy extends BloodBase {
     }
     generalProInit(): void {
         this._Owner.pos(this._SceneImg('Land').width / 2, this._SceneImg('Land').height / 2);
-        this.Shell = this._Owner.getChildByName('Shell') as Laya.Image;
         // !shell && this.Shell.removeSelf();
-        this.Shell.removeSelf();
-        this.Pic = this._Owner.getChildByName('Pic') as Laya.Image;
+        this._ImgChild('Shell').removeSelf();
         if (this._Owner['_EnemyData']['color']) {
-            this.Pic.skin = `Game/UI/Game/Enemy/enemy_01_${this._Owner['_EnemyData']['color']}.png`;
+            this._ImgChild('Pic').skin = `Game/UI/Game/Enemy/enemy_01_${this._Owner['_EnemyData']['color']}.png`;
         }
         const angle = this._Owner['_EnemyData']['angle'];
         this._Owner.rotation = angle;
@@ -129,7 +58,7 @@ export default class Enemy extends BloodBase {
         })
     }
     deathFunc(): void {
-        this._evNotify('presentQuantity');
+        this._evNotify(_GameEvent.Game.addEnemy);
         // 最后一个为boss
         if (this._Owner.name === 'Boss') {
             Tools._Node.createPrefab(_Res._list.prefab2D.Heroine.prefab, this._Parent, [this._Owner.x, this._Owner.y], Heroine);

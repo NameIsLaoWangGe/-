@@ -1,5 +1,5 @@
 import BloodBase from "./BloodBase";
-import { _BossData } from "./Boss";
+import { _GameData } from "./_GameData";
 import { _GameEvent } from "./_GameEvent";
 
 export class EnemyHouse extends BloodBase {
@@ -20,6 +20,6 @@ export class EnemyHouse extends BloodBase {
         })
     }
     deathFunc(): void {
-        _BossData._ins().createLevelBoss(this._SceneImg('BossParent'));
+        new _GameData._Boss(this._SceneImg('BossParent'));
     }
 }

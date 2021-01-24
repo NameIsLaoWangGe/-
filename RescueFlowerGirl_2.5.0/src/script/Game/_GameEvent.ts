@@ -6,24 +6,27 @@ export module _GameEvent {
 
     }
     export enum Game {
-        checkEnemyBullet = '_Game_bulletCheckHero',
-        closeScene = '_Game_closeScene',
-        checkBuff = '_Game_checkBuff',
+        checkEnemyBullet = 'Game' + '_bulletCheckHero',
+        closeScene = 'Game' + '_closeScene',
+        checkBuff = 'Game' + 'checkBuff',
 
         //攻击检测
-        treeCheckWeapon = '_Game_treeCheckWeapon',
-        enemyCheckWeapon = '_Game_enemyCheckWeapon',
-        enemyLandCheckWeapon = '_Game_enemyLandCheckWeapon',
-        enemyHouseCheckWeapon = '_Game_enemyHouseCheckWeapon',
-        bossCheckWeapon = '_Game_bossCheckWeapon',
-        heroineCheckWeapon = '_Game_heroineCheckWeapon',
+        treeCheckWeapon = 'Game' + 'treeCheckWeapon',
+        enemyCheckWeapon = 'Game' + 'enemyCheckWeapon',
+        enemyLandCheckWeapon = 'Game' + 'enemyLandCheckWeapon',
+        enemyHouseCheckWeapon = 'Game' + 'enemyHouseCheckWeapon',
+        bossCheckWeapon = 'Game' + 'bossCheckWeapon',
+        heroineCheckWeapon = 'Game' + 'heroineCheckWeapon',
 
         // 阶段
-        enemyStage = '_Game_enemyStage',
-        enemyLandStage = '_Game_landStage',
-        enemyHouseStage = '_Game_enemyHouseStage',
-        bossStage = '_Game_bossStage',
-        heroineStage = '_Game_heroineStage',
+        enemyStage = 'Game' + 'enemyStage',
+        enemyLandStage = 'Game' + 'landStage',
+        enemyHouseStage = 'Game' + 'enemyHouseStage',
+        bossStage = 'Game' + 'bossStage',
+        heroineStage = 'Game' + 'heroineStage',
+
+        //敌人
+        addEnemy = 'Game' + 'addEnemy',
     }
     export enum Task {
 

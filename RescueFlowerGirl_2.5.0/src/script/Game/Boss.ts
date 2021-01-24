@@ -3,56 +3,6 @@ import { _GameEvent } from "./_GameEvent";
 import { _Res } from "../Frame/_PreLoad";
 import Enemy from "./Enemy";
 import { BossBullet } from "./BossBullet";
-
-export class _BossData extends DataAdmin._Table {
-    private static ins: _BossData;
-    static _ins() {
-        if (!this.ins) {
-            this.ins = new _BossData();
-            this.ins._arr = _Res._list.json.Boss.dataArr;
-            this.ins.levelData = this.ins._getObjByName(`Boss${Admin._game.level}`);
-        }
-        return this.ins;
-    }
-    constructor() {
-        super();
-        this._arr = _Res._list.json.Boss.dataArr;
-    }
-    _otherPro = {
-        blood: 'blood',
-        specials: 'specials',
-        speed: 'speed',
-        skills: 'skills',
-        bulletPower: 'bulletPower',
-    }
-    levelData: any;
-    getLevelSkill(): string[] {
-        return this.levelData['skills'];
-    }
-    getLevelSpeed(): number[] {
-        return this.levelData['speed'];
-    }
-    getLevelblood(): number {
-        return this.levelData['blood'];
-    }
-    getOtherBossSkill(): any[] {
-        return
-    }
-    createLevelBoss(Parent: Laya.Sprite): Laya.Sprite {
-        const element = Tools._Node.createPrefab(_Res._list.prefab2D.Enemy.prefab, Parent) as Laya.Image;
-        element.name = `Boss`;
-        let speed = Tools._Number.randomOneBySection(_BossData._ins().getLevelSpeed()[0], _BossData._ins().getLevelSpeed()[1]);
-        speed = Tools._Number.randomOneHalf() == 0 ? -speed : speed;
-        element['_EnemyData'] = {
-            blood: _BossData._ins().getLevelblood(),
-            angle: Tools._Number.randomOneBySection(0, 360),
-            speed: speed,
-            sikllNameArr: _BossData._ins().getLevelSkill(),
-        };
-        element.addComponent(Boss);
-        return element;
-    }
-}
 export class Boss extends Enemy {
     lwgOnAwake(): void {
         this.generalProInit();

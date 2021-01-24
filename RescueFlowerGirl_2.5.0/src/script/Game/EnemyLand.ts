@@ -1,7 +1,6 @@
 import { Animation2D, TimerAdmin, Tools } from "../Frame/Lwg";
 import { _Res } from "../Frame/_PreLoad";
 import BloodBase from "./BloodBase";
-import { Boss, _BossData } from "./Boss";
 import { BossBullet } from "./BossBullet";
 import { _Game } from "./_Game";
 import { _GameEvent } from "./_GameEvent";

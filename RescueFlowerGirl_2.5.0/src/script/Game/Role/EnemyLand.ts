@@ -1,7 +1,8 @@
-import { LwgAni2D, LwgTimer, LwgTools } from "../../Lwg/Lwg";
+import Lwg, { LwgAni2D, LwgTimer, LwgTools } from "../../Lwg/Lwg";
 import BloodBase from "./BloodBase";
 import { EnemyAttack } from "./EnemyAttack";
 import { _Game } from "../_GameData";
+import { _EnemyAttack } from "../EnemyAttack/_EnemyAttack";
 
 export default class EnemyLand extends BloodBase {
     lwgOnAwake(): void {
@@ -20,7 +21,7 @@ export default class EnemyLand extends BloodBase {
                 this._Owner.rotation = 0;
                 this._ImgChild('Blood').visible = true;
                 this.landStage = true;
-                EnemyAttack.attackType5(this._Owner);
+                _EnemyAttack.Sector._ins().enemyLand(this._Owner as Lwg.NodeAdmin._Image);
             })
         })
         this._evReg(_Game._Event.enemyLandCheckWeapon, (Weapon: Laya.Image, numBlood: number) => {

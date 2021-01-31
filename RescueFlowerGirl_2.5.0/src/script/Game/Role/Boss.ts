@@ -1,4 +1,5 @@
 import { LwgScene, LwgData, LwgEff2D, LwgTimer, LwgTools } from "../../Lwg/Lwg";
+import { _EnemyAttack } from "../EnemyAttack/_EnemyAttack";
 import Enemy from "./Enemy";
 import { EnemyAttack } from "./EnemyAttack";
 export class Boss extends Enemy {
@@ -32,6 +33,6 @@ export class Boss extends Enemy {
     appear(): void {
     }
     attack(): void {
-        EnemyAttack.attackType7(this._Owner);
+        _EnemyAttack.Sector._ins().boss(this._Owner as any);
     }
 }

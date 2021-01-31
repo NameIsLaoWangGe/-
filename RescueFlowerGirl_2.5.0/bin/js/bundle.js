@@ -1577,6 +1577,7 @@
             SceneAniAdmin._closeAniTime = 0;
             function _commonOpenAni(Scene) {
                 var afterAni = () => {
+                    LwgScene._SceneServe._close();
                     LwgClick._switch = true;
                     if (Scene[Scene.name]) {
                         Scene[Scene.name].lwgOpenAniAfter();
@@ -6075,6 +6076,9 @@
                 }
                 _Point.angleAndLenByPoint = angleAndLenByPoint;
                 function getRoundPos(angle, radius, centerPos) {
+                    if (!centerPos) {
+                        return new Laya.Point(null, null);
+                    }
                     var center = centerPos;
                     var radius = radius;
                     var hudu = (2 * Math.PI / 360) * angle;
@@ -7673,6 +7677,129 @@
         }
     }
 
+    class CreateBullet {
+        static create(enemy) {
+            const bullet = LwgTools._Node.createPrefab(_Res._list.prefab2D.EnemyBullet.prefab, this.EBParent, [enemy._lwg.gPoint.x, enemy._lwg.gPoint.y], EnemyBullet);
+            return bullet;
+        }
+    }
+
+    class Sector {
+        static _ins() {
+            if (!this.ins)
+                this.ins = new Sector;
+            return this.ins;
+        }
+        enemy(enemy) {
+            const angleSpacing = 15;
+            const speed = 5;
+            LwgTimer._frameRandomLoop(120, 300, enemy, () => {
+                for (let index = 0; index < 3; index++) {
+                    const bullet = CreateBullet.create(enemy);
+                    let _speedAdd = 0;
+                    LwgTimer._frameLoop(1, bullet, () => {
+                        const point = LwgTools._Point.getRoundPos(index * angleSpacing + 180 - angleSpacing, _speedAdd += speed, enemy._lwg.gPoint);
+                        bullet.pos(point.x, point.y);
+                    });
+                }
+            });
+        }
+        enemyLand(enemy) {
+            const angleSpacing = 15;
+            let time = 0;
+            const speed = 5;
+            LwgTimer._frameLoop(30, enemy, () => {
+                time++;
+                let num = time % 2 == 0 ? 12 : 10;
+                for (let index = 0; index < num; index++) {
+                    const bullet = CreateBullet.create(enemy);
+                    let _speedAdd = 0;
+                    LwgTimer._frameLoop(1, bullet, () => {
+                        const unit = (180 - angleSpacing * 2) / num;
+                        const point = LwgTools._Point.getRoundPos(unit * index + angleSpacing * 2 + 90 - unit / 2, _speedAdd += speed, enemy._lwg.gPoint);
+                        bullet.pos(point.x, point.y);
+                    });
+                }
+            });
+        }
+        boss(enemy) {
+            const angleSpacing = 30;
+            let time = 0;
+            const speed = 5;
+            const num = 6;
+            LwgTimer._frameLoop(30, enemy, () => {
+                time++;
+                const unit = (180 - angleSpacing * 2) / num;
+                for (let index = 0; index < num; index++) {
+                    const bullet = CreateBullet.create(enemy);
+                    let _speedAdd = 0;
+                    LwgTimer._frameLoop(1, bullet, () => {
+                        const unit = (180 - angleSpacing * 2) / num;
+                        const point = LwgTools._Point.getRoundPos(unit * index + angleSpacing * 2 + 90, _speedAdd += speed, new Laya.Point(enemy._lwg.gPoint.x + 100, enemy._lwg.gPoint.y));
+                        bullet.pos(point.x, point.y);
+                    });
+                }
+                for (let index = 0; index < num; index++) {
+                    const bullet = CreateBullet.create(enemy);
+                    let _speedAdd = 0;
+                    LwgTimer._frameLoop(1, bullet, () => {
+                        const point = LwgTools._Point.getRoundPos(unit * index + angleSpacing * 2, _speedAdd += speed, new Laya.Point(enemy._lwg.gPoint.x - 100, enemy._lwg.gPoint.y));
+                        bullet.pos(point.x, point.y);
+                    });
+                }
+            });
+        }
+        heroine(enemy) {
+            const angleSpeed = 15;
+            LwgTimer._frameRandomLoop(120, 300, enemy, () => {
+                for (let index = 0; index < 3; index++) {
+                    const bullet = CreateBullet.create(enemy);
+                    let speed = 0;
+                    LwgTimer._frameLoop(1, bullet, () => {
+                        const point = LwgTools._Point.getRoundPos(index * angleSpeed + 180 - angleSpeed, speed += 2, bullet._lwg.gPoint);
+                        bullet.pos(point.x, point.y);
+                    });
+                }
+            });
+        }
+    }
+
+    class _EnemyAttack {
+    }
+    _EnemyAttack.Sector = Sector;
+
+    class EnemyLand extends BloodBase {
+        constructor() {
+            super(...arguments);
+            this.landStage = false;
+        }
+        lwgOnAwake() {
+            this.bloodInit(100);
+            this._ImgChild('Blood').visible = false;
+            LwgTimer._frameLoop(1, this, () => {
+                this._Owner.rotation += 0.1;
+            });
+        }
+        lwgEvent() {
+            this._evReg(_Game._Event.enemyLandStage, () => {
+                Laya.timer.clearAll(this);
+                const time = Math.abs(this._Owner.rotation % 360) * 10;
+                LwgAni2D.rotate(this._Owner, 0, time, 0, () => {
+                    this._Owner.rotation = 0;
+                    this._ImgChild('Blood').visible = true;
+                    this.landStage = true;
+                    _EnemyAttack.Sector._ins().enemyLand(this._Owner);
+                });
+            });
+            this._evReg(_Game._Event.enemyLandCheckWeapon, (Weapon, numBlood) => {
+                this.checkOtherRule(Weapon, 160, this.landStage ? numBlood : 0);
+            });
+        }
+        deathFunc() {
+            this._evNotify(_Game._Event.enemyHouseStage);
+        }
+    }
+
     class EnemyAttack {
         static createBullet(enemy) {
             const gP = this.getEnemyGp(enemy);
@@ -7838,38 +7965,6 @@
         }
     }
 
-    class EnemyLand extends BloodBase {
-        constructor() {
-            super(...arguments);
-            this.landStage = false;
-        }
-        lwgOnAwake() {
-            this.bloodInit(100);
-            this._ImgChild('Blood').visible = false;
-            LwgTimer._frameLoop(1, this, () => {
-                this._Owner.rotation += 0.1;
-            });
-        }
-        lwgEvent() {
-            this._evReg(_Game._Event.enemyLandStage, () => {
-                Laya.timer.clearAll(this);
-                const time = Math.abs(this._Owner.rotation % 360) * 10;
-                LwgAni2D.rotate(this._Owner, 0, time, 0, () => {
-                    this._Owner.rotation = 0;
-                    this._ImgChild('Blood').visible = true;
-                    this.landStage = true;
-                    EnemyAttack.attackType5(this._Owner);
-                });
-            });
-            this._evReg(_Game._Event.enemyLandCheckWeapon, (Weapon, numBlood) => {
-                this.checkOtherRule(Weapon, 160, this.landStage ? numBlood : 0);
-            });
-        }
-        deathFunc() {
-            this._evNotify(_Game._Event.enemyHouseStage);
-        }
-    }
-
     class Heroine extends BloodBase {
         constructor() {
             super(...arguments);
@@ -7906,78 +8001,6 @@
             this._openScene('Victory', false);
         }
     }
-
-    class CreateBullet {
-        static create(enemy) {
-            const bullet = LwgTools._Node.createPrefab(_Res._list.prefab2D.EnemyBullet.prefab, this.EBParent, [enemy._lwg.gPoint.x, enemy._lwg.gPoint.y], EnemyBullet);
-            return bullet;
-        }
-    }
-
-    class Sector {
-        static _ins() {
-            if (!this.ins)
-                this.ins = new Sector;
-            return this.ins;
-        }
-        enemy(enemy) {
-            const angleSpacing = 15;
-            let _speedAdd = 0;
-            const speed = 5;
-            LwgTimer._frameRandomLoop(120, 300, enemy, () => {
-                for (let index = 0; index < 3; index++) {
-                    const bullet = CreateBullet.create(enemy);
-                    LwgTimer._frameLoop(1, bullet, () => {
-                        const point = LwgTools._Point.getRoundPos(index * angleSpacing + 180 - angleSpacing, _speedAdd += speed, enemy._lwg.gPoint);
-                        bullet.pos(point.x, point.y);
-                    });
-                }
-            });
-        }
-        boss(enemy) {
-            const angleSpeed = 15;
-            LwgTimer._frameRandomLoop(120, 300, enemy, () => {
-                for (let index = 0; index < 3; index++) {
-                    const bullet = CreateBullet.create(enemy);
-                    let speed = 0;
-                    LwgTimer._frameLoop(1, bullet, () => {
-                        const point = LwgTools._Point.getRoundPos(index * angleSpeed + 180 - angleSpeed, speed += 2, bullet._lwg.gPoint);
-                        bullet.pos(point.x, point.y);
-                    });
-                }
-            });
-        }
-        enemyLand(enemy) {
-            const angleSpeed = 15;
-            LwgTimer._frameRandomLoop(120, 300, enemy, () => {
-                for (let index = 0; index < 3; index++) {
-                    const bullet = CreateBullet.create(enemy);
-                    let speed = 0;
-                    LwgTimer._frameLoop(1, bullet, () => {
-                        const point = LwgTools._Point.getRoundPos(index * angleSpeed + 180 - angleSpeed, speed += 2, bullet._lwg.gPoint);
-                        bullet.pos(point.x, point.y);
-                    });
-                }
-            });
-        }
-        heroine(enemy) {
-            const angleSpeed = 15;
-            LwgTimer._frameRandomLoop(120, 300, enemy, () => {
-                for (let index = 0; index < 3; index++) {
-                    const bullet = CreateBullet.create(enemy);
-                    let speed = 0;
-                    LwgTimer._frameLoop(1, bullet, () => {
-                        const point = LwgTools._Point.getRoundPos(index * angleSpeed + 180 - angleSpeed, speed += 2, bullet._lwg.gPoint);
-                        bullet.pos(point.x, point.y);
-                    });
-                }
-            });
-        }
-    }
-
-    class _EnemyAttack {
-    }
-    _EnemyAttack.Sector = Sector;
 
     class Enemy extends BloodBase {
         lwgOnAwake() {
@@ -8072,7 +8095,7 @@
         appear() {
         }
         attack() {
-            EnemyAttack.attackType7(this._Owner);
+            _EnemyAttack.Sector._ins().boss(this._Owner);
         }
     }
 

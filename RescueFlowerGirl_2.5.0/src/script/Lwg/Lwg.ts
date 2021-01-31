@@ -1986,6 +1986,7 @@ export module Lwg {
         /**通用场景进场动画*/
         export function _commonOpenAni(Scene: Laya.Scene): number {
             var afterAni = () => {
+                LwgScene._SceneServe._close();
                 LwgClick._switch = true;
                 if (Scene[Scene.name]) {
                     Scene[Scene.name].lwgOpenAniAfter();
@@ -8137,6 +8138,9 @@ export module Lwg {
             * @param centerPos 原点
             */
             export function getRoundPos(angle: number, radius: number, centerPos: Laya.Point): Laya.Point {
+                if (!centerPos) {
+                    return new Laya.Point(null, null);
+                }
                 var center = centerPos; //圆心坐标
                 var radius = radius; //半径
                 var hudu = (2 * Math.PI / 360) * angle; //90度角的弧度

@@ -1,8 +1,0 @@
-{
-  "code": "import { LwgTimer } from \"../../Lwg/Lwg\";\r\nimport Enemy from \"./Enemy\";\r\nimport { EnemyAttack } from \"./EnemyAttack\";\r\nexport class Boss extends Enemy {\r\n    lwgOnAwake() {\r\n        this.generalProInit();\r\n        this._Owner.pos(this._SceneImg('Content').x, this._SceneImg('Content').y);\r\n        this._Owner.rotation = 0;\r\n        this._SceneImg('Content').removeSelf();\r\n        this.bloodInit(this._Owner['_EnemyData']['blood']);\r\n    }\r\n    lwgOnStart() {\r\n        this.attack();\r\n        this.move();\r\n    }\r\n    move() {\r\n        let dir = 'left';\r\n        LwgTimer._frameLoop(1, this, () => {\r\n            if (dir == 'right') {\r\n                this._Owner.x++;\r\n                if (this._Owner.x > Laya.stage.width - 100) {\r\n                    dir = 'left';\r\n                }\r\n            }\r\n            else {\r\n                this._Owner.x--;\r\n                if (this._Owner.x < 100) {\r\n                    dir = 'right';\r\n                }\r\n            }\r\n        });\r\n    }\r\n    appear() {\r\n    }\r\n    attack() {\r\n        EnemyAttack.attackType7(this._Owner);\r\n    }\r\n}\r\n",
-  "references": [
-    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Lwg/Lwg.ts",
-    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Game/Role/Enemy.ts",
-    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Game/Role/EnemyAttack.ts"
-  ]
-}

@@ -1,11 +1,37 @@
-import { Admin, DataAdmin, EventAdmin, Tools } from "../Frame/Lwg";
-import { _Res } from "../Frame/_PreLoad";
-import { Boss } from "./Boss";
-import Enemy from "./Enemy";
-import { _GameEvent } from "./_GameEvent";
+import Lwg, { LwgData, LwgGame, LwgTools } from "../Lwg/Lwg";
+import { _Res } from "./_Res";
 
-export module _GameData {
-    export class _Buff extends DataAdmin._Table {
+export module _Game {
+    export enum _Event {
+        checkEnemyBullet = 'Game' + '_bulletCheckHero',
+        closeScene = 'Game' + '_closeScene',
+        checkBuff = 'Game' + 'checkBuff',
+
+        //攻击检测
+        treeCheckWeapon = 'Game' + 'treeCheckWeapon',
+        enemyCheckWeapon = 'Game' + 'enemyCheckWeapon',
+        enemyLandCheckWeapon = 'Game' + 'enemyLandCheckWeapon',
+        enemyHouseCheckWeapon = 'Game' + 'enemyHouseCheckWeapon',
+        bossCheckWeapon = 'Game' + 'bossCheckWeapon',
+        heroineCheckWeapon = 'Game' + 'heroineCheckWeapon',
+
+        // 阶段
+        enemyStage = 'Game' + 'enemyStage',
+        enemyLandStage = 'Game' + 'landStage',
+        enemyHouseStage = 'Game' + 'enemyHouseStage',
+        bossStage = 'Game' + 'bossStage',
+        heroineStage = 'Game' + 'heroineStage',
+
+        //敌人
+        addEnemy = 'Game' + 'addEnemy',
+    }
+    /**剩余贴图的集合，游戏结束时一并销毁*/
+    export let _texArr = [];
+    /**箭的容器集合，这缓存为位图的bitmap节点，必须手动销毁*/
+    export let _arrowParentArr = [];
+}
+export module _Role {
+    export class _Buff extends LwgData._Table {
         private static ins: _Buff;
         static _ins() {
             if (!this.ins) {
@@ -25,17 +51,16 @@ export module _GameData {
          * @param y 坐标y
          * */
         createBuff(type: number, Parent: Laya.Sprite, x: number, y: number, script: any): Laya.Image {
-            const Buff = Tools._Node.createPrefab(_Res._list.prefab2D.Buff.prefab, Parent, [x, y], script) as Laya.Image;
+            const Buff = LwgTools._Node.createPrefab(_Res._list.prefab2D.Buff.prefab, Parent, [x, y], script) as Laya.Image;
             Buff['buffType'] = type;
             return Buff;
         }
     }
-
-    export class _Enemy extends DataAdmin._Table {
+    export class _Enemy extends LwgData._Table {
         constructor(_Parent: Laya.Image) {
             super();
             this._arr = _Res._list.json.Enemy.dataArr;
-            this.levelData = this._getObjByName(`level${Admin._game.level}`);
+            this.levelData = this._getObjByName(`level${LwgGame.level.value}`);
             this.quantity = this.levelData['quantity'];
             this.Parent = _Parent;
         }
@@ -52,35 +77,35 @@ export module _GameData {
         quantity: number;
         /**当前有头盔的怪物数量*/
         shellNum: number;
-        createEnmey(): void {
+        createEnmey(Script: any): void {
             this.quantity--;
             const shellNum = this.levelData[this._otherPro.shellNum];
             let shellNumTime = 0;
-            const element = Tools._Node.createPrefab(_Res._list.prefab2D.Enemy.prefab, this.Parent) as Laya.Image;
+            const element = LwgTools._Node.createPrefab(_Res._list.prefab2D.Enemy.prefab, this.Parent) as Laya.Image;
             shellNumTime++;
-            const color = Tools._Array.randomGetOne(['blue', 'yellow', 'red']);
+            const color = LwgTools._Array.randomGetOne(['blue', 'yellow', 'red']);
             element.name = `${color}${color}`;
-            let speed = Tools._Number.randomOneBySection(this.levelData[this._otherPro.speed][0], this.levelData[this._otherPro.speed][1]);
-            speed = Tools._Number.randomOneHalf() == 0 ? -speed : speed;
+            let speed = LwgTools._Number.randomOneBySection(this.levelData[this._otherPro.speed][0], this.levelData[this._otherPro.speed][1]);
+            speed = LwgTools._Number.randomOneHalf() == 0 ? -speed : speed;
             element['_EnemyData'] = {
                 shell: shellNumTime <= shellNum ? true : false,
                 blood: this.levelData['blood'],
-                angle: Tools._Number.randomOneBySection(0, 360),
+                angle: LwgTools._Number.randomOneBySection(0, 360),
                 speed: speed,
                 color: color,
             };
-            element.addComponent(Enemy);
+            element.addComponent(Script);
         }
     }
-    export class _Boss extends DataAdmin._Table {
-        constructor(Parent: Laya.Image) {
+    export class _Boss extends LwgData._Table {
+        constructor(Parent: Laya.Image, BossScript: any) {
             super();
             this._arr = _Res._list.json.Boss.dataArr;
-            this.levelData = this._getObjByName(`Boss${Admin._game.level}`);
+            this.levelData = this._getObjByName(`Boss${LwgGame.level.value}`);
             this.skills = this.levelData['skills'];
             this.speed = this.levelData['speed'];
             this.blood = this.levelData['blood'];
-            this.createLevelBoss(Parent);
+            this.createLevelBoss(Parent, BossScript);
         }
         _otherPro = {
             blood: 'blood',
@@ -93,18 +118,18 @@ export module _GameData {
         skills: string[];
         speed: number[];
         blood: number;
-        createLevelBoss(Parent: Laya.Sprite): Laya.Sprite {
-            const element = Tools._Node.createPrefab(_Res._list.prefab2D.Enemy.prefab, Parent) as Laya.Image;
+        createLevelBoss(Parent: Laya.Image, BossScript: any): Laya.Sprite {
+            const element = LwgTools._Node.createPrefab(_Res._list.prefab2D.Enemy.prefab, Parent) as Laya.Image;
             element.name = `Boss`;
-            let speed = Tools._Number.randomOneBySection(this.speed[0], this.speed[1]);
-            speed = Tools._Number.randomOneHalf() == 0 ? -speed : speed;
+            let speed = LwgTools._Number.randomOneBySection(this.speed[0], this.speed[1]);
+            speed = LwgTools._Number.randomOneHalf() == 0 ? -speed : speed;
             element['_EnemyData'] = {
                 blood: this.blood,
-                angle: Tools._Number.randomOneBySection(0, 360),
+                angle: LwgTools._Number.randomOneBySection(0, 360),
                 speed: speed,
                 sikllNameArr: this.skills,
             };
-            element.addComponent(Boss);
+            element.addComponent(BossScript);
             return element;
         }
     }

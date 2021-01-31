@@ -1,4 +1,4 @@
-import { Dialogue } from "../Frame/Lwg";
+import { Dialogue } from "../Lwg/Lwg";
 
 export default class RecordManager {
     static Init() {

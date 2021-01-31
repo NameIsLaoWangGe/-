@@ -1,5 +1,5 @@
-import lwg, { Admin, EventAdmin, PalyAudio, Setting, _SceneName } from "../Frame/Lwg";
-import { _Task } from "../Frame/_Task";
+import lwg, { Admin, EventAdmin, PalyAudio, Setting, _SceneName } from "../Lwg/Lwg";
+import { _Task } from "../Lwg/_Task";
 export default class ADManager {
 
     public static ShowBanner() {

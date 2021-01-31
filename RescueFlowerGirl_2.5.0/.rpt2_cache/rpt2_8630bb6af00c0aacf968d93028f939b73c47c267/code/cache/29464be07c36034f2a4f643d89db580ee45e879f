@@ -1,0 +1,7 @@
+{
+  "code": "import { LwgScene, LwgTimer, LwgTools } from \"../../Lwg/Lwg\";\r\nimport { _Game } from \"../_GameData\";\r\nexport default class EnemyBullet extends LwgScene._ObjectBase {\r\n    lwgOnStart() {\r\n        this.checkHeroAndLevel();\r\n    }\r\n    checkHeroAndLevel() {\r\n        LwgTimer._frameLoop(1, this, () => {\r\n            !LwgTools._Node.leaveStage(this._Owner, () => {\r\n                this._Owner.removeSelf();\r\n            }) && this._evNotify(_Game._Event.checkEnemyBullet, [this._Owner, 1]);\r\n        });\r\n    }\r\n}\r\n",
+  "references": [
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Lwg/Lwg.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Game/_GameData.ts"
+  ]
+}

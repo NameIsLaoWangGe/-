@@ -1,0 +1,8 @@
+{
+  "code": "import BloodBase from \"./BloodBase\";\r\nimport { _GameData } from \"./_GameData\";\r\nimport { _GameEvent } from \"./_GameEvent\";\r\nexport class EnemyHouse extends BloodBase {\r\n    constructor() {\r\n        super(...arguments);\r\n        this.enemyHouseStage = false;\r\n    }\r\n    lwgOnAwake() {\r\n        this.bloodInit(50);\r\n        this._ImgChild('Blood').visible = false;\r\n    }\r\n    lwgEvent() {\r\n        this._evReg(_GameEvent.Game.enemyHouseStage, () => {\r\n            this.enemyHouseStage = true;\r\n            this._ImgChild('Blood').visible = true;\r\n        });\r\n        this._evReg(_GameEvent.Game.enemyHouseCheckWeapon, (Weapon, numBlood) => {\r\n            this.checkOtherRule(Weapon, 50, this.enemyHouseStage ? numBlood : 0);\r\n        });\r\n    }\r\n    deathFunc() {\r\n        new _GameData._Boss(this._SceneImg('BossParent'));\r\n    }\r\n}\r\n",
+  "references": [
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Game/BloodBase.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Game/_GameData.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Game/_GameEvent.ts"
+  ]
+}

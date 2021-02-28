@@ -8,7 +8,7 @@ export default class Hero extends BloodBase {
     /**攻击控制*/
     _HeroAttack: HeroAttack;
     lwgOnAwake(): void {
-        this.bloodInit(50);
+        this.bloodInit(5000);
         this.attackInterval = 10;
         this._HeroAttack = new HeroAttack(this._SceneImg('WeaponParent'), this._Owner);
         this._HeroAttack.ballisticNum = 1;
@@ -20,6 +20,7 @@ export default class Hero extends BloodBase {
             }
         })
     }
+    
     deathFunc(): void {
         this._openScene('Defeated', false);
     }

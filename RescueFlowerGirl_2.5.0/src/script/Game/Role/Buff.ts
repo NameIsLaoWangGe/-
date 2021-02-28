@@ -1,7 +1,6 @@
 import { LwgScene, LwgData, LwgTimer, LwgTools } from "../../Lwg/Lwg";
 import { _Role, _Game } from "../_GameData";
 import BloodBase from "./BloodBase";
-import { EnemyAttack } from "./EnemyAttack";
 export default class _Buff extends LwgScene._ObjectBase {
     lwgOnStart(): void {
         this.checkHero();
@@ -28,7 +27,6 @@ export class Tree extends BloodBase {
         this._evReg(_Game._Event.enemyLandStage, () => {
             this.buffState = false;
             this._ImgChild('Blood').visible = false;
-            EnemyAttack.attackType3(this._Owner as any);
         })
         this._evReg(_Game._Event.treeCheckWeapon, (Weapon: Laya.Image, numBlood: number) => {
             if (this.buffState) {

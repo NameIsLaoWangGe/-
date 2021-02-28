@@ -51,7 +51,7 @@ export module _Role {
          * @param y 坐标y
          * */
         createBuff(type: number, Parent: Laya.Sprite, x: number, y: number, script: any): Laya.Image {
-            const Buff = LwgTools._Node.createPrefab(_Res._list.prefab2D.Buff.prefab, Parent, [x, y], script) as Laya.Image;
+            const Buff = LwgTools._Node.createPrefab(_Res.$prefab2D.Buff.prefab2D, Parent, [x, y], script) as Laya.Image;
             Buff['buffType'] = type;
             return Buff;
         }
@@ -59,7 +59,7 @@ export module _Role {
     export class _Enemy extends LwgData._Table {
         constructor(_Parent: Laya.Image) {
             super();
-            this._arr = _Res._list.json.Enemy.dataArr;
+            this._arr = _Res.$json.Enemy.dataArr;
             this.levelData = this._getObjByName(`level${LwgGame.level.value}`);
             this.quantity = this.levelData['quantity'];
             this.Parent = _Parent;
@@ -81,7 +81,7 @@ export module _Role {
             this.quantity--;
             const shellNum = this.levelData[this._otherPro.shellNum];
             let shellNumTime = 0;
-            const element = LwgTools._Node.createPrefab(_Res._list.prefab2D.Enemy.prefab, this.Parent) as Laya.Image;
+            const element = LwgTools._Node.createPrefab(_Res.$prefab2D.Enemy.prefab2D, this.Parent) as Laya.Image;
             shellNumTime++;
             const color = LwgTools._Array.randomGetOne(['blue', 'yellow', 'red']);
             element.name = `${color}${color}`;
@@ -100,7 +100,7 @@ export module _Role {
     export class _Boss extends LwgData._Table {
         constructor(Parent: Laya.Image, BossScript: any) {
             super();
-            this._arr = _Res._list.json.Boss.dataArr;
+            this._arr = _Res.$json.Boss.dataArr;
             this.levelData = this._getObjByName(`Boss${LwgGame.level.value}`);
             this.skills = this.levelData['skills'];
             this.speed = this.levelData['speed'];
@@ -119,7 +119,7 @@ export module _Role {
         speed: number[];
         blood: number;
         createLevelBoss(Parent: Laya.Image, BossScript: any): Laya.Sprite {
-            const element = LwgTools._Node.createPrefab(_Res._list.prefab2D.Enemy.prefab, Parent) as Laya.Image;
+            const element = LwgTools._Node.createPrefab(_Res.$prefab2D.Boss.prefab2D, Parent) as Laya.Image;
             element.name = `Boss`;
             let speed = LwgTools._Number.randomOneBySection(this.speed[0], this.speed[1]);
             speed = LwgTools._Number.randomOneHalf() == 0 ? -speed : speed;

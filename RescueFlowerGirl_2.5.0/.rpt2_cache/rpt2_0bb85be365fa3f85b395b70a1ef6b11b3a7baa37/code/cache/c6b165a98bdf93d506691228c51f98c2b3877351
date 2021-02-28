@@ -1,0 +1,9 @@
+{
+  "code": "import { Level1 } from \"./Level1\";\r\nimport { Level3 } from \"./Level3\";\r\nexport class Level {\r\n    static _ins() {\r\n        if (!this.ins)\r\n            this.ins = new this;\r\n        return this.ins;\r\n    }\r\n    enemy(enemy) {\r\n    }\r\n    land(enemy) {\r\n    }\r\n    house(enemy) {\r\n    }\r\n    boss(enemy) {\r\n    }\r\n    heroine(enemy) {\r\n    }\r\n}\r\nexport class _EnemyAttack {\r\n}\r\n_EnemyAttack.Level1 = Level3;\r\n_EnemyAttack.lvArr = [Level1, , Level1,];\r\n",
+  "references": [
+    "D:/Work/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Lwg/Lwg.ts",
+    "D:/Work/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Game/EnemyAttack/Level1.ts",
+    "D:/Work/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Game/EnemyAttack/Level2.ts",
+    "D:/Work/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Game/EnemyAttack/Level3.ts"
+  ]
+}

@@ -1,8 +1,6 @@
 import Lwg, { LwgScene, LwgData, LwgEff2D, LwgEvent, LwgTimer, LwgTools } from "../../Lwg/Lwg";
-import _EnemyBullet from "./EnemyBullet";
 import BloodBase from "./BloodBase";
 import { Heroine } from "./Heroine";
-import { EnemyAttack } from "./EnemyAttack";
 import { _Res } from "../_Res";
 import { _Game } from "../_GameData";
 import { _EnemyAttack } from "../EnemyAttack/_EnemyAttack";
@@ -16,7 +14,7 @@ export default class Enemy extends BloodBase {
         this.ranAttackNum = LwgTools._Number.randomOneBySection(1, 3, true);
     }
     generalProInit(): void {
-        this._Owner.pos(this._SceneImg('Land').width / 2, this._SceneImg('Land').height / 2);
+        this._Owner.pos(Laya.stage.width / 2, 300);
         // !shell && this.Shell.removeSelf();
         this._ImgChild('Shell').removeSelf();
         if (this._Owner['_EnemyData']['color']) {
@@ -40,7 +38,7 @@ export default class Enemy extends BloodBase {
         const time = 220 / radiusSpeed;
         LwgTimer._frameNumLoop(1, time, this, () => {
             radius += radiusSpeed;
-            let point = LwgTools._Point.getRoundPos(this._Owner.rotation, radius, new Laya.Point(this._SceneImg('Land').width / 2, this._SceneImg('Land').height / 2))
+            let point = LwgTools._Point.getRoundPosNew(this._Owner.rotation, radius, new Laya.Point(this._SceneImg('Land').width / 2, this._SceneImg('Land').height / 2))
             this._Owner.x = point.x;
             this._Owner.y = point.y;
         }, () => {
@@ -48,11 +46,11 @@ export default class Enemy extends BloodBase {
         })
     }
     attack(): void {
-        _EnemyAttack.Sector._ins().enemy(this._Owner as Lwg.NodeAdmin._Image);
+        _EnemyAttack.Level1.enemy(this._Owner as Lwg.NodeAdmin._Image);
     }
     move(): void {
         LwgTimer._frameLoop(1, this, () => {
-            let point = LwgTools._Point.getRoundPos(this._Owner.rotation += this.speed, 220, new Laya.Point(this._SceneImg('Land').width / 2, this._SceneImg('Land').height / 2))
+            let point = LwgTools._Point.getRoundPosNew(this._Owner.rotation += this.speed, 220, new Laya.Point(this._SceneImg('Land').width / 2, this._SceneImg('Land').height / 2))
             this._Owner.x = point.x;
             this._Owner.y = point.y;
         })
@@ -65,7 +63,7 @@ export default class Enemy extends BloodBase {
     deathFunc(): void {
         // 最后一个为boss
         if (this._Owner.name === 'Boss') {
-            LwgTools._Node.createPrefab(_Res._list.prefab2D.Heroine.prefab, this._Parent, [this._Owner.x, this._Owner.y], Heroine);
+            LwgTools._Node.createPrefab(_Res.$prefab2D.Heroine.prefab2D, this._Parent, [this._Owner.x, this._Owner.y], Heroine);
         } else {
             this._evNotify(_Game._Event.addEnemy);
         }

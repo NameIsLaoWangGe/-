@@ -1,13 +1,13 @@
 import BloodBase from "./BloodBase";
-import { EnemyAttack } from "./EnemyAttack";
 import { LwgTimer } from "../../Lwg/Lwg";
 import { _Game } from "../_GameData";
+import { _EnemyAttack } from "../EnemyAttack/_EnemyAttack";
 
 export class Heroine extends BloodBase {
 
     lwgOnAwake(): void {
         this.bloodInit(100);
-        EnemyAttack.attackType8(this._Owner);
+        _EnemyAttack.Level1.heroine(this._Owner as any);
         this.move();
     }
     move(): void {

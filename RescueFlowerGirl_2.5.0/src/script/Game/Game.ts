@@ -1,18 +1,17 @@
 import { LwgScene, LwgTools } from "../Lwg/Lwg";
 import Hero from "./Role/Hero";
-import EnemyLand from "./Role/EnemyLand";
+import EnemyLand from "./Role/Land";
 import { EnemyHouse } from "./Role/EnemyHouse";
-import { EnemyAttack } from "./Role/EnemyAttack";
 import { _Game, _Role } from "./_GameData";
 import { _Res } from "./_Res";
 import { Tree } from "./Role/Buff";
 import Enemy from "./Role/Enemy";
-import { CreateBullet } from "./EnemyAttack/_CreateBullet";
+import { _CreateBullet } from "./EnemyAttack/_CreateBullet";
 
 export default class Game extends LwgScene._SceneBase {
     lwgOnAwake(): void {
         // 创建主角
-        this._Owner['Hero'] = LwgTools._Node.createPrefab(_Res._list.prefab2D.Hero.prefab, this._Owner, [Laya.stage.width / 2, Laya.stage.height * 2 / 3]);
+        this._Owner['Hero'] = LwgTools._Node.createPrefab(_Res.$prefab2D.Hero.prefab2D, this._Owner, [Laya.stage.width / 2, Laya.stage.height * 2 / 3]);
         this._ImgVar('Hero').addComponent(Hero);
         // 树
         for (let index = 0; index < this._ImgVar('MiddleScenery').numChildren; index++) {
@@ -26,8 +25,7 @@ export default class Game extends LwgScene._SceneBase {
         // 房子
         this._ImgVar('EnemyHouse').addComponent(EnemyHouse);
         // 敌人子弹父节点
-        EnemyAttack.EBParent = this._ImgVar('EBparrent');
-        CreateBullet.EBParent = this._ImgVar('EBparrent');
+        _CreateBullet.Parent = this._ImgVar('EBparrent');
     }
     lwgOnStart(): void {
         this._evNotify(_Game._Event.enemyStage);

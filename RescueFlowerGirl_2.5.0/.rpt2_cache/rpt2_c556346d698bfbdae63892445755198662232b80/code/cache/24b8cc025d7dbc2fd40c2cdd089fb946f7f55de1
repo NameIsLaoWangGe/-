@@ -1,0 +1,9 @@
+{
+  "code": "import BloodBase from \"./BloodBase\";\r\nimport { EnemyAttack } from \"./EnemyAttack\";\r\nimport { _Game, _Role } from \"../_GameData\";\r\nimport { Boss } from \"./Boss\";\r\nexport class EnemyHouse extends BloodBase {\r\n    constructor() {\r\n        super(...arguments);\r\n        this.enemyHouseStage = false;\r\n    }\r\n    lwgOnAwake() {\r\n        this.bloodInit(20);\r\n        this._ImgChild('Blood').visible = false;\r\n    }\r\n    lwgEvent() {\r\n        this._evReg(_Game._Event.enemyHouseStage, () => {\r\n            this.enemyHouseStage = true;\r\n            this._ImgChild('Blood').visible = true;\r\n            EnemyAttack.attackType6(this._Owner);\r\n        });\r\n        this._evReg(_Game._Event.enemyHouseCheckWeapon, (Weapon, numBlood) => {\r\n            this.checkOtherRule(Weapon, 50, this.enemyHouseStage ? numBlood : 0);\r\n        });\r\n    }\r\n    deathFunc() {\r\n        new _Role._Boss(this._SceneImg('BossParent'), Boss);\r\n    }\r\n}\r\n",
+  "references": [
+    "D:/Work/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Game/Role/BloodBase.ts",
+    "D:/Work/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Game/Role/EnemyAttack.ts",
+    "D:/Work/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Game/_GameData.ts",
+    "D:/Work/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Game/Role/Boss.ts"
+  ]
+}

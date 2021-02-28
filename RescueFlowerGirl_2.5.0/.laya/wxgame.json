@@ -19,9 +19,11 @@
     ],
     "compressJs": true,
     "compressJsFilter": [
-        "$basePath/**/*.js"
+        "$basePath/**/*.js",
+        "!$basePath/libs/min/**/*.js"
     ],
     "compressJsNoteList": [
+        "",
         ""
     ],
     "version": false,
@@ -66,7 +68,7 @@
     "onlyIndexJS": true,
     "es6toes5": false,
     "projectType": "ts",
-    "pubTime": 1611494438588,
+    "pubTime": 1614509523215,
     "uesEnginePlugin": false,
     "wxOptimize": {
         "useOptimizeOpen": false,

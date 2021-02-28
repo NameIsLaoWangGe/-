@@ -1,0 +1,8 @@
+{
+  "code": "import { Level1 } from \"./Level1\";\r\nimport { Level2 } from \"./Level2\";\r\nexport class _EnemyAttack {\r\n}\r\n_EnemyAttack.Level1 = Level2;\r\n_EnemyAttack.lvArr = [Level1, , Level1,];\r\n",
+  "references": [
+    "D:/Work/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Lwg/Lwg.ts",
+    "D:/Work/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Game/EnemyAttack/Level1.ts",
+    "D:/Work/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Game/EnemyAttack/Level2.ts"
+  ]
+}

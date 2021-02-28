@@ -1,0 +1,8 @@
+{
+  "code": "import { LwgTools } from \"../../Lwg/Lwg\";\r\nimport EnemyBullet from \"../Role/EnemyBullet\";\r\nimport { _Res } from \"../_Res\";\r\nexport class CreateBullet {\r\n    static create(enemy) {\r\n        const bullet = LwgTools._Node.createPrefab(_Res.$prefab2D.EnemyBullet.prefab2D, this.EBParent, [enemy._lwg.gPoint.x, enemy._lwg.gPoint.y], EnemyBullet);\r\n        return bullet;\r\n    }\r\n}\r\n",
+  "references": [
+    "D:/Work/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Lwg/Lwg.ts",
+    "D:/Work/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Game/Role/EnemyBullet.ts",
+    "D:/Work/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Game/_Res.ts"
+  ]
+}

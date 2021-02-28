@@ -15,7 +15,7 @@ export class HeroAttack {
     ballisticNum = 1;
     /**创建一个子弹*/ 
     private createWeapon(style: string, x: number, y: number): Laya.Image {
-        const Weapon = LwgTools._Node.createPrefab(_Res._list.prefab2D.Weapon.prefab) as Laya.Image;
+        const Weapon = LwgTools._Node.createPrefab(_Res.$prefab2D.Weapon.prefab2D) as Laya.Image;
         this.WeaponParent.addChild(Weapon);
         Weapon.addComponent(HeroWeapon);
         Weapon.pos(x, y);

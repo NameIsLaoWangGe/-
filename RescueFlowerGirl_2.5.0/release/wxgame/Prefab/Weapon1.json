@@ -1,1 +1,0 @@
-{"type":"Image","props":{"y":0,"x":0,"width":32,"presetID":1,"pivotY":0,"pivotX":0,"name":"Weapon","isPresetRoot":true,"height":160},"compId":82,"child":[{"type":"Image","props":{"y":0,"skin":"Game/UI/Game/Hero/Hero_01_weapon_blue.png","presetID":2,"name":"Pic","centerX":0},"compId":83}],"loadList":["Game/UI/Game/Hero/Hero_01_weapon_blue.png"],"loadList3D":[]}

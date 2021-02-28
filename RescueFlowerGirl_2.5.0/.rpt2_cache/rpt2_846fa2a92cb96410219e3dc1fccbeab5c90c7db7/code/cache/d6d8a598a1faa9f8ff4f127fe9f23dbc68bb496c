@@ -1,0 +1,7 @@
+{
+  "code": "import { LwgScene, LwgSet } from \"../Lwg/Lwg\";\r\nimport Game from \"./Game\";\r\nexport default class Start extends LwgScene._SceneBase {\r\n    lwgOnAwake() {\r\n        LwgSet._bgMusic.switch = false;\r\n    }\r\n    lwgButton() {\r\n        this._btnUp(this._ImgVar('BtnStart'), () => {\r\n            let levelName = 'Game';\r\n            this._openScene(levelName, true, false, () => {\r\n                if (!LwgScene._SceneControl[levelName].getComponent(Game)) {\r\n                    LwgScene._SceneControl[levelName].addComponent(Game);\r\n                }\r\n            });\r\n        });\r\n    }\r\n}\r\n",
+  "references": [
+    "D:/Work/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Lwg/Lwg.ts",
+    "D:/Work/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Game/Game.ts"
+  ]
+}

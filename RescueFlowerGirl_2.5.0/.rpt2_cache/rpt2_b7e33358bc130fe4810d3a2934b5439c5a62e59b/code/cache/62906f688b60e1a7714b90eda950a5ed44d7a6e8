@@ -1,0 +1,7 @@
+{
+  "code": "import { Sector } from \"./Sector\";\r\nexport class _EnemyAttack {\r\n}\r\n_EnemyAttack.Sector = Sector;\r\n",
+  "references": [
+    "D:/Work/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Lwg/Lwg.ts",
+    "D:/Work/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Game/EnemyAttack/Sector.ts"
+  ]
+}

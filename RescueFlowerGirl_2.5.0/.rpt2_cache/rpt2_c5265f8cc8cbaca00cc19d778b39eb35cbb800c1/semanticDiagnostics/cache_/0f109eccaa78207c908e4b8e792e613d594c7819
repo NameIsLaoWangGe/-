@@ -1,0 +1,10 @@
+[
+  {
+    "flatMessage": "Property 'EBParent' does not exist on type 'typeof _CreateBullet'. Did you mean 'Parent'?",
+    "formatted": "\u001b[96m../../../../Work/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Game/Game.ts\u001b[0m:\u001b[93m30\u001b[0m:\u001b[93m23\u001b[0m - \u001b[91merror\u001b[0m\u001b[90m TS2551: \u001b[0mProperty 'EBParent' does not exist on type 'typeof _CreateBullet'. Did you mean 'Parent'?\r\n\r\n\u001b[7m30\u001b[0m         _CreateBullet.EBParent = this._ImgVar('EBparrent');\r\n\u001b[7m  \u001b[0m \u001b[91m                      ~~~~~~~~\u001b[0m\r\n\r\n  \u001b[96m../../../../Work/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Game/EnemyAttack/_CreateBullet.ts\u001b[0m:\u001b[93m10\u001b[0m:\u001b[93m12\u001b[0m\r\n    \u001b[7m10\u001b[0m     static Parent: Laya.Image;\r\n    \u001b[7m  \u001b[0m \u001b[96m           ~~~~~~\u001b[0m\r\n    'Parent' is declared here.\r\n",
+    "category": 1,
+    "code": 2551,
+    "type": "semantic",
+    "fileLine": "D:/Work/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Game/Game.ts(30,23)"
+  }
+]

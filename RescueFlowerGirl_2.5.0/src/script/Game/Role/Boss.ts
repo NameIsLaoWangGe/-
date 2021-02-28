@@ -1,14 +1,13 @@
 import { LwgScene, LwgData, LwgEff2D, LwgTimer, LwgTools } from "../../Lwg/Lwg";
 import { _EnemyAttack } from "../EnemyAttack/_EnemyAttack";
 import Enemy from "./Enemy";
-import { EnemyAttack } from "./EnemyAttack";
 export class Boss extends Enemy {
     lwgOnAwake(): void {
         this.generalProInit();
         this._Owner.pos(this._SceneImg('Content').x, this._SceneImg('Content').y);
         this._Owner.rotation = 0;
         this._SceneImg('Content').removeSelf();
-        this.bloodInit(this._Owner['_EnemyData']['blood']);
+        this.bloodInit(20);
     }
     lwgOnStart(): void {
         this.attack();
@@ -33,6 +32,6 @@ export class Boss extends Enemy {
     appear(): void {
     }
     attack(): void {
-        _EnemyAttack.Sector._ins().boss(this._Owner as any);
+        _EnemyAttack.Level1.boss(this._Owner as any);
     }
 }

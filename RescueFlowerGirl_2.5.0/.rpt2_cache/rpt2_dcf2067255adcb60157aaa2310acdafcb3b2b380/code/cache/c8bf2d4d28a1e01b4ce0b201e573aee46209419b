@@ -1,0 +1,9 @@
+{
+  "code": "import { _CreateBullet } from \"./_CreateBullet\";\r\nimport { _General } from \"./_General\";\r\nexport class Level3 {\r\n    enemy(enemy) {\r\n        _General._randomAngleDown(enemy, 50, 200, 12, _CreateBullet._bulletType.single);\r\n    }\r\n    land(enemy) {\r\n        _General._spiral(enemy, 3, 1, 11, 12, _CreateBullet._bulletType.single);\r\n    }\r\n    house(enemy) {\r\n        _General._spiral(enemy, 3, 3, 11, 12, _CreateBullet._bulletType.single);\r\n    }\r\n    boss(enemy) {\r\n        _General._spiral(enemy, 3, 3, 11, 10, _CreateBullet._bulletType.single);\r\n        _General._randomAngleDown(enemy, 3, 5, 12, _CreateBullet._bulletType.single);\r\n    }\r\n    heroine(enemy) {\r\n        _General._spiral(enemy, 3, 3, 11, 10, _CreateBullet._bulletType.single);\r\n        _General._annular(enemy, 20, 15, 12, _CreateBullet._bulletType.single);\r\n    }\r\n}\r\n",
+  "references": [
+    "D:/Work/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Lwg/Lwg.ts",
+    "D:/Work/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Game/EnemyAttack/_CreateBullet.ts",
+    "D:/Work/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Game/EnemyAttack/_LevelBase.ts",
+    "D:/Work/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Game/EnemyAttack/_General.ts"
+  ]
+}

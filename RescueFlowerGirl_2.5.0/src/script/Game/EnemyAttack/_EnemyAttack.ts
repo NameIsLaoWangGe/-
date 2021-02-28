@@ -4,6 +4,6 @@ import { Level3 } from "./Level3";
 import { Level4 } from "./Level4";
 import { Level5 } from "./Level5";
 export class _EnemyAttack {
-    static Level1 = new Level4;
+    static Level1 = new Level5;
     static lvArr = [Level1, , Level2,];
 }

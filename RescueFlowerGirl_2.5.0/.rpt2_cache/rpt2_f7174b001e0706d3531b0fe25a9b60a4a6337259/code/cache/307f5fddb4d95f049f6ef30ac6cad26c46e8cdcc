@@ -1,9 +1,0 @@
-{
-  "code": "import { _CreateBullet } from \"./_CreateBullet\";\r\nimport { _General } from \"./_General\";\r\nexport class Level4 {\r\n    enemy(enemy) {\r\n        _General._fall(enemy, 50, 200, 5, 0, _CreateBullet._bulletType.three_Triangle);\r\n    }\r\n    land(enemy) {\r\n        _General._evenDowByCenter(enemy, 20, 3, 45, 12, 0, _CreateBullet._bulletType.three_Triangle);\r\n        _General._spiral(enemy, 3, 1, 11, 10, 0, _CreateBullet._bulletType.single);\r\n    }\r\n    house(enemy) {\r\n        _General._spiral(enemy, 3, 2, 11, 12, 0, _CreateBullet._bulletType.three_Triangle);\r\n        _General._evenDowByCenter(enemy, 20, 8, 30, 12, 0, _CreateBullet._bulletType.single);\r\n    }\r\n    boss(enemy) {\r\n        _General._evenDowByCenter(enemy, 20, 4, 30, 12, 0, _CreateBullet._bulletType.three_Triangle);\r\n        _General._annular(enemy, 30, 25, 8, 0, _CreateBullet._bulletType.single);\r\n        _General._annular(enemy, 30, 12, 8, 0, _CreateBullet._bulletType.single, 15);\r\n    }\r\n    heroine(enemy) {\r\n        _General._spiral(enemy, 3, 4, 11, 12, 0, _CreateBullet._bulletType.single, -100);\r\n        _General._evenDowByCenter(enemy, 20, 5, 30, 12, 0, _CreateBullet._bulletType.three_Triangle);\r\n    }\r\n}\r\n",
-  "references": [
-    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Lwg/Lwg.ts",
-    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Game/EnemyAttack/_CreateBullet.ts",
-    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Game/EnemyAttack/_Whom.ts",
-    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Game/EnemyAttack/_General.ts"
-  ]
-}

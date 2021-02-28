@@ -7684,7 +7684,9 @@
         static checkHero(bullet) {
             LwgTimer._frameLoop(1, bullet, () => {
                 const bool = LwgTools._Node.leaveStage(bullet, () => {
-                    bullet.removeSelf();
+                    Laya.timer.clearAll(bullet);
+                    Laya.Tween.clearAll(bullet);
+                    bullet.destroy(true);
                 });
                 if (!bool && bullet.name === _CreateBullet._bulletType.single) {
                     LwgEvent._notify(_Game._Event.checkEnemyBullet, [bullet, 1]);
@@ -7995,7 +7997,7 @@
 
     class _General {
         static _annular(enemy, interval, num = 10, speed = 10, rSpeed = 0, style, delay = 0, diffX = 0) {
-            LwgTimer._frameOnce(delay, this, () => {
+            LwgTimer._frameOnce(delay, enemy, () => {
                 LwgTimer._frameLoop(interval, enemy, () => {
                     for (let index = 0; index < num; index++) {
                         const ep = new Laya.Point(enemy._lwg.gPoint.x += diffX, enemy._lwg.gPoint.y);
@@ -8015,7 +8017,7 @@
         }
         static _spiral(enemy, interval, num, spacing, speed = 10, rSpeed = 0, style = _CreateBullet._bulletType.single, delay = 0, diffX = 0) {
             let time = 0;
-            LwgTimer._frameOnce(delay, this, () => {
+            LwgTimer._frameOnce(delay, enemy, () => {
                 LwgTimer._frameLoop(interval, enemy, () => {
                     time++;
                     let fA = 0;
@@ -8037,7 +8039,7 @@
             });
         }
         static _randomAngleDown(enemy, interval1, interval2, speed = 10, rSpeed = 0, style = _CreateBullet._bulletType.single, delay = 0, diffX = 0) {
-            LwgTimer._frameOnce(delay, this, () => {
+            LwgTimer._frameOnce(delay, enemy, () => {
                 LwgTimer._frameRandomLoop(interval1, interval2, enemy, () => {
                     let fA = LwgTools._Number.randomOneInt(0, 180);
                     const ep = new Laya.Point(enemy._lwg.gPoint.x += diffX, enemy._lwg.gPoint.y);
@@ -8089,32 +8091,32 @@
         }
     }
 
-    class Level4 {
+    class Level5 {
         enemy(enemy) {
-            _General._fall(enemy, 50, 200, 5, 0, _CreateBullet._bulletType.three_Triangle);
+            _General._fall(enemy, 50, 200, 5, 5, _CreateBullet._bulletType.three_Across);
         }
         land(enemy) {
-            _General._evenDowByCenter(enemy, 20, 3, 45, 12, 0, _CreateBullet._bulletType.three_Triangle);
-            _General._spiral(enemy, 3, 1, 11, 10, 0, _CreateBullet._bulletType.single);
+            _General._spiral(enemy, 3, 1, 11, 10, 0, _CreateBullet._bulletType.two);
+            _General._evenDowByCenter(enemy, 25, 6, 45, 8, 3, _CreateBullet._bulletType.three_Vertical);
         }
         house(enemy) {
-            _General._spiral(enemy, 3, 2, 11, 12, 0, _CreateBullet._bulletType.three_Triangle);
+            _General._spiral(enemy, 5, 2, 11, 10, 5, _CreateBullet._bulletType.three_Vertical);
             _General._evenDowByCenter(enemy, 20, 8, 30, 12, 0, _CreateBullet._bulletType.single);
         }
         boss(enemy) {
-            _General._evenDowByCenter(enemy, 20, 4, 30, 12, 0, _CreateBullet._bulletType.three_Triangle);
-            _General._annular(enemy, 30, 25, 8, 0, _CreateBullet._bulletType.single);
-            _General._annular(enemy, 30, 12, 8, 0, _CreateBullet._bulletType.single, 15);
+            _General._evenDowByCenter(enemy, 20, 2, 30, 10, 5, _CreateBullet._bulletType.three_Across);
+            _General._annular(enemy, 30, 10, 8, 5, _CreateBullet._bulletType.three_Vertical);
+            _General._annular(enemy, 30, 12, 8, 0, _CreateBullet._bulletType.two, 15);
         }
         heroine(enemy) {
-            _General._spiral(enemy, 3, 4, 11, 12, 0, _CreateBullet._bulletType.single, -100);
-            _General._evenDowByCenter(enemy, 20, 5, 30, 12, 0, _CreateBullet._bulletType.three_Triangle);
+            _General._spiral(enemy, 5, 3, 11, 10, 8, _CreateBullet._bulletType.three_Across, -100);
+            _General._evenDowByCenter(enemy, 20, 5, 15, 12, 5, _CreateBullet._bulletType.two);
         }
     }
 
     class _EnemyAttack {
     }
-    _EnemyAttack.Level1 = new Level4;
+    _EnemyAttack.Level1 = new Level5;
     _EnemyAttack.lvArr = [Level1, , Level2,];
 
     class Land extends BloodBase {

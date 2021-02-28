@@ -23,7 +23,7 @@ export class _General {
      * @memberof _General
      */
     static _annular(enemy: Lwg.NodeAdmin._Image, interval: number, num: number = 10, speed: number = 10, rSpeed: number = 0, style: string, delay: number = 0, diffX: number = 0): void {
-        LwgTimer._frameOnce(delay, this, () => {
+        LwgTimer._frameOnce(delay, enemy, () => {
             LwgTimer._frameLoop(interval, enemy, () => {
                 for (let index = 0; index < num; index++) {
                     const ep = new Laya.Point(enemy._lwg.gPoint.x += diffX, enemy._lwg.gPoint.y);
@@ -55,7 +55,7 @@ export class _General {
     */
     static _spiral(enemy: Lwg.NodeAdmin._Image, interval: number, num: number, spacing: number, speed: number = 10, rSpeed: number = 0, style: string = _CreateBullet._bulletType.single, delay: number = 0, diffX: number = 0): void {
         let time = 0;
-        LwgTimer._frameOnce(delay, this, () => {
+        LwgTimer._frameOnce(delay, enemy, () => {
             LwgTimer._frameLoop(interval, enemy, () => {
                 time++;
                 let fA = 0;
@@ -89,7 +89,7 @@ export class _General {
      * @param {number} [diffX=0] X轴偏移位置[diffX=0] 
      */
     static _randomAngleDown(enemy: Lwg.NodeAdmin._Image, interval1: number, interval2: number, speed: number = 10, rSpeed: number = 0, style: string = _CreateBullet._bulletType.single, delay: number = 0, diffX: number = 0): void {
-        LwgTimer._frameOnce(delay, this, () => {
+        LwgTimer._frameOnce(delay, enemy, () => {
             LwgTimer._frameRandomLoop(interval1, interval2, enemy, () => {
                 let fA = LwgTools._Number.randomOneInt(0, 180);
                 const ep = new Laya.Point(enemy._lwg.gPoint.x += diffX, enemy._lwg.gPoint.y);

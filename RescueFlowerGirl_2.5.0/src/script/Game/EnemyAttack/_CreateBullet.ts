@@ -26,7 +26,9 @@ export class _CreateBullet {
     static checkHero(bullet: Lwg.NodeAdmin._Image): void {
         LwgTimer._frameLoop(1, bullet, () => {
             const bool = LwgTools._Node.leaveStage(bullet, () => {
-                bullet.removeSelf();
+                Laya.timer.clearAll(bullet);
+                Laya.Tween.clearAll(bullet);
+                bullet.destroy(true);
             })
             // 发送事件检测主角
             if (!bool && bullet.name === _CreateBullet._bulletType.single) {
@@ -101,7 +103,7 @@ export class _CreateBullet {
       * 三个子弹在一起的横排央视
       * @param {type} enemy: Lwg.NodeAdmin._Image I am argument enemy: Lwg.NodeAdmin._Image. 
       */
-     static EB_three_Vertical(enemy: Lwg.NodeAdmin._Image): Lwg.NodeAdmin._Image {
+    static EB_three_Vertical(enemy: Lwg.NodeAdmin._Image): Lwg.NodeAdmin._Image {
         const bullet = this.createBase(enemy, this._bulletType.three_Vertical);
         bullet.name = this._bulletType.three_Vertical;
         for (let index = 0; index < bullet.numChildren; index++) {

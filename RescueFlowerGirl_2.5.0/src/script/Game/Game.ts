@@ -6,7 +6,7 @@ import { _Game, _Role } from "./_GameData";
 import { _Res } from "./_Res";
 import { Tree } from "./Role/Buff";
 import Enemy from "./Role/Enemy";
-import { _CreateBullet } from "./EnemyAttack/_CreateBullet";
+import { _EnemyBullet } from "./EnemyAttack/_EnemyBullet";
 
 export default class Game extends LwgScene._SceneBase {
     lwgOnAwake(): void {
@@ -25,7 +25,7 @@ export default class Game extends LwgScene._SceneBase {
         // 房子
         this._ImgVar('EnemyHouse').addComponent(EnemyHouse);
         // 敌人子弹父节点
-        _CreateBullet.Parent = this._ImgVar('EBparrent');
+        _EnemyBullet.Parent = this._ImgVar('EBparrent');
     }
     lwgOnStart(): void {
         this._evNotify(_Game._Event.enemyStage);

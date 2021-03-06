@@ -1,5 +1,5 @@
 import Lwg, { LwgTimer, LwgTools } from "../../Lwg/Lwg";
-import { _CreateBullet } from "./_CreateBullet";
+import { _EnemyBullet } from "./_EnemyBullet";
 import {_Whom } from "./_Whom";
 
 export class Level2  implements _Whom {
@@ -7,7 +7,7 @@ export class Level2  implements _Whom {
     enemy(enemy: Lwg.NodeAdmin._Image): void {
         const speed = 8;
         LwgTimer._frameRandomLoop(120, 300, enemy, () => {
-            const bullet = _CreateBullet.EB_two(enemy);
+            const bullet = _EnemyBullet.EB_two();
             LwgTimer._frameLoop(1, bullet, () => {
                 bullet.y += speed;
             })
@@ -21,7 +21,7 @@ export class Level2  implements _Whom {
             let fA = LwgTools._Number.randomOneInt(0, 180);
             for (let index = 0; index < num; index++) {
                 const ep = new Laya.Point(enemy._lwg.gPoint.x, enemy._lwg.gPoint.y);
-                const bullet = _CreateBullet.EB_two(enemy);
+                const bullet = _EnemyBullet.EB_two();
                 let _speedAdd = 0;
                 bullet.rotation = fA + 90;
                 LwgTimer._frameLoop(1, bullet, () => {
@@ -54,7 +54,7 @@ export class Level2  implements _Whom {
             let timeAngle = angle;
             const ep = new Laya.Point(enemy._lwg.gPoint.x, enemy._lwg.gPoint.y);
             for (let index = 0; index < num; index++) {
-                const bullet = _CreateBullet.EB_two(enemy);
+                const bullet = _EnemyBullet.EB_two();
                 bullet.rotation = spacing * index + timeAngle - 90;
                 let _speedAdd = 0;
                 LwgTimer._frameLoop(1, bullet, () => {
@@ -75,7 +75,7 @@ export class Level2  implements _Whom {
             let fA = 0;
             for (let index = 0; index < num; index++) {
                 const ep = new Laya.Point(enemy._lwg.gPoint.x, enemy._lwg.gPoint.y);
-                const bullet = _CreateBullet.EB_two(enemy);
+                const bullet = _EnemyBullet.EB_two();
                 let _speedAdd = 0;
                 let angle = fA + time * spacing1;
                 let speed = 6;
@@ -103,7 +103,7 @@ export class Level2  implements _Whom {
             let fA = 0;
             for (let index = 0; index < num; index++) {
                 const ep = new Laya.Point(enemy._lwg.gPoint.x, enemy._lwg.gPoint.y);
-                const bullet = _CreateBullet.EB_two(enemy);
+                const bullet = _EnemyBullet.EB_two();
                 let _speedAdd = 0;
                 let angle = 30;
                 let speed = 12;

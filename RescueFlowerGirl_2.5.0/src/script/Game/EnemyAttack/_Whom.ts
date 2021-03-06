@@ -17,7 +17,6 @@ export interface _Whom {
      * boss
      */
     boss: (enemy: Lwg.NodeAdmin._Image) => void;
-
     /**
      * 女主角
      */

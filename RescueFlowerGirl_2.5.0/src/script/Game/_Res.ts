@@ -29,7 +29,7 @@ export module _Res {
             url: 'Prefab/Enemy.json',
             prefab2D: null as Laya.Prefab,
         }
-         
+
         /**
          * 单个子弹
          * @static 
@@ -52,7 +52,7 @@ export module _Res {
          */
         static EB_three_Triangle: prefab2D = {
             url: 'Prefab/EB_three_Triangle.json',
-            prefab2D: null as Laya.Prefab, 
+            prefab2D: null as Laya.Prefab,
         }
         /**
          * 三个子弹横向排列
@@ -68,6 +68,12 @@ export module _Res {
          */
         static EB_three_Vertical: prefab2D = {
             url: 'Prefab/EB_three_Vertical.json',
+            prefab2D: null as Laya.Prefab,
+        }
+
+        /**四个子弹排成方形*/
+        static EB_Four_Square: prefab2D = {
+            url: 'Prefab/EB_Four_Square.json',
             prefab2D: null as Laya.Prefab,
         }
 

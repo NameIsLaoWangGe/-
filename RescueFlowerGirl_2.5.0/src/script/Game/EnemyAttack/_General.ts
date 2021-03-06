@@ -1,5 +1,6 @@
 
-import Lwg, { LwgTimer, LwgTools } from "../../Lwg/Lwg";
+import Lwg, { LwgEvent, LwgTimer, LwgTools } from "../../Lwg/Lwg";
+import { _Game } from "../_GameData";
 import { _EnemyBullet } from "./_EnemyBullet";
 
 /**
@@ -8,8 +9,6 @@ import { _EnemyBullet } from "./_EnemyBullet";
  * @class _General
  */
 export class _General {
-
-
 
     /**
      * 按角度移动的基础
@@ -31,6 +30,7 @@ export class _General {
             const point = LwgTools._Point.getRoundPosNew(angle, _speedAdd += speed, enemyPos);
             bullet.pos(point.x, point.y);
             bullet.rotation += _rSpeed;
+
             func && func();
         })
     }
@@ -75,7 +75,7 @@ export class _General {
             LwgTimer._frameLoop(interval, enemy, () => {
                 for (let index = 0; index < num; index++) {
                     const ep = new Laya.Point(enemy._lwg.gPoint.x += diffX, enemy._lwg.gPoint.y);
-                    const bullet: Lwg.NodeAdmin._Image = _EnemyBullet[style]();
+                    const bullet: Lwg.NodeAdmin._Image = _EnemyBullet[style](enemy);
                     const angle = 360 / num * index;
                     let _speedAdd = 0;
                     bullet.rotation = angle - 90;
@@ -109,7 +109,7 @@ export class _General {
                 const fA = 0;
                 const ep = new Laya.Point(enemy._lwg.gPoint.x + diffX, enemy._lwg.gPoint.y);
                 for (let index = 0; index < num; index++) {
-                    const bullet: Lwg.NodeAdmin._Image = _EnemyBullet[style]();
+                    const bullet: Lwg.NodeAdmin._Image = _EnemyBullet[style](enemy);
                     let _speedAdd = 0;
                     let angle = fA + time * spacingAngle;
                     angle += index * 360 / num;
@@ -145,7 +145,7 @@ export class _General {
             let time = 0;
             LwgTimer._frameLoop(interval, enemy, () => {
                 const ep = new Laya.Point(enemy._lwg.gPoint.x + diffX, enemy._lwg.gPoint.y);
-                const bullet: Lwg.NodeAdmin._Image = _EnemyBullet[style]();
+                const bullet: Lwg.NodeAdmin._Image = _EnemyBullet[style](enemy);
                 let _speedAdd = 0;
                 let angle = time * spacingAngle;
                 if (angle > endAngle) {
@@ -186,7 +186,7 @@ export class _General {
             LwgTimer._frameRandomLoop(interval1, interval2, enemy, () => {
                 let fA = LwgTools._Number.randomOneInt(0, 180);
                 const ep = new Laya.Point(enemy._lwg.gPoint.x += diffX, enemy._lwg.gPoint.y);
-                const bullet: Lwg.NodeAdmin._Image = _EnemyBullet[style]();
+                const bullet: Lwg.NodeAdmin._Image = _EnemyBullet[style](enemy);
                 bullet.x += diffX;
                 let _speedAdd = 0;
                 bullet.rotation = fA - 90;
@@ -206,16 +206,16 @@ export class _General {
      * @param {Lwg.NodeAdmin._Image} enemy 敌人
      * @param {number} interval1 间隔1
      * @param {number} interval2 间隔2
-     * @param {number} [speed=10] 速度[speed=10]
+     * @param {number} [speedY=10] 速度[speed=10]
      * @param {number} [rSpeed=10] 旋转速度[speed=10]
      * @param {string} [style=_EnemyBullet.Type.single] 子弹样式
      * @param {number} [delay=0] 延时[delay=0]
      * @param {number} [diffX=0] X轴偏移位置[diffX=0]
      */
-    static _fall(enemy: Lwg.NodeAdmin._Image, interval1: number, interval2: number, speed: number = 10, rSpeed: number = 0, style: string = _EnemyBullet.Type.three_Across, delay: number = 0, diffX: number = 0): void {
+    static _fall(enemy: Lwg.NodeAdmin._Image, interval1: number, interval2: number, speedY: number = 10, rSpeed: number = 0, style: string = _EnemyBullet.Type.three_Across, delay: number = 0, diffX: number = 0): void {
         LwgTimer._frameOnce(delay, enemy, () => {
             LwgTimer._frameRandomLoop(interval1, interval2, enemy, () => {
-                this.moveByXY(enemy, diffX, _EnemyBullet[style](), 0, speed, rSpeed, null);
+                this.moveByXY(enemy, diffX, _EnemyBullet[style](enemy), 0, speedY, rSpeed, null);
             })
         })
     }
@@ -238,7 +238,7 @@ export class _General {
             LwgTimer._frameLoop(interval, enemy, () => {
                 for (let index = 0; index < num; index++) {
                     let angle = index * (180 - spacing * 2) / (num - 1) + spacing;
-                    this.moveByAngle(enemy, diffX, _EnemyBullet[style](), angle, speed, rSpeed, null);
+                    this.moveByAngle(enemy, diffX, _EnemyBullet[style](enemy), angle, speed, rSpeed, null);
                 }
             })
         })
@@ -265,7 +265,7 @@ export class _General {
             LwgTimer._frameLoop(interval, enemy, () => {
                 for (let index = 0; index < num; index++) {
                     LwgTimer._frameOnce(numFrameInterval * index, enemy, () => {
-                        this.moveByAngle(enemy, diffX, _EnemyBullet[style](), angle, speed, rSpeed, null);
+                        this.moveByAngle(enemy, diffX, _EnemyBullet[style](enemy), angle, speed, rSpeed, null);
                     })
                 }
             })

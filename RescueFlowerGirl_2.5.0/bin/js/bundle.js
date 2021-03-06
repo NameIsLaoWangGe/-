@@ -7705,9 +7705,9 @@
                 element.name = this.Type.single;
             }
         }
-        static createBase(type, checkType) {
+        static createBase(enemy, type, checkType) {
             let prefab = _Res.$prefab2D[type]['prefab2D'];
-            const bullet = LwgTools._Node.createPrefab(prefab, this.Parent);
+            const bullet = LwgTools._Node.createPrefab(prefab, this.Parent, [enemy._lwg.gPoint.x, enemy._lwg.gPoint.y]);
             bullet.name = type;
             switch (checkType) {
                 case this.ChekType.bullet:
@@ -7725,28 +7725,28 @@
             }
             return bullet;
         }
-        static EB_single() {
-            const bullet = this.createBase(this.Type.single, this.ChekType.bullet);
+        static EB_single(enemy) {
+            const bullet = this.createBase(enemy, this.Type.single, this.ChekType.bullet);
             return bullet;
         }
-        static EB_two() {
-            const bullet = this.createBase(this.Type.two, this.ChekType.child);
+        static EB_two(enemy) {
+            const bullet = this.createBase(enemy, this.Type.two, this.ChekType.child);
             return bullet;
         }
-        static EB_three_Triangle() {
-            const bullet = this.createBase(this.Type.three_Triangle, this.ChekType.child);
+        static EB_three_Triangle(enemy) {
+            const bullet = this.createBase(enemy, this.Type.three_Triangle, this.ChekType.child);
             return bullet;
         }
-        static EB_three_Across() {
-            const bullet = this.createBase(this.Type.three_Across, this.ChekType.child);
+        static EB_three_Across(enemy) {
+            const bullet = this.createBase(enemy, this.Type.three_Across, this.ChekType.child);
             return bullet;
         }
-        static EB_three_Vertical() {
-            const bullet = this.createBase(this.Type.three_Vertical, this.ChekType.child);
+        static EB_three_Vertical(enemy) {
+            const bullet = this.createBase(enemy, this.Type.three_Vertical, this.ChekType.child);
             return bullet;
         }
-        static EB_Four_Square() {
-            const bullet = this.createBase(this.Type.four_Square, this.ChekType.child);
+        static EB_Four_Square(enemy) {
+            const bullet = this.createBase(enemy, this.Type.four_Square, this.ChekType.child);
             return bullet;
         }
     }
@@ -7771,7 +7771,7 @@
             LwgTimer._frameRandomLoop(120, 300, enemy, () => {
                 const ep = new Laya.Point(enemy._lwg.gPoint.x, enemy._lwg.gPoint.y);
                 for (let index = 0; index < 3; index++) {
-                    const bullet = _EnemyBullet.EB_single();
+                    const bullet = _EnemyBullet.EB_single(enemy);
                     let _speedAdd = 0;
                     LwgTimer._frameLoop(1, bullet, () => {
                         const point = LwgTools._Point.getRoundPosNew(index * angleSpacing + 90 - angleSpacing, _speedAdd += speed, ep);
@@ -7793,7 +7793,7 @@
                     num = 10;
                 }
                 for (let index = 0; index < num; index++) {
-                    const bullet = _EnemyBullet.EB_single();
+                    const bullet = _EnemyBullet.EB_single(enemy);
                     let _speedAdd = 0;
                     LwgTimer._frameLoop(1, bullet, () => {
                         const unit = 180 / num;
@@ -7825,7 +7825,7 @@
                 let timeAngle = angle;
                 const ep = new Laya.Point(enemy._lwg.gPoint.x, enemy._lwg.gPoint.y);
                 for (let index = 0; index < num; index++) {
-                    const bullet = _EnemyBullet.EB_single();
+                    const bullet = _EnemyBullet.EB_single(enemy);
                     let _speedAdd = 0;
                     LwgTimer._frameLoop(1, bullet, () => {
                         const point = LwgTools._Point.getRoundPosNew(spacing * index + timeAngle, _speedAdd += speed, ep);
@@ -7842,7 +7842,7 @@
                 const ep1 = new Laya.Point(enemy._lwg.gPoint.x + 100, enemy._lwg.gPoint.y);
                 const ep2 = new Laya.Point(enemy._lwg.gPoint.x - 100, enemy._lwg.gPoint.y);
                 for (let index = 0; index < num; index++) {
-                    const bullet = _EnemyBullet.EB_single();
+                    const bullet = _EnemyBullet.EB_single(enemy);
                     let _speedAdd = 0;
                     LwgTimer._frameLoop(1, bullet, () => {
                         const point = LwgTools._Point.getRoundPosNew(unit * index + unit / 2, _speedAdd += speed, ep1);
@@ -7850,7 +7850,7 @@
                     });
                 }
                 for (let index = 0; index < num; index++) {
-                    const bullet = _EnemyBullet.EB_single();
+                    const bullet = _EnemyBullet.EB_single(enemy);
                     let _speedAdd = 0;
                     LwgTimer._frameLoop(1, bullet, () => {
                         const point = LwgTools._Point.getRoundPosNew(unit * index + unit / 2, _speedAdd += speed, ep2);
@@ -7867,7 +7867,7 @@
                 const fA = LwgTools._Number.randomOneInt(360);
                 const ep = new Laya.Point(enemy._lwg.gPoint.x, enemy._lwg.gPoint.y);
                 for (let index = 0; index < num; index++) {
-                    const bullet = _EnemyBullet.EB_single();
+                    const bullet = _EnemyBullet.EB_single(enemy);
                     let _speedAdd = 0;
                     LwgTimer._frameLoop(1, bullet, () => {
                         const point = LwgTools._Point.getRoundPosNew(fA + spacing * index, _speedAdd += speed, ep);
@@ -7875,7 +7875,7 @@
                     });
                 }
                 for (let index = 0; index < num; index++) {
-                    const bullet = _EnemyBullet.EB_single();
+                    const bullet = _EnemyBullet.EB_single(enemy);
                     let _speedAdd = 0;
                     LwgTimer._frameLoop(1, bullet, () => {
                         const point = LwgTools._Point.getRoundPosNew(fA + spacing * index + 120, _speedAdd += speed, ep);
@@ -7883,7 +7883,7 @@
                     });
                 }
                 for (let index = 0; index < num; index++) {
-                    const bullet = _EnemyBullet.EB_single();
+                    const bullet = _EnemyBullet.EB_single(enemy);
                     let _speedAdd = 0;
                     LwgTimer._frameLoop(1, bullet, () => {
                         const point = LwgTools._Point.getRoundPosNew(fA + spacing * index + 240, _speedAdd += speed, ep);
@@ -7898,7 +7898,7 @@
         enemy(enemy) {
             const speed = 8;
             LwgTimer._frameRandomLoop(120, 300, enemy, () => {
-                const bullet = _EnemyBullet.EB_two();
+                const bullet = _EnemyBullet.EB_two(enemy);
                 LwgTimer._frameLoop(1, bullet, () => {
                     bullet.y += speed;
                 });
@@ -7911,7 +7911,7 @@
                 let fA = LwgTools._Number.randomOneInt(0, 180);
                 for (let index = 0; index < num; index++) {
                     const ep = new Laya.Point(enemy._lwg.gPoint.x, enemy._lwg.gPoint.y);
-                    const bullet = _EnemyBullet.EB_two();
+                    const bullet = _EnemyBullet.EB_two(enemy);
                     let _speedAdd = 0;
                     bullet.rotation = fA + 90;
                     LwgTimer._frameLoop(1, bullet, () => {
@@ -7943,7 +7943,7 @@
                 let timeAngle = angle;
                 const ep = new Laya.Point(enemy._lwg.gPoint.x, enemy._lwg.gPoint.y);
                 for (let index = 0; index < num; index++) {
-                    const bullet = _EnemyBullet.EB_two();
+                    const bullet = _EnemyBullet.EB_two(enemy);
                     bullet.rotation = spacing * index + timeAngle - 90;
                     let _speedAdd = 0;
                     LwgTimer._frameLoop(1, bullet, () => {
@@ -7963,7 +7963,7 @@
                 let fA = 0;
                 for (let index = 0; index < num; index++) {
                     const ep = new Laya.Point(enemy._lwg.gPoint.x, enemy._lwg.gPoint.y);
-                    const bullet = _EnemyBullet.EB_two();
+                    const bullet = _EnemyBullet.EB_two(enemy);
                     let _speedAdd = 0;
                     let angle = fA + time * spacing1;
                     let speed = 6;
@@ -7989,7 +7989,7 @@
                 let fA = 0;
                 for (let index = 0; index < num; index++) {
                     const ep = new Laya.Point(enemy._lwg.gPoint.x, enemy._lwg.gPoint.y);
-                    const bullet = _EnemyBullet.EB_two();
+                    const bullet = _EnemyBullet.EB_two(enemy);
                     let _speedAdd = 0;
                     let angle = 30;
                     let speed = 12;
@@ -8036,7 +8036,7 @@
                 LwgTimer._frameLoop(interval, enemy, () => {
                     for (let index = 0; index < num; index++) {
                         const ep = new Laya.Point(enemy._lwg.gPoint.x += diffX, enemy._lwg.gPoint.y);
-                        const bullet = _EnemyBullet[style]();
+                        const bullet = _EnemyBullet[style](enemy);
                         const angle = 360 / num * index;
                         let _speedAdd = 0;
                         bullet.rotation = angle - 90;
@@ -8058,7 +8058,7 @@
                     const fA = 0;
                     const ep = new Laya.Point(enemy._lwg.gPoint.x + diffX, enemy._lwg.gPoint.y);
                     for (let index = 0; index < num; index++) {
-                        const bullet = _EnemyBullet[style]();
+                        const bullet = _EnemyBullet[style](enemy);
                         let _speedAdd = 0;
                         let angle = fA + time * spacingAngle;
                         angle += index * 360 / num;
@@ -8078,7 +8078,7 @@
                 let time = 0;
                 LwgTimer._frameLoop(interval, enemy, () => {
                     const ep = new Laya.Point(enemy._lwg.gPoint.x + diffX, enemy._lwg.gPoint.y);
-                    const bullet = _EnemyBullet[style]();
+                    const bullet = _EnemyBullet[style](enemy);
                     let _speedAdd = 0;
                     let angle = time * spacingAngle;
                     if (angle > endAngle) {
@@ -8108,7 +8108,7 @@
                 LwgTimer._frameRandomLoop(interval1, interval2, enemy, () => {
                     let fA = LwgTools._Number.randomOneInt(0, 180);
                     const ep = new Laya.Point(enemy._lwg.gPoint.x += diffX, enemy._lwg.gPoint.y);
-                    const bullet = _EnemyBullet[style]();
+                    const bullet = _EnemyBullet[style](enemy);
                     bullet.x += diffX;
                     let _speedAdd = 0;
                     bullet.rotation = fA - 90;
@@ -8124,7 +8124,7 @@
         static _fall(enemy, interval1, interval2, speed = 10, rSpeed = 0, style = _EnemyBullet.Type.three_Across, delay = 0, diffX = 0) {
             LwgTimer._frameOnce(delay, enemy, () => {
                 LwgTimer._frameRandomLoop(interval1, interval2, enemy, () => {
-                    this.moveByXY(enemy, diffX, _EnemyBullet[style](), speed, 0, rSpeed, null);
+                    this.moveByXY(enemy, diffX, _EnemyBullet[style](enemy), speed, 0, rSpeed, null);
                 });
             });
         }
@@ -8134,7 +8134,7 @@
                 LwgTimer._frameLoop(interval, enemy, () => {
                     for (let index = 0; index < num; index++) {
                         let angle = index * (180 - spacing * 2) / (num - 1) + spacing;
-                        this.moveByAngle(enemy, diffX, _EnemyBullet[style](), angle, speed, rSpeed, null);
+                        this.moveByAngle(enemy, diffX, _EnemyBullet[style](enemy), angle, speed, rSpeed, null);
                     }
                 });
             });
@@ -8144,7 +8144,7 @@
                 LwgTimer._frameLoop(interval, enemy, () => {
                     for (let index = 0; index < num; index++) {
                         LwgTimer._frameOnce(numFrameInterval * index, enemy, () => {
-                            this.moveByAngle(enemy, diffX, _EnemyBullet[style](), angle, speed, rSpeed, null);
+                            this.moveByAngle(enemy, diffX, _EnemyBullet[style](enemy), angle, speed, rSpeed, null);
                         });
                     }
                 });
@@ -8167,13 +8167,17 @@
             _General._assignAngle(enemy, 25, 65, 3, 4, 8, 0, _EnemyBullet.Type.two, 0, -200);
         }
         boss(enemy) {
-            _General._evenDowByCenter(enemy, 20, 2, 30, 10, 5, _EnemyBullet.Type.three_Across);
-            _General._annular(enemy, 30, 10, 8, 5, _EnemyBullet.Type.three_Vertical);
-            _General._annular(enemy, 30, 12, 8, 0, _EnemyBullet.Type.two, 15);
+            _General._evenDowByCenter(enemy, 20, 5, 30, 10, 5, _EnemyBullet.Type.three_Across);
+            _General._assignAngle(enemy, 25, 115, 3, 4, 8, 0, _EnemyBullet.Type.single, 0, 200);
+            _General._assignAngle(enemy, 25, 90, 3, 4, 8, 0, _EnemyBullet.Type.single, 0, 0);
+            _General._assignAngle(enemy, 25, 65, 3, 4, 8, 0, _EnemyBullet.Type.single, 0, -200);
         }
         heroine(enemy) {
-            _General._spiral(enemy, 5, 3, 11, 10, 8, _EnemyBullet.Type.three_Across, -100);
-            _General._evenDowByCenter(enemy, 20, 5, 15, 12, 5, _EnemyBullet.Type.two);
+            _General._spiral(enemy, 5, 3, 11, 10, 8, _EnemyBullet.Type.two);
+            _General._assignAngle(enemy, 25, 135, 3, 4, 8, 0, _EnemyBullet.Type.single, 0, 200);
+            _General._assignAngle(enemy, 25, 45, 3, 4, 8, 0, _EnemyBullet.Type.single, 0, -200);
+            _General._assignAngle(enemy, 25, 100, 3, 4, 8, 0, _EnemyBullet.Type.single, 0, 100);
+            _General._assignAngle(enemy, 25, 80, 3, 4, 8, 0, _EnemyBullet.Type.single, 0, -100);
         }
     }
 

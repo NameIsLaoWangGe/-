@@ -1,0 +1,9 @@
+{
+  "code": "import BloodBase from \"./BloodBase\";\r\nimport { LwgTimer } from \"../../Lwg/Lwg\";\r\nimport { _Game } from \"../_GameData\";\r\nimport { _EnemyAttack } from \"../EnemyAttack/_EnemyAttack\";\r\nexport class Heroine extends BloodBase {\r\n    constructor() {\r\n        super(...arguments);\r\n        this.heroineStage = true;\r\n    }\r\n    lwgOnAwake() {\r\n        this.bloodInit(100);\r\n        _EnemyAttack.Level1.heroine(this._Owner);\r\n        this.move();\r\n    }\r\n    move() {\r\n        let dir = 'left';\r\n        LwgTimer._frameLoop(1, this, () => {\r\n            if (dir == 'right') {\r\n                this._Owner.x++;\r\n                if (this._Owner.x > Laya.stage.width - 100) {\r\n                    dir = 'left';\r\n                }\r\n            }\r\n            else {\r\n                this._Owner.x--;\r\n                if (this._Owner.x < 100) {\r\n                    dir = 'right';\r\n                }\r\n            }\r\n        });\r\n    }\r\n    lwgEvent() {\r\n        this._evReg(_Game._Event.heroineCheckWeapon, (Weapon, numBlood) => {\r\n            this.checkOtherRule(Weapon, 50, this.heroineStage ? numBlood : 0);\r\n        });\r\n    }\r\n    deathFunc() {\r\n        this._openScene('Victory', false);\r\n    }\r\n}\r\n",
+  "references": [
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Game/Role/BloodBase.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Lwg/Lwg.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Game/_GameData.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Game/EnemyAttack/_EnemyAttack.ts"
+  ]
+}

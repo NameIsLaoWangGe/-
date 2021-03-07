@@ -1,5 +1,5 @@
-import { _Res } from "./_Res";
 import { LwgPreLoad } from "../Lwg/Lwg";
+import { _Res } from "./General/_Res";
 
 export default class PreLoad extends LwgPreLoad._PreLoadScene {
     lwgOnStart(): void {

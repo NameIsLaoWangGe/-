@@ -1,0 +1,11 @@
+{
+  "code": "import { LwgAdaptive, LwgScene, LwgClick, LwgPlatform, LwgSceneAni, LwgAdmin } from \"./Lwg\";\r\nimport PreLoad from \"../Game/PreLoad\";\r\nimport Start from \"../Game/Start\";\r\nimport Defeated from \"../Game/Defeated\";\r\nimport Victory from \"../Game/Victory\";\r\nexport default class LwgInit extends LwgAdmin._InitScene {\r\n    lwgOnAwake() {\r\n        LwgPlatform._Ues.value = LwgPlatform._Tpye.OPPOTest;\r\n        Laya.Stat.show();\r\n        Laya.MouseManager.multiTouchEnabled = false;\r\n        LwgSceneAni._openSwitch.value = true;\r\n        LwgSceneAni._Use.value = {\r\n            class: LwgSceneAni._fadeOut.Open,\r\n            type: null,\r\n        };\r\n        LwgClick._Use.value = LwgClick._Type.reduce;\r\n        LwgAdaptive._Use.value = [1280, 720];\r\n        LwgScene._SceneScript = {\r\n            PreLoad: PreLoad,\r\n            Start: Start,\r\n            Defeated: Defeated,\r\n            Victory: Victory,\r\n        };\r\n    }\r\n    lwgOnStart() {\r\n        this._openScene('PreLoad');\r\n    }\r\n}\r\n",
+  "references": [
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Lwg/Lwg.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Lwg/SubPkg.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Game/PreLoad.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Game/Start.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Game/Defeated.ts",
+    "F:/Work/Game/07_RescueFlowerGirl_2.5.0/Project/RescueFlowerGirl_2.5.0/src/script/Game/Victory.ts"
+  ]
+}

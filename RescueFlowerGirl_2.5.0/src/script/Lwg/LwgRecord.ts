@@ -267,4 +267,12 @@ export module record {
     export enum Table {
         'wps表格数字输入逗号自动消失' = '右键单元格设置，数字设置为文本',
     }
+
+    export let Git={
+        TortoiseGit安装:'网上搜索TortoiseGit安装，里面也有一个语言选择包，可以选择中文，TortoiseGit安装在任意目录，语言包则旋转默认安装，当然应该也可以安装在其他目录',
+        clone远程项目:'将远程项目的http//地址改复制一下，用命令或者TortoiseGit都可以拉去',
+        生成密钥才可以推送:'gitbash输入命令ssh-keygen -t rsa -C "849567502@qq.com" 为生成密钥，地址在C:\Users\用户名（我的是老王个）\.ssh中，id_rsa.pub这个文件中有密钥，填写到github中去，右上角选项中能看到密钥按钮进去填写即可',
+        如果用TortoiseGit推送的话:'当推送'
+
+    }
 }

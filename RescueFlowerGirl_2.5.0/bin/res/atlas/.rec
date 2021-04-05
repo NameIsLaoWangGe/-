@@ -120,8 +120,6 @@ R 9B501DC8 chijinbi.wav
 R E23D09D2 guoguan.wav
 R 9140B217 huodejinbi.wav
 R 6E72E92F wancheng.wav
-D Game/UI/Common
-D Game/UI/DesignPic
 D Game/UI/Game
 P B42D56D9 aim.png
 D Game/UI/PreLoad

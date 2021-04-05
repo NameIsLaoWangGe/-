@@ -1,0 +1,7 @@
+{
+  "code": "import { LwgPreLoad } from \"../Lwg/Lwg\";\r\nimport { _Res } from \"./General/_Res\";\r\nexport default class PreLoad extends LwgPreLoad._PreLoadScene {\r\n    lwgOnStart() {\r\n        this.lwgStartLoding(_Res);\r\n    }\r\n    lwgOpenAni() { return 1; }\r\n    lwgStepComplete() {\r\n    }\r\n    lwgAllComplete() {\r\n        return 1000;\r\n    }\r\n}\r\n",
+  "references": [
+    "D:/Work/Game/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Lwg/Lwg.ts",
+    "D:/Work/Game/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Game/General/_Res.ts"
+  ]
+}

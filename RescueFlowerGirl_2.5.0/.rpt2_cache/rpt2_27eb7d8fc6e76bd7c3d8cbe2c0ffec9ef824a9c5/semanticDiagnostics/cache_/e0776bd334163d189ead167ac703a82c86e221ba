@@ -1,0 +1,10 @@
+[
+  {
+    "flatMessage": "Conversion of type '_Sprite' to type 'Image' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.\n  Type '_Sprite' is missing the following properties from type 'Image': _skin, _group, dispose, createChildren, and 46 more.",
+    "formatted": "\u001b[96m../../../../Work/Game/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Game/Levels_HeroAttack.ts\u001b[0m:\u001b[93m18\u001b[0m:\u001b[93m24\u001b[0m - \u001b[91merror\u001b[0m\u001b[90m TS2352: \u001b[0mConversion of type '_Sprite' to type 'Image' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.\r\n  Type '_Sprite' is missing the following properties from type 'Image': _skin, _group, dispose, createChildren, and 46 more.\r\n\r\n\u001b[7m18\u001b[0m         const Weapon = LwgTools._Node.createPrefab(_Res.$prefab2D.Weapon.prefab2D) as Laya.Image;\r\n\u001b[7m  \u001b[0m \u001b[91m                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\u001b[0m\r\n",
+    "category": 1,
+    "code": 2352,
+    "type": "semantic",
+    "fileLine": "D:/Work/Game/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Game/Levels_HeroAttack.ts(18,24)"
+  }
+]

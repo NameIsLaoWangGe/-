@@ -1,0 +1,10 @@
+[
+  {
+    "flatMessage": "Type '{ PreLoad: typeof PreLoad; Start: typeof Start; Defeated: typeof Defeated; Victory: typeof Victory; }' is not assignable to type 'any[]'.\n  Object literal may only specify known properties, and 'PreLoad' does not exist in type 'any[]'.",
+    "formatted": "\u001b[96m../../../../Work/Game/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Lwg/LwgInit.ts\u001b[0m:\u001b[93m20\u001b[0m:\u001b[93m13\u001b[0m - \u001b[91merror\u001b[0m\u001b[90m TS2322: \u001b[0mType '{ PreLoad: typeof PreLoad; Start: typeof Start; Defeated: typeof Defeated; Victory: typeof Victory; }' is not assignable to type 'any[]'.\r\n  Object literal may only specify known properties, and 'PreLoad' does not exist in type 'any[]'.\r\n\r\n\u001b[7m20\u001b[0m             PreLoad: PreLoad,\r\n\u001b[7m  \u001b[0m \u001b[91m            ~~~~~~~~~~~~~~~~\u001b[0m\r\n",
+    "category": 1,
+    "code": 2322,
+    "type": "semantic",
+    "fileLine": "D:/Work/Game/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Lwg/LwgInit.ts(20,13)"
+  }
+]

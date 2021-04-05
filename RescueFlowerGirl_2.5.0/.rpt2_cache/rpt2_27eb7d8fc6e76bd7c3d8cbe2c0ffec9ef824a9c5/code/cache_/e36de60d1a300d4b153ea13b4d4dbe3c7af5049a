@@ -1,0 +1,7 @@
+{
+  "code": "import LwgInit from \"./script/Lwg/LwgInit\";\r\nimport _Init from \"./script/Game/General/_Init\";\r\nexport default class GameConfig {\r\n    constructor() {\r\n    }\r\n    static init() {\r\n        var reg = Laya.ClassUtils.regClass;\r\n        reg(\"script/Lwg/LwgInit.ts\", LwgInit);\r\n        reg(\"script/Game/General/_Init.ts\", _Init);\r\n    }\r\n}\r\nGameConfig.width = 720;\r\nGameConfig.height = 1280;\r\nGameConfig.scaleMode = \"fixedwidth\";\r\nGameConfig.screenMode = \"vertical\";\r\nGameConfig.alignV = \"top\";\r\nGameConfig.alignH = \"left\";\r\nGameConfig.startScene = \"Scene/_Init.scene\";\r\nGameConfig.sceneRoot = \"\";\r\nGameConfig.debug = false;\r\nGameConfig.stat = false;\r\nGameConfig.physicsDebug = true;\r\nGameConfig.exportSceneToJson = true;\r\nGameConfig.init();\r\n",
+  "references": [
+    "D:/Work/Game/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Lwg/LwgInit.ts",
+    "D:/Work/Game/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Game/General/_Init.ts"
+  ]
+}

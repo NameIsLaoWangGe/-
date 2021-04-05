@@ -1,6 +1,5 @@
 import { LwgScene, LwgAni2D, LwgEff2D, LwgTimer, LwgTools, LwgPlatform } from "../../Lwg/Lwg";
 import { _GameAni } from "./_GameAni";
-import { $Guide } from "./_GameGlobal";
 /**裁剪界面的层级必须在最上面*/
 export default class _Guide extends LwgScene._SceneBase {
     lwgOpenAni(): number {
@@ -234,15 +233,15 @@ export default class _Guide extends LwgScene._SceneBase {
         });
     }
     lwgEvent(): void {
-        this._evReg($Guide.Event.vanishGuide, () => {
-            this._AniVar('Click').stop();
-            this.handVanish();
-            this.bgVanish();
-        })
+        // this._evReg($Guide.Event.vanishGuide, () => {
+        //     this._AniVar('Click').stop();
+        //     this.handVanish();
+        //     this.bgVanish();
+        // })
 
-        this._evReg($Guide.Event.closeGuide, () => {
-            this._closeScene();
-        })
+        // this._evReg($Guide.Event.closeGuide, () => {
+        //     this._closeScene();
+        // })
     }
     lwgCloseAni(): number {
         return _GameAni._dialogCloseFadeOut(this._ImgVar('Hand'), this._ImgVar('Background'));

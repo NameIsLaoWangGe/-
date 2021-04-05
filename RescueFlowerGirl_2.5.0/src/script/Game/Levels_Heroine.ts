@@ -1,6 +1,6 @@
 import { LwgTimer } from "../Lwg/Lwg";
 import { _EnemyAttack } from "./EnemyAttack/_EnemyAttack";
-import { _Game } from "./General/_GameData";
+import { _Game } from "./General/_GameGlobal";
 import Levels_RoleBase from "./Levels_RoleBase";
 
 export class Levels_Heroine extends Levels_RoleBase {

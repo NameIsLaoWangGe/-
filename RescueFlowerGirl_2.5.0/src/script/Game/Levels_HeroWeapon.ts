@@ -1,5 +1,5 @@
 import { LwgScene, LwgTimer, LwgTools } from "../Lwg/Lwg";
-import { _Game } from "./General/_GameData";
+import { _Game } from "./General/_GameGlobal";
 
 export class Levels_HeroWeapon extends LwgScene._ObjectBase {
     launchAcc: number = 0;

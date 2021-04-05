@@ -1,6 +1,6 @@
 import Lwg, { LwgTimer, LwgTools } from "../Lwg/Lwg";
 import { _EnemyAttack } from "./EnemyAttack/_EnemyAttack";
-import { _Game } from "./General/_GameData";
+import { _Game } from "./General/_GameGlobal";
 import { _Res } from "./General/_Res";
 import { Levels_Heroine } from "./Levels_Heroine";
 import Levels_RoleBase from "./Levels_RoleBase";

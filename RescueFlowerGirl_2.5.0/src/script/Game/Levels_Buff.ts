@@ -1,5 +1,5 @@
 import { LwgScene, LwgTimer, LwgTools } from "../Lwg/Lwg";
-import { _Game, _Role } from "./General/_GameData";
+import { _Game, _Role } from "./General/_GameGlobal";
 import Levels_RoleBase from "./Levels_RoleBase";
 export default class Levels_Buff extends LwgScene._ObjectBase {
     lwgOnStart(): void {

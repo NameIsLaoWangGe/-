@@ -1,0 +1,1 @@
+{"type":"View","props":{"width":720,"name":"_Init","height":1280},"compId":2,"child":[{"type":"Script","props":{"runtime":"script/Game/General/_Init.ts"},"compId":9}],"loadList":[],"loadList3D":[]}

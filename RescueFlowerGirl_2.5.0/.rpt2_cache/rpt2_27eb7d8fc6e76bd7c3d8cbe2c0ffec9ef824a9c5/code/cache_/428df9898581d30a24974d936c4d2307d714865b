@@ -1,0 +1,6 @@
+{
+  "code": "import { LwgScene } from \"../../Lwg/Lwg\";\r\nexport class _SceneName extends LwgScene._BaseName {\r\n}\r\n_SceneName.AdsHint = 'AdsHint';\r\n_SceneName.PersonalInfo = 'PersonalInfo';\r\n_SceneName.Levels = 'Levels';\r\n_SceneName.CheckIn = 'CheckIn';\r\n_SceneName.Share = 'Share';\r\n_SceneName.Sweep = 'Sweep';\r\n_SceneName.Assembly = 'Assembly';\r\n_SceneName.Embattle = 'Embattle';\r\n_SceneName.Workshop = 'Workshop';\r\n_SceneName.Acquire = 'Acquire';\r\n",
+  "references": [
+    "D:/Work/Game/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Lwg/Lwg.ts"
+  ]
+}

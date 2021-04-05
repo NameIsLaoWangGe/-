@@ -1,5 +1,5 @@
 import Lwg, { LwgEvent, LwgScene, LwgTimer, LwgTools } from "../../Lwg/Lwg";
-import { _Game } from "../General/_GameData";
+import { _Game } from "../General/_GameGlobal";
 import { _Res } from "../General/_Res";
 
 export class _EnemyBullet {

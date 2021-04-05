@@ -1,0 +1,10 @@
+[
+  {
+    "flatMessage": "Property '_ownerDestroy' does not exist on type 'Levels_RoleBase'.",
+    "formatted": "\u001b[96m../../../../Work/Game/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Game/Levels_RoleBase.ts\u001b[0m:\u001b[93m37\u001b[0m:\u001b[93m18\u001b[0m - \u001b[91merror\u001b[0m\u001b[90m TS2339: \u001b[0mProperty '_ownerDestroy' does not exist on type 'Levels_RoleBase'.\r\n\r\n\u001b[7m37\u001b[0m             this._ownerDestroy();\r\n\u001b[7m  \u001b[0m \u001b[91m                 ~~~~~~~~~~~~~\u001b[0m\r\n",
+    "category": 1,
+    "code": 2339,
+    "type": "semantic",
+    "fileLine": "D:/Work/Game/RescueFlowerGirl/RescueFlowerGirl_2.5.0/src/script/Game/Levels_RoleBase.ts(37,18)"
+  }
+]

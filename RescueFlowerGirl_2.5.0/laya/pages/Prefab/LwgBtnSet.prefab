@@ -2,17 +2,32 @@
     "x":0,
     "type":"Sprite",
     "selectedBox":423,
+    "selecteID":424,
     "searchKey":"Sprite,BtnSet,BtnSet",
     "props":{"y":0,"x":0,"width":47,"var":"BtnSet","presetID":1,"preset":"laya/pages/Prefab/LwgBtnSet.prefab","pivotY":27,"pivotX":24,"name":"BtnSet","isPresetRoot":true,"height":54},
     "nodeParent":-1,
-    "maxID":424,
+    "maxID":425,
     "label":"BtnSet",
-    "isDirectory":false,
+    "isOpen":true,
+    "isDirectory":true,
     "isAniNode":true,
-    "hasChild":false,
+    "hasChild":true,
     "compId":423,
     "child":[
-        ],
+        {
+            "x":15,
+            "type":"Image",
+            "searchKey":"Image",
+            "props":{"y":55,"x":58,"width":116,"skin":"Lwg/UI/rectangle_02.png","presetID":2,"preset":"laya/pages/Prefab/LwgBtnSet.prefab","height":111,"anchorY":0.5,"anchorX":0.5},
+            "nodeParent":423,
+            "label":"Image(LwgBtnSet)",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":424,
+            "child":[
+                ]
+        }],
     "animations":[
         {
             "nodes":[

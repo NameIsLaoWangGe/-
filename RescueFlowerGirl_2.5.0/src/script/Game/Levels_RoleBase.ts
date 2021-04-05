@@ -34,7 +34,7 @@ export default class Levels_RoleBase extends LwgScene._ObjectBase {
         if (this.bloodPresnt <= 0) {
             this.deathFunc();
             this.deathEffect();
-            this._ownerDestroy();
+            this._lwgDestroyAndClear();
         } else {
             this.subOnceFunc();
         }

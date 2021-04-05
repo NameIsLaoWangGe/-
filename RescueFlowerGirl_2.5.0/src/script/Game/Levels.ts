@@ -1,7 +1,7 @@
 import { LwgScene, LwgTools } from "../Lwg/Lwg";
 import { _EnemyBullet } from "./EnemyAttack/_EnemyBullet";
 import { _Res } from "./General/_Res";
-import { _Game, _Role } from "./General/_GameData";
+import { _Game, _Role } from "./General/_GameGlobal";
 import { Tree } from "./Levels_Buff";
 import Levels_Land from "./Levels_Land";
 import Levels_Enemy from "./Levels_Enemy";
@@ -68,6 +68,10 @@ export default class Levels extends LwgScene._SceneBase {
             this._closeScene();
         });
     }
+}
+
+export class Levels1 extends Levels {
+
 }
 
 

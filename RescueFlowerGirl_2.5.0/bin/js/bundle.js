@@ -25,10 +25,10 @@
                     switch (val) {
                         case PlatformAdmin._Tpye.WebTest:
                             Laya.LocalStorage.clear();
-                            GoldAdmin._num.value = 5000;
+                            Currencydmin.Gold._num.value = 5000;
                             break;
                         case PlatformAdmin._Tpye.Research:
-                            GoldAdmin._num.value = 50000000000000;
+                            Currencydmin.Gold._num.value = 50000000000000;
                             break;
                         default:
                             break;
@@ -47,12 +47,12 @@
                     if (bool) {
                         GameAdmin._switch = false;
                         TimerAdmin._switch = false;
-                        LwgClick._aniSwitch = true;
+                        LwgClick._filter.value = LwgClick._filterType.all;
                     }
                     else {
                         GameAdmin._switch = true;
                         TimerAdmin._switch = true;
-                        LwgClick._aniSwitch = false;
+                        LwgClick._filter.value = LwgClick._filterType.none;
                     }
                 }
             };
@@ -108,25 +108,112 @@
         let SceneAdmin;
         (function (SceneAdmin) {
             SceneAdmin._SceneControl = {};
-            SceneAdmin._SceneScript = {};
+            SceneAdmin._SceneScript = [];
             class _BaseName {
             }
-            _BaseName.PreLoad = 'PreLoad';
-            _BaseName.PreLoadCutIn = 'PreLoadCutIn';
-            _BaseName.Guide = 'Guide';
+            _BaseName._LwgInit = '_LwgInit';
+            _BaseName._PreLoad = '_PreLoad';
+            _BaseName._PreLoadCutIn = '_PreLoadCutIn';
+            _BaseName._Guide = '_Guide';
+            _BaseName._Parameter = '_Parameter';
             _BaseName.Start = 'Start';
-            _BaseName.Shop = 'Shop';
-            _BaseName.Task = 'Task';
-            _BaseName.Set = 'Set';
-            _BaseName.Victory = 'Victory';
-            _BaseName.Defeated = 'Defeated';
-            _BaseName.CheckIn = 'CheckIn';
-            _BaseName.LwgInit = 'LwgInit';
             _BaseName.SelectLevel = 'SelectLevel';
             _BaseName.Settle = 'Settle';
+            _BaseName.Victory = 'Victory';
+            _BaseName.Defeated = 'Defeated';
             _BaseName.Share = 'Share';
+            _BaseName.CheckIn = 'CheckIn';
             _BaseName.Ranking = 'Ranking';
+            _BaseName.Set = 'Set';
+            _BaseName.Shop = 'Shop';
+            _BaseName.Task = 'Task';
             SceneAdmin._BaseName = _BaseName;
+            function _sceneZOderUp(upScene) {
+                let num = 0;
+                for (const key in SceneAdmin._SceneControl) {
+                    if (Object.prototype.hasOwnProperty.call(SceneAdmin._SceneControl, key)) {
+                        const Scene = SceneAdmin._SceneControl[key];
+                        if (Scene.parent) {
+                            Scene.zOrder = 0;
+                            num++;
+                        }
+                    }
+                }
+                if (upScene) {
+                    upScene.zOrder = num;
+                }
+            }
+            SceneAdmin._sceneZOderUp = _sceneZOderUp;
+            function _addToStage(_openScene, _openZOder) {
+                if (_openScene) {
+                    if (_openZOder) {
+                        Laya.stage.addChildAt(_openScene, _openZOder);
+                    }
+                    else {
+                        Laya.stage.addChild(_openScene);
+                    }
+                    let spcriptBool = false;
+                    for (let index = 0; index < SceneAdmin._SceneScript.length; index++) {
+                        const element = SceneAdmin._SceneScript[index];
+                        if (element['name'] === _openScene.name) {
+                            if (!_openScene.getComponent(element)) {
+                                _openScene.addComponent(element);
+                                spcriptBool = true;
+                            }
+                        }
+                    }
+                    if (!spcriptBool) {
+                        console.log(`${_openScene.name}场景没有同名脚本！,需在LwgInit脚本中导入该脚本！`);
+                    }
+                }
+            }
+            SceneAdmin._addToStage = _addToStage;
+            ;
+            function _aniFlow(_openScene, _closeScene, _openFunc, _closeFunc) {
+                let closeAniTime = 0;
+                let closeScript;
+                if (_closeScene) {
+                    _sceneZOderUp(_closeScene);
+                    closeScript = _closeScene[_closeScene.name];
+                    if (closeScript) {
+                        closeAniTime = closeScript.lwgCloseAni();
+                        if (closeAniTime === null) {
+                            if (SceneAniAdmin._closeSwitch.value) {
+                                closeAniTime = SceneAniAdmin._commonCloseAni(_closeScene);
+                            }
+                        }
+                    }
+                }
+                Laya.timer.once(closeAniTime, this, () => {
+                    if (_closeScene) {
+                        closeScript && closeScript.lwgBeforeCloseAni();
+                        _closeScene.close();
+                        _closeFunc && _closeFunc();
+                    }
+                    ClickAdmin._filter.value = ClickAdmin._filterType.all;
+                    if (_openScene) {
+                        ClickAdmin._filter.value = ClickAdmin._filterType.none;
+                        _sceneZOderUp(_openScene);
+                        const openScript = _openScene[_openScene.name];
+                        let openAniTime = openScript.lwgOpenAni();
+                        if (openAniTime === null) {
+                            if (SceneAniAdmin._openSwitch.value) {
+                                openAniTime = SceneAniAdmin._commonOpenAni(_openScene);
+                            }
+                            else {
+                                openAniTime = 0;
+                            }
+                        }
+                        Laya.timer.once(openAniTime, this, () => {
+                            openScript.lwgOpenAniAfter();
+                            openScript.lwgButton();
+                            _openFunc && _openFunc();
+                            ClickAdmin._filter.value = ClickAdmin._filterType.all;
+                        });
+                    }
+                });
+            }
+            SceneAdmin._aniFlow = _aniFlow;
             SceneAdmin._PreLoadCutIn = {
                 openName: null,
                 closeName: null,
@@ -134,167 +221,39 @@
             function _preLoadOpenScene(openName, closeName, func, zOrder) {
                 SceneAdmin._PreLoadCutIn.openName = openName;
                 SceneAdmin._PreLoadCutIn.closeName = closeName;
-                _openScene(_BaseName.PreLoadCutIn, closeName, func, zOrder);
+                _openScene(_BaseName._PreLoadCutIn, closeName, func, zOrder);
             }
             SceneAdmin._preLoadOpenScene = _preLoadOpenScene;
-            class _SceneServe {
-                static _openZOderUp() {
-                    if (SceneAniAdmin._closeSwitch.value) {
-                        let num = 0;
-                        for (const key in SceneAdmin._SceneControl) {
-                            if (Object.prototype.hasOwnProperty.call(SceneAdmin._SceneControl, key)) {
-                                const Scene = SceneAdmin._SceneControl[key];
-                                if (Scene.parent) {
-                                    Scene.zOrder = 0;
-                                    num++;
-                                }
-                            }
-                        }
-                        if (this._openScene) {
-                            this._openScene.zOrder = num;
-                            for (let index = 0; index < this._closeSceneArr.length; index++) {
-                                const element = this._closeSceneArr[index];
-                                if (element) {
-                                    element.zOrder = --num;
-                                }
-                                else {
-                                    this._closeSceneArr.splice(index, 1);
-                                    index--;
-                                }
-                            }
-                        }
-                    }
-                }
-                ;
-                static _closeZOderUP(CloseScene) {
-                    if (SceneAniAdmin._closeSwitch.value) {
-                        let num = 0;
-                        for (const key in SceneAdmin._SceneControl) {
-                            if (Object.prototype.hasOwnProperty.call(SceneAdmin._SceneControl, key)) {
-                                const Scene = SceneAdmin._SceneControl[key];
-                                if (Scene.parent) {
-                                    num++;
-                                }
-                            }
-                        }
-                        if (CloseScene) {
-                            CloseScene.zOrder = num;
-                            if (this._openScene) {
-                                this._openScene.zOrder = --num;
-                            }
-                        }
-                    }
-                }
-                ;
-                static _open() {
-                    if (this._openScene) {
-                        if (this._openZOder) {
-                            Laya.stage.addChildAt(this._openScene, this._openZOder);
-                        }
-                        else {
-                            Laya.stage.addChild(this._openScene);
-                        }
-                        if (SceneAdmin._SceneScript[this._openScene.name]) {
-                            if (!this._openScene.getComponent(SceneAdmin._SceneScript[this._openScene.name])) {
-                                this._openScene.addComponent(SceneAdmin._SceneScript[this._openScene.name]);
-                            }
-                        }
-                        else {
-                            console.log(`${this._openScene.name}场景没有同名脚本！,需在LwgInit脚本中导入该脚本！`);
-                        }
-                        this._openZOderUp();
-                        this._openFunc();
-                    }
-                }
-                ;
-                static _close() {
-                    if (this._closeSceneArr.length > 0) {
-                        for (let index = 0; index < this._closeSceneArr.length; index++) {
-                            let scene = this._closeSceneArr[index];
-                            if (scene) {
-                                _closeScene(scene.name);
-                                this._closeSceneArr.splice(index, 1);
-                                index--;
-                            }
-                        }
-                    }
-                    this._remake();
-                }
-                static _remake() {
-                    this._openScene = null;
-                    this._openZOder = 1;
-                    this._openFunc = null;
-                    this._closeZOder = 0;
-                }
-            }
-            _SceneServe._openScene = null;
-            _SceneServe._openZOder = 1;
-            _SceneServe._openFunc = null;
-            _SceneServe._closeSceneArr = [];
-            _SceneServe._closeZOder = 0;
-            _SceneServe._sceneNum = 1;
-            SceneAdmin._SceneServe = _SceneServe;
-            function _openScene(openName, closeName, func, zOrder) {
-                LwgClick._aniSwitch = false;
+            function _openScene(openName, closeName, openfunc, zOrder) {
+                LwgClick._filter.value = LwgClick._filterType.none;
                 Laya.Scene.load('Scene/' + openName + '.json', Laya.Handler.create(this, function (scene) {
-                    const openScene = ToolsAdmin._Node.checkChildren(Laya.stage, openName);
+                    let openScene = ToolsAdmin._Node.checkChildren(Laya.stage, openName);
                     if (openScene) {
                         openScene.close();
-                        console.log(`场景${openName}重复出现！前面的场景将会被关闭！`);
+                        console.log(`场景${openName}重复出现！前一个场景被关闭！`);
                     }
-                    _SceneServe._openScene = SceneAdmin._SceneControl[scene.name = openName] = scene;
-                    if (closeName && SceneAdmin._SceneControl[closeName]) {
-                        _SceneServe._closeSceneArr.push(SceneAdmin._SceneControl[closeName]);
-                        _SceneServe._closeZOder = SceneAdmin._SceneControl[closeName].zOrder;
-                    }
-                    _SceneServe._openZOder = zOrder ? zOrder : null;
-                    _SceneServe._openFunc = func ? func : () => { };
-                    _SceneServe._open();
+                    openScene = SceneAdmin._SceneControl[scene.name = openName] = scene;
+                    _addToStage(openScene, zOrder);
+                    _aniFlow(openScene, SceneAdmin._SceneControl[closeName], openfunc, null);
                 }));
             }
             SceneAdmin._openScene = _openScene;
-            function _closeScene(closeName, func) {
-                if (!SceneAdmin._SceneControl[closeName]) {
+            function _closeScene(closeName, closefunc) {
+                const closeScene = SceneAdmin._SceneControl[closeName];
+                if (!closeScene) {
                     console.log(`场景${closeName}关闭失败，可能不存在！`);
                     return;
                 }
-                var closef = () => {
-                    func && func();
-                    LwgClick._aniSwitch = true;
-                    SceneAdmin._SceneControl[closeName].close();
-                };
-                if (!SceneAniAdmin._closeSwitch.value) {
-                    closef();
-                }
-                else {
-                    _SceneServe._closeZOderUP(LwgScene._SceneControl[closeName]);
-                    const script = SceneAdmin._SceneControl[closeName][closeName];
-                    if (script) {
-                        LwgClick._aniSwitch = false;
-                        let time0 = script.lwgCloseAni();
-                        if (time0 !== null) {
-                            SceneAniAdmin._closeAniDelay = time0;
-                            script.lwgBeforeCloseAni();
-                            Laya.timer.once(time0, this, () => {
-                                closef();
-                                LwgClick._aniSwitch = true;
-                            });
-                        }
-                        else {
-                            const delay = SceneAniAdmin._commonCloseAni(SceneAdmin._SceneControl[closeName]);
-                            Laya.timer.once(delay, this, () => {
-                                script.lwgBeforeCloseAni();
-                                closef();
-                            });
-                        }
-                    }
-                }
+                _aniFlow(null, closeScene, null, closefunc);
             }
             SceneAdmin._closeScene = _closeScene;
             class _ScriptBase extends Laya.Script {
                 constructor() {
                     super(...arguments);
                     this.ownerSceneName = '';
+                }
+                get ownerName() {
+                    return this.owner.name;
                 }
                 getFind(name, type) {
                     if (!this[`_Scene${type}${name}`]) {
@@ -330,16 +289,16 @@
                     return this.getFind(name, '_FindList');
                 }
                 _storeNum(name, _func, initial) {
-                    return StorageAdmin._num(`${this.owner.name}/${name}`, _func, initial);
+                    return StorageAdmin._num(`${this.ownerSceneName}/${name}`, _func, initial);
                 }
                 _storeStr(name, _func, initial) {
-                    return StorageAdmin._str(`${this.owner.name}/${name}`, _func, initial);
+                    return StorageAdmin._str(`${this.ownerSceneName}/${name}`, _func, initial);
                 }
                 _storeBool(name, _func, initial) {
-                    return StorageAdmin._bool(`${this.owner.name}/${name}`, _func, initial);
+                    return StorageAdmin._bool(`${this.ownerSceneName}/${name}`, _func, initial);
                 }
                 _storeArray(name, _func, initial) {
-                    return StorageAdmin._array(`${this.owner.name}/${name}`, _func, initial);
+                    return StorageAdmin._array(`${this.ownerSceneName}/${name}`, _func, initial);
                 }
                 lwgOnAwake() { }
                 ;
@@ -360,104 +319,54 @@
                 lwgOnStart() { }
                 lwgButton() { }
                 ;
+                checkBtnClick(target, clickFunc, e) {
+                    if (ClickAdmin._absolute) {
+                        switch (ClickAdmin._filter.value) {
+                            case ClickAdmin._filterType.all || ClickAdmin._filterType.button:
+                                clickFunc && clickFunc(e);
+                                break;
+                            case ClickAdmin._filterType.someBtnIncludeStage || ClickAdmin._filterType.someBtnExcludeStage:
+                                ClickAdmin._checkTarget(target.name) && clickFunc && clickFunc(e);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
                 _btnDown(target, down, effect) {
                     LwgClick._on(effect == undefined ? LwgClick._Use.value : effect, target, this, (e) => {
-                        var func = () => {
-                            ClickAdmin._absoluteSwitch && LwgClick._aniSwitch && down && down(e);
-                        };
-                        if (ClickAdmin._assign.length > 0) {
-                            ClickAdmin._checkAssign(target.name) && func();
-                        }
-                        else {
-                            func();
-                        }
+                        this.checkBtnClick(target, down, e);
                     }, null, null, null);
                 }
                 _btnMove(target, move, effect) {
                     LwgClick._on(effect == undefined ? LwgClick._Use.value : effect, target, this, null, (e) => {
-                        var func = () => {
-                            ClickAdmin._absoluteSwitch && LwgClick._aniSwitch && move && move(e);
-                        };
-                        if (ClickAdmin._assign.length > 0) {
-                            ClickAdmin._checkAssign(target.name) && func();
-                        }
-                        else {
-                            func();
-                        }
+                        this.checkBtnClick(target, move, e);
                     }, null, null);
                 }
                 _btnUp(target, up, effect) {
                     LwgClick._on(effect == undefined ? LwgClick._Use.value : effect, target, this, null, null, (e) => {
-                        var func = () => {
-                            ClickAdmin._absoluteSwitch && LwgClick._aniSwitch && up && up(e);
-                        };
-                        if (ClickAdmin._assign.length > 0) {
-                            ClickAdmin._checkAssign(target.name) && func();
-                        }
-                        else {
-                            func();
-                        }
+                        this.checkBtnClick(target, up, e);
                     }, null);
                 }
                 _btnOut(target, out, effect) {
                     LwgClick._on(effect == undefined ? LwgClick._Use.value : effect, target, this, null, null, null, (e) => {
-                        var func = () => {
-                            ClickAdmin._absoluteSwitch && LwgClick._aniSwitch && out && out(e);
-                        };
-                        if (ClickAdmin._assign.length > 0) {
-                            ClickAdmin._checkAssign(target.name) && func();
-                        }
-                        else {
-                            func();
-                        }
+                        this.checkBtnClick(target, out, e);
                     });
                 }
                 _btnFour(target, down, move, up, out, effect) {
                     LwgClick._on(effect == null ? effect : LwgClick._Use.value, target, this, (e) => {
-                        var func = () => {
-                            ClickAdmin._absoluteSwitch && LwgClick._aniSwitch && down && down(e);
-                        };
-                        if (ClickAdmin._assign.length > 0) {
-                            ClickAdmin._checkAssign(target.name) && func();
-                        }
-                        else {
-                            func();
-                        }
+                        this.checkBtnClick(target, down, e);
                     }, (e) => {
-                        var func = () => {
-                            ClickAdmin._absoluteSwitch && LwgClick._aniSwitch && move && move(e);
-                        };
-                        if (ClickAdmin._assign.length > 0) {
-                            ClickAdmin._checkAssign(target.name) && func();
-                        }
-                        else {
-                            func();
-                        }
+                        this.checkBtnClick(target, move, e);
                     }, (e) => {
-                        var func = () => {
-                            ClickAdmin._absoluteSwitch && LwgClick._aniSwitch && up && up(e);
-                        };
-                        if (ClickAdmin._assign.length > 0) {
-                            ClickAdmin._checkAssign(target.name) && func();
-                        }
-                        else {
-                            func();
-                        }
+                        this.checkBtnClick(target, up, e);
                     }, (e) => {
-                        var func = () => {
-                            ClickAdmin._absoluteSwitch && LwgClick._aniSwitch && out && out(e);
-                        };
-                        if (ClickAdmin._assign.length > 0) {
-                            ClickAdmin._checkAssign(target.name) && func();
-                        }
-                        else {
-                            func();
-                        }
+                        this.checkBtnClick(target, out, e);
                     });
                 }
                 _openScene(openName, closeSelf, preLoadCutIn, func, zOrder) {
                     let closeName;
-                    if (closeSelf == undefined || closeSelf == true) {
+                    if (closeSelf === undefined || closeSelf === true) {
                         closeName = this.ownerSceneName;
                     }
                     if (!preLoadCutIn) {
@@ -467,18 +376,28 @@
                         LwgScene._preLoadOpenScene(openName, closeName, func, zOrder);
                     }
                 }
-                _closeScene(sceneName, func) {
-                    LwgScene._closeScene(sceneName ? sceneName : this.ownerSceneName, func);
+                _closeScene(sceneName = this.ownerSceneName, func) {
+                    if (sceneName !== this.ownerSceneName) {
+                        const scene = LwgScene._SceneControl[sceneName];
+                        const scirpt = scene[sceneName];
+                        const time = scirpt.lwgCloseAni();
+                        Laya.timer.once(time ? time : 0, this, () => {
+                            scene.close();
+                        });
+                    }
+                    else {
+                        LwgScene._closeScene(this.ownerSceneName, func);
+                    }
                 }
                 lwgOnUpdate() { }
                 ;
                 lwgOnDisable() { }
                 ;
-                onStageMouseDown(e) { ClickAdmin._stageSwitch && ClickAdmin._assign.length === 0 && LwgClick._aniSwitch && this.lwgOnStageDown(e); }
+                onStageMouseDown(e) { ClickAdmin._checkStage() && this.lwgOnStageDown(e); }
                 ;
-                onStageMouseMove(e) { ClickAdmin._stageSwitch && ClickAdmin._assign.length === 0 && LwgClick._aniSwitch && this.lwgOnStageMove(e); }
+                onStageMouseMove(e) { ClickAdmin._checkStage() && this.lwgOnStageMove(e); }
                 ;
-                onStageMouseUp(e) { ClickAdmin._stageSwitch && ClickAdmin._assign.length === 0 && LwgClick._aniSwitch && this.lwgOnStageUp(e); }
+                onStageMouseUp(e) { ClickAdmin._checkStage() && this.lwgOnStageUp(e); }
                 ;
                 lwgOnStageDown(e) { }
                 ;
@@ -515,6 +434,9 @@
                 }
                 _AniVar(name) {
                     return this.getVar(name, '_AniVar');
+                }
+                _SkVar(name) {
+                    return this.getVar(name, '_SkVar');
                 }
                 _BtnVar(name) {
                     return this.getVar(name, '_BtnVar');
@@ -581,23 +503,9 @@
                 onStart() {
                     this.moduleOnStart();
                     this.lwgOnStart();
-                    this.btnAndOpenAni();
                 }
                 moduleOnStart() { }
-                btnAndOpenAni() {
-                    let time = this.lwgOpenAni();
-                    if (time !== null) {
-                        Laya.timer.once(time, this, () => {
-                            LwgClick._aniSwitch = true;
-                            this.lwgOpenAniAfter();
-                            this.lwgButton();
-                            _SceneServe._close();
-                        });
-                    }
-                    else {
-                        SceneAniAdmin._commonOpenAni(this._Owner);
-                    }
-                }
+                ;
                 lwgOpenAni() { return null; }
                 ;
                 lwgOpenAniAfter() { }
@@ -634,7 +542,7 @@
                 constructor() {
                     super();
                 }
-                _ownerDestroy() {
+                _lwgDestroyAndClear() {
                     this._Owner.destroy();
                     this.clear();
                 }
@@ -750,10 +658,10 @@
                 _TapChild(name) {
                     return this.getChild(name, '_TapChild');
                 }
-                _TapBox(name) {
-                    return this.getChild(name, '_TapBox');
+                _FontClipChild(name) {
+                    return this.getChild(name, '_TapFontClip');
                 }
-                _TapFontClip(name) {
+                _SKChild(name) {
                     return this.getChild(name, '_TapFontClip');
                 }
                 onAwake() {
@@ -800,8 +708,8 @@
             class _Box extends Laya.Box {
             }
             NodeAdmin._Box = _Box;
-            function _addProperty(node, nodeType) {
-                if (!node)
+            function _addProperty(Node, nodeType) {
+                if (!Node)
                     return;
                 let _proType;
                 switch (nodeType) {
@@ -815,17 +723,17 @@
                         _proType;
                         break;
                 }
-                var getGPoint = () => {
-                    if (node.parent) {
-                        return node.parent.localToGlobal(new Laya.Point(node.x, node.y));
+                let getGPoint = () => {
+                    if (Node.parent) {
+                        return Node.parent.localToGlobal(new Laya.Point(Node.x, Node.y));
                     }
                     else {
                         return null;
                     }
                 };
-                const _fPoint = new Laya.Point(node.x, node.y);
+                const _fPoint = new Laya.Point(Node.x, Node.y);
                 const _fGPoint = getGPoint();
-                const _fRotation = node.rotation;
+                const _fRotation = Node.rotation;
                 _proType = {
                     get gPoint() {
                         return getGPoint();
@@ -833,8 +741,31 @@
                     fPoint: _fPoint,
                     fGPoint: _fGPoint,
                     fRotation: _fRotation,
+                    disByNode(OtherNode) {
+                        const nodePos = getGPoint();
+                        if (nodePos) {
+                            if (OtherNode.parent) {
+                                let otherNodePos = OtherNode.parent.localToGlobal(new Laya.Point(Node.x, Node.y));
+                                return nodePos.distance(otherNodePos.x, otherNodePos.y);
+                            }
+                        }
+                        return null;
+                    },
+                    globleDisByPoint(point) {
+                        const nodeGPos = getGPoint();
+                        return nodeGPos.distance(point.x, point.y);
+                    },
+                    localDisByPoint(point) {
+                        const nodePos = new Laya.Point(Node.x, Node.y);
+                        return nodePos.distance(point.x, point.y);
+                    },
+                    childGPoint(Child) {
+                        const point = new Laya.Point(Child.x, Child.y);
+                        const gPoint = Node.localToGlobal(point);
+                        return gPoint;
+                    }
                 };
-                node['_lwg'] = _proType;
+                Node['_lwg'] = _proType;
             }
             NodeAdmin._addProperty = _addProperty;
         })(NodeAdmin = Lwg.NodeAdmin || (Lwg.NodeAdmin = {}));
@@ -842,7 +773,7 @@
         (function (Dialogue) {
             let Skin;
             (function (Skin) {
-                Skin["blackBord"] = "Lwg/UI/ui_orthogon_black_0.7.png";
+                Skin["blackBord"] = "Lwg/UI/rectangle_mask_07.png";
             })(Skin || (Skin = {}));
             function _middleHint(describe) {
                 const Hint_M = Laya.Pool.getItemByClass('Hint_M', Laya.Sprite);
@@ -1026,168 +957,193 @@
             }
             Dialogue.createCommonDialog = createCommonDialog;
         })(Dialogue = Lwg.Dialogue || (Lwg.Dialogue = {}));
-        let GoldAdmin;
-        (function (GoldAdmin) {
-            GoldAdmin._num = {
-                get value() {
-                    return Laya.LocalStorage.getItem('GoldNum') ? Number(Laya.LocalStorage.getItem('GoldNum')) : 0;
-                },
-                set value(val) {
-                    Laya.LocalStorage.setItem('GoldNum', val.toString());
+        let Currencydmin;
+        (function (Currencydmin) {
+            let Diamond;
+            (function (Diamond) {
+                Diamond._num = {
+                    get value() {
+                        return Laya.LocalStorage.getItem('Currencydmin/DiamondNum') ? Number(Laya.LocalStorage.getItem('Currencydmin/DiamondNum')) : 0;
+                    },
+                    set value(val) {
+                        Laya.LocalStorage.setItem('Currencydmin/DiamondNum', val.toString());
+                    }
+                };
+            })(Diamond = Currencydmin.Diamond || (Currencydmin.Diamond = {}));
+            let Gold;
+            (function (Gold_1) {
+                Gold_1._num = {
+                    get value() {
+                        return Laya.LocalStorage.getItem('Currencydmin/GoldNum') ? Number(Laya.LocalStorage.getItem('Currencydmin/GoldNum')) : 0;
+                    },
+                    set value(val) {
+                        Laya.LocalStorage.setItem('Currencydmin/GoldNum', val.toString());
+                    }
+                };
+                function _createNode(x, y, parent = Laya.stage) {
+                    if (Gold_1._GoldNode) {
+                        Gold_1._GoldNode.removeSelf();
+                    }
+                    let Img;
+                    Laya.loader.load('Prefab/LwgGold.json', Laya.Handler.create(this, function (prefabJson) {
+                        const _prefab = new Laya.Prefab;
+                        _prefab.json = prefabJson;
+                        Img = LwgTools._Node.createPrefab(_prefab, parent, [x, y], null, 100);
+                        Gold_1._GoldNode = Img;
+                        _updateNumNode();
+                    }));
                 }
-            };
-            function _createGoldNode(x, y, parent) {
-                if (!parent) {
-                    parent = Laya.stage;
+                Gold_1._createNode = _createNode;
+                function _updateNumNode() {
+                    const Num = Gold_1._GoldNode.getChildByName('Num');
+                    if (Num['sheet']) {
+                        Num['value'] = ToolsAdmin._Format.formatNumber(Gold_1._num.value);
+                    }
+                    else {
+                        Num['text'] = ToolsAdmin._Format.formatNumber(Gold_1._num.value);
+                    }
                 }
-                if (GoldAdmin.GoldNode) {
-                    GoldAdmin.GoldNode.removeSelf();
+                function _add(number) {
+                    Gold_1._num.value += Number(number);
+                    _updateNumNode();
                 }
-                let sp;
-                Laya.loader.load('Prefab/LwgGold.json', Laya.Handler.create(this, function (prefab) {
-                    let _prefab = new Laya.Prefab();
-                    _prefab.json = prefab;
-                    sp = Laya.Pool.getItemByCreateFun('gold', _prefab.create, _prefab);
-                    let Num = sp.getChildByName('Num');
-                    Num.text = ToolsAdmin._Format.formatNumber(GoldAdmin._num.value);
-                    parent.addChild(sp);
-                    sp.pos(x, y);
-                    sp.zOrder = 100;
-                    GoldAdmin.GoldNode = sp;
-                }));
-            }
-            GoldAdmin._createGoldNode = _createGoldNode;
-            function _add(number) {
-                GoldAdmin._num.value += Number(number);
-                let Num = GoldAdmin.GoldNode.getChildByName('Num');
-                Num.text = ToolsAdmin._Format.formatNumber(GoldAdmin._num.value);
-            }
-            GoldAdmin._add = _add;
-            function _addDisPlay(number) {
-                let Num = GoldAdmin.GoldNode.getChildByName('Num');
-                Num.value = (Number(Num.value) + Number(number)).toString();
-            }
-            GoldAdmin._addDisPlay = _addDisPlay;
-            function _addNoDisPlay(number) {
-                GoldAdmin._num.value += Number(number);
-            }
-            GoldAdmin._addNoDisPlay = _addNoDisPlay;
-            function _nodeAppear(delayed, x, y) {
-                if (!GoldAdmin.GoldNode) {
-                    return;
+                Gold_1._add = _add;
+                function _addDisPlay(number) {
+                    const Num = Gold_1._GoldNode.getChildByName('Num');
+                    if (Num['sheet']) {
+                        Num['value'] = (Number(Num['value']) + number).toString();
+                    }
+                    else {
+                        Num['text'] = (Number(Num['text']) + number).toString();
+                    }
                 }
-                if (delayed) {
-                    Ani2DAdmin.scale_Alpha(GoldAdmin.GoldNode, 0, 1, 1, 1, 1, 1, delayed, 0, f => {
-                        GoldAdmin.GoldNode.visible = true;
-                    });
+                Gold_1._addDisPlay = _addDisPlay;
+                function _addNoDisPlay(number) {
+                    Gold_1._num.value += Number(number);
                 }
-                else {
-                    GoldAdmin.GoldNode.visible = true;
+                Gold_1._addNoDisPlay = _addNoDisPlay;
+                function _nodeAppear(delayed, x, y) {
+                    if (!Gold_1._GoldNode) {
+                        return;
+                    }
+                    if (delayed) {
+                        Ani2DAdmin.scale_Alpha(Gold_1._GoldNode, 0, 1, 1, 1, 1, 1, delayed, 0, () => {
+                            Gold_1._GoldNode.visible = true;
+                        });
+                    }
+                    else {
+                        Gold_1._GoldNode.visible = true;
+                    }
+                    if (x) {
+                        Gold_1._GoldNode.x = x;
+                    }
+                    if (y) {
+                        Gold_1._GoldNode.y = y;
+                    }
                 }
-                if (x) {
-                    GoldAdmin.GoldNode.x = x;
+                Gold_1._nodeAppear = _nodeAppear;
+                function _nodeVinish(delayed) {
+                    if (!Gold_1._GoldNode) {
+                        return;
+                    }
+                    if (delayed) {
+                        Ani2DAdmin.scale_Alpha(Gold_1._GoldNode, 1, 1, 1, 1, 1, 0, delayed, 0, () => {
+                            Gold_1._GoldNode.visible = false;
+                        });
+                    }
+                    else {
+                        Gold_1._GoldNode.visible = false;
+                    }
                 }
-                if (y) {
-                    GoldAdmin.GoldNode.y = y;
+                Gold_1._nodeVinish = _nodeVinish;
+                function _nodeMove(x, y, time = 200, delay = 0, func = null) {
+                    LwgAni2D.move(Gold_1._GoldNode, x, y ? y : Gold_1._GoldNode.y, time, () => {
+                        func && func();
+                    }, delay);
                 }
-            }
-            GoldAdmin._nodeAppear = _nodeAppear;
-            function _nodeVinish(delayed) {
-                if (!GoldAdmin.GoldNode) {
-                    return;
+                Gold_1._nodeMove = _nodeMove;
+                let SkinUrl;
+                (function (SkinUrl) {
+                    SkinUrl[SkinUrl["Lwg/UI/corner_12.png"] = 0] = "Lwg/UI/corner_12.png";
+                })(SkinUrl || (SkinUrl = {}));
+                function _createOne(width, height, url) {
+                    const Gold = Laya.Pool.getItemByClass('addGold', Laya.Image);
+                    Gold.name = 'addGold';
+                    Gold.alpha = 1;
+                    Gold.zOrder = 60;
+                    Gold.width = width;
+                    Gold.height = height;
+                    Gold.pivotX = width / 2;
+                    Gold.pivotY = height / 2;
+                    if (!url) {
+                        Gold.skin = SkinUrl[0];
+                    }
+                    else {
+                        Gold.skin = url;
+                    }
+                    if (Gold_1._GoldNode) {
+                        Gold.zOrder = Gold_1._GoldNode.zOrder + 10;
+                    }
+                    return Gold;
                 }
-                if (delayed) {
-                    Ani2DAdmin.scale_Alpha(GoldAdmin.GoldNode, 1, 1, 1, 1, 1, 0, delayed, 0, f => {
-                        GoldAdmin.GoldNode.visible = false;
-                    });
+                Gold_1._createOne = _createOne;
+                function _getAni_Single(parent, number, width, height, url, firstPoint, targetPoint, func1, func2) {
+                    for (let index = 0; index < number; index++) {
+                        Laya.timer.once(index * 30, this, () => {
+                            const Gold = _createOne(width, height, url);
+                            parent.addChild(Gold);
+                            Ani2DAdmin.move_Scale(Gold, 1, firstPoint.x, firstPoint.y, targetPoint.x, targetPoint.y, 1, 350, 0, null, () => {
+                                AudioAdmin._playSound(AudioAdmin._voiceUrl.huodejinbi);
+                                if (index === number - 1) {
+                                    Laya.timer.once(200, this, () => {
+                                        if (func2) {
+                                            func2();
+                                        }
+                                    });
+                                }
+                                else {
+                                    if (func1) {
+                                        func1();
+                                    }
+                                }
+                                Gold.removeSelf();
+                            });
+                        });
+                    }
                 }
-                else {
-                    GoldAdmin.GoldNode.visible = false;
-                }
-            }
-            GoldAdmin._nodeVinish = _nodeVinish;
-            let SkinUrl;
-            (function (SkinUrl) {
-                SkinUrl[SkinUrl["Frame/Effects/iconGold.png"] = 0] = "Frame/Effects/iconGold.png";
-            })(SkinUrl || (SkinUrl = {}));
-            function _createOne(width, height, url) {
-                const Gold = Laya.Pool.getItemByClass('addGold', Laya.Image);
-                Gold.name = 'addGold';
-                let num = Math.floor(Math.random() * 12);
-                Gold.alpha = 1;
-                Gold.zOrder = 60;
-                Gold.width = width;
-                Gold.height = height;
-                Gold.pivotX = width / 2;
-                Gold.pivotY = height / 2;
-                if (!url) {
-                    Gold.skin = SkinUrl[0];
-                }
-                else {
-                    Gold.skin = url;
-                }
-                if (GoldAdmin.GoldNode) {
-                    Gold.zOrder = GoldAdmin.GoldNode.zOrder + 10;
-                }
-                return Gold;
-            }
-            GoldAdmin._createOne = _createOne;
-            function _getAni_Single(parent, number, width, height, url, firstPoint, targetPoint, func1, func2) {
-                for (let index = 0; index < number; index++) {
-                    Laya.timer.once(index * 30, this, () => {
-                        let Gold = _createOne(width, height, url);
+                Gold_1._getAni_Single = _getAni_Single;
+                function _getAni_Heap(parent, number, width, height, url, firstPoint, targetPoint, func1, func2) {
+                    for (let index = 0; index < number; index++) {
+                        const Gold = _createOne(width ? width : 100, height ? height : 100, url ? url : SkinUrl[0]);
+                        parent = parent ? parent : Laya.stage;
                         parent.addChild(Gold);
-                        Ani2DAdmin.move_Scale(Gold, 1, firstPoint.x, firstPoint.y, targetPoint.x, targetPoint.y, 1, 350, 0, null, () => {
-                            AudioAdmin._playSound(AudioAdmin._voiceUrl.huodejinbi);
-                            if (index === number - 1) {
-                                Laya.timer.once(200, this, () => {
-                                    if (func2) {
-                                        func2();
-                                    }
-                                });
-                            }
-                            else {
-                                if (func1) {
-                                    func1();
+                        firstPoint = firstPoint ? firstPoint : new Laya.Point(Laya.stage.width / 2, Laya.stage.height / 2);
+                        targetPoint = targetPoint ? targetPoint : new Laya.Point(Gold_1._GoldNode.x, Gold_1._GoldNode.y);
+                        let x = Math.floor(Math.random() * 2) == 1 ? firstPoint.x + Math.random() * 100 : firstPoint.x - Math.random() * 100;
+                        let y = Math.floor(Math.random() * 2) == 1 ? firstPoint.y + Math.random() * 100 : firstPoint.y - Math.random() * 100;
+                        Ani2DAdmin.move_Scale(Gold, 0.5, firstPoint.x, firstPoint.y, x, y, 1, 300, Math.random() * 100 + 100, Laya.Ease.expoIn, () => {
+                            Ani2DAdmin.move_Scale(Gold, 1, Gold.x, Gold.y, targetPoint.x, targetPoint.y, 1, 400, Math.random() * 200 + 100, Laya.Ease.cubicOut, () => {
+                                AudioAdmin._playSound(AudioAdmin._voiceUrl.huodejinbi);
+                                if (index === number - 1) {
+                                    Laya.timer.once(200, this, () => {
+                                        if (func2) {
+                                            func2();
+                                        }
+                                    });
                                 }
-                            }
-                            Gold.removeSelf();
-                        });
-                    });
-                }
-            }
-            GoldAdmin._getAni_Single = _getAni_Single;
-            function _getAni_Heap(parent, number, width, height, url, firstPoint, targetPoint, func1, func2) {
-                for (let index = 0; index < number; index++) {
-                    let Gold = _createOne(width ? width : 100, height ? height : 100, url ? url : SkinUrl[0]);
-                    parent = parent ? parent : Laya.stage;
-                    parent.addChild(Gold);
-                    firstPoint = firstPoint ? firstPoint : new Laya.Point(Laya.stage.width / 2, Laya.stage.height / 2);
-                    targetPoint = targetPoint ? targetPoint : new Laya.Point(GoldAdmin.GoldNode.x, GoldAdmin.GoldNode.y);
-                    let x = Math.floor(Math.random() * 2) == 1 ? firstPoint.x + Math.random() * 100 : firstPoint.x - Math.random() * 100;
-                    let y = Math.floor(Math.random() * 2) == 1 ? firstPoint.y + Math.random() * 100 : firstPoint.y - Math.random() * 100;
-                    Ani2DAdmin.move_Scale(Gold, 0.5, firstPoint.x, firstPoint.y, x, y, 1, 300, Math.random() * 100 + 100, Laya.Ease.expoIn, () => {
-                        Ani2DAdmin.move_Scale(Gold, 1, Gold.x, Gold.y, targetPoint.x, targetPoint.y, 1, 400, Math.random() * 200 + 100, Laya.Ease.cubicOut, () => {
-                            AudioAdmin._playSound(AudioAdmin._voiceUrl.huodejinbi);
-                            if (index === number - 1) {
-                                Laya.timer.once(200, this, () => {
-                                    if (func2) {
-                                        func2();
+                                else {
+                                    if (func1) {
+                                        func1();
                                     }
-                                });
-                            }
-                            else {
-                                if (func1) {
-                                    func1();
                                 }
-                            }
-                            Gold.removeSelf();
+                                Gold.removeSelf();
+                            });
                         });
-                    });
+                    }
                 }
-            }
-            GoldAdmin._getAni_Heap = _getAni_Heap;
-        })(GoldAdmin = Lwg.GoldAdmin || (Lwg.GoldAdmin = {}));
+                Gold_1._getAni_Heap = _getAni_Heap;
+            })(Gold = Currencydmin.Gold || (Currencydmin.Gold = {}));
+        })(Currencydmin = Lwg.Currencydmin || (Lwg.Currencydmin = {}));
         let EventAdmin;
         (function (EventAdmin) {
             EventAdmin.dispatcher = new Laya.EventDispatcher();
@@ -1483,16 +1439,12 @@
                 }, args, coverBefore);
             }
             TimerAdmin._once = _once;
-            function _clearAll(arr) {
-                for (let index = 0; index < arr.length; index++) {
-                    Laya.timer.clearAll(arr[index]);
-                }
+            function _clearAll(caller) {
+                Laya.timer.clearAll(caller);
             }
             TimerAdmin._clearAll = _clearAll;
-            function _clear(arr) {
-                for (let index = 0; index < arr.length; index++) {
-                    Laya.timer.clear(arr[index][0], arr[index][1]);
-                }
+            function _clear(caller, func) {
+                Laya.timer.clear(caller, func);
             }
             TimerAdmin._clear = _clear;
         })(TimerAdmin = Lwg.TimerAdmin || (Lwg.TimerAdmin = {}));
@@ -1575,40 +1527,26 @@
             };
             SceneAniAdmin._Use = {
                 get value() {
-                    return this['SceneAnimation/name'] ? this['SceneAnimation/name'] : null;
+                    return this['SceneAnimation/use'] ? this['SceneAnimation/use'] : null;
                 },
                 set value(val) {
-                    this['SceneAnimation/name'] = val;
+                    if (val.class['name'] === 'Open') {
+                        SceneAniAdmin._openSwitch.value = true;
+                    }
+                    else {
+                        SceneAniAdmin._openSwitch.value = false;
+                    }
+                    this['SceneAnimation/use'] = val;
                 }
             };
-            SceneAniAdmin._closeAniDelay = 0;
             SceneAniAdmin._closeAniTime = 0;
+            SceneAniAdmin._openAniTime = 0;
             function _commonOpenAni(Scene) {
-                var afterAni = () => {
-                    LwgScene._SceneServe._close();
-                    LwgClick._aniSwitch = true;
-                    if (Scene[Scene.name]) {
-                        Scene[Scene.name].lwgOpenAniAfter();
-                        Scene[Scene.name].lwgButton();
-                    }
-                };
-                if (!SceneAniAdmin._openSwitch.value) {
-                    LwgScene._SceneServe._close();
-                    Laya.timer.once(SceneAniAdmin._closeAniDelay + SceneAniAdmin._closeAniTime, this, () => {
-                        afterAni();
-                    });
-                    return 0;
-                }
-                let sumDelay = 0;
-                sumDelay = SceneAniAdmin._Use.value.class['_paly'](SceneAniAdmin._Use.value.type, Scene);
-                Laya.timer.once(sumDelay, this, () => {
-                    afterAni();
-                });
-                return sumDelay;
+                return SceneAniAdmin._Use.value.class['_paly'](SceneAniAdmin._Use.value.type, Scene);
             }
             SceneAniAdmin._commonOpenAni = _commonOpenAni;
-            function _commonCloseAni(CloseScene) {
-                return SceneAniAdmin._Use.value.class['_paly'](SceneAniAdmin._Use.value.type, CloseScene);
+            function _commonCloseAni(Scene) {
+                return SceneAniAdmin._Use.value.class['_paly'](SceneAniAdmin._Use.value.type, Scene);
             }
             SceneAniAdmin._commonCloseAni = _commonCloseAni;
             let _fadeOut;
@@ -1618,9 +1556,7 @@
                 class Close {
                     static _paly(type, Scene) {
                         _fadeOut_Close(Scene);
-                        SceneAniAdmin._closeAniDelay = _delay;
-                        SceneAniAdmin._closeAniTime = _time;
-                        return _time + _delay;
+                        return _delay + _time;
                     }
                     ;
                 }
@@ -1628,7 +1564,7 @@
                 class Open {
                     static _paly(type, Scene) {
                         _fadeOut_Open(Scene);
-                        return _time + _delay;
+                        return SceneAniAdmin._closeAniTime = _time + _delay;
                     }
                     ;
                 }
@@ -1855,9 +1791,7 @@
                             _shutters[`_${type}`](Scene, false);
                             Scene.visible = false;
                         });
-                        SceneAniAdmin._closeAniDelay = _delay;
-                        SceneAniAdmin._closeAniTime = _time;
-                        return _time + _delay;
+                        return SceneAniAdmin._closeAniTime = _delay + _time;
                     }
                     ;
                 }
@@ -1880,7 +1814,7 @@
                                 Scene.visible = true;
                             });
                         });
-                        return _time + _delay;
+                        return SceneAniAdmin._closeAniTime = _time + _delay;
                     }
                     ;
                 }
@@ -2171,7 +2105,8 @@
                 constructor() {
                     this.name = 'name';
                     this.serial = 'serial';
-                    this.sort = 'sort';
+                    this.gameLevel = 'level';
+                    this.level = 'level';
                     this.chName = 'chName';
                     this.classify = 'classify';
                     this.unlockWay = 'unlockWay';
@@ -2187,6 +2122,8 @@
                     this.getAward = 'getAward';
                     this.otherGetAward = 'otherGetAward';
                     this.pitch = 'pitch';
+                    this.price = 'price';
+                    this.EXP = 'EXP';
                 }
             }
             DataAdmin._BaseProperty = _BaseProperty;
@@ -2204,6 +2141,7 @@
                     super(...arguments);
                     this.$data = null;
                     this.$unlockWayType = DataAdmin._unlockWayType;
+                    this.buttonOn = false;
                 }
                 get $dataIndex() { return this['item/dataIndex']; }
                 set $dataIndex(_dataIndex) { this['item/dataIndex'] = _dataIndex; }
@@ -2213,27 +2151,22 @@
                 }
                 $render() { }
                 ;
-                lwglistRender(data, index) {
-                    this.$data = data;
-                    this.$dataIndex = index;
-                    if (!this.$data)
-                        return;
-                    this.$render();
-                }
                 $button() { }
                 ;
-                $awake() { }
+                $onStart() { }
                 ;
-                lwgOnAwake() {
-                    this.$awake();
-                    this.$button();
+                lwgOnStart() {
+                    this.$onStart();
+                    if (!this.buttonOn) {
+                        this.$button();
+                    }
                 }
             }
             DataAdmin._Item = _Item;
             class _Table {
-                constructor(tableName, _tableArr, localStorage, lastVtableName, lastProArr) {
+                constructor(tableName, _tableArr = null, localStorage = true, addCompare = true, lastVtableName, lastProArr) {
                     this._unlockWay = DataAdmin._unlockWayType;
-                    this._tableName = 'name';
+                    this._tableName = 'Table';
                     this._lastArr = [];
                     this._localStorage = false;
                     this._property = new _BaseProperty;
@@ -2241,7 +2174,12 @@
                         this._tableName = tableName;
                         if (localStorage) {
                             this._localStorage = localStorage;
-                            this._arr = addCompare(_tableArr, tableName, this._property.name);
+                            if (addCompare) {
+                                this._arr = _compareAdd(_tableArr, tableName, this._property.name);
+                            }
+                            else {
+                                this._arr = _compare(_tableArr, tableName);
+                            }
                             if (lastVtableName) {
                                 if (lastProArr) {
                                     this._compareLastInforByPro(lastVtableName, lastProArr);
@@ -2257,11 +2195,21 @@
                     }
                 }
                 get _arr() {
+                    if (!this[`_${this._tableName}arr`]) {
+                        console.log('非单例模式下，请手动初始化_arr');
+                    }
                     return this[`_${this._tableName}arr`];
                 }
                 set _arr(arr) {
                     this[`_${this._tableName}arr`] = arr;
                     Laya.LocalStorage.setJSON(this._tableName, JSON.stringify(this[`_${this._tableName}arr`]));
+                }
+                get _ListScrollBarTouchScrollEnable() {
+                    return this._List.scrollBar.touchScrollEnable;
+                }
+                ;
+                set _ListScrollBarTouchScrollEnable(bool) {
+                    this._List.scrollBar.touchScrollEnable = bool;
                 }
                 get _List() {
                     return this[`${this._tableName}_List`];
@@ -2277,12 +2225,18 @@
                             if (!_item) {
                                 _item = cell.addComponent(this._listRenderScript);
                             }
-                            _item.lwglistRender(this._listArray[index], index);
+                            _item.$data = this._listArray[index];
+                            _item.$dataIndex = index;
+                            _item.$render();
+                            if (!_item.buttonOn) {
+                                _item.$button();
+                            }
                         }
                     });
                     list.selectHandler = new Laya.Handler(this, (index) => {
                         this._listSelect && this._listSelect(index);
                     });
+                    this[`${this._tableName}_List`].refresh();
                 }
                 get _listArray() {
                     return this._List.array;
@@ -2385,6 +2339,26 @@
                         }
                     }
                 }
+                _sumProByCompelet(proName) {
+                    let sum = 0;
+                    for (let index = 0; index < this._arr.length; index++) {
+                        const element = this._arr[index];
+                        if (element.complete && element[proName]) {
+                            sum += element[proName];
+                        }
+                    }
+                    return sum;
+                }
+                _sumProByAll(proName) {
+                    let sum = 0;
+                    for (let index = 0; index < this._arr.length; index++) {
+                        const element = this._arr[index];
+                        if (element[proName]) {
+                            sum += element[proName];
+                        }
+                    }
+                    return sum;
+                }
                 _getPitchIndexInListArr() {
                     if (this._List) {
                         for (let index = 0; index < this._List.array.length; index++) {
@@ -2425,19 +2399,6 @@
                     return value;
                 }
                 ;
-                _setCompleteByName(name) {
-                    for (const key in this._arr) {
-                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
-                            const element = this._arr[key];
-                            if (element.name == name) {
-                                element.complete = true;
-                                this._refreshAndStorage();
-                                return;
-                            }
-                        }
-                    }
-                }
-                ;
                 _setCompleteByNameArr(nameArr) {
                     for (let index = 0; index < this._arr.length; index++) {
                         const element = this._arr[index];
@@ -2451,18 +2412,57 @@
                     this._refreshAndStorage();
                 }
                 ;
+                _getFirstObjByPro(proName, value) {
+                    for (const key in this._arr) {
+                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                            const element = this._arr[key];
+                            if (element[proName] === value) {
+                                return element;
+                            }
+                        }
+                    }
+                }
                 _getObjByName(name) {
-                    let obj = null;
                     for (const key in this._arr) {
                         if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
                             const element = this._arr[key];
                             if (element.name == name) {
-                                obj = element;
-                                break;
+                                return element;
                             }
                         }
                     }
-                    return obj;
+                }
+                _getFirstObjByLevel(level) {
+                    for (const key in this._arr) {
+                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                            const element = this._arr[key];
+                            if (element.level == level) {
+                                return element;
+                            }
+                        }
+                    }
+                }
+                _getObjArrByLevel(level) {
+                    const arr = [];
+                    for (const key in this._arr) {
+                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                            const element = this._arr[key];
+                            if (element.level == level) {
+                                arr.push(element);
+                            }
+                        }
+                    }
+                    return arr;
+                }
+                _getObjBySerial(serial) {
+                    for (const key in this._arr) {
+                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                            const element = this._arr[key];
+                            if (element.serial === serial) {
+                                return element;
+                            }
+                        }
+                    }
                 }
                 _setProSoleByClassify(name, pro, value) {
                     const obj = this._getObjByName(name);
@@ -2491,8 +2491,18 @@
                     this._setOneProForAll(this._property.complete, true);
                     this._refreshAndStorage();
                 }
-                _setCompleteName(name) {
+                _setCompleteByName(name) {
                     this._setProperty(name, this._property.complete, true);
+                    this._refreshAndStorage();
+                }
+                _setCompleteByProName(proName, value) {
+                    for (let index = 0; index < this._arr.length; index++) {
+                        const element = this._arr[index];
+                        if (element[proName] && element[proName] === value) {
+                            element[this._property.complete] = true;
+                            break;
+                        }
+                    }
                     this._refreshAndStorage();
                 }
                 _setOtherCompleteName(name) {
@@ -2597,6 +2607,30 @@
                         if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
                             const element = this._arr[key];
                             if (element[this._property.classify] == classify) {
+                                arr.push(element);
+                            }
+                        }
+                    }
+                    return arr;
+                }
+                _getArrByCompelet() {
+                    let arr = [];
+                    for (const key in this._arr) {
+                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                            const element = this._arr[key];
+                            if (element[this._property.complete]) {
+                                arr.push(element);
+                            }
+                        }
+                    }
+                    return arr;
+                }
+                _getArrByNoCompelet() {
+                    let arr = [];
+                    for (const key in this._arr) {
+                        if (Object.prototype.hasOwnProperty.call(this._arr, key)) {
+                            const element = this._arr[key];
+                            if (!element[this._property.complete]) {
                                 arr.push(element);
                             }
                         }
@@ -2739,7 +2773,28 @@
                     }
                     return bool;
                 }
+                _eachArr(func) {
+                    for (let index = 0; index < this._arr.length; index++) {
+                        const element = this._arr[index];
+                        func && func(element);
+                    }
+                }
+                _eachArrByCompelet(func) {
+                    for (let index = 0; index < this._arr.length; index++) {
+                        const element = this._arr[index];
+                        func && func(element);
+                    }
+                }
+                _eachArrByNoCompelet(func) {
+                    for (let index = 0; index < this._arr.length; index++) {
+                        const element = this._arr[index];
+                        if (!element.complete) {
+                            func && func(element);
+                        }
+                    }
+                }
                 get _pitchClassify() {
+                    this._setAllOtherCompleteDelay;
                     if (!this[`${this._tableName}/pitchClassify`]) {
                         if (this._localStorage) {
                             return Laya.LocalStorage.getItem(`${this._tableName}/pitchClassify`) ? Laya.LocalStorage.getItem(`${this._tableName}/pitchClassify`) : null;
@@ -2852,7 +2907,7 @@
                         }
                     }
                 }
-                _addObject(obj) {
+                _addObj(obj) {
                     let _obj = ToolsAdmin._ObjArray.objCopy(obj);
                     for (let index = 0; index < this._arr.length; index++) {
                         const element = this._arr[index];
@@ -2862,7 +2917,7 @@
                     }
                     this._refreshAndStorage();
                 }
-                _addObjectArr(objArr) {
+                _addObjArr(objArr) {
                     const _objArr = ToolsAdmin._ObjArray.arrCopy(objArr);
                     for (let i = 0; i < _objArr.length; i++) {
                         const obj = _objArr[i];
@@ -2882,12 +2937,20 @@
                     }
                     this._refreshAndStorage();
                 }
-                _deleteObjByName(name) {
+                _deleteListObjByName(name) {
                     for (let index = 0; index < this._arr.length; index++) {
                         const element = this._arr[index];
                         if (element.name === name) {
-                            this._arr.splice(index, 1);
-                            index--;
+                            this._List.deleteItem(index);
+                        }
+                    }
+                    this._refreshAndStorage();
+                }
+                _deleteListObjByPro(pro, value) {
+                    for (let index = 0; index < this._arr.length; index++) {
+                        const element = this._arr[index];
+                        if (element[pro] && element[pro] === value) {
+                            this._List.deleteItem(index);
                         }
                     }
                     this._refreshAndStorage();
@@ -2911,7 +2974,7 @@
                 }
             }
             DataAdmin._Table = _Table;
-            function addCompare(tableArr, storageName, propertyName) {
+            function _compare(tableArr, storageName) {
                 try {
                     Laya.LocalStorage.getJSON(storageName);
                 }
@@ -2919,18 +2982,42 @@
                     Laya.LocalStorage.setJSON(storageName, JSON.stringify(tableArr));
                     return tableArr;
                 }
-                let storeArr;
+                let storageArr;
                 if (Laya.LocalStorage.getJSON(storageName)) {
-                    storeArr = JSON.parse(Laya.LocalStorage.getJSON(storageName));
-                    let diffArray = ToolsAdmin._ObjArray.diffProByTwo(tableArr, storeArr, propertyName);
-                    console.log(`${storageName}新添加对象`, diffArray);
-                    ToolsAdmin._Array.addToarray(storeArr, diffArray);
+                    storageArr = JSON.parse(Laya.LocalStorage.getJSON(storageName));
+                    if (!tableArr || !storageArr) {
+                        return storageArr;
+                    }
                 }
                 else {
-                    storeArr = tableArr;
+                    storageArr = tableArr;
                 }
-                Laya.LocalStorage.setJSON(storageName, JSON.stringify(storeArr));
-                return storeArr;
+                Laya.LocalStorage.setJSON(storageName, JSON.stringify(storageArr));
+                return storageArr;
+            }
+            function _compareAdd(tableArr, storageName, propertyName) {
+                try {
+                    Laya.LocalStorage.getJSON(storageName);
+                }
+                catch (error) {
+                    Laya.LocalStorage.setJSON(storageName, JSON.stringify(tableArr));
+                    return tableArr;
+                }
+                let storageArr;
+                if (Laya.LocalStorage.getJSON(storageName)) {
+                    storageArr = JSON.parse(Laya.LocalStorage.getJSON(storageName));
+                    if (!tableArr || !storageArr) {
+                        return storageArr;
+                    }
+                    let diffArray = ToolsAdmin._ObjArray.diffProByTwo(tableArr, storageArr, propertyName);
+                    console.log(`${storageName}新添加对象`, diffArray);
+                    ToolsAdmin._Array.addToarray(storageArr, diffArray);
+                }
+                else {
+                    storageArr = tableArr;
+                }
+                Laya.LocalStorage.setJSON(storageName, JSON.stringify(storageArr));
+                return storageArr;
             }
             function _jsonCompare(url, storageName, propertyName) {
                 let dataArr;
@@ -3577,7 +3664,7 @@
                         this.skin = urlArr ? ToolsAdmin._Array.randomGetOne(urlArr) : _SkinUrl.花3;
                         this.zOrder = zOrder ? zOrder : 0;
                         this.alpha = 0;
-                        let RGBA = [];
+                        let RGBA = [null, null, null, null];
                         RGBA[0] = colorRGBA ? ToolsAdmin._Number.randomOneBySection(colorRGBA[0][0], colorRGBA[1][0]) : ToolsAdmin._Number.randomOneBySection(180, 255);
                         RGBA[1] = colorRGBA ? ToolsAdmin._Number.randomOneBySection(colorRGBA[0][1], colorRGBA[1][1]) : ToolsAdmin._Number.randomOneBySection(10, 180);
                         RGBA[2] = colorRGBA ? ToolsAdmin._Number.randomOneBySection(colorRGBA[0][2], colorRGBA[1][2]) : ToolsAdmin._Number.randomOneBySection(10, 180);
@@ -3701,7 +3788,7 @@
                         this.rotation = rotation ? ToolsAdmin._Number.randomOneBySection(rotation[0], rotation[1]) : 0;
                         this.alpha = 0;
                         this.zOrder = zOrder ? zOrder : 1000;
-                        let RGBA = [];
+                        let RGBA = [null, null, null, null];
                         RGBA[0] = colorRGBA ? ToolsAdmin._Number.randomOneBySection(colorRGBA[0][0], colorRGBA[1][0]) : ToolsAdmin._Number.randomOneBySection(180, 255);
                         RGBA[1] = colorRGBA ? ToolsAdmin._Number.randomOneBySection(colorRGBA[0][1], colorRGBA[1][1]) : ToolsAdmin._Number.randomOneBySection(10, 180);
                         RGBA[2] = colorRGBA ? ToolsAdmin._Number.randomOneBySection(colorRGBA[0][2], colorRGBA[1][2]) : ToolsAdmin._Number.randomOneBySection(10, 180);
@@ -4337,7 +4424,7 @@
                         this.pivotY = this.height / 2;
                         let p = radiusXY ? ToolsAdmin._Point.randomPointByCenter(centerPos, radiusXY[0], radiusXY[1], 1) : ToolsAdmin._Point.randomPointByCenter(centerPos, 100, 100, 1);
                         this.pos(p[0].x, p[0].y);
-                        let RGBA = [];
+                        const RGBA = [null, null, null, null];
                         RGBA[0] = colorRGBA ? ToolsAdmin._Number.randomOneBySection(colorRGBA[0][0], colorRGBA[1][0]) : ToolsAdmin._Number.randomOneBySection(10, 255);
                         RGBA[1] = colorRGBA ? ToolsAdmin._Number.randomOneBySection(colorRGBA[0][1], colorRGBA[1][1]) : ToolsAdmin._Number.randomOneBySection(200, 255);
                         RGBA[2] = colorRGBA ? ToolsAdmin._Number.randomOneBySection(colorRGBA[0][2], colorRGBA[1][2]) : ToolsAdmin._Number.randomOneBySection(10, 255);
@@ -4443,7 +4530,7 @@
                         this.height = height ? ToolsAdmin._Number.randomOneBySection(height[0], height[1]) : this.width;
                         this.pivotX = this.width / 2;
                         this.pivotY = this.height / 2;
-                        let RGBA = [];
+                        const RGBA = [null, null, null, null];
                         RGBA[0] = colorRGBA ? ToolsAdmin._Number.randomOneBySection(colorRGBA[0][0], colorRGBA[1][0]) : ToolsAdmin._Number.randomOneBySection(0, 255);
                         RGBA[1] = colorRGBA ? ToolsAdmin._Number.randomOneBySection(colorRGBA[0][1], colorRGBA[1][1]) : ToolsAdmin._Number.randomOneBySection(0, 255);
                         RGBA[2] = colorRGBA ? ToolsAdmin._Number.randomOneBySection(colorRGBA[0][2], colorRGBA[1][2]) : ToolsAdmin._Number.randomOneBySection(0, 255);
@@ -4526,25 +4613,68 @@
         })(Eff2DAdmin = Lwg.Eff2DAdmin || (Lwg.Eff2DAdmin = {}));
         let ClickAdmin;
         (function (ClickAdmin) {
-            ClickAdmin._aniSwitch = true;
-            ClickAdmin._absoluteSwitch = true;
-            ClickAdmin._assign = [];
-            ClickAdmin._assignIncludeStage = [];
-            ClickAdmin._assignExcludeStage = [];
-            ClickAdmin._stageSwitch = true;
-            function _checkAssign(name) {
-                let assign = false;
-                if (LwgClick._assign.length > 0) {
-                    for (let index = 0; index < LwgClick._assign.length; index++) {
-                        const _name = LwgClick._assign[index];
-                        if (_name === name) {
-                            assign = true;
+            ClickAdmin._absolute = true;
+            ClickAdmin._filterType = {
+                all: 'all',
+                none: 'none',
+                stage: 'stage',
+                button: 'button',
+                someBtnIncludeStage: 'someBtnIncludeStage',
+                someBtnExcludeStage: 'someBtnExcludeStage',
+            };
+            ClickAdmin._filter = {
+                get value() {
+                    return this['ClickAdmin/filter'] ? this['ClickAdmin/filter'] : ClickAdmin._filterType.all;
+                },
+                set value(val) {
+                    this['ClickAdmin/filter'] = val;
+                    switch (val) {
+                        case ClickAdmin._filterType.all || ClickAdmin._filterType.none || ClickAdmin._filterType.stage:
+                            ClickAdmin._filter._nodeSelection = [];
+                            break;
+                        default:
+                            break;
+                    }
+                },
+                get _nodeSelection() {
+                    return this['ClickAdmin/_nodeSelection'];
+                },
+                set _nodeSelection(arr) {
+                    this['ClickAdmin/_nodeSelection'] = arr;
+                    switch (ClickAdmin._filter.value) {
+                        case ClickAdmin._filterType.someBtnIncludeStage || ClickAdmin._filterType.someBtnExcludeStage:
+                            ClickAdmin._filter.value = ClickAdmin._filterType.someBtnExcludeStage;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            };
+            function _checkTarget(targetName) {
+                let targetClick = false;
+                if (ClickAdmin._absolute) {
+                    if (ClickAdmin._filter._nodeSelection.length > 0) {
+                        for (let index = 0; index < ClickAdmin._filter._nodeSelection.length; index++) {
+                            const _name = ClickAdmin._filter._nodeSelection[index];
+                            if (_name === targetName) {
+                                targetClick = true;
+                            }
                         }
                     }
                 }
-                return assign;
+                return targetClick;
             }
-            ClickAdmin._checkAssign = _checkAssign;
+            ClickAdmin._checkTarget = _checkTarget;
+            function _checkStage() {
+                let stageClick = false;
+                if (LwgClick._absolute) {
+                    if (ClickAdmin._filter.value === ClickAdmin._filterType.all || ClickAdmin._filter.value === ClickAdmin._filterType.stage || ClickAdmin._filter.value === ClickAdmin._filterType.someBtnIncludeStage) {
+                        stageClick = true;
+                    }
+                }
+                return stageClick;
+            }
+            ClickAdmin._checkStage = _checkStage;
             ClickAdmin._Type = {
                 no: 'no',
                 largen: 'largen',
@@ -4797,21 +4927,15 @@
                 }), delayed ? delayed : 0);
             }
             Ani2DAdmin.circulation_scale = circulation_scale;
-            function leftRight_Shake(node, range, time, delayed, func, click) {
+            function leftRight_Shake(node, range, time, delayed, func) {
                 if (!delayed) {
                     delayed = 0;
-                }
-                if (!click) {
-                    LwgClick._aniSwitch = false;
                 }
                 Laya.Tween.to(node, { x: node.x - range }, time, null, Laya.Handler.create(this, function () {
                     Laya.Tween.to(node, { x: node.x + range * 2 }, time, null, Laya.Handler.create(this, function () {
                         Laya.Tween.to(node, { x: node.x - range }, time, null, Laya.Handler.create(this, function () {
                             if (func) {
                                 func();
-                            }
-                            if (!click) {
-                                LwgClick._aniSwitch = true;
                             }
                         }));
                     }));
@@ -4859,24 +4983,18 @@
                     Laya.Tween.to(node, { y: node.y - range * 2 }, time, null, Laya.Handler.create(this, function () {
                         Laya.Tween.to(node, { y: node.y + range }, time, null, Laya.Handler.create(this, function () {
                             if (func !== null) {
-                                func();
+                                func && func();
                             }
                         }));
                     }));
-                }), delayed);
+                }), delayed ? delayed : 0);
             }
             Ani2DAdmin.upDwon_Shake = upDwon_Shake;
             function fadeOut(node, alpha1, alpha2, time, delayed, func, stageClick) {
                 node.alpha = alpha1;
-                if (stageClick) {
-                    LwgClick._aniSwitch = false;
-                }
                 Laya.Tween.to(node, { alpha: alpha2 }, time, null, Laya.Handler.create(this, function () {
                     if (func) {
                         func();
-                    }
-                    if (stageClick) {
-                        LwgClick._aniSwitch = true;
                     }
                 }), delayed ? delayed : 0);
             }
@@ -5834,10 +5952,12 @@
                 }
                 _Node.showExcludedChild3D = showExcludedChild3D;
                 function createPrefab(prefab, Parent, point, script, zOrder, name) {
-                    const Sp = Laya.Pool.getItemByCreateFun(name ? name : prefab.json['props']['name'], prefab.create, prefab);
+                    name = name ? name : prefab.json['props']['name'];
+                    const Sp = Laya.Pool.getItemByCreateFun(name, prefab.create, prefab);
                     Parent && Parent.addChild(Sp);
                     point && Sp.pos(point[0], point[1]);
                     script && Sp.addComponent(script);
+                    Sp.name = name;
                     NodeAdmin._addProperty(Sp);
                     if (zOrder)
                         Sp.zOrder = zOrder;
@@ -6073,10 +6193,7 @@
                     }
                 }
                 _Point.getRoundPosNew = getRoundPosNew;
-                function randomPointByCenter(centerPos, radiusX, radiusY, count) {
-                    if (!count) {
-                        count = 1;
-                    }
+                function randomPointByCenter(centerPos, radiusX, radiusY, count = 1) {
                     let arr = [];
                     for (let index = 0; index < count; index++) {
                         let x0 = ToolsAdmin._Number.randomCountBySection(0, radiusX, 1, false);
@@ -6626,169 +6743,105 @@
         })(ToolsAdmin = Lwg.ToolsAdmin || (Lwg.ToolsAdmin = {}));
         let PreLoadAdmin;
         (function (PreLoadAdmin) {
-            let _Event;
-            (function (_Event) {
-                _Event["importList"] = "_PreLoad_importList";
-                _Event["complete"] = "_PreLoad_complete";
-                _Event["stepLoding"] = "_PreLoad_startLoding";
-                _Event["progress"] = "_PreLoad_progress";
-            })(_Event = PreLoadAdmin._Event || (PreLoadAdmin._Event = {}));
             class _PreLoadScene extends SceneAdmin._SceneBase {
                 constructor() {
                     super(...arguments);
-                    this._listName = {
-                        $scene3D: '$scene3D',
-                        $prefab3D: '$prefab3D',
-                        $mesh3D: '$mesh3D',
-                        $material: '$material',
-                        $texture: '$texture',
-                        $texture2D: '$texture2D',
-                        $pic2D: '$pic2D',
-                        $scene2D: '$scene2D',
-                        $prefab2D: '$prefab2D',
-                        $json: '$json',
-                        $skeleton: '$skeleton',
-                        $effectTex2D: '$effectTex2D',
-                    };
-                    this._scene3D = [];
-                    this._prefab3D = [];
-                    this._mesh3D = [];
-                    this._material = [];
-                    this._texture = [];
-                    this._texture2D = [];
-                    this._pic2D = [];
-                    this._scene2D = [];
-                    this._prefab2D = [];
-                    this._json = [];
-                    this._skeleton = [];
-                    this._effectsTex2D = [];
-                    this._sumProgress = 0;
-                    this._loadOrder = [];
+                    this.$pic2D = [];
+                    this.$texture = [];
+                    this.$prefab2D = [];
+                    this.$scene2D = [];
+                    this.$scene3D = [];
+                    this.$prefab3D = [];
+                    this.$texture2D = [];
+                    this.$effectsTex2D = [];
+                    this.$material = [];
+                    this.$mesh3D = [];
+                    this.$json = [];
+                    this.$skeleton = [];
+                    this._loadOrder = [this.$pic2D, this.$texture, this.$prefab2D, this.$scene2D, this.$prefab3D, this.$texture2D, this.$effectsTex2D, this.$material, this.$mesh3D, this.$scene3D, this.$json, this.$skeleton];
                     this._loadOrderIndex = 0;
+                    this._sumProgress = 0;
+                    this._currentProgress = 0;
                 }
-                get _currentProgress() {
-                    return this['currentProgress'] ? this['currentProgress'] : 0;
+                lwgStartLoding(listObj) {
+                    listObj['$effectsTex2D'] = Eff3DAdmin._tex2D;
+                    for (const typeName in listObj) {
+                        if (Object.prototype.hasOwnProperty.call(listObj, typeName)) {
+                            for (const resObj in listObj[typeName]) {
+                                if (Object.prototype.hasOwnProperty.call(listObj[typeName], resObj)) {
+                                    const obj = listObj[typeName][resObj];
+                                    this[typeName].push(obj);
+                                }
+                            }
+                        }
+                    }
+                    for (let index = 0; index < this._loadOrder.length; index++) {
+                        this._sumProgress += this._loadOrder[index].length;
+                        if (this._loadOrder[index].length <= 0) {
+                            this._loadOrder.splice(index, 1);
+                            index--;
+                        }
+                    }
+                    let time = this.lwgOpenAni();
+                    Laya.timer.once(time ? time : 0, this, () => {
+                        this.lode();
+                    });
                 }
+                lwgStepComplete() { }
+                lwgAllComplete() { return 0; }
                 ;
-                set _currentProgress(val) {
-                    this['currentProgress'] = val;
-                    if (this['currentProgress'] >= this._sumProgress) {
+                stepComplete() {
+                    this._currentProgress++;
+                    console.log('当前进度条进度:', this._currentProgress / this._sumProgress);
+                    if (this._currentProgress >= this._sumProgress) {
                         if (this._sumProgress == 0) {
                             return;
                         }
-                        console.log('当前进度条进度为:', this['currentProgress'] / this._sumProgress);
-                        console.log('所有资源加载完成！此时所有资源可通过例如 Laya.loader.getRes("url")获取');
-                        EventAdmin._notify(PreLoadAdmin._Event.complete);
+                        console.log(`所有资源加载完成！此时所有资源可通过例如:Laya.loader.getRes("url")获取`);
+                        this.allComplete();
                     }
                     else {
                         let number = 0;
                         for (let index = 0; index <= this._loadOrderIndex; index++) {
                             number += this._loadOrder[index].length;
                         }
-                        if (this['currentProgress'] == number) {
+                        if (this._currentProgress === number) {
                             this._loadOrderIndex++;
                         }
-                        EventAdmin._notify(PreLoadAdmin._Event.stepLoding);
+                        this.lode();
+                        this.lwgStepComplete();
                     }
                 }
-                ;
-                moduleEvent() {
-                    EventAdmin._registerOnce(_Event.importList, this, (listObj) => {
-                        console.log(listObj);
-                        listObj[this._listName.$effectTex2D] = Eff3DAdmin._tex2D;
-                        for (const key in listObj) {
-                            if (Object.prototype.hasOwnProperty.call(listObj, key)) {
-                                for (const key1 in listObj[key]) {
-                                    if (Object.prototype.hasOwnProperty.call(listObj[key], key1)) {
-                                        const obj = listObj[key][key1];
-                                        switch (key) {
-                                            case this._listName.$json:
-                                                this._json.push(obj);
-                                                break;
-                                            case this._listName.$material:
-                                                this._material.push(obj);
-                                                break;
-                                            case this._listName.$mesh3D:
-                                                this._mesh3D.push(obj);
-                                                break;
-                                            case this._listName.$pic2D:
-                                                this._pic2D.push(obj);
-                                                break;
-                                            case this._listName.$prefab2D:
-                                                this._prefab2D.push(obj);
-                                                break;
-                                            case this._listName.$prefab3D:
-                                                this._prefab3D.push(obj);
-                                                break;
-                                            case this._listName.$scene2D:
-                                                this._scene2D.push(obj);
-                                                break;
-                                            case this._listName.$scene3D:
-                                                this._scene3D.push(obj);
-                                                break;
-                                            case this._listName.$texture2D:
-                                                this._texture2D.push(obj);
-                                                break;
-                                            case this._listName.$skeleton:
-                                                this._skeleton.push(obj);
-                                                break;
-                                            case this._listName.$texture:
-                                                this._texture.push(obj);
-                                                break;
-                                            case this._listName.$effectTex2D:
-                                                this._effectsTex2D.push(obj);
-                                                break;
-                                            default:
-                                                break;
-                                        }
-                                    }
-                                }
-                            }
+                allComplete() {
+                    Laya.timer.once(this.lwgAllComplete(), this, () => {
+                        if (this._Owner.name == LwgScene._BaseName._PreLoadCutIn) {
+                            this._openScene(LwgScene._PreLoadCutIn.openName);
                         }
-                        this._loadOrder = [this._pic2D, this._scene2D, this._prefab2D, this._prefab3D, this._json, this._texture, this._texture2D, this._mesh3D, this._material, this._skeleton, this._scene3D, this._effectsTex2D];
-                        for (let index = 0; index < this._loadOrder.length; index++) {
-                            this._sumProgress += this._loadOrder[index].length;
-                            if (this._loadOrder[index].length <= 0) {
-                                this._loadOrder.splice(index, 1);
-                                index--;
-                            }
-                        }
-                        let time = this.lwgOpenAni();
-                        Laya.timer.once(time ? time : 0, this, () => {
-                            EventAdmin._notify(PreLoadAdmin._Event.stepLoding);
-                        });
-                    });
-                    EventAdmin._register(_Event.stepLoding, this, () => { this.start(); });
-                    EventAdmin._registerOnce(_Event.complete, this, () => {
-                        Laya.timer.once(this.lwgAllComplete(), this, () => {
-                            if (this._Owner.name == LwgScene._BaseName.PreLoadCutIn) {
-                                this._openScene(LwgScene._PreLoadCutIn.openName);
-                            }
-                            else {
-                                AudioAdmin._playMusic();
-                                this._openScene(LwgScene._BaseName.Start);
-                            }
-                        });
-                    });
-                    EventAdmin._register(_Event.progress, this, () => {
-                        this._currentProgress++;
-                        if (this._currentProgress < this._sumProgress) {
-                            console.log('当前进度条进度为:', this._currentProgress / this._sumProgress);
-                            this.lwgStepComplete();
+                        else {
+                            AudioAdmin._playMusic();
                         }
                     });
                 }
-                moduleOnStart() {
-                    if (this._Owner.name)
-                        LwgScene._SceneControl[this._Owner.name] = this._Owner;
+                lodeFunc(resArr, index, res, typeName, completeFunc) {
+                    const url = resArr[index].url;
+                    if (typeof url === 'object') {
+                        console.log(typeName, url, `数组加载完成，为数组对象，只能从getRes（url）中逐个获取`);
+                    }
+                    else {
+                        if (res == null) {
+                            console.log(`XXXXXXXXXXX${typeName}:${url}加载失败！不会停止加载进程！, 数组下标为：${index}, 'XXXXXXXXXXX`);
+                        }
+                        else {
+                            console.log(`${typeName}:${url}加载完成！, 数组下标为${index}`);
+                            completeFunc && completeFunc();
+                        }
+                    }
+                    this.stepComplete();
                 }
-                lwgStartLoding(any) {
-                    EventAdmin._notify(PreLoadAdmin._Event.importList, (any));
-                }
-                start() {
+                lode() {
                     if (this._loadOrder.length <= 0) {
                         console.log('没有加载项');
-                        EventAdmin._notify(PreLoadAdmin._Event.complete);
+                        this.allComplete();
                         return;
                     }
                     let alreadyPro = 0;
@@ -6797,181 +6850,96 @@
                     }
                     let index = this._currentProgress - alreadyPro;
                     switch (this._loadOrder[this._loadOrderIndex]) {
-                        case this._pic2D:
-                            Laya.loader.load(this._pic2D[index].url, Laya.Handler.create(this, (any) => {
-                                if (typeof this._pic2D[index].url === 'object') {
-                                    console.log(`${this._pic2D[index]} 数组加载完成，为数组对象，只能从getRes（url）中逐个获取`);
-                                }
-                                else {
-                                    if (any == null) {
-                                        console.log('XXXXXXXXXXX2D资源' + this._pic2D[index] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
-                                    }
-                                    else {
-                                        console.log('2D图片' + this._pic2D[index] + '加载完成！', '数组下标为：', index);
-                                    }
-                                }
-                                EventAdmin._notify(_Event.progress);
+                        case this.$pic2D:
+                            Laya.loader.load(this.$pic2D[index].url, Laya.Handler.create(this, (res) => {
+                                this.lodeFunc(this._loadOrder[this._loadOrderIndex], index, res, '2D图片', null);
                             }));
                             break;
-                        case this._scene2D:
-                            Laya.loader.load(this._scene2D[index].url, Laya.Handler.create(this, (any) => {
-                                if (typeof this._scene2D[index].url === 'object') {
-                                    console.log(`${this._scene2D[index].url} 数组加载完成，为数组对象，只能从getRes（url）中逐个获取`);
-                                }
-                                else {
-                                    if (any == null) {
-                                        console.log('XXXXXXXXXXX2D场景' + this._scene2D[index].url + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
-                                    }
-                                    else {
-                                        console.log('2D场景' + this._scene2D[index].url + '加载完成！', '数组下标为：', index);
-                                    }
-                                }
-                                EventAdmin._notify(_Event.progress);
+                        case this.$scene2D:
+                            Laya.loader.load(this.$scene2D[index].url, Laya.Handler.create(this, (res) => {
+                                this.lodeFunc(this._loadOrder[this._loadOrderIndex], index, res, '2D场景', null);
                             }), null, Laya.Loader.JSON);
                             break;
-                        case this._scene3D:
-                            Laya.Scene3D.load(this._scene3D[index].url, Laya.Handler.create(this, (Scene3D) => {
-                                if (Scene3D == null) {
-                                    console.log('XXXXXXXXXXX3D场景' + this._scene3D[index].url + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
-                                }
-                                else {
-                                    this._scene3D[index].scene3D = Scene3D;
-                                    console.log('3D场景' + this._scene3D[index].url + '加载完成！', '数组下标为：', index);
-                                }
-                                EventAdmin._notify(_Event.progress);
+                        case this.$scene3D:
+                            Laya.Scene3D.load(this.$scene3D[index].url, Laya.Handler.create(this, (Scene3D) => {
+                                this.lodeFunc(this._loadOrder[this._loadOrderIndex], index, Scene3D, '3D场景', () => {
+                                    this.$scene3D[index].scene3D = Scene3D;
+                                });
                             }));
                             break;
-                        case this._prefab3D:
-                            Laya.Sprite3D.load(this._prefab3D[index].url, Laya.Handler.create(this, (Sp3D) => {
-                                if (Sp3D == null) {
-                                    console.log('XXXXXXXXXXX3D预设体' + this._prefab3D[index].url + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
-                                }
-                                else {
-                                    this._prefab3D[index].prefab3D = Sp3D;
-                                    console.log('3D预制体' + this._prefab3D[index].url + '加载完成！', '数组下标为：', index);
-                                }
-                                EventAdmin._notify(_Event.progress);
+                        case this.$prefab3D:
+                            Laya.Sprite3D.load(this.$prefab3D[index].url, Laya.Handler.create(this, (Sp3D) => {
+                                this.lodeFunc(this._loadOrder[this._loadOrderIndex], index, Sp3D, '3D预制体', () => {
+                                    this.$prefab3D[index].prefab3D = Sp3D;
+                                });
                             }));
                             break;
-                        case this._mesh3D:
-                            Laya.Mesh.load(this._mesh3D[index].url, Laya.Handler.create(this, (Mesh3D) => {
-                                if (Mesh3D == null) {
-                                    console.log('XXXXXXXXXXX3D网格' + this._mesh3D[index].url + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
-                                }
-                                else {
-                                    this._mesh3D[index].mesh3D = Mesh3D;
-                                    console.log('3D网格' + this._mesh3D[index].url + '加载完成！', '数组下标为：', index);
-                                }
-                                EventAdmin._notify(_Event.progress);
+                        case this.$mesh3D:
+                            Laya.Mesh.load(this.$mesh3D[index].url, Laya.Handler.create(this, (Mesh3D) => {
+                                this.lodeFunc(this._loadOrder[this._loadOrderIndex], index, Mesh3D, '3D网格', () => {
+                                    this.$mesh3D[index].mesh3D = Mesh3D;
+                                });
                             }));
                             break;
-                        case this._texture:
-                            Laya.loader.load(this._texture[index].url, Laya.Handler.create(this, (tex) => {
-                                if (typeof this._texture[index].url === 'object') {
-                                    console.log(`${this._texture[index]} 数组加载完成，为数组对象，只能从getRes（url）中逐个获取`);
-                                }
-                                else {
-                                    if (tex == null) {
-                                        console.log('XXXXXXXXXXX2D纹理' + this._texture[index].url + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
-                                    }
-                                    else {
-                                        this._texture[index].texture = tex;
-                                        console.log('纹理' + this._texture[index].url + '加载完成！', '数组下标为：', index);
-                                    }
-                                }
-                                EventAdmin._notify(_Event.progress);
+                        case this.$texture:
+                            Laya.loader.load(this.$texture[index].url, Laya.Handler.create(this, (tex) => {
+                                this.lodeFunc(this._loadOrder[this._loadOrderIndex], index, tex, '纹理', () => {
+                                    this.$texture[index].texture = tex;
+                                });
                             }));
                             break;
-                        case this._texture2D:
-                            Laya.Texture2D.load(this._texture2D[index].url, Laya.Handler.create(this, (tex2D) => {
-                                if (tex2D == null) {
-                                    console.log('XXXXXXXXXXX2D纹理' + this._texture2D[index].url + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
-                                }
-                                else {
-                                    this._texture2D[index].texture2D = tex2D;
-                                    console.log('3D纹理' + this._texture2D[index].url + '加载完成！', '数组下标为：', index);
-                                }
-                                EventAdmin._notify(_Event.progress);
+                        case this.$texture2D:
+                            Laya.Texture2D.load(this.$texture2D[index].url, Laya.Handler.create(this, (tex2D) => {
+                                this.lodeFunc(this._loadOrder[this._loadOrderIndex], index, tex2D, '3D纹理', () => {
+                                    this.$texture2D[index].texture2D = tex2D;
+                                });
                             }));
                             break;
-                        case this._effectsTex2D:
-                            Laya.Texture2D.load(this._effectsTex2D[index].url, Laya.Handler.create(this, (tex2D) => {
-                                if (tex2D == null) {
-                                    console.log('XXXXXXXXXXX3D纹理' + this._effectsTex2D[index].url + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
-                                }
-                                else {
-                                    this._effectsTex2D[index].texture2D = tex2D;
-                                    console.log('3D纹理' + this._effectsTex2D[index].url + '加载完成！', '数组下标为：', index);
-                                }
-                                EventAdmin._notify(_Event.progress);
+                        case this.$effectsTex2D:
+                            Laya.Texture2D.load(this.$effectsTex2D[index].url, Laya.Handler.create(this, (tex2D) => {
+                                this.lodeFunc(this._loadOrder[this._loadOrderIndex], index, tex2D, '3D纹理', () => {
+                                    this.$effectsTex2D[index].texture2D = tex2D;
+                                });
                             }));
                             break;
-                        case this._material:
-                            Laya.Material.load(this._material[index].url, Laya.Handler.create(this, (Material) => {
-                                if (Material == null) {
-                                    console.log('XXXXXXXXXXX材质' + this._material[index].url + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
-                                }
-                                else {
-                                    this._material[index].material = Material;
-                                    console.log('材质' + this._material[index].url + '加载完成！', '数组下标为：', index);
-                                }
-                                EventAdmin._notify(_Event.progress);
+                        case this.$material:
+                            Laya.Material.load(this.$material[index].url, Laya.Handler.create(this, (Material) => {
+                                this.lodeFunc(this._loadOrder[this._loadOrderIndex], index, Material, '3D纹理', () => {
+                                    this.$material[index].material = Material;
+                                });
                             }));
                             break;
-                        case this._json:
-                            Laya.loader.load(this._json[index].url, Laya.Handler.create(this, (Json) => {
-                                if (typeof this._json[index].url === 'object') {
-                                    console.log(`${this._json[index]} 数组加载，完成，为数组对象，只能从getRes（url）中逐个获取`);
-                                }
-                                else {
-                                    if (Json == null) {
-                                        console.log('XXXXXXXXXXX数据表' + this._json[index].url + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
-                                    }
-                                    else {
-                                        this._json[index].dataArr = Json["RECORDS"];
-                                        console.log('数据表' + this._json[index].url + '加载完成！', '数组下标为：', index);
-                                    }
-                                }
-                                EventAdmin._notify(_Event.progress);
+                        case this.$json:
+                            Laya.loader.load(this.$json[index].url, Laya.Handler.create(this, (Json) => {
+                                this.lodeFunc(this._loadOrder[this._loadOrderIndex], index, Json, '数据表', () => {
+                                    this.$json[index].dataArr = Json["RECORDS"];
+                                });
                             }), null, Laya.Loader.JSON);
                             break;
-                        case this._skeleton:
-                            this._skeleton[index].templet.on(Laya.Event.ERROR, this, () => {
-                                console.log('XXXXXXXXXXX骨骼动画' + this._skeleton[index] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
-                                EventAdmin._notify(_Event.progress);
+                        case this.$skeleton:
+                            this.$skeleton[index].templet.on(Laya.Event.ERROR, this, () => {
+                                console.log('XXXXXXXXXXX骨骼动画' + this.$skeleton[index] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
+                                this.stepComplete();
                             });
-                            this._skeleton[index].templet.on(Laya.Event.COMPLETE, this, () => {
-                                console.log('骨骼动画', this._skeleton[index].templet.url, '加载完成！', '数组下标为：', index);
-                                EventAdmin._notify(_Event.progress);
+                            this.$skeleton[index].templet.on(Laya.Event.COMPLETE, this, () => {
+                                console.log('骨骼动画', this.$skeleton[index].url, '加载完成！', '数组下标为：', index);
+                                this.stepComplete();
                             });
-                            this._skeleton[index].templet.loadAni(this._skeleton[index].url);
+                            this.$skeleton[index].templet.loadAni(this.$skeleton[index].url);
                             break;
-                        case this._prefab2D:
-                            Laya.loader.load(this._prefab2D[index].url, Laya.Handler.create(this, (prefab2d) => {
-                                if (typeof this._prefab2D[index].url === 'object') {
-                                    console.log(`${this._prefab2D[index]} 加载，完成，为数组对象，只能从getRes（url）中逐个获取`);
-                                }
-                                else {
-                                    if (prefab2d == null) {
-                                        console.log('XXXXXXXXXXX2D预制体' + this._prefab2D[index].url + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
-                                    }
-                                    else {
-                                        let _prefab = new Laya.Prefab();
-                                        _prefab.json = prefab2d;
-                                        this._prefab2D[index].prefab2D = _prefab;
-                                        console.log('2D预制体' + this._prefab2D[index].url + '加载完成！', '数组下标为：', index);
-                                    }
-                                }
-                                EventAdmin._notify(_Event.progress);
+                        case this.$prefab2D:
+                            Laya.loader.load(this.$prefab2D[index].url, Laya.Handler.create(this, (prefabJson) => {
+                                this.lodeFunc(this._loadOrder[this._loadOrderIndex], index, prefabJson, '2D预制体', () => {
+                                    let _prefab = new Laya.Prefab();
+                                    _prefab.json = prefabJson;
+                                    this.$prefab2D[index].prefab2D = _prefab;
+                                });
                             }));
                             break;
                         default:
                             break;
                     }
                 }
-                lwgStepComplete() { }
-                lwgAllComplete() { return 0; }
-                ;
             }
             PreLoadAdmin._PreLoadScene = _PreLoadScene;
             class _PreLoadCutInScene extends _PreLoadScene {
@@ -7184,31 +7152,56 @@
         })(ExecutionAdmin = Lwg.ExecutionAdmin || (Lwg.ExecutionAdmin = {}));
     })(Lwg || (Lwg = {}));
     var Lwg$1 = Lwg;
-    let LwgPlatform = Lwg.PlatformAdmin;
-    let LwgGame = Lwg.GameAdmin;
-    let LwgScene = Lwg.SceneAdmin;
-    let LwgAdaptive = Lwg.AdaptiveAdmin;
-    let LwgSceneAni = Lwg.SceneAniAdmin;
-    let LwgNode = Lwg.NodeAdmin;
-    let LwgDialogue = Lwg.Dialogue;
-    let LwgEvent = Lwg.EventAdmin;
-    let LwgTimer = Lwg.TimerAdmin;
-    let LwgData = Lwg.DataAdmin;
-    let LwgStorage = Lwg.StorageAdmin;
-    let LwgDate = Lwg.DateAdmin;
-    let LwgSet = Lwg.SetAdmin;
-    let LwgAudio = Lwg.AudioAdmin;
-    let LwgClick = Lwg.ClickAdmin;
-    let LwgColor = Lwg.ColorAdmin;
-    let LwgEff2D = Lwg.Eff2DAdmin;
-    let LwgEff3D = Lwg.Eff3DAdmin;
-    let LwgAni2D = Lwg.Ani2DAdmin;
-    let LwgAni3D = Lwg.Ani3DAdmin;
-    let LwgExecution = Lwg.ExecutionAdmin;
-    let LwgGold = Lwg.GoldAdmin;
-    let LwgTools = Lwg.ToolsAdmin;
-    let LwgPreLoad = Lwg.PreLoadAdmin;
-    let LwgAdmin = Lwg.InitAdmin;
+    const LwgPlatform = Lwg.PlatformAdmin;
+    const LwgGame = Lwg.GameAdmin;
+    const LwgScene = Lwg.SceneAdmin;
+    const LwgAdaptive = Lwg.AdaptiveAdmin;
+    const LwgSceneAni = Lwg.SceneAniAdmin;
+    const LwgNode = Lwg.NodeAdmin;
+    const LwgDialogue = Lwg.Dialogue;
+    const LwgEvent = Lwg.EventAdmin;
+    const LwgTimer = Lwg.TimerAdmin;
+    const LwgData = Lwg.DataAdmin;
+    const LwgStorage = Lwg.StorageAdmin;
+    const LwgDate = Lwg.DateAdmin;
+    const LwgSet = Lwg.SetAdmin;
+    const LwgAudio = Lwg.AudioAdmin;
+    const LwgClick = Lwg.ClickAdmin;
+    const LwgColor = Lwg.ColorAdmin;
+    const LwgEff2D = Lwg.Eff2DAdmin;
+    const LwgEff3D = Lwg.Eff3DAdmin;
+    const LwgAni2D = Lwg.Ani2DAdmin;
+    const LwgAni3D = Lwg.Ani3DAdmin;
+    const LwgExecution = Lwg.ExecutionAdmin;
+    const LwgCurrency = Lwg.Currencydmin;
+    const LwgTools = Lwg.ToolsAdmin;
+    const LwgPreLoad = Lwg.PreLoadAdmin;
+    const LwgAdmin = Lwg.InitAdmin;
+
+    class _SceneName extends LwgScene._BaseName {
+    }
+    _SceneName.AdsHint = 'AdsHint';
+    _SceneName.PersonalInfo = 'PersonalInfo';
+    _SceneName.Levels = 'Levels';
+    _SceneName.Levels1 = 'Levels1';
+    _SceneName.CheckIn = 'CheckIn';
+    _SceneName.Share = 'Share';
+    _SceneName.Sweep = 'Sweep';
+    _SceneName.Assembly = 'Assembly';
+    _SceneName.Embattle = 'Embattle';
+    _SceneName.Workshop = 'Workshop';
+    _SceneName.Acquire = 'Acquire';
+
+    class Start extends LwgScene._SceneBase {
+        lwgOnAwake() {
+            LwgSet._bgMusic.switch = false;
+        }
+        lwgButton() {
+            this._btnUp(this._ImgVar('BtnStart'), () => {
+                this._openScene(_SceneName.Levels);
+            });
+        }
+    }
 
     var _Res;
     (function (_Res) {
@@ -7326,18 +7319,15 @@
         ;
     })(_Res || (_Res = {}));
 
-    class PreLoad extends LwgPreLoad._PreLoadScene {
-        lwgOnStart() {
-            this.lwgStartLoding(_Res);
-        }
-        lwgOpenAni() { return 1; }
-        lwgStepComplete() {
-        }
-        lwgAllComplete() {
-            return 1000;
-        }
-    }
-
+    var $Guide;
+    (function ($Guide) {
+        let Event;
+        (function (Event) {
+        })(Event = $Guide.Event || ($Guide.Event = {}));
+        let Data;
+        (function (Data) {
+        })(Data = $Guide.Data || ($Guide.Data = {}));
+    })($Guide || ($Guide = {}));
     var _Game;
     (function (_Game) {
         let _Event;
@@ -7570,7 +7560,7 @@
             if (this.bloodPresnt <= 0) {
                 this.deathFunc();
                 this.deathEffect();
-                this._ownerDestroy();
+                this._lwgDestroyAndClear();
             }
             else {
                 this.subOnceFunc();
@@ -8279,7 +8269,7 @@
             Weapon.addComponent(Levels_HeroWeapon);
             Weapon.pos(x, y);
             const Pic = Weapon.getChildByName('Pic');
-            Pic.skin = style ? `Game/UI/Game/Hero/Hero_01_weapon_${style}.png` : `Lwg/UI/ui_circle_c_007.png`;
+            Pic.skin = style ? `Game/UI/Game/Hero/Hero_01_weapon_${style}.png` : `Lwg/UI/rectangle_05.png`;
             Weapon.name = style;
             return Weapon;
         }
@@ -8484,20 +8474,283 @@
             });
         }
     }
+    class Levels1 extends Levels {
+    }
 
-    class Start extends LwgScene._SceneBase {
-        lwgOnAwake() {
-            LwgSet._bgMusic.switch = false;
+    class _PreLoadCutIn extends LwgPreLoad._PreLoadCutInScene {
+        lwgOpenAniAfter() {
         }
-        lwgButton() {
-            this._btnUp(this._ImgVar('BtnStart'), () => {
-                let levelName = 'Game';
-                this._openScene(levelName, true, false, () => {
-                    if (!LwgScene._SceneControl[levelName].getComponent(Levels)) {
-                        LwgScene._SceneControl[levelName].addComponent(Levels);
+        lwgAllComplete() {
+            return 10;
+        }
+        lwgOnDisable() {
+        }
+    }
+
+    class _PreLoad extends LwgPreLoad._PreLoadScene {
+        lwgOnAwake() {
+        }
+        lwgOnStart() {
+            this.lwgStartLoding(_Res);
+        }
+        lwgStepComplete() {
+        }
+        lwgAllComplete() {
+            this._openScene(_SceneName.Start);
+            return 2000;
+        }
+        lwgOnDisable() {
+        }
+    }
+
+    class _GameAni {
+        static _dialogOpenPopup(Content, Bg, func) {
+            Content.scene.zOrder = Laya.stage.numChildren - 1;
+            const time = 100;
+            const delay = 100;
+            Content.scale(0.5, 0.5);
+            LwgAni2D.bombs_Appear(Content, 0, 1, 1.2, 0, time * 3, () => {
+                func && func();
+            });
+            if (Bg) {
+                Bg.alpha = 0;
+                LwgAni2D.fadeOut(Bg, 0, 1, 200, delay * 2);
+            }
+            return time * 3;
+        }
+        static _dialogOpenFadeOut(Content, Bg, func) {
+            Bg && LwgAni2D.fadeOut(Bg, 0, 1, 300, 0, () => {
+                func && func();
+            });
+            LwgAni2D.fadeOut(Content, 0, 1, 250, 0, () => {
+                !Bg && func && func();
+            });
+            return 300;
+        }
+        static _dialogCloseFadeOut(Content, Bg, func) {
+            const time = 60;
+            const delay = 100;
+            LwgAni2D.fadeOut(Content, 1, 0, time * 3, delay * 1.5, () => {
+                func && func();
+            });
+            Bg && LwgAni2D.fadeOut(Bg, 1, 0, time * 3);
+            return time * 3 + delay * 1.5;
+        }
+        static _charactersEffect(label, bodyText, func) {
+            for (let index = 0; index < bodyText.length; index++) {
+                const char = bodyText.charAt(index);
+                LwgTimer._frameOnce(10 * index, this, () => {
+                    label.text += char;
+                    if (index == bodyText.length - 1) {
+                        func && func();
                     }
                 });
+            }
+        }
+        static _scaleHint(Node) {
+            LwgTimer._loop(1000, this, () => {
+                LwgAni2D.swell_shrink(Node, 1, 1.05, 300);
             });
+        }
+        static _fadeHint(Node) {
+            LwgAni2D.fadeOut(Node, 0, 0.6, 1500, 0, () => {
+                LwgAni2D.fadeOut(Node, 0.6, 0, 800, 0, () => {
+                    LwgTimer._frameOnce(30, this, () => {
+                        this._fadeHint(Node);
+                    });
+                });
+            });
+        }
+    }
+
+    class _Guide extends LwgScene._SceneBase {
+        constructor() {
+            super(...arguments);
+            this.btnComX = Laya.stage.width - 250;
+            this.btnComY = 70;
+            this.bgType = {
+                present: 'present',
+                vanish: 'vanish',
+                appear: 'appear',
+            };
+        }
+        lwgOpenAni() {
+            return 200;
+        }
+        lwgOnAwake() {
+            this._ImgVar('Hand').scale(0, 0);
+            this._ImgVar('Slide').scale(0, 0);
+        }
+        clickEffcet() {
+            LwgEff2D._Aperture._continuous(this._Owner, [this._ImgVar('Hand').x, this._ImgVar('Hand').y + 28], [6, 6], null, null, [LwgEff2D._SkinUrl.圆形小光环], null, this._ImgVar('Hand').zOrder - 1, [1.2, 1.2], [0.6, 0.6], [0.01, 0.01]);
+        }
+        boreholeCircle(arr, handX, handY, func) {
+            for (let index = 0; index < arr.length; index++) {
+                const time = 80 / 8;
+                let radiusBase = 15;
+                const element = arr[index];
+                const speed = (arr[index][2] - radiusBase) / time;
+                LwgTimer._frameNumLoop(1, time, this, () => {
+                    radiusBase += speed;
+                    element[2] = radiusBase;
+                    LwgTools._Draw.reverseCircleMask(this._ImgVar('Background'), arr, true);
+                }, () => {
+                    func && func();
+                }, true);
+            }
+            handX && this._ImgVar('Hand').pos(handX, handY - 30);
+        }
+        boreholeRoundrect(arr, handX, handY, func) {
+            handX && this._ImgVar('Hand').pos(handX, handY);
+            for (let index = 0; index < arr.length; index++) {
+                let widthBase = 0;
+                let heightBase = 0;
+                let radiuBase = 0;
+                const element = arr[index];
+                const time = 20;
+                const speedX = (element[2] - widthBase) / time;
+                const speedY = (element[3] - heightBase) / time;
+                const speedR = (element[4] - radiuBase) / time;
+                LwgTimer._frameNumLoop(1, time, this, () => {
+                    widthBase += speedX;
+                    heightBase += speedY;
+                    radiuBase += speedR;
+                    element[2] = widthBase;
+                    element[3] = heightBase;
+                    element[4] = radiuBase;
+                    LwgTools._Draw.reverseRoundrectMask(this._ImgVar('Background'), arr, true);
+                }, () => {
+                    func && func();
+                }, true);
+            }
+            handX && this._ImgVar('Hand').pos(handX, handY);
+        }
+        handAppear(delay, func) {
+            const time = 200;
+            LwgAni2D.scale(this._ImgVar('Hand'), 0, 0, 1, 1, time, delay ? delay : 0, () => {
+                func && func();
+            });
+            this._ImgVar('HandPic').rotation = -17;
+        }
+        bgAppear(delay, func) {
+            LwgTools._Node.destroyAllChildren(this._ImgVar('Background'));
+            const time = 300;
+            this._ImgVar('HandPic').rotation = -17;
+            LwgAni2D.fadeOut(this._ImgVar('Background'), 0, 1, time, delay ? delay : 0, () => {
+                func && func();
+            });
+        }
+        handVanish(delay, func) {
+            const time = 300;
+            this._ImgVar('HandPic').rotation = -17;
+            LwgAni2D.scale(this._ImgVar('Hand'), 1, 1, 0, 0, time, delay ? delay : 0, () => {
+                func && func();
+            });
+        }
+        bgVanish(delay, func) {
+            const time = 300;
+            LwgAni2D.fadeOut(this._ImgVar('Background'), 1, 0, time, delay ? delay : 0, () => {
+                func && func();
+            });
+        }
+        handMove(x, y, func, bgType) {
+            this.handClear();
+            const _y = y - 30;
+            const point = new Laya.Point(this._ImgVar('Hand').x, this._ImgVar('Hand').y);
+            const time = point.distance(x, _y);
+            LwgAni2D.move(this._ImgVar('Hand'), x, _y, time, () => {
+                func && func();
+            });
+            this._ImgVar('Hand').scale(1, 1);
+            LwgAni2D.move(this._ImgVar('HandPic'), 75, 56, time);
+            switch (bgType) {
+                case this.bgType.vanish:
+                    this.bgVanish();
+                    break;
+                case this.bgType.appear:
+                    this.bgAppear();
+                    break;
+                default:
+                    break;
+            }
+        }
+        handClear() {
+            LwgTimer._clearAll([this._ImgVar('Hand')]);
+            LwgAni2D._clearAll([this._ImgVar('Hand')]);
+            this._AniVar('Frame').stop();
+            this._AniVar('Click').stop();
+            this._AniVar('ClickOne').stop();
+            this._ImgVar('Hand').visible = true;
+            this._ImgVar('HandPic').scale(1, 1);
+            this._ImgVar('HandPic').rotation = -17;
+            this._ImgVar('Hand').pos(this._ImgVar('HandPic')._lwg.gPoint.x - 75, this._ImgVar('HandPic')._lwg.gPoint.y - 56);
+            this._ImgVar('HandPic').pos(75, 56);
+        }
+        slideUpAppear(x, y, width, height, radius, delay) {
+            this.bgAppear(delay ? delay : 0, () => {
+                this.boreholeRoundrect([[x, y, width, height, radius]], null, null, () => {
+                    this._ImgVar('Hand').scale(0, 0);
+                    this._ImgVar('Slide').scale(1, 1);
+                    this._ImgVar('Slide').pos(x, y);
+                    this._AniVar('SlideUp').play();
+                });
+            });
+        }
+        noMoveRoundrect(x, y, width, height, radius, delay, handX, handY) {
+            this.bgAppear(delay ? delay : 0, () => {
+                this.boreholeRoundrect([[x, y, width, height, radius]], handX ? handX : x, handY ? handY : y - 30, () => {
+                    this.handAppear(null, () => {
+                        this._AniVar('Click').play();
+                    });
+                });
+            });
+        }
+        moveRoundrectNoBg(x, y, width, height, radius) {
+            this.boreholeRoundrect([[x, y, width, height, radius]], null, null, () => {
+                this.handMove(x, y, () => {
+                    this._AniVar('Click').play();
+                });
+            });
+        }
+        noMoveCircle(x, y, radius) {
+            this.bgAppear(0, () => {
+                this.boreholeCircle([[x, y, radius]], x, y, () => {
+                    this.handAppear(200, () => {
+                        this._AniVar('Click').play();
+                    });
+                });
+            });
+        }
+        moveCircleBg(x, y, radius) {
+            this.bgAppear(0, () => {
+                this.boreholeCircle([[x, y, radius]], null, null, () => {
+                    this.handMove(x, y, () => {
+                        this._AniVar('Click').play();
+                    });
+                });
+            });
+        }
+        moveCircleNoBg(x, y, radius) {
+            this.boreholeCircle([[x, y, radius]], null, null, () => {
+                this.handMove(x, y, () => {
+                    this._AniVar('Click').play();
+                });
+            });
+        }
+        lwgEvent() {
+        }
+        lwgCloseAni() {
+            return _GameAni._dialogCloseFadeOut(this._ImgVar('Hand'), this._ImgVar('Background'));
+        }
+        lwgOnDisable() {
+            this._ImgVar('Background').destroy();
+        }
+    }
+
+    class _Parameter extends LwgScene._SceneBase {
+        lwgOnAwake() {
+        }
+        lwgButton() {
         }
     }
 
@@ -8519,27 +8772,30 @@
         }
     }
 
-    class LwgInit extends LwgAdmin._InitScene {
+    class _Init extends LwgAdmin._InitScene {
         lwgOnAwake() {
-            LwgPlatform._Ues.value = LwgPlatform._Tpye.OPPOTest;
+            LwgPlatform._Ues.value = LwgPlatform._Tpye.Bytedance;
             Laya.Stat.show();
             Laya.MouseManager.multiTouchEnabled = false;
-            LwgSceneAni._openSwitch.value = true;
             LwgSceneAni._Use.value = {
                 class: LwgSceneAni._fadeOut.Open,
                 type: null,
             };
-            LwgClick._Use.value = LwgClick._Type.reduce;
-            LwgAdaptive._Use.value = [1280, 720];
-            LwgScene._SceneScript = {
-                PreLoad: PreLoad,
-                Start: Start,
-                Defeated: Defeated,
-                Victory: Victory,
-            };
+            LwgClick._Use.value = LwgClick._Type.largen;
+            LwgAdaptive._Use.value = [720, 120];
+            LwgScene._SceneScript = [
+                _PreLoad,
+                _PreLoadCutIn,
+                _Guide,
+                _Parameter,
+                Start,
+                Levels,
+                Defeated,
+                Victory,
+            ];
         }
         lwgOnStart() {
-            this._openScene('PreLoad');
+            this._openScene(_SceneName._PreLoad);
         }
     }
 
@@ -8548,7 +8804,7 @@
         }
         static init() {
             var reg = Laya.ClassUtils.regClass;
-            reg("script/Lwg/LwgInit.ts", LwgInit);
+            reg("script/Game/General/_Init.ts", _Init);
         }
     }
     GameConfig.width = 720;
@@ -8557,7 +8813,7 @@
     GameConfig.screenMode = "vertical";
     GameConfig.alignV = "top";
     GameConfig.alignH = "left";
-    GameConfig.startScene = "Scene/Lwginit.scene";
+    GameConfig.startScene = "Scene/_Init.scene";
     GameConfig.sceneRoot = "";
     GameConfig.debug = false;
     GameConfig.stat = false;

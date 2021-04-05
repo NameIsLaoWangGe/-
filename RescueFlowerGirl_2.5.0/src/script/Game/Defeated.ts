@@ -1,5 +1,5 @@
 import { LwgScene } from "../Lwg/Lwg";
-import { _Game } from "./General/_GameData";
+import { _Game } from "./General/_GameGlobal";
 
 export default class Defeated extends LwgScene._SceneBase {
     lwgButton(): void {

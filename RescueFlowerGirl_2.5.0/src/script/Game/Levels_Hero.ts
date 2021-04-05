@@ -1,5 +1,5 @@
 import { LwgTimer } from "../Lwg/Lwg";
-import { _Game } from "./General/_GameData";
+import { _Game } from "./General/_GameGlobal";
 import { Levels_HeroAttack } from "./Levels_HeroAttack";
 import Levels_RoleBase from "./Levels_RoleBase";
 export default class Levels_Hero extends Levels_RoleBase {

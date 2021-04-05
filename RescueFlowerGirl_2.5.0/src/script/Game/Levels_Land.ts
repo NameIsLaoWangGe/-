@@ -1,7 +1,7 @@
 
 import Lwg, { LwgAni2D, LwgTimer } from "../Lwg/Lwg";
 import { _EnemyAttack } from "./EnemyAttack/_EnemyAttack";
-import { _Game } from "./General/_GameData";
+import { _Game } from "./General/_GameGlobal";
 import _RoleBase from "./Levels_RoleBase";
 
 export default class Levels_Land extends _RoleBase {

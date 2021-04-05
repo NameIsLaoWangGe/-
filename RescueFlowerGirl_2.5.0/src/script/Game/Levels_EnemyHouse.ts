@@ -1,5 +1,5 @@
 import { _EnemyAttack } from "./EnemyAttack/_EnemyAttack";
-import { _Game, _Role } from "./General/_GameData";
+import { _Game, _Role } from "./General/_GameGlobal";
 import { Levels_Boss } from "./Levels_Boss";
 import Levels_RoleBase from "./Levels_RoleBase";
 

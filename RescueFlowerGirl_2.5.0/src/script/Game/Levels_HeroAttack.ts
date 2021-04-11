@@ -1,4 +1,4 @@
-import Lwg, { LwgTools } from "../Lwg/Lwg";
+import { LwgNode, LwgTools } from "../Lwg/Lwg";
 import { _Res } from "./General/_Res";
 import { Levels_HeroWeapon } from "./Levels_HeroWeapon";
 
@@ -15,7 +15,7 @@ export class Levels_HeroAttack {
     ballisticNum = 1;
     /**创建一个子弹*/ 
     private createWeapon(style: string, x: number, y: number): Laya.Image {
-        const Weapon = LwgTools._Node.createPrefab(_Res.$prefab2D.Weapon.prefab2D) as Lwg.NodeAdmin._Image;
+        const Weapon = LwgTools.Node.createPrefab(_Res.$prefab2D.Weapon.prefab2D) as  LwgNode.Image;
         this.WeaponParent.addChild(Weapon);
         Weapon.addComponent(Levels_HeroWeapon);
         Weapon.pos(x, y);

@@ -54,7 +54,7 @@ export default class _SubPkg {
                 },
             });
         }
-        LwgTools._Point.getRoundPosNew
+        LwgTools.Point.getRoundPosNew
     }
 
     loadPkg_VIVO() {
@@ -83,7 +83,7 @@ export default class _SubPkg {
     loadPkg_OPPO() {
         console.log("loadPkg_OPPOsssssssss");
         if (this.pkgFlag == this.pkgInfo.length) {
-             LwgScene._openScene('PreLoad');
+             LwgScene.openScene('PreLoad');
             console.log("GameInit");
         } else {
             let info = this.pkgInfo[this.pkgFlag];

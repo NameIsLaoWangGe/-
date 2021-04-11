@@ -1,24 +1,24 @@
-import Lwg from "../../Lwg/Lwg";
+import { LwgNode } from "../../Lwg/Lwg";
 
-export interface _Whom {
+export interface Whom {
     /**
      *普通敌人 
      */
-    enemy: (enemy: Lwg.NodeAdmin._Image) => void;
+    enemy: (enemy: LwgNode.Image) => void;
     /**
     *陆地
     */
-    land: (enemy: Lwg.NodeAdmin._Image) => void;
+    land: (enemy: LwgNode.Image) => void;
     /**
      *房子
      */
-    house: (enemy: Lwg.NodeAdmin._Image) => void;
+    house: (enemy: LwgNode.Image) => void;
     /**
      * boss
      */
-    boss: (enemy: Lwg.NodeAdmin._Image) => void;
+    boss: (enemy: LwgNode.Image) => void;
     /**
      * 女主角
      */
-    heroine: (enemy: Lwg.NodeAdmin._Image) => void;
+    heroine: (enemy: LwgNode.Image) => void;
 }

@@ -1,10 +1,10 @@
-import Lwg from "../../Lwg/Lwg";
+import { LwgPreLoad } from "../../Lwg/Lwg";
 
-type scene3D = {} & Lwg.PreLoadAdmin.scene3D;
-type texture2D = {} & Lwg.PreLoadAdmin.texture2D;
-type scene2D = {} & Lwg.PreLoadAdmin.scene2D;
-type prefab2D = {} & Lwg.PreLoadAdmin.prefab2D;
-type json = {} & Lwg.PreLoadAdmin.json;
+type scene3D = {} & LwgPreLoad.scene3D;
+type texture2D = {} & LwgPreLoad.texture2D;
+type scene2D = {} & LwgPreLoad.scene2D;
+type prefab2D = {} & LwgPreLoad.prefab2D;
+type json = {} & LwgPreLoad.json;
 
 export module _Res {
     export class $scene3D {

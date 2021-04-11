@@ -6,11 +6,11 @@ export default class Levels_Buff extends LwgScene._ObjectBase {
         this.checkHero();
     }
     checkHero(): void {
-        LwgTimer._frameLoop(1, this, () => {
+        LwgTimer.frameLoop(1, this, () => {
             this._Owner.y += 5;
-            !LwgTools._Node.leaveStage(this._Owner, () => {
+            !LwgTools.Node.leaveStage(this._Owner, () => {
                 this._Owner.removeSelf();
-            }) && LwgTools._Node.checkTwoDistance(this._Owner, this._SceneImg('Hero'), 60, () => {
+            }) && LwgTools.Node.checkTwoDistance(this._Owner, this._SceneImg('Hero'), 60, () => {
                 this._Owner.removeSelf();
                 this._evNotify(_Game._Event.checkBuff, [this._Owner['buffType']]);
             })

@@ -1,6 +1,6 @@
 import { LwgPreLoad } from "../../Lwg/Lwg";
 import { _Res } from "./_Res";
-import { _SceneName } from "./_SceneName";
+import _SceneName from "./_SceneName";
 export default class _PreLoad extends LwgPreLoad._PreLoadScene {
     lwgOnAwake(): void {
     }

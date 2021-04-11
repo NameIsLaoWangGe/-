@@ -1,6 +1,6 @@
 import { LwgScene } from "../../Lwg/Lwg";
 
-export class _SceneName extends LwgScene._BaseName {
+export default class _SceneName extends LwgScene._BaseName {
     static AdsHint = 'AdsHint';
     static PersonalInfo = 'PersonalInfo';
     static Levels = 'Levels';

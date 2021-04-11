@@ -1,4 +1,4 @@
-import Lwg, { LwgData, LwgGame, LwgTools } from "../../Lwg/Lwg";
+import  { LwgData, LwgGame, LwgNode, LwgTools } from "../../Lwg/Lwg";
 import { _Res } from "./_Res";
 
 export module $Guide {
@@ -36,7 +36,7 @@ export module _Game {
     export let _arrowParentArr = [];
 }
 export module _Role {
-    export class _Buff extends LwgData._Table {
+    export class _Buff extends LwgData.Table {
         private static ins: _Buff;
         static _ins() {
             if (!this.ins) {
@@ -55,13 +55,13 @@ export module _Role {
          * @param x 坐标x
          * @param y 坐标y
          * */
-        createBuff(type: number, Parent: Laya.Sprite, x: number, y: number, script: any): Lwg.NodeAdmin._Image {
-            const Buff = LwgTools._Node.createPrefab(_Res.$prefab2D.Buff.prefab2D, Parent, [x, y], script);
+        createBuff(type: number, Parent: Laya.Sprite, x: number, y: number, script: any): LwgNode.Image {
+            const Buff = LwgTools.Node.createPrefab(_Res.$prefab2D.Buff.prefab2D, Parent, [x, y], script);
             Buff['buffType'] = type;
-            return Buff as Lwg.NodeAdmin._Image;
+            return Buff as LwgNode.Image;
         }
     }
-    export class _Enemy extends LwgData._Table {
+    export class _Enemy extends LwgData.Table {
         constructor(_Parent: Laya.Image) {
             super();
             this._arr = _Res.$json.Enemy.dataArr;
@@ -86,23 +86,23 @@ export module _Role {
             this.quantity--;
             const shellNum = this.levelData[this._otherPro.shellNum];
             let shellNumTime = 0;
-            const element = LwgTools._Node.createPrefab(_Res.$prefab2D.Enemy.prefab2D, this.Parent) as Lwg.NodeAdmin._Image;
+            const element = LwgTools.Node.createPrefab(_Res.$prefab2D.Enemy.prefab2D, this.Parent) as LwgNode.Image;
             shellNumTime++;
             const color = LwgTools._Array.randomGetOne(['blue', 'yellow', 'red']);
             element.name = `${color}${color}`;
-            let speed = LwgTools._Number.randomOneBySection(this.levelData[this._otherPro.speed][0], this.levelData[this._otherPro.speed][1]);
-            speed = LwgTools._Number.randomOneHalf() == 0 ? -speed : speed;
+            let speed = LwgTools.Num.randomOneBySection(this.levelData[this._otherPro.speed][0], this.levelData[this._otherPro.speed][1]);
+            speed = LwgTools.Num.randomOneHalf() == 0 ? -speed : speed;
             element['_EnemyData'] = {
                 shell: shellNumTime <= shellNum ? true : false,
                 blood: this.levelData['blood'],
-                angle: LwgTools._Number.randomOneBySection(0, 360),
+                angle: LwgTools.Num.randomOneBySection(0, 360),
                 speed: speed,
                 color: color,
             };
             element.addComponent(Script);
         }
     }
-    export class _Boss extends LwgData._Table {
+    export class _Boss extends LwgData.Table {
         constructor(Parent: Laya.Image, BossScript: any) {
             super();
             this._arr = _Res.$json.Boss.dataArr;
@@ -124,13 +124,13 @@ export module _Role {
         speed: number[];
         blood: number;
         createLevelBoss(Parent: Laya.Image, BossScript: any): Laya.Sprite {
-            const element = LwgTools._Node.createPrefab(_Res.$prefab2D.Boss.prefab2D, Parent) as Lwg.NodeAdmin._Image;
+            const element = LwgTools.Node.createPrefab(_Res.$prefab2D.Boss.prefab2D, Parent) as LwgNode.Image;
             element.name = `Boss`;
-            let speed = LwgTools._Number.randomOneBySection(this.speed[0], this.speed[1]);
-            speed = LwgTools._Number.randomOneHalf() == 0 ? -speed : speed;
+            let speed = LwgTools.Num.randomOneBySection(this.speed[0], this.speed[1]);
+            speed = LwgTools.Num.randomOneHalf() == 0 ? -speed : speed;
             element['_EnemyData'] = {
                 blood: this.blood,
-                angle: LwgTools._Number.randomOneBySection(0, 360),
+                angle: LwgTools.Num.randomOneBySection(0, 360),
                 speed: speed,
                 sikllNameArr: this.skills,
             };

@@ -21,19 +21,19 @@ export class Levels_HeroWeapon extends LwgScene._ObjectBase {
         return this.dropAcc += 0.5;
     }
     lwgOnAwake(): void {
-        LwgTimer._frameLoop(1, this, () => {
+        LwgTimer.frameLoop(1, this, () => {
             this.move();
         })
     }
     move(): void {
         if (this.getSpeed() > 0) {
-            let p = LwgTools._Point.angleAndLenByPoint(this._Owner.rotation - 90, this.getSpeed());
+            let p = LwgTools.Point.angleAndLenByPoint(this._Owner.rotation - 90, this.getSpeed());
             this._Owner.x += p.x;
             this._Owner.y += p.y;
         } else {
             this._Owner.y += this.getDropSpeed();
         }
-        const leave = LwgTools._Node.leaveStage(this._Owner, () => {
+        const leave = LwgTools.Node.leaveStage(this._Owner, () => {
             this._Owner.destroy();
         })
         if (!leave) {
@@ -48,10 +48,10 @@ export class Levels_HeroWeapon extends LwgScene._ObjectBase {
     drop(): void {
         this.state = this.stateType.free;
         Laya.timer.clearAll(this);
-        LwgTimer._frameLoop(1, this, () => {
+        LwgTimer.frameLoop(1, this, () => {
             this._Owner.y += 40;
             this._Owner.rotation += 10;
-            LwgTools._Node.leaveStage(this._Owner, () => {
+            LwgTools.Node.leaveStage(this._Owner, () => {
                 this._Owner.destroy();
             });
         })

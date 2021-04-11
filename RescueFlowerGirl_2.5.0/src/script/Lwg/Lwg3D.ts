@@ -69,7 +69,7 @@ export module lwg3D {
 
         private getFindComponent(name: string, Component: string): any {
             if (!this[`_child${name}${Component}`]) {
-                let Node = LwgTools._Node.findChild3D(this.owner, name);
+                let Node = LwgTools.Node.findChild3D(this.owner, name);
                 if (Node) {
                     if (Node[Component]) {
                         return this[`_child${name}${Component}`] = Node[Component];
@@ -86,7 +86,7 @@ export module lwg3D {
         /**从全局查找当前节点，返回第一个*/
         _find(name: string): Laya.MeshSprite3D {
             if (!this[`_FindNode${name}`]) {
-                let Node = LwgTools._Node.findChild3D(this.owner, name);
+                let Node = LwgTools.Node.findChild3D(this.owner, name);
                 if (Node) {
                     return this[`_FindNode${name}`] = Node;
                 } else {
@@ -112,10 +112,10 @@ export module lwg3D {
         /**场景中的一些事件，在lwgOnAwake和lwgOnEnable之间执行*/
         lwgEventRegister(): void { };
         _EvReg(name: string, func: Function): void {
-            LwgEvent._register(name, this, func);
+            LwgEvent.register(name, this, func);
         }
         _EvNotify(name: string, args?: Array<any>): void {
-            LwgEvent._notify(name, args);
+            LwgEvent.notify(name, args);
         }
         /**初始化，在onEnable中执行，重写即可覆盖*/
         lwgOnEnable(): void { }
@@ -171,7 +171,7 @@ export module lwg3D {
             this.lwgOnDisable();
             Laya.timer.clearAll(this);
             Laya.Tween.clearAll(this);
-            LwgEvent._offCaller(this);
+            LwgEvent.offCaller(this);
         }
     }
     /**3D物件通用父类*/
@@ -226,7 +226,7 @@ export module lwg3D {
             this.lwgOnDisable();
             Laya.Tween.clearAll(this);
             Laya.timer.clearAll(this);
-            LwgEvent._offCaller(this);
+            LwgEvent.offCaller(this);
         }
     }
 }

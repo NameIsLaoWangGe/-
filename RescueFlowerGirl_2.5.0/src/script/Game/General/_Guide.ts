@@ -1,7 +1,7 @@
 import { LwgScene, LwgAni2D, LwgEff2D, LwgTimer, LwgTools, LwgPlatform } from "../../Lwg/Lwg";
 import { _GameAni } from "./_GameAni";
 /**裁剪界面的层级必须在最上面*/
-export default class _Guide extends LwgScene._SceneBase {
+export default class _Guide extends LwgScene.SceneBase {
     lwgOpenAni(): number {
         return 200;
     }
@@ -10,7 +10,7 @@ export default class _Guide extends LwgScene._SceneBase {
         this._ImgVar('Slide').scale(0, 0);
     }
     clickEffcet(): void {
-        LwgEff2D._Aperture._continuous(this._Owner, [this._ImgVar('Hand').x, this._ImgVar('Hand').y + 28], [6, 6], null, null, [LwgEff2D._SkinUrl.圆形小光环], null, this._ImgVar('Hand').zOrder - 1, [1.2, 1.2], [0.6, 0.6], [0.01, 0.01]);
+        LwgEff2D.Aperture.continuous(this._Owner, [this._ImgVar('Hand').x, this._ImgVar('Hand').y + 28], [6, 6], null, null, [LwgEff2D.SkinUrl.圆形小光环], null, this._ImgVar('Hand').zOrder - 1, [1.2, 1.2], [0.6, 0.6], [0.01, 0.01]);
     }
     /**
       * 在一个节点上绘制一个圆形反向遮罩,可以绘制很多个,但是不要同时存在多个interactionArea，清除直接删除node中的interactionArea节点即可
@@ -25,10 +25,10 @@ export default class _Guide extends LwgScene._SceneBase {
             let radiusBase = 15;
             const element = arr[index];
             const speed = (arr[index][2] - radiusBase) / time;
-            LwgTimer._frameNumLoop(1, time, this, () => {
+            LwgTimer.frameNumLoop(1, time, this, () => {
                 radiusBase += speed;
                 element[2] = radiusBase;
-                LwgTools._Draw.reverseCircleMask(this._ImgVar('Background'), arr, true);
+                LwgTools.Draw.reverseCircleMask(this._ImgVar('Background'), arr, true);
             }, () => {
                 func && func();
             }, true)
@@ -54,14 +54,14 @@ export default class _Guide extends LwgScene._SceneBase {
             const speedX = (element[2] - widthBase) / time;
             const speedY = (element[3] - heightBase) / time;
             const speedR = (element[4] - radiuBase) / time;
-            LwgTimer._frameNumLoop(1, time, this, () => {
+            LwgTimer.frameNumLoop(1, time, this, () => {
                 widthBase += speedX;
                 heightBase += speedY;
                 radiuBase += speedR;
                 element[2] = widthBase;
                 element[3] = heightBase;
                 element[4] = radiuBase;
-                LwgTools._Draw.reverseRoundrectMask(this._ImgVar('Background'), arr, true);
+                LwgTools.Draw.reverseRoundrectMask(this._ImgVar('Background'), arr, true);
             }, () => {
                 func && func();
             }, true)
@@ -79,7 +79,7 @@ export default class _Guide extends LwgScene._SceneBase {
         this._ImgVar('HandPic').rotation = -17;
     }
     bgAppear(delay?: number, func?: Function): void {
-        LwgTools._Node.destroyAllChildren(this._ImgVar('Background'));
+        LwgTools.Node.destroyAllChildren(this._ImgVar('Background'));
         const time = 300;
         this._ImgVar('HandPic').rotation = -17;
         LwgAni2D.fadeOut(this._ImgVar('Background'), 0, 1, time, delay ? delay : 0, () => {
@@ -126,8 +126,8 @@ export default class _Guide extends LwgScene._SceneBase {
         }
     }
     handClear(): void {
-        LwgTimer._clearAll([this._ImgVar('Hand')]);
-        LwgAni2D._clearAll([this._ImgVar('Hand')]);
+        LwgTimer.clearAll([this._ImgVar('Hand')]);
+        LwgAni2D.clearAll([this._ImgVar('Hand')]);
         this._AniVar('Frame').stop();
         this._AniVar('Click').stop();
         this._AniVar('ClickOne').stop();

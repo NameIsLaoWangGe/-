@@ -42,7 +42,7 @@ export class _GameAni {
     static _charactersEffect(label: Laya.Label, bodyText: string, func?: Function): void {
         for (let index = 0; index < bodyText.length; index++) {
             const char = bodyText.charAt(index);
-            LwgTimer._frameOnce(10 * index, this, () => {
+            LwgTimer.frameOnce(10 * index, this, () => {
                 label.text += char;
                 if (index == bodyText.length - 1) {
                     func && func();
@@ -62,7 +62,7 @@ export class _GameAni {
     static _fadeHint(Node: Laya.Sprite): void {
         LwgAni2D.fadeOut(Node, 0, 0.6, 1500, 0, () => {
             LwgAni2D.fadeOut(Node, 0.6, 0, 800, 0, () => {
-                LwgTimer._frameOnce(30, this, () => {
+                LwgTimer.frameOnce(30, this, () => {
                     this._fadeHint(Node);
                 })
             })

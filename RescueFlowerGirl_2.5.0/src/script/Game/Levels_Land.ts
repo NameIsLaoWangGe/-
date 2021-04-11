@@ -1,5 +1,5 @@
 
-import Lwg, { LwgAni2D, LwgTimer } from "../Lwg/Lwg";
+import { LwgAni2D, LwgNode, LwgTimer } from "../Lwg/Lwg";
 import { _EnemyAttack } from "./EnemyAttack/_EnemyAttack";
 import { _Game } from "./General/_GameGlobal";
 import _RoleBase from "./Levels_RoleBase";
@@ -8,7 +8,7 @@ export default class Levels_Land extends _RoleBase {
     lwgOnAwake(): void {
         this.bloodInit(100);
         this._ImgChild('Blood').visible = false;
-        LwgTimer._frameLoop(1, this, () => {
+        LwgTimer.frameLoop(1, this, () => {
             this._Owner.rotation += 0.1;
         })
     }
@@ -21,7 +21,7 @@ export default class Levels_Land extends _RoleBase {
                 this._Owner.rotation = 0;
                 this._ImgChild('Blood').visible = true;
                 this.landStage = true;
-                _EnemyAttack.Level1.land(this._Owner as Lwg.NodeAdmin._Image);
+                _EnemyAttack.Level1.land(this._Owner as  LwgNode.Image);
             })
         })
         this._evReg(_Game._Event.enemyLandCheckWeapon, (Weapon: Laya.Image, numBlood: number) => {

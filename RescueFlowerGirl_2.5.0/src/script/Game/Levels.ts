@@ -8,10 +8,10 @@ import Levels_Enemy from "./Levels_Enemy";
 import Levels_Hero from "./Levels_Hero";
 import { Levels_EnemyHouse } from "./Levels_EnemyHouse";
 
-export default class Levels extends LwgScene._SceneBase {
+export default class Levels extends LwgScene.SceneBase {
     lwgOnAwake(): void {
         // 创建主角
-        this._Owner['Hero'] = LwgTools._Node.createPrefab(_Res.$prefab2D.Hero.prefab2D, this._Owner, [Laya.stage.width / 2, Laya.stage.height * 2 / 3]);
+        this._Owner['Hero'] = LwgTools.Node.createPrefab(_Res.$prefab2D.Hero.prefab2D, this._Owner, [Laya.stage.width / 2, Laya.stage.height * 2 / 3]);
         this._ImgVar('Hero').addComponent(Levels_Hero);
         // 树
         for (let index = 0; index < this._ImgVar('MiddleScenery').numChildren; index++) {

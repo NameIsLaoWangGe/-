@@ -15,7 +15,7 @@ export class Levels_Boss extends Levels_Enemy {
     }
     move(): void {
         let dir = 'left';
-        LwgTimer._frameLoop(1, this, () => {
+        LwgTimer.frameLoop(1, this, () => {
             if (dir == 'right') {
                 this._Owner.x++;
                 if (this._Owner.x > Laya.stage.width - 100) {

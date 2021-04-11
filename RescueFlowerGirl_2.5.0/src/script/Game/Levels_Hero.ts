@@ -14,7 +14,7 @@ export default class Levels_Hero extends Levels_RoleBase {
         this._HeroAttack.ballisticNum = 1;
     }
     lwgOnStart(): void {
-        LwgTimer._frameLoop(this.attackInterval, this, () => {
+        LwgTimer.frameLoop(this.attackInterval, this, () => {
             if (this.mouseP) {
                 this._HeroAttack.attack_S();
             }

@@ -22,7 +22,7 @@ export default class Levels_RoleBase extends LwgScene._ObjectBase {
      * @param numBlood 血量
      * */
     checkOtherRule(Weapon: Laya.Image, dis: number, numBlood: number): void {
-        LwgTools._Node.checkTwoDistance(Weapon, this._Owner, dis ? dis : 30, () => {
+        LwgTools.Node.checkTwoDistance(Weapon, this._Owner, dis ? dis : 30, () => {
             this.bloodRule(Weapon, numBlood);
         });
     }
@@ -55,7 +55,7 @@ export default class Levels_RoleBase extends LwgScene._ObjectBase {
     * */
     deathEffect(): void {
         for (let index = 0; index < 20; index++) {
-            LwgEff2D._Particle._spray(Laya.stage, this._Owner._lwg.gPoint, [10, 30])
+            LwgEff2D.Particle.spray(Laya.stage, this._Owner._lwg.gPoint, [10, 30])
         }
     }
 }

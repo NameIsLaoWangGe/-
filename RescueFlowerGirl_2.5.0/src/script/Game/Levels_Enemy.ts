@@ -1,4 +1,4 @@
-import Lwg, { LwgTimer, LwgTools } from "../Lwg/Lwg";
+import{ LwgNode, LwgTimer, LwgTools } from "../Lwg/Lwg";
 import { _EnemyAttack } from "./EnemyAttack/_EnemyAttack";
 import { _Game } from "./General/_GameGlobal";
 import { _Res } from "./General/_Res";
@@ -11,7 +11,7 @@ export default class Levels_Enemy extends Levels_RoleBase {
     lwgOnAwake(): void {
         this.generalProInit();
         this.bloodInit(this._Owner['_EnemyData']['blood']);
-        this.ranAttackNum = LwgTools._Number.randomOneBySection(1, 3, true);
+        this.ranAttackNum = LwgTools.Num.randomOneBySection(1, 3, true);
     }
     generalProInit(): void {
         this._Owner.pos(Laya.stage.width / 2, 300);
@@ -36,9 +36,9 @@ export default class Levels_Enemy extends Levels_RoleBase {
         let radius = 0;
         const radiusSpeed = 2;
         const time = 220 / radiusSpeed;
-        LwgTimer._frameNumLoop(1, time, this, () => {
+        LwgTimer.frameNumLoop(1, time, this, () => {
             radius += radiusSpeed;
-            let point = LwgTools._Point.getRoundPosNew(this._Owner.rotation, radius, new Laya.Point(this._SceneImg('Land').width / 2, this._SceneImg('Land').height / 2))
+            let point = LwgTools.Point.getRoundPosNew(this._Owner.rotation, radius, new Laya.Point(this._SceneImg('Land').width / 2, this._SceneImg('Land').height / 2))
             this._Owner.x = point.x;
             this._Owner.y = point.y;
         }, () => {
@@ -46,11 +46,11 @@ export default class Levels_Enemy extends Levels_RoleBase {
         })
     }
     attack(): void {
-        _EnemyAttack.Level1.enemy(this._Owner as Lwg.NodeAdmin._Image);
+        _EnemyAttack.Level1.enemy(this._Owner as  LwgNode.Image);
     }
     move(): void {
-        LwgTimer._frameLoop(1, this, () => {
-            let point = LwgTools._Point.getRoundPosNew(this._Owner.rotation += this.speed, 220, new Laya.Point(this._SceneImg('Land').width / 2, this._SceneImg('Land').height / 2))
+        LwgTimer.frameLoop(1, this, () => {
+            let point = LwgTools.Point.getRoundPosNew(this._Owner.rotation += this.speed, 220, new Laya.Point(this._SceneImg('Land').width / 2, this._SceneImg('Land').height / 2))
             this._Owner.x = point.x;
             this._Owner.y = point.y;
         })
@@ -63,7 +63,7 @@ export default class Levels_Enemy extends Levels_RoleBase {
     deathFunc(): void {
         // 最后一个为boss
         if (this._Owner.name === 'Boss') {
-            LwgTools._Node.createPrefab(_Res.$prefab2D.Heroine.prefab2D, this._Parent, [this._Owner.x, this._Owner.y], Levels_Heroine);
+            LwgTools.Node.createPrefab(_Res.$prefab2D.Heroine.prefab2D, this._Parent, [this._Owner.x, this._Owner.y], Levels_Heroine);
         } else {
             this._evNotify(_Game._Event.addEnemy);
         }

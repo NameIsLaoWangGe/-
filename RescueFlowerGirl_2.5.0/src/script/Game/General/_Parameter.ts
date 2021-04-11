@@ -1,5 +1,5 @@
 import { LwgScene } from "../../Lwg/Lwg";
-export default class _Parameter extends LwgScene._SceneBase {
+export default class _Parameter extends LwgScene.SceneBase {
     lwgOnAwake(): void {
       
     }

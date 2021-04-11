@@ -1,6 +1,5 @@
 import { LwgTimer, LwgTools } from "../../Lwg/Lwg";
 import { _CutInRes, _Res } from "./_Res";
-import { _SceneName } from "./_SceneName";
 export class _Game3D {
     private static ins: _Game3D;
     aniName = {

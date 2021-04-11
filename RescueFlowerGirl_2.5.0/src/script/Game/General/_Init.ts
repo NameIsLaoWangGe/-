@@ -1,27 +1,26 @@
 import Start from "../Start";
-import { LwgAdaptive, LwgAdmin, LwgClick, LwgPlatform, LwgScene, LwgSceneAni } from "../../Lwg/Lwg";
 import Levels from "../Levels";
 import _SubPkg from "../../Lwg/_SubPkg";
 import _PreLoadCutIn from "./_PreLoadCutIn";
 import _PreLoad from "./_PreLoad";
 import _Guide from "./_Guide";
 import _Parameter from "./_Parameter";
-import { _SceneName } from "./_SceneName";
 import Defeated from "../Defeated";
 import Victory from "../Victory";
-
-export default class _Init extends LwgAdmin._InitScene {
+import _SceneName from "./_SceneName";
+import { LwgAdaptive, LwgClick, LwgInit, LwgPlatform, LwgScene, LwgSceneAni } from "../../Lwg/Lwg";
+export default class _Init extends LwgInit._InitScene {
     lwgOnAwake(): void {
-        LwgPlatform._Ues.value = LwgPlatform._Tpye.Bytedance;
+        LwgPlatform.Ues.value = LwgPlatform.Tpye.Bytedance;
         Laya.Stat.show();
         Laya.MouseManager.multiTouchEnabled = false;
-        LwgSceneAni._Use.value = {
+        LwgSceneAni.Use.value = {
             class: LwgSceneAni._fadeOut.Open,
             type: null,
         };
-        LwgClick._Use.value = LwgClick._Type.largen;
-        LwgAdaptive._Use.value = [720, 120];
-        LwgScene._SceneScript = [
+        LwgClick.Use.value = LwgClick._Type.largen;
+        LwgAdaptive.Use.value = [720, 1280];
+        LwgScene.SceneScript = [
             _PreLoad,
             _PreLoadCutIn,
             _Guide,

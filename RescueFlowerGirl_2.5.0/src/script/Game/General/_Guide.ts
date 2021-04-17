@@ -1,5 +1,5 @@
 import { LwgScene, LwgAni2D, LwgEff2D, LwgTimer, LwgTools, LwgPlatform } from "../../Lwg/Lwg";
-import { _GameAni } from "./_GameAni";
+import { GameAni } from "./_GameAni";
 /**裁剪界面的层级必须在最上面*/
 export default class _Guide extends LwgScene.SceneBase {
     lwgOpenAni(): number {
@@ -244,7 +244,7 @@ export default class _Guide extends LwgScene.SceneBase {
         // })
     }
     lwgCloseAni(): number {
-        return _GameAni._dialogCloseFadeOut(this._ImgVar('Hand'), this._ImgVar('Background'));
+        return GameAni._dialogCloseFadeOut(this._ImgVar('Hand'), this._ImgVar('Background'));
     }
     lwgOnDisable(): void {
         // Background被缓存成位图后续手动销毁

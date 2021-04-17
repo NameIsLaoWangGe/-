@@ -1,5 +1,5 @@
 import { LwgScene, LwgData, LwgEff2D, LwgTimer, LwgTools } from "../Lwg/Lwg";
-import { _EnemyAttack } from "./EnemyAttack/_EnemyAttack";
+import { EnemyAttackControl } from "./EnemyAttack/EnemyAttackControl";
 import Levels_Enemy from "./Levels_Enemy";
 export class Levels_Boss extends Levels_Enemy {
     lwgOnAwake(): void {
@@ -32,6 +32,6 @@ export class Levels_Boss extends Levels_Enemy {
     appear(): void {
     }
     attack(): void {
-        _EnemyAttack.Level1.boss(this._Owner as any);
+        EnemyAttackControl.Level1.boss(this._Owner as any);
     }
 }

@@ -1,0 +1,7 @@
+{
+  "code": "import { LwgPreLoad } from \"../../Lwg/Lwg\";\r\nexport default class _PreLoadCutIn extends LwgPreLoad._PreLoadCutInScene {\r\n    lwgOpenAniAfter() {\r\n    }\r\n    lwgAllComplete() {\r\n        return 10;\r\n    }\r\n    lwgOnDisable() {\r\n    }\r\n}\r\n",
+  "references": [
+    "D:/Work/Game/RescueFlowerGirl/Project/RescueFlowerGirl_2.5.0/src/script/Lwg/Lwg.ts",
+    "D:/Work/Game/RescueFlowerGirl/Project/RescueFlowerGirl_2.5.0/src/script/Game/General/_Res.ts"
+  ]
+}

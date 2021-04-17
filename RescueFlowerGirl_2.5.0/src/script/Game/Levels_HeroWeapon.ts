@@ -1,5 +1,5 @@
 import { LwgScene, LwgTimer, LwgTools } from "../Lwg/Lwg";
-import { _Game } from "./General/_GameGlobal";
+import { _GameEvent } from "./General/_GameEvent";
 
 export class Levels_HeroWeapon extends LwgScene._ObjectBase {
     launchAcc: number = 0;
@@ -37,12 +37,12 @@ export class Levels_HeroWeapon extends LwgScene._ObjectBase {
             this._Owner.destroy();
         })
         if (!leave) {
-            this._evNotify(_Game._Event.treeCheckWeapon, [this._Owner, 1]);
-            this._evNotify(_Game._Event.enemyCheckWeapon, [this._Owner, 1]);
-            this._evNotify(_Game._Event.enemyLandCheckWeapon, [this._Owner, 1]);
-            this._evNotify(_Game._Event.enemyHouseCheckWeapon, [this._Owner, 1]);
-            this._evNotify(_Game._Event.heroineCheckWeapon, [this._Owner, 1]);
-            this._evNotify(_Game._Event.bossCheckWeapon, [this._Owner, 1]);
+            this._evNotify(_GameEvent.treeCheckWeapon, [this._Owner, 1]);
+            this._evNotify(_GameEvent.enemyCheckWeapon, [this._Owner, 1]);
+            this._evNotify(_GameEvent.enemyLandCheckWeapon, [this._Owner, 1]);
+            this._evNotify(_GameEvent.enemyHouseCheckWeapon, [this._Owner, 1]);
+            this._evNotify(_GameEvent.heroineCheckWeapon, [this._Owner, 1]);
+            this._evNotify(_GameEvent.bossCheckWeapon, [this._Owner, 1]);
         }
     }
     drop(): void {

@@ -1,0 +1,4 @@
+{
+  "code": "export var _GameControl;\r\n(function (_GameControl) {\r\n    _GameControl._texArr = [];\r\n    _GameControl._arrowParentArr = [];\r\n})(_GameControl || (_GameControl = {}));\r\n",
+  "references": []
+}

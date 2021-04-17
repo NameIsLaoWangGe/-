@@ -1,0 +1,9 @@
+{
+  "code": "import { LwgAni2D, LwgTimer } from \"../Lwg/Lwg\";\r\nimport { EnemyAttack } from \"./EnemyAttack/EnemyAttack\";\r\nimport { _GameEvent } from \"./General/_GameEvent\";\r\nimport _RoleBase from \"./Levels_RoleBase\";\r\nexport default class Levels_Land extends _RoleBase {\r\n    constructor() {\r\n        super(...arguments);\r\n        this.landStage = false;\r\n    }\r\n    lwgOnAwake() {\r\n        this.bloodInit(100);\r\n        this._ImgChild('Blood').visible = false;\r\n        LwgTimer.frameLoop(1, this, () => {\r\n            this._Owner.rotation += 0.1;\r\n        });\r\n    }\r\n    lwgEvent() {\r\n        this._evReg(_GameEvent.enemyLandStage, () => {\r\n            Laya.timer.clearAll(this);\r\n            const time = Math.abs(this._Owner.rotation % 360) * 10;\r\n            LwgAni2D.rotate(this._Owner, 0, time, 0, () => {\r\n                this._Owner.rotation = 0;\r\n                this._ImgChild('Blood').visible = true;\r\n                this.landStage = true;\r\n                EnemyAttack.Level1.land(this._Owner);\r\n            });\r\n        });\r\n        this._evReg(_GameEvent.enemyLandCheckWeapon, (Weapon, numBlood) => {\r\n            this.checkOtherRule(Weapon, 160, this.landStage ? numBlood : 0);\r\n        });\r\n    }\r\n    deathFunc() {\r\n        this._evNotify(_GameEvent.enemyHouseStage);\r\n    }\r\n}\r\n",
+  "references": [
+    "D:/Work/Game/RescueFlowerGirl/Project/RescueFlowerGirl_2.5.0/src/script/Lwg/Lwg.ts",
+    "D:/Work/Game/RescueFlowerGirl/Project/RescueFlowerGirl_2.5.0/src/script/Game/EnemyAttack/EnemyAttack.ts",
+    "D:/Work/Game/RescueFlowerGirl/Project/RescueFlowerGirl_2.5.0/src/script/Game/General/_GameEvent.ts",
+    "D:/Work/Game/RescueFlowerGirl/Project/RescueFlowerGirl_2.5.0/src/script/Game/Levels_RoleBase.ts"
+  ]
+}

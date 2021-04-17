@@ -1,5 +1,6 @@
 import { LwgScene, LwgTimer, LwgTools } from "../Lwg/Lwg";
-import { _Game, _Role } from "./General/_GameGlobal";
+import { BuffData } from "./General/_GameData";
+import { _GameEvent } from "./General/_GameEvent";
 import Levels_RoleBase from "./Levels_RoleBase";
 export default class Levels_Buff extends LwgScene._ObjectBase {
     lwgOnStart(): void {
@@ -12,7 +13,7 @@ export default class Levels_Buff extends LwgScene._ObjectBase {
                 this._Owner.removeSelf();
             }) && LwgTools.Node.checkTwoDistance(this._Owner, this._SceneImg('Hero'), 60, () => {
                 this._Owner.removeSelf();
-                this._evNotify(_Game._Event.checkBuff, [this._Owner['buffType']]);
+                this._evNotify(_GameEvent.checkBuff, [this._Owner['buffType']]);
             })
         })
     }
@@ -24,17 +25,17 @@ export class Tree extends Levels_RoleBase {
         this.bloodInit(20);
     }
     lwgEvent(): void {
-        this._evReg(_Game._Event.enemyLandStage, () => {
+        this._evReg(_GameEvent.enemyLandStage, () => {
             this.buffState = false;
             this._ImgChild('Blood').visible = false;
         })
-        this._evReg(_Game._Event.treeCheckWeapon, (Weapon: Laya.Image, numBlood: number) => {
+        this._evReg(_GameEvent.treeCheckWeapon, (Weapon: Laya.Image, numBlood: number) => {
             if (this.buffState) {
                 this.checkOtherRule(Weapon, 50, numBlood);
             }
         })
     }
     deathFunc(): void {
-        _Role._Buff._ins().createBuff(0, this._Scene, this._Owner._lwg.gPoint.x, this._Owner._lwg.gPoint.y, Levels_Buff);
+        BuffData._ins().createBuff(0, this._Scene, this._Owner._lwg.gPoint.x, this._Owner._lwg.gPoint.y, Levels_Buff);
     }
 }

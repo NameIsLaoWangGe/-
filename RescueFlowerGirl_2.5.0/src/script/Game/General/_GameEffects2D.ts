@@ -1,12 +1,12 @@
 import { LwgAudio, LwgEff2D, LwgTimer, LwgTools } from "../../Lwg/Lwg";
 
-export class _GameEffects2D {
+export class GameEffects2D {
     /**
      * @static 上面左右喷少量彩带, 普通页面，效果平淡，二级界面
      * @param {Laya.Sprite} parent
-     * @memberof _GameEffects
+     * @memberof GameEffects
      */
-    static _interfacePointJet(): void {
+    static interfacePointJet(): void {
         const diff = 100;
         LwgTimer.frameNumLoop(5, 15, this, () => {
             for (let index = 0; index < 5; index++) {
@@ -23,7 +23,7 @@ export class _GameEffects2D {
      * @param {Laya.Scene} scene 场景
      * @memberof _GameEffects
      */
-    static _completeCross(): void {
+    static completeCross(): void {
         let num = 4;
         let spcaing = 20;
         for (let index = 0; index < num; index++) {
@@ -62,7 +62,7 @@ export class _GameEffects2D {
      * 全屏，完成特效，斜方向交叉，融合，消失
      * @memberof _GameEffects
      */
-    static _completeSidelingCross(): void {
+    static completeSidelingCross(): void {
         let len = Laya.stage.width;
         let _height = Laya.stage.height * 2.5;
 
@@ -108,7 +108,7 @@ export class _GameEffects2D {
      * @param func 回调，不是精确时间
      * @memberof _GameEffects
      */
-    static _fireworksCelebrate(func?: Function) {
+    static fireworksCelebrate(func?: Function) {
         const centerP1 = new Laya.Point(Laya.stage.width / 2, 0);
         const num1 = 150;
         LwgTimer.frameNumRandomLoop(1, 3, num1, this, () => {
@@ -133,7 +133,7 @@ export class _GameEffects2D {
         })
     }
     /**单个花爆炸，点击打开宝箱*/
-    static _oneFireworks(point: Laya.Point): void {
+    static oneFireworks(point: Laya.Point): void {
         const count = LwgTools.Num.randomOneInt(10, 20);
         const time = 30;
         const dis = LwgTools.Num.randomOneInt(100, 300);
@@ -149,7 +149,7 @@ export class _GameEffects2D {
      * 场景内，普通爆炸，形成一个圆形，用于某些物体弹出的背景效果
      * @param scene 场景
      * */
-    static _circleFlowe(scene: Laya.Scene): void {
+    static circleFlowe(scene: Laya.Scene): void {
         const count = 90;
         const time = 35;
         const dis = LwgTools.Num.randomOneInt(500, 500);
@@ -168,7 +168,7 @@ export class _GameEffects2D {
      * @param {Laya.Sprite} sprite 节点
      * @memberof _GameEffects
      */
-    static _bothBlinkOnSprite(scene: Laya.Scene, sprite: Laya.Sprite): any {
+    static bothBlinkOnSprite(scene: Laya.Scene, sprite: Laya.Sprite): any {
         const caller = {};
         // 星星闪烁动画左边
         LwgTimer.frameRandomLoop(30, 50, caller, () => {
@@ -190,7 +190,7 @@ export class _GameEffects2D {
      * @param {number} [delay] 延时
      * @memberof _GameEffects
      */
-    static _circleExplode(Parent: Laya.Sprite, p: Laya.Point, delay?: number): void {
+    static circleExplode(Parent: Laya.Sprite, p: Laya.Point, delay?: number): void {
         LwgTimer.once(delay ? delay : 0, this, () => {
             const count = 40;
             const time = 5;

@@ -1,6 +1,6 @@
 import{ LwgNode, LwgTimer, LwgTools } from "../Lwg/Lwg";
-import { _EnemyAttack } from "./EnemyAttack/_EnemyAttack";
-import { _Game } from "./General/_GameGlobal";
+import { EnemyAttackControl } from "./EnemyAttack/EnemyAttackControl";
+import { _GameEvent } from "./General/_GameEvent";
 import { _Res } from "./General/_Res";
 import { Levels_Heroine } from "./Levels_Heroine";
 import Levels_RoleBase from "./Levels_RoleBase";
@@ -46,7 +46,7 @@ export default class Levels_Enemy extends Levels_RoleBase {
         })
     }
     attack(): void {
-        _EnemyAttack.Level1.enemy(this._Owner as  LwgNode.Image);
+        EnemyAttackControl.Level1.enemy(this._Owner as  LwgNode.Image);
     }
     move(): void {
         LwgTimer.frameLoop(1, this, () => {
@@ -56,7 +56,7 @@ export default class Levels_Enemy extends Levels_RoleBase {
         })
     }
     lwgEvent(): void {
-        this._evReg(_Game._Event.enemyCheckWeapon, (Weapon: Laya.Image, numBlood: number) => {
+        this._evReg(_GameEvent.enemyCheckWeapon, (Weapon: Laya.Image, numBlood: number) => {
             this.checkOtherRule(Weapon, 30, numBlood);
         })
     }
@@ -65,7 +65,7 @@ export default class Levels_Enemy extends Levels_RoleBase {
         if (this._Owner.name === 'Boss') {
             LwgTools.Node.createPrefab(_Res.$prefab2D.Heroine.prefab2D, this._Parent, [this._Owner.x, this._Owner.y], Levels_Heroine);
         } else {
-            this._evNotify(_Game._Event.addEnemy);
+            this._evNotify(_GameEvent.addEnemy);
         }
     }
 }

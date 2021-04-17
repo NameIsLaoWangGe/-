@@ -1,16 +1,17 @@
-import { _EnemyBullet } from "./_EnemyBullet";
+import { EnemyBullet } from "./EnemyBullet";
 import { LwgNode, LwgTimer, LwgTools } from "../../Lwg/Lwg";
-import { Whom } from "./_Whom";
+import { Whom } from "../General/_GameInterface";
 
 export class Level1  implements Whom {
     /**向下发射均匀的三个子弹*/
     enemy(enemy:  LwgNode.Image): void {
+    
         const angleSpacing = 15;
         const speed = 5;
         LwgTimer.frameRandomLoop(120, 300, enemy, () => {
             const ep = new Laya.Point(enemy._lwg.gPoint.x, enemy._lwg.gPoint.y);
             for (let index = 0; index < 3; index++) {
-                const bullet = _EnemyBullet.EB_single(enemy);
+                const bullet = EnemyBullet.EB_single(enemy);
                 let _speedAdd = 0;
                 LwgTimer.frameLoop(1, bullet, () => {
                     const point = LwgTools.Point.getRoundPosNew(index * angleSpacing + 90 - angleSpacing, _speedAdd += speed, ep);
@@ -32,7 +33,7 @@ export class Level1  implements Whom {
                 num = 10;
             }
             for (let index = 0; index < num; index++) {
-                const bullet = _EnemyBullet.EB_single(enemy);
+                const bullet = EnemyBullet.EB_single(enemy);
                 let _speedAdd = 0;
                 LwgTimer.frameLoop(1, bullet, () => {
                     const unit = 180 / num;
@@ -64,7 +65,7 @@ export class Level1  implements Whom {
             let timeAngle = angle;
             const ep = new Laya.Point(enemy._lwg.gPoint.x, enemy._lwg.gPoint.y);
             for (let index = 0; index < num; index++) {
-                const bullet = _EnemyBullet.EB_single(enemy);
+                const bullet = EnemyBullet.EB_single(enemy);
                 let _speedAdd = 0;
                 LwgTimer.frameLoop(1, bullet, () => {
                     const point = LwgTools.Point.getRoundPosNew(spacing * index + timeAngle, _speedAdd += speed, ep);
@@ -83,7 +84,7 @@ export class Level1  implements Whom {
             const ep1 = new Laya.Point(enemy._lwg.gPoint.x + 100, enemy._lwg.gPoint.y);
             const ep2 = new Laya.Point(enemy._lwg.gPoint.x - 100, enemy._lwg.gPoint.y);
             for (let index = 0; index < num; index++) {
-                const bullet = _EnemyBullet.EB_single(enemy);
+                const bullet = EnemyBullet.EB_single(enemy);
                 let _speedAdd = 0;
                 LwgTimer.frameLoop(1, bullet, () => {
                     const point = LwgTools.Point.getRoundPosNew(unit * index + unit / 2, _speedAdd += speed, ep1);
@@ -91,7 +92,7 @@ export class Level1  implements Whom {
                 })
             }
             for (let index = 0; index < num; index++) {
-                const bullet = _EnemyBullet.EB_single(enemy);
+                const bullet = EnemyBullet.EB_single(enemy);
                 let _speedAdd = 0;
                 LwgTimer.frameLoop(1, bullet, () => {
                     const point = LwgTools.Point.getRoundPosNew(unit * index + unit / 2, _speedAdd += speed, ep2);
@@ -110,7 +111,7 @@ export class Level1  implements Whom {
             const fA = LwgTools.Num.randomOneInt(360);
             const ep = new Laya.Point(enemy._lwg.gPoint.x, enemy._lwg.gPoint.y);
             for (let index = 0; index < num; index++) {
-                const bullet = _EnemyBullet.EB_single(enemy);
+                const bullet = EnemyBullet.EB_single(enemy);
                 let _speedAdd = 0;
                 LwgTimer.frameLoop(1, bullet, () => {
                     const point = LwgTools.Point.getRoundPosNew(fA + spacing * index, _speedAdd += speed, ep);
@@ -118,7 +119,7 @@ export class Level1  implements Whom {
                 })
             }
             for (let index = 0; index < num; index++) {
-                const bullet = _EnemyBullet.EB_single(enemy);
+                const bullet = EnemyBullet.EB_single(enemy);
                 let _speedAdd = 0;
                 LwgTimer.frameLoop(1, bullet, () => {
                     const point = LwgTools.Point.getRoundPosNew(fA + spacing * index + 120, _speedAdd += speed, ep);
@@ -126,7 +127,7 @@ export class Level1  implements Whom {
                 })
             }
             for (let index = 0; index < num; index++) {
-                const bullet = _EnemyBullet.EB_single(enemy);
+                const bullet = EnemyBullet.EB_single(enemy);
                 let _speedAdd = 0;
                 LwgTimer.frameLoop(1, bullet, () => {
                     const point = LwgTools.Point.getRoundPosNew(fA + spacing * index + 240, _speedAdd += speed, ep);

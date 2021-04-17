@@ -1,7 +1,7 @@
 import { LwgEff3D, LwgTimer } from "../../Lwg/Lwg";
-export class _GameEffects3D {
+export class GameEffects3D {
     /**角色的服装展示,特效唯一，点击多次从头播放*/
-    static _showCloth(Scene3D: Laya.Scene3D): void {
+    static showCloth(Scene3D: Laya.Scene3D): void {
         const _changeEffectParent = this['_showClothParent'] as Laya.Sprite3D;
         if (_changeEffectParent) {
             _changeEffectParent.destroy();

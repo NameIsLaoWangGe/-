@@ -1,5 +1,5 @@
 import { LwgTimer } from "../Lwg/Lwg";
-import { _Game } from "./General/_GameGlobal";
+import { _GameEvent } from "./General/_GameEvent";
 import { Levels_HeroAttack } from "./Levels_HeroAttack";
 import Levels_RoleBase from "./Levels_RoleBase";
 export default class Levels_Hero extends Levels_RoleBase {
@@ -20,15 +20,15 @@ export default class Levels_Hero extends Levels_RoleBase {
             }
         })
     }
-    
+
     deathFunc(): void {
         this._openScene('Defeated', false);
     }
     lwgEvent(): void {
-        this._evReg(_Game._Event.checkEnemyBullet, (Bullet: Laya.Image, numBlood: number) => {
+        this._evReg(_GameEvent.checkEnemyBullet, (Bullet: Laya.Image, numBlood: number) => {
             this.checkOtherRule(Bullet, 40, numBlood);
         });
-        this._evReg(_Game._Event.checkBuff, (type: number) => {
+        this._evReg(_GameEvent.checkBuff, (type: number) => {
             switch (type) {
                 case 0:
                     this._HeroAttack.ballisticNum++;

@@ -380,13 +380,13 @@ export module LwgScene {
         lwgAdaptive(): void { };
         /**场景中的一些事件，在lwgOnEnable中注册,lwgOnStart以后可以派发这些事件*/
         lwgEvent(): void { };
-        _evReg(name: string, func: Function): void {
+        _evReg(name: any, func: Function): void {
             LwgEvent.register(name, this, func);
         }
         _evRegOne(name: string, func: Function): void {
             LwgEvent.registerOnce(name, this, func);
         }
-        _evNotify(name: string, args?: Array<any>): void {
+        _evNotify(name: any, args?: Array<any>): void {
             LwgEvent.notify(name, args);
         }
         /**初始化，在onEnable中执行，重写即可覆盖*/

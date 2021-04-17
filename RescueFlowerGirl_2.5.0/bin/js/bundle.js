@@ -7176,6 +7176,25 @@
       }
   }
 
+  var _GameEvent;
+  (function (_GameEvent) {
+      _GameEvent[_GameEvent["checkEnemyBullet"] = 0] = "checkEnemyBullet";
+      _GameEvent[_GameEvent["closeScene"] = 1] = "closeScene";
+      _GameEvent[_GameEvent["checkBuff"] = 2] = "checkBuff";
+      _GameEvent[_GameEvent["treeCheckWeapon"] = 3] = "treeCheckWeapon";
+      _GameEvent[_GameEvent["enemyCheckWeapon"] = 4] = "enemyCheckWeapon";
+      _GameEvent[_GameEvent["enemyLandCheckWeapon"] = 5] = "enemyLandCheckWeapon";
+      _GameEvent[_GameEvent["enemyHouseCheckWeapon"] = 6] = "enemyHouseCheckWeapon";
+      _GameEvent[_GameEvent["bossCheckWeapon"] = 7] = "bossCheckWeapon";
+      _GameEvent[_GameEvent["heroineCheckWeapon"] = 8] = "heroineCheckWeapon";
+      _GameEvent[_GameEvent["enemyStage"] = 9] = "enemyStage";
+      _GameEvent[_GameEvent["enemyLandStage"] = 10] = "enemyLandStage";
+      _GameEvent[_GameEvent["enemyHouseStage"] = 11] = "enemyHouseStage";
+      _GameEvent[_GameEvent["bossStage"] = 12] = "bossStage";
+      _GameEvent[_GameEvent["heroineStage"] = 13] = "heroineStage";
+      _GameEvent[_GameEvent["addEnemy"] = 14] = "addEnemy";
+  })(_GameEvent || (_GameEvent = {}));
+
   var _Res;
   (function (_Res) {
       class $scene3D {
@@ -7292,133 +7311,7 @@
       ;
   })(_Res || (_Res = {}));
 
-  var $Guide;
-  (function ($Guide) {
-      let Event;
-      (function (Event) {
-      })(Event = $Guide.Event || ($Guide.Event = {}));
-      let Data;
-      (function (Data) {
-      })(Data = $Guide.Data || ($Guide.Data = {}));
-  })($Guide || ($Guide = {}));
-  var _Game;
-  (function (_Game) {
-      let _Event;
-      (function (_Event) {
-          _Event["checkEnemyBullet"] = "Game_bulletCheckHero";
-          _Event["closeScene"] = "Game_closeScene";
-          _Event["checkBuff"] = "GamecheckBuff";
-          _Event["treeCheckWeapon"] = "GametreeCheckWeapon";
-          _Event["enemyCheckWeapon"] = "GameenemyCheckWeapon";
-          _Event["enemyLandCheckWeapon"] = "GameenemyLandCheckWeapon";
-          _Event["enemyHouseCheckWeapon"] = "GameenemyHouseCheckWeapon";
-          _Event["bossCheckWeapon"] = "GamebossCheckWeapon";
-          _Event["heroineCheckWeapon"] = "GameheroineCheckWeapon";
-          _Event["enemyStage"] = "GameenemyStage";
-          _Event["enemyLandStage"] = "GamelandStage";
-          _Event["enemyHouseStage"] = "GameenemyHouseStage";
-          _Event["bossStage"] = "GamebossStage";
-          _Event["heroineStage"] = "GameheroineStage";
-          _Event["addEnemy"] = "GameaddEnemy";
-      })(_Event = _Game._Event || (_Game._Event = {}));
-      _Game._texArr = [];
-      _Game._arrowParentArr = [];
-  })(_Game || (_Game = {}));
-  var _Role;
-  (function (_Role) {
-      class _Buff extends LwgData.Table {
-          constructor() {
-              super(...arguments);
-              this.type = {
-                  Num: 'Num',
-                  S: 'S',
-              };
-          }
-          static _ins() {
-              if (!this.ins) {
-                  this.ins = new _Buff();
-              }
-              return this.ins;
-          }
-          createBuff(type, Parent, x, y, script) {
-              const Buff = LwgTools.Node.createPrefab(_Res.$prefab2D.Buff.prefab2D, Parent, [x, y], script);
-              Buff['buffType'] = type;
-              return Buff;
-          }
-      }
-      _Role._Buff = _Buff;
-      class _Enemy extends LwgData.Table {
-          constructor(_Parent) {
-              super();
-              this._otherPro = {
-                  quantity: "quantity",
-                  shellNum: "shellNum",
-                  blood: 'blood',
-                  boss: 'boss',
-                  speed: 'speed',
-              };
-              this._arr = _Res.$json.Enemy.dataArr;
-              this.levelData = this._getObjByName(`level${LwgGame.level.value}`);
-              this.quantity = this.levelData['quantity'];
-              this.Parent = _Parent;
-          }
-          createEnmey(Script) {
-              this.quantity--;
-              const shellNum = this.levelData[this._otherPro.shellNum];
-              let shellNumTime = 0;
-              const element = LwgTools.Node.createPrefab(_Res.$prefab2D.Enemy.prefab2D, this.Parent);
-              shellNumTime++;
-              const color = LwgTools._Array.randomGetOne(['blue', 'yellow', 'red']);
-              element.name = `${color}${color}`;
-              let speed = LwgTools.Num.randomOneBySection(this.levelData[this._otherPro.speed][0], this.levelData[this._otherPro.speed][1]);
-              speed = LwgTools.Num.randomOneHalf() == 0 ? -speed : speed;
-              element['_EnemyData'] = {
-                  shell: shellNumTime <= shellNum ? true : false,
-                  blood: this.levelData['blood'],
-                  angle: LwgTools.Num.randomOneBySection(0, 360),
-                  speed: speed,
-                  color: color,
-              };
-              element.addComponent(Script);
-          }
-      }
-      _Role._Enemy = _Enemy;
-      class _Boss extends LwgData.Table {
-          constructor(Parent, BossScript) {
-              super();
-              this._otherPro = {
-                  blood: 'blood',
-                  specials: 'specials',
-                  speed: 'speed',
-                  skills: 'skills',
-                  bulletPower: 'bulletPower',
-              };
-              this._arr = _Res.$json.Boss.dataArr;
-              this.levelData = this._getObjByName(`Boss${LwgGame.level.value}`);
-              this.skills = this.levelData['skills'];
-              this.speed = this.levelData['speed'];
-              this.blood = this.levelData['blood'];
-              this.createLevelBoss(Parent, BossScript);
-          }
-          createLevelBoss(Parent, BossScript) {
-              const element = LwgTools.Node.createPrefab(_Res.$prefab2D.Boss.prefab2D, Parent);
-              element.name = `Boss`;
-              let speed = LwgTools.Num.randomOneBySection(this.speed[0], this.speed[1]);
-              speed = LwgTools.Num.randomOneHalf() == 0 ? -speed : speed;
-              element['_EnemyData'] = {
-                  blood: this.blood,
-                  angle: LwgTools.Num.randomOneBySection(0, 360),
-                  speed: speed,
-                  sikllNameArr: this.skills,
-              };
-              element.addComponent(BossScript);
-              return element;
-          }
-      }
-      _Role._Boss = _Boss;
-  })(_Role || (_Role = {}));
-
-  class _EnemyBullet {
+  class EnemyBullet {
       static clearBullet(Bullet) {
           Laya.timer.clearAll(Bullet);
           Laya.Tween.clearAll(Bullet);
@@ -7430,7 +7323,7 @@
                   this.clearBullet(Bullet);
               });
               if (!bool && checkHero) {
-                  LwgEvent.notify(_Game._Event.checkEnemyBullet, [Bullet, 1]);
+                  LwgEvent.notify(_GameEvent.checkEnemyBullet, [Bullet, 1]);
               }
           });
       }
@@ -7495,7 +7388,7 @@
           return bullet;
       }
   }
-  _EnemyBullet.Type = {
+  EnemyBullet.Type = {
       single: 'EB_single',
       two: 'EB_two',
       three_Triangle: 'EB_three_Triangle',
@@ -7503,11 +7396,99 @@
       three_Vertical: 'EB_three_Vertical',
       four_Square: 'EB_Four_Square',
   };
-  _EnemyBullet.ChekType = {
+  EnemyBullet.ChekType = {
       bullet: 'bullet',
       child: 'child',
       bulletAndchild: 'bulletAndchild',
   };
+
+  class BuffData extends LwgData.Table {
+      constructor() {
+          super(...arguments);
+          this.type = {
+              Num: 'Num',
+              S: 'S',
+          };
+      }
+      static _ins() {
+          if (!this.ins) {
+              this.ins = new BuffData();
+          }
+          return this.ins;
+      }
+      createBuff(type, Parent, x, y, script) {
+          const Buff = LwgTools.Node.createPrefab(_Res.$prefab2D.Buff.prefab2D, Parent, [x, y], script);
+          Buff['buffType'] = type;
+          return Buff;
+      }
+  }
+  class EnemyData extends LwgData.Table {
+      constructor(_Parent) {
+          super();
+          this._otherPro = {
+              quantity: "quantity",
+              shellNum: "shellNum",
+              blood: 'blood',
+              boss: 'boss',
+              speed: 'speed',
+          };
+          this._arr = _Res.$json.Enemy.dataArr;
+          this.levelData = this._getObjByName(`level${LwgGame.level.value}`);
+          this.quantity = this.levelData['quantity'];
+          this.Parent = _Parent;
+      }
+      createEnmey(Script) {
+          this.quantity--;
+          const shellNum = this.levelData[this._otherPro.shellNum];
+          let shellNumTime = 0;
+          const element = LwgTools.Node.createPrefab(_Res.$prefab2D.Enemy.prefab2D, this.Parent);
+          shellNumTime++;
+          const color = LwgTools._Array.randomGetOne(['blue', 'yellow', 'red']);
+          element.name = `${color}${color}`;
+          let speed = LwgTools.Num.randomOneBySection(this.levelData[this._otherPro.speed][0], this.levelData[this._otherPro.speed][1]);
+          speed = LwgTools.Num.randomOneHalf() == 0 ? -speed : speed;
+          element['_EnemyData'] = {
+              shell: shellNumTime <= shellNum ? true : false,
+              blood: this.levelData['blood'],
+              angle: LwgTools.Num.randomOneBySection(0, 360),
+              speed: speed,
+              color: color,
+          };
+          element.addComponent(Script);
+      }
+  }
+  class BossData extends LwgData.Table {
+      constructor(Parent, BossScript) {
+          super();
+          this._otherPro = {
+              blood: 'blood',
+              specials: 'specials',
+              speed: 'speed',
+              skills: 'skills',
+              bulletPower: 'bulletPower',
+          };
+          this._arr = _Res.$json.Boss.dataArr;
+          this.levelData = this._getObjByName(`Boss${LwgGame.level.value}`);
+          this.skills = this.levelData['skills'];
+          this.speed = this.levelData['speed'];
+          this.blood = this.levelData['blood'];
+          this.createLevelBoss(Parent, BossScript);
+      }
+      createLevelBoss(Parent, BossScript) {
+          const element = LwgTools.Node.createPrefab(_Res.$prefab2D.Boss.prefab2D, Parent);
+          element.name = `Boss`;
+          let speed = LwgTools.Num.randomOneBySection(this.speed[0], this.speed[1]);
+          speed = LwgTools.Num.randomOneHalf() == 0 ? -speed : speed;
+          element['_EnemyData'] = {
+              blood: this.blood,
+              angle: LwgTools.Num.randomOneBySection(0, 360),
+              speed: speed,
+              sikllNameArr: this.skills,
+          };
+          element.addComponent(BossScript);
+          return element;
+      }
+  }
 
   class Levels_RoleBase extends LwgScene._ObjectBase {
       constructor() {
@@ -7562,7 +7543,7 @@
                   this._Owner.removeSelf();
               }) && LwgTools.Node.checkTwoDistance(this._Owner, this._SceneImg('Hero'), 60, () => {
                   this._Owner.removeSelf();
-                  this._evNotify(_Game._Event.checkBuff, [this._Owner['buffType']]);
+                  this._evNotify(_GameEvent.checkBuff, [this._Owner['buffType']]);
               });
           });
       }
@@ -7576,18 +7557,18 @@
           this.bloodInit(20);
       }
       lwgEvent() {
-          this._evReg(_Game._Event.enemyLandStage, () => {
+          this._evReg(_GameEvent.enemyLandStage, () => {
               this.buffState = false;
               this._ImgChild('Blood').visible = false;
           });
-          this._evReg(_Game._Event.treeCheckWeapon, (Weapon, numBlood) => {
+          this._evReg(_GameEvent.treeCheckWeapon, (Weapon, numBlood) => {
               if (this.buffState) {
                   this.checkOtherRule(Weapon, 50, numBlood);
               }
           });
       }
       deathFunc() {
-          _Role._Buff._ins().createBuff(0, this._Scene, this._Owner._lwg.gPoint.x, this._Owner._lwg.gPoint.y, Levels_Buff);
+          BuffData._ins().createBuff(0, this._Scene, this._Owner._lwg.gPoint.x, this._Owner._lwg.gPoint.y, Levels_Buff);
       }
   }
 
@@ -7598,7 +7579,7 @@
           LwgTimer.frameRandomLoop(120, 300, enemy, () => {
               const ep = new Laya.Point(enemy._lwg.gPoint.x, enemy._lwg.gPoint.y);
               for (let index = 0; index < 3; index++) {
-                  const bullet = _EnemyBullet.EB_single(enemy);
+                  const bullet = EnemyBullet.EB_single(enemy);
                   let _speedAdd = 0;
                   LwgTimer.frameLoop(1, bullet, () => {
                       const point = LwgTools.Point.getRoundPosNew(index * angleSpacing + 90 - angleSpacing, _speedAdd += speed, ep);
@@ -7620,7 +7601,7 @@
                   num = 10;
               }
               for (let index = 0; index < num; index++) {
-                  const bullet = _EnemyBullet.EB_single(enemy);
+                  const bullet = EnemyBullet.EB_single(enemy);
                   let _speedAdd = 0;
                   LwgTimer.frameLoop(1, bullet, () => {
                       const unit = 180 / num;
@@ -7652,7 +7633,7 @@
               let timeAngle = angle;
               const ep = new Laya.Point(enemy._lwg.gPoint.x, enemy._lwg.gPoint.y);
               for (let index = 0; index < num; index++) {
-                  const bullet = _EnemyBullet.EB_single(enemy);
+                  const bullet = EnemyBullet.EB_single(enemy);
                   let _speedAdd = 0;
                   LwgTimer.frameLoop(1, bullet, () => {
                       const point = LwgTools.Point.getRoundPosNew(spacing * index + timeAngle, _speedAdd += speed, ep);
@@ -7669,7 +7650,7 @@
               const ep1 = new Laya.Point(enemy._lwg.gPoint.x + 100, enemy._lwg.gPoint.y);
               const ep2 = new Laya.Point(enemy._lwg.gPoint.x - 100, enemy._lwg.gPoint.y);
               for (let index = 0; index < num; index++) {
-                  const bullet = _EnemyBullet.EB_single(enemy);
+                  const bullet = EnemyBullet.EB_single(enemy);
                   let _speedAdd = 0;
                   LwgTimer.frameLoop(1, bullet, () => {
                       const point = LwgTools.Point.getRoundPosNew(unit * index + unit / 2, _speedAdd += speed, ep1);
@@ -7677,7 +7658,7 @@
                   });
               }
               for (let index = 0; index < num; index++) {
-                  const bullet = _EnemyBullet.EB_single(enemy);
+                  const bullet = EnemyBullet.EB_single(enemy);
                   let _speedAdd = 0;
                   LwgTimer.frameLoop(1, bullet, () => {
                       const point = LwgTools.Point.getRoundPosNew(unit * index + unit / 2, _speedAdd += speed, ep2);
@@ -7694,7 +7675,7 @@
               const fA = LwgTools.Num.randomOneInt(360);
               const ep = new Laya.Point(enemy._lwg.gPoint.x, enemy._lwg.gPoint.y);
               for (let index = 0; index < num; index++) {
-                  const bullet = _EnemyBullet.EB_single(enemy);
+                  const bullet = EnemyBullet.EB_single(enemy);
                   let _speedAdd = 0;
                   LwgTimer.frameLoop(1, bullet, () => {
                       const point = LwgTools.Point.getRoundPosNew(fA + spacing * index, _speedAdd += speed, ep);
@@ -7702,7 +7683,7 @@
                   });
               }
               for (let index = 0; index < num; index++) {
-                  const bullet = _EnemyBullet.EB_single(enemy);
+                  const bullet = EnemyBullet.EB_single(enemy);
                   let _speedAdd = 0;
                   LwgTimer.frameLoop(1, bullet, () => {
                       const point = LwgTools.Point.getRoundPosNew(fA + spacing * index + 120, _speedAdd += speed, ep);
@@ -7710,7 +7691,7 @@
                   });
               }
               for (let index = 0; index < num; index++) {
-                  const bullet = _EnemyBullet.EB_single(enemy);
+                  const bullet = EnemyBullet.EB_single(enemy);
                   let _speedAdd = 0;
                   LwgTimer.frameLoop(1, bullet, () => {
                       const point = LwgTools.Point.getRoundPosNew(fA + spacing * index + 240, _speedAdd += speed, ep);
@@ -7725,7 +7706,7 @@
       enemy(enemy) {
           const speed = 8;
           LwgTimer.frameRandomLoop(120, 300, enemy, () => {
-              const bullet = _EnemyBullet.EB_two(enemy);
+              const bullet = EnemyBullet.EB_two(enemy);
               LwgTimer.frameLoop(1, bullet, () => {
                   bullet.y += speed;
               });
@@ -7738,7 +7719,7 @@
               let fA = LwgTools.Num.randomOneInt(0, 180);
               for (let index = 0; index < num; index++) {
                   const ep = new Laya.Point(enemy._lwg.gPoint.x, enemy._lwg.gPoint.y);
-                  const bullet = _EnemyBullet.EB_two(enemy);
+                  const bullet = EnemyBullet.EB_two(enemy);
                   let _speedAdd = 0;
                   bullet.rotation = fA + 90;
                   LwgTimer.frameLoop(1, bullet, () => {
@@ -7770,7 +7751,7 @@
               let timeAngle = angle;
               const ep = new Laya.Point(enemy._lwg.gPoint.x, enemy._lwg.gPoint.y);
               for (let index = 0; index < num; index++) {
-                  const bullet = _EnemyBullet.EB_two(enemy);
+                  const bullet = EnemyBullet.EB_two(enemy);
                   bullet.rotation = spacing * index + timeAngle - 90;
                   let _speedAdd = 0;
                   LwgTimer.frameLoop(1, bullet, () => {
@@ -7790,7 +7771,7 @@
               let fA = 0;
               for (let index = 0; index < num; index++) {
                   const ep = new Laya.Point(enemy._lwg.gPoint.x, enemy._lwg.gPoint.y);
-                  const bullet = _EnemyBullet.EB_two(enemy);
+                  const bullet = EnemyBullet.EB_two(enemy);
                   let _speedAdd = 0;
                   let angle = fA + time * spacing1;
                   let speed = 6;
@@ -7816,7 +7797,7 @@
               let fA = 0;
               for (let index = 0; index < num; index++) {
                   const ep = new Laya.Point(enemy._lwg.gPoint.x, enemy._lwg.gPoint.y);
-                  const bullet = _EnemyBullet.EB_two(enemy);
+                  const bullet = EnemyBullet.EB_two(enemy);
                   let _speedAdd = 0;
                   let angle = 30;
                   let speed = 12;
@@ -7834,7 +7815,7 @@
       }
   }
 
-  class _General {
+  class EnemyAttackBase {
       static moveByAngle(Bullet, diffX, angle, speed, rSpeed, FrameFunc, ChildMove) {
           let frameTime = 0;
           let _childMoveDelay = 0;
@@ -7928,7 +7909,7 @@
           });
       }
       static childStretch(ParentBullet, speed = 2, rSpeed = 5) {
-          _EnemyBullet.checkNumChild(ParentBullet);
+          EnemyBullet.checkNumChild(ParentBullet);
           if (ParentBullet['childStretch']) {
               return;
           }
@@ -7939,14 +7920,13 @@
                   const ChildB = ParentBullet.getChildAt(index);
                   LwgNode._addProperty(ChildB);
                   const angle = LwgTools.Point.pointByAngleNew(parentLocP.x - ChildB.x, parentLocP.y - ChildB.y);
-                  const baseDis = parentLocP.distance(ChildB.x, ChildB.y);
-                  this.moveByAngle_Stretch(ChildB, baseDis, 0, angle, speed, 100, 0, null, null);
+                  this.moveByAngle_Stretch(ChildB, 20, 0, angle, speed, 100, 0, null, null);
               }
           }
       }
       static childExplodebyAngle(ParentBullet, speed = 10, rSpeed = 5) {
           Laya.timer.clearAll(ParentBullet);
-          _EnemyBullet.checkNumChild(ParentBullet);
+          EnemyBullet.checkNumChild(ParentBullet);
           const gPosBullet = new Laya.Point(ParentBullet._lwg.gPoint.x, ParentBullet._lwg.gPoint.y);
           for (let index = 0; index < ParentBullet.numChildren; index++) {
               const ChildB = ParentBullet.getChildAt(index);
@@ -7956,10 +7936,10 @@
               this.moveByAngle(ChildB, 0, angle, speed, rSpeed, null, null);
           }
       }
-      static _fall(Enemy, interval1, interval2, speedY = 10, rSpeed = 0, style = _EnemyBullet.Type.three_Across, delay = 0, diffX = 0, frameFunc, ChildMove) {
+      static _fall(Enemy, interval1, interval2, speedY = 10, rSpeed = 0, style = EnemyBullet.Type.three_Across, delay = 0, diffX = 0, frameFunc, ChildMove) {
           LwgTimer.frameOnce(delay, Enemy, () => {
               LwgTimer.frameRandomLoop(interval1, interval2, Enemy, () => {
-                  this.moveByXY(_EnemyBullet[style](Enemy), diffX, 0, speedY, rSpeed, frameFunc, ChildMove);
+                  this.moveByXY(EnemyBullet[style](Enemy), diffX, 0, speedY, rSpeed, frameFunc, ChildMove);
               });
           });
       }
@@ -7967,12 +7947,12 @@
           LwgTimer.frameOnce(delay, Enemy, () => {
               LwgTimer.frameLoop(interval, Enemy, () => {
                   for (let index = 0; index < num; index++) {
-                      this.moveByAngle(_EnemyBullet[style](Enemy), diffX, 360 / num * index, speed, rSpeed, frameFunc, ChildMove);
+                      this.moveByAngle(EnemyBullet[style](Enemy), diffX, 360 / num * index, speed, rSpeed, frameFunc, ChildMove);
                   }
               });
           });
       }
-      static _spiral(Enemy, interval, num, spacingAngle, speed = 10, rSpeed = 0, style = _EnemyBullet.Type.single, delay = 0, diffX = 0, frameFunc, ChildMove) {
+      static _spiral(Enemy, interval, num, spacingAngle, speed = 10, rSpeed = 0, style = EnemyBullet.Type.single, delay = 0, diffX = 0, frameFunc, ChildMove) {
           let time = 0;
           LwgTimer.frameOnce(delay, Enemy, () => {
               LwgTimer.frameLoop(interval, Enemy, () => {
@@ -7982,12 +7962,12 @@
                   for (let index = 0; index < num; index++) {
                       let angle = fA + time * spacingAngle;
                       angle += index * 360 / num;
-                      this.moveByAngle(_EnemyBullet[style](Enemy), diffX, angle, speed, rSpeed, frameFunc, ChildMove);
+                      this.moveByAngle(EnemyBullet[style](Enemy), diffX, angle, speed, rSpeed, frameFunc, ChildMove);
                   }
               });
           });
       }
-      static _slapDown(Enemy, interval = 3, startAngle = 0, endAngle = 180, spacingAngle = 15, speed = 10, rSpeed = 0, style = _EnemyBullet.Type.single, delay = 0, diffX = 0, frameFunc, ChildMove) {
+      static _slapDown(Enemy, interval = 3, startAngle = 0, endAngle = 180, spacingAngle = 15, speed = 10, rSpeed = 0, style = EnemyBullet.Type.single, delay = 0, diffX = 0, frameFunc, ChildMove) {
           LwgTimer.frameOnce(delay, Enemy, () => {
               let time = 0;
               LwgTimer.frameLoop(interval, Enemy, () => {
@@ -8004,78 +7984,78 @@
                   else {
                       time++;
                   }
-                  this.moveByAngle(_EnemyBullet[style](Enemy), diffX, angle, speed, rSpeed, frameFunc, ChildMove);
+                  this.moveByAngle(EnemyBullet[style](Enemy), diffX, angle, speed, rSpeed, frameFunc, ChildMove);
               });
           });
       }
-      static _randomAngleDown(Enemy, interval1, interval2, speed = 10, rSpeed = 0, style = _EnemyBullet.Type.single, delay = 0, diffX = 0, frameFunc, ChildMove) {
+      static _randomAngleDown(Enemy, interval1, interval2, speed = 10, rSpeed = 0, style = EnemyBullet.Type.single, delay = 0, diffX = 0, frameFunc, ChildMove) {
           LwgTimer.frameOnce(delay, Enemy, () => {
               LwgTimer.frameRandomLoop(interval1, interval2, Enemy, () => {
-                  this.moveByAngle(_EnemyBullet[style](Enemy), diffX, LwgTools.Num.randomOneInt(0, 180), speed, rSpeed, frameFunc, ChildMove);
+                  this.moveByAngle(EnemyBullet[style](Enemy), diffX, LwgTools.Num.randomOneInt(0, 180), speed, rSpeed, frameFunc, ChildMove);
               });
           });
       }
-      static _evenDowByCenter(Enemy, interval = 5, num = 2, spacing = 30, speed = 10, rSpeed = 0, style = _EnemyBullet.Type.three_Triangle, delay = 0, diffX = 0, frameFunc, ChildMove) {
+      static _evenDowByCenter(Enemy, interval = 5, num = 2, spacing = 30, speed = 10, rSpeed = 0, style = EnemyBullet.Type.three_Triangle, delay = 0, diffX = 0, frameFunc, ChildMove) {
           LwgTimer.frameOnce(delay, Enemy, () => {
               rSpeed = LwgTools.Num.randomOneHalf() === 0 ? rSpeed : -rSpeed;
               LwgTimer.frameLoop(interval, Enemy, () => {
                   for (let index = 0; index < num; index++) {
                       let angle = index * (180 - spacing * 2) / (num - 1) + spacing;
-                      this.moveByAngle(_EnemyBullet[style](Enemy), diffX, angle, speed, rSpeed, frameFunc, ChildMove);
+                      this.moveByAngle(EnemyBullet[style](Enemy), diffX, angle, speed, rSpeed, frameFunc, ChildMove);
                   }
               });
           });
       }
-      static _assignAngle(Enemy, interval = 20, angle = 30, num = 2, numFrameInterval = 10, speed = 10, rSpeed = 0, style = _EnemyBullet.Type.single, delay = 0, diffX = 0, frameFunc, ChildMove) {
+      static _assignAngle(Enemy, interval = 20, angle = 30, num = 2, numFrameInterval = 10, speed = 10, rSpeed = 0, style = EnemyBullet.Type.single, delay = 0, diffX = 0, frameFunc, ChildMove) {
           LwgTimer.frameOnce(delay, Enemy, () => {
               LwgTimer.frameLoop(interval, Enemy, () => {
                   for (let index = 0; index < num; index++) {
                       LwgTimer.frameOnce(numFrameInterval * index, Enemy, () => {
-                          this.moveByAngle(_EnemyBullet[style](Enemy), diffX, angle, speed, rSpeed, frameFunc, ChildMove);
+                          this.moveByAngle(EnemyBullet[style](Enemy), diffX, angle, speed, rSpeed, frameFunc, ChildMove);
                       });
                   }
               });
           });
       }
   }
-  _General.ChildMoveType = {
+  EnemyAttackBase.ChildMoveType = {
       childExplodebyAngle: 'childExplodebyAngle',
       childStretch: 'childStretch',
   };
 
   class Level6 {
       enemy(enemy) {
-          _General._fall(enemy, 200, 200, 5, 0, _EnemyBullet.Type.four_Square, 0, 0, null, { type: _General.ChildMoveType.childStretch, delay: [1, 1] });
+          EnemyAttackBase._fall(enemy, 200, 200, 5, 0, EnemyBullet.Type.four_Square, 0, 0, null, { type: EnemyAttackBase.ChildMoveType.childStretch, delay: [1, 1] });
       }
       land(enemy) {
-          _General._slapDown(enemy, 1, 0, 180, 11, 10, 0, _EnemyBullet.Type.single);
-          _General._assignAngle(enemy, 25, 135, 3, 4, 8, 0, _EnemyBullet.Type.single, 0, 200);
-          _General._assignAngle(enemy, 25, 45, 3, 4, 8, 0, _EnemyBullet.Type.single, 0, -200);
+          EnemyAttackBase._slapDown(enemy, 1, 0, 180, 11, 10, 0, EnemyBullet.Type.single);
+          EnemyAttackBase._assignAngle(enemy, 25, 135, 3, 4, 8, 0, EnemyBullet.Type.single, 0, 200);
+          EnemyAttackBase._assignAngle(enemy, 25, 45, 3, 4, 8, 0, EnemyBullet.Type.single, 0, -200);
       }
       house(enemy) {
-          _General._spiral(enemy, 5, 2, 11, 10, 5, _EnemyBullet.Type.three_Vertical);
-          _General._assignAngle(enemy, 25, 115, 3, 4, 8, 0, _EnemyBullet.Type.two, 0, 200);
-          _General._assignAngle(enemy, 25, 65, 3, 4, 8, 0, _EnemyBullet.Type.two, 0, -200);
+          EnemyAttackBase._spiral(enemy, 5, 2, 11, 10, 5, EnemyBullet.Type.three_Vertical);
+          EnemyAttackBase._assignAngle(enemy, 25, 115, 3, 4, 8, 0, EnemyBullet.Type.two, 0, 200);
+          EnemyAttackBase._assignAngle(enemy, 25, 65, 3, 4, 8, 0, EnemyBullet.Type.two, 0, -200);
       }
       boss(enemy) {
-          _General._evenDowByCenter(enemy, 20, 5, 30, 10, 5, _EnemyBullet.Type.three_Across);
-          _General._assignAngle(enemy, 25, 115, 3, 4, 8, 0, _EnemyBullet.Type.single, 0, 200);
-          _General._assignAngle(enemy, 25, 90, 3, 4, 8, 0, _EnemyBullet.Type.single, 0, 0);
-          _General._assignAngle(enemy, 25, 65, 3, 4, 8, 0, _EnemyBullet.Type.single, 0, -200);
+          EnemyAttackBase._evenDowByCenter(enemy, 20, 5, 30, 10, 5, EnemyBullet.Type.three_Across);
+          EnemyAttackBase._assignAngle(enemy, 25, 115, 3, 4, 8, 0, EnemyBullet.Type.single, 0, 200);
+          EnemyAttackBase._assignAngle(enemy, 25, 90, 3, 4, 8, 0, EnemyBullet.Type.single, 0, 0);
+          EnemyAttackBase._assignAngle(enemy, 25, 65, 3, 4, 8, 0, EnemyBullet.Type.single, 0, -200);
       }
       heroine(enemy) {
-          _General._spiral(enemy, 5, 3, 11, 10, 8, _EnemyBullet.Type.two);
-          _General._assignAngle(enemy, 25, 135, 3, 4, 8, 0, _EnemyBullet.Type.single, 0, 200);
-          _General._assignAngle(enemy, 25, 45, 3, 4, 8, 0, _EnemyBullet.Type.single, 0, -200);
-          _General._assignAngle(enemy, 25, 100, 3, 4, 8, 0, _EnemyBullet.Type.single, 0, 100);
-          _General._assignAngle(enemy, 25, 80, 3, 4, 8, 0, _EnemyBullet.Type.single, 0, -100);
+          EnemyAttackBase._spiral(enemy, 5, 3, 11, 10, 8, EnemyBullet.Type.two);
+          EnemyAttackBase._assignAngle(enemy, 25, 135, 3, 4, 8, 0, EnemyBullet.Type.single, 0, 200);
+          EnemyAttackBase._assignAngle(enemy, 25, 45, 3, 4, 8, 0, EnemyBullet.Type.single, 0, -200);
+          EnemyAttackBase._assignAngle(enemy, 25, 100, 3, 4, 8, 0, EnemyBullet.Type.single, 0, 100);
+          EnemyAttackBase._assignAngle(enemy, 25, 80, 3, 4, 8, 0, EnemyBullet.Type.single, 0, -100);
       }
   }
 
-  class _EnemyAttack {
+  class EnemyAttackControl {
   }
-  _EnemyAttack.Level1 = new Level6;
-  _EnemyAttack.lvArr = [Level1, , Level2,];
+  EnemyAttackControl.Level1 = new Level6;
+  EnemyAttackControl.lvArr = [Level1, , Level2,];
 
   class Levels_Land extends Levels_RoleBase {
       constructor() {
@@ -8090,22 +8070,22 @@
           });
       }
       lwgEvent() {
-          this._evReg(_Game._Event.enemyLandStage, () => {
+          this._evReg(_GameEvent.enemyLandStage, () => {
               Laya.timer.clearAll(this);
               const time = Math.abs(this._Owner.rotation % 360) * 10;
               LwgAni2D.rotate(this._Owner, 0, time, 0, () => {
                   this._Owner.rotation = 0;
                   this._ImgChild('Blood').visible = true;
                   this.landStage = true;
-                  _EnemyAttack.Level1.land(this._Owner);
+                  EnemyAttackControl.Level1.land(this._Owner);
               });
           });
-          this._evReg(_Game._Event.enemyLandCheckWeapon, (Weapon, numBlood) => {
+          this._evReg(_GameEvent.enemyLandCheckWeapon, (Weapon, numBlood) => {
               this.checkOtherRule(Weapon, 160, this.landStage ? numBlood : 0);
           });
       }
       deathFunc() {
-          this._evNotify(_Game._Event.enemyHouseStage);
+          this._evNotify(_GameEvent.enemyHouseStage);
       }
   }
 
@@ -8116,7 +8096,7 @@
       }
       lwgOnAwake() {
           this.bloodInit(100);
-          _EnemyAttack.Level1.heroine(this._Owner);
+          EnemyAttackControl.Level1.heroine(this._Owner);
           this.move();
       }
       move() {
@@ -8137,7 +8117,7 @@
           });
       }
       lwgEvent() {
-          this._evReg(_Game._Event.heroineCheckWeapon, (Weapon, numBlood) => {
+          this._evReg(_GameEvent.heroineCheckWeapon, (Weapon, numBlood) => {
               this.checkOtherRule(Weapon, 50, this.heroineStage ? numBlood : 0);
           });
       }
@@ -8183,7 +8163,7 @@
           });
       }
       attack() {
-          _EnemyAttack.Level1.enemy(this._Owner);
+          EnemyAttackControl.Level1.enemy(this._Owner);
       }
       move() {
           LwgTimer.frameLoop(1, this, () => {
@@ -8193,7 +8173,7 @@
           });
       }
       lwgEvent() {
-          this._evReg(_Game._Event.enemyCheckWeapon, (Weapon, numBlood) => {
+          this._evReg(_GameEvent.enemyCheckWeapon, (Weapon, numBlood) => {
               this.checkOtherRule(Weapon, 30, numBlood);
           });
       }
@@ -8202,7 +8182,7 @@
               LwgTools.Node.createPrefab(_Res.$prefab2D.Heroine.prefab2D, this._Parent, [this._Owner.x, this._Owner.y], Levels_Heroine);
           }
           else {
-              this._evNotify(_Game._Event.addEnemy);
+              this._evNotify(_GameEvent.addEnemy);
           }
       }
   }
@@ -8249,12 +8229,12 @@
               this._Owner.destroy();
           });
           if (!leave) {
-              this._evNotify(_Game._Event.treeCheckWeapon, [this._Owner, 1]);
-              this._evNotify(_Game._Event.enemyCheckWeapon, [this._Owner, 1]);
-              this._evNotify(_Game._Event.enemyLandCheckWeapon, [this._Owner, 1]);
-              this._evNotify(_Game._Event.enemyHouseCheckWeapon, [this._Owner, 1]);
-              this._evNotify(_Game._Event.heroineCheckWeapon, [this._Owner, 1]);
-              this._evNotify(_Game._Event.bossCheckWeapon, [this._Owner, 1]);
+              this._evNotify(_GameEvent.treeCheckWeapon, [this._Owner, 1]);
+              this._evNotify(_GameEvent.enemyCheckWeapon, [this._Owner, 1]);
+              this._evNotify(_GameEvent.enemyLandCheckWeapon, [this._Owner, 1]);
+              this._evNotify(_GameEvent.enemyHouseCheckWeapon, [this._Owner, 1]);
+              this._evNotify(_GameEvent.heroineCheckWeapon, [this._Owner, 1]);
+              this._evNotify(_GameEvent.bossCheckWeapon, [this._Owner, 1]);
           }
       }
       drop() {
@@ -8342,10 +8322,10 @@
           this._openScene('Defeated', false);
       }
       lwgEvent() {
-          this._evReg(_Game._Event.checkEnemyBullet, (Bullet, numBlood) => {
+          this._evReg(_GameEvent.checkEnemyBullet, (Bullet, numBlood) => {
               this.checkOtherRule(Bullet, 40, numBlood);
           });
-          this._evReg(_Game._Event.checkBuff, (type) => {
+          this._evReg(_GameEvent.checkBuff, (type) => {
               switch (type) {
                   case 0:
                       this._HeroAttack.ballisticNum++;
@@ -8426,7 +8406,7 @@
       appear() {
       }
       attack() {
-          _EnemyAttack.Level1.boss(this._Owner);
+          EnemyAttackControl.Level1.boss(this._Owner);
       }
   }
 
@@ -8440,19 +8420,25 @@
           this._ImgChild('Blood').visible = false;
       }
       lwgEvent() {
-          this._evReg(_Game._Event.enemyHouseStage, () => {
+          this._evReg(_GameEvent.enemyHouseStage, () => {
               this.enemyHouseStage = true;
               this._ImgChild('Blood').visible = true;
-              _EnemyAttack.Level1.house(this._Owner);
+              EnemyAttackControl.Level1.house(this._Owner);
           });
-          this._evReg(_Game._Event.enemyHouseCheckWeapon, (Weapon, numBlood) => {
+          this._evReg(_GameEvent.enemyHouseCheckWeapon, (Weapon, numBlood) => {
               this.checkOtherRule(Weapon, 50, this.enemyHouseStage ? numBlood : 0);
           });
       }
       deathFunc() {
-          new _Role._Boss(this._SceneImg('BossParent'), Levels_Boss);
+          new BossData(this._SceneImg('BossParent'), Levels_Boss);
       }
   }
+
+  var _GameControl;
+  (function (_GameControl) {
+      _GameControl._texArr = [];
+      _GameControl._arrowParentArr = [];
+  })(_GameControl || (_GameControl = {}));
 
   class Levels extends LwgScene.SceneBase {
       lwgOnAwake() {
@@ -8466,40 +8452,40 @@
           }
           this._ImgVar('Land').addComponent(Levels_Land);
           this._ImgVar('EnemyHouse').addComponent(Levels_EnemyHouse);
-          _EnemyBullet.Parent = this._ImgVar('EBparrent');
+          EnemyBullet.Parent = this._ImgVar('EBparrent');
       }
       lwgOnStart() {
-          this._evNotify(_Game._Event.enemyStage);
+          this._evNotify(_GameEvent.enemyStage);
       }
       lwgEvent() {
-          this._evReg(_Game._Event.enemyStage, () => {
-              this._Enemy = new _Role._Enemy(this._ImgVar('EnemyParent'));
+          this._evReg(_GameEvent.enemyStage, () => {
+              this._Enemy = new EnemyData(this._ImgVar('EnemyParent'));
               const num = this._Enemy.quantity >= 10 ? 10 : this._Enemy.quantity;
               for (let index = 0; index < num; index++) {
                   this._Enemy.createEnmey(Levels_Enemy);
               }
           });
-          this._evReg(_Game._Event.addEnemy, () => {
+          this._evReg(_GameEvent.addEnemy, () => {
               if (this._Enemy.quantity > 0) {
                   this._Enemy.createEnmey(Levels_Enemy);
               }
               else {
                   if (this._ImgVar('EnemyParent').numChildren <= 1) {
-                      this._evNotify(_Game._Event.enemyLandStage);
+                      this._evNotify(_GameEvent.enemyLandStage);
                   }
               }
           });
-          this._evReg(_Game._Event.closeScene, () => {
-              for (let index = 0; index < _Game._texArr.length; index++) {
-                  const element = _Game._texArr[index];
+          this._evReg(_GameEvent.closeScene, () => {
+              for (let index = 0; index < _GameControl._texArr.length; index++) {
+                  const element = _GameControl._texArr[index];
                   element.destroy(true);
-                  _Game._texArr.splice(index, 1);
+                  _GameControl._texArr.splice(index, 1);
                   index--;
               }
-              for (let index = 0; index < _Game._arrowParentArr.length; index++) {
-                  const element = _Game._arrowParentArr[index];
+              for (let index = 0; index < _GameControl._arrowParentArr.length; index++) {
+                  const element = _GameControl._arrowParentArr[index];
                   element.destroy(true);
-                  _Game._arrowParentArr.splice(index, 1);
+                  _GameControl._arrowParentArr.splice(index, 1);
                   index--;
               }
               this._closeScene();
@@ -8535,7 +8521,7 @@
       }
   }
 
-  class _GameAni {
+  class GameAni {
       static _dialogOpenPopup(Content, Bg, func) {
           Content.scene.zOrder = Laya.stage.numChildren - 1;
           const time = 100;
@@ -8772,7 +8758,7 @@
       lwgEvent() {
       }
       lwgCloseAni() {
-          return _GameAni._dialogCloseFadeOut(this._ImgVar('Hand'), this._ImgVar('Background'));
+          return GameAni._dialogCloseFadeOut(this._ImgVar('Hand'), this._ImgVar('Background'));
       }
       lwgOnDisable() {
           this._ImgVar('Background').destroy();
@@ -8790,7 +8776,7 @@
       lwgButton() {
           this._btnUp(this._ImgVar('BtnBack'), () => {
               this._openScene('Start');
-              this._evNotify(_Game._Event.closeScene);
+              this._evNotify(_GameEvent.closeScene);
           });
       }
   }
@@ -8799,7 +8785,7 @@
       lwgButton() {
           this._btnUp(this._ImgVar('BtnGet'), () => {
               this._openScene('Start');
-              LwgEvent.notify(_Game._Event.closeScene);
+              LwgEvent.notify(_GameEvent.closeScene);
           });
       }
   }

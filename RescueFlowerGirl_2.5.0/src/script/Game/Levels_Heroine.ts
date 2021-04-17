@@ -1,13 +1,13 @@
 import { LwgTimer } from "../Lwg/Lwg";
-import { _EnemyAttack } from "./EnemyAttack/_EnemyAttack";
-import { _Game } from "./General/_GameGlobal";
+import { EnemyAttackControl } from "./EnemyAttack/EnemyAttackControl";
+import { _GameEvent } from "./General/_GameEvent";
 import Levels_RoleBase from "./Levels_RoleBase";
 
 export class Levels_Heroine extends Levels_RoleBase {
 
     lwgOnAwake(): void {
         this.bloodInit(100);
-        _EnemyAttack.Level1.heroine(this._Owner as any);
+        EnemyAttackControl.Level1.heroine(this._Owner as any);
         this.move();
     }
     move(): void {
@@ -28,7 +28,7 @@ export class Levels_Heroine extends Levels_RoleBase {
     }
     heroineStage = true;
     lwgEvent(): void {
-        this._evReg(_Game._Event.heroineCheckWeapon, (Weapon: Laya.Image, numBlood: number) => {
+        this._evReg(_GameEvent.heroineCheckWeapon, (Weapon: Laya.Image, numBlood: number) => {
             this.checkOtherRule(Weapon, 50, this.heroineStage ? numBlood : 0);
         })
     }

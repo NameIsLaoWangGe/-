@@ -1,5 +1,5 @@
 import { LwgAni2D, LwgTimer } from "../../Lwg/Lwg";
-export class _GameAni {
+export class GameAni {
     /**弹开*/
     static _dialogOpenPopup(Content: Laya.Sprite, Bg?: Laya.Sprite, func?: Function): number {
         Content.scene.zOrder = Laya.stage.numChildren - 1;
@@ -14,7 +14,7 @@ export class _GameAni {
             LwgAni2D.fadeOut(Bg, 0, 1, 200, delay * 2);
         }
         return time * 3;
-    }
+    }                                     
 
     /**渐隐打开*/
     static _dialogOpenFadeOut(Content: Laya.Sprite, Bg?: Laya.Sprite, func?: Function): number {

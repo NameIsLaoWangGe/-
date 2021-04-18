@@ -367,5 +367,6 @@ export module record {
         生成密钥才可以推送: 'gitbash输入命令ssh-keygen -t rsa -C "849567502@qq.com" 为生成密钥，地址在C:\Users\用户名（我的是老王哥）\.ssh中，id_rsa.pub这个文件中有密钥，填写到github中去，右上角选项中能看到密钥按钮进去填写即可',
         如果用TortoiseGit推送的话: 'TortoiseGit推送时会有一个弹窗弹出来，是输入密钥的，输入后会弹出输入用户名，就是‘849567502@qq.com’，然后弹出输入密码，即可推送，三次输入缺一不可',
         TortoiseGit的好处: '自动记录一些信息，并且可视化操作，不过最好用git命令行',
+        如果不能推送了:'就在重复一次密钥'
     }
 }

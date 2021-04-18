@@ -126,6 +126,7 @@ export module LwgScene {
         static _PreLoad = '_PreLoad';
         static _PreLoadCutIn = '_PreLoadCutIn';
         static _Guide = '_Guide';
+        static _CommonDialog = '_CommonDialog';
         static _Parameter = '_Parameter';
         static Start = 'Start';
         static SelectLevel = 'SelectLevel';
@@ -168,14 +169,14 @@ export module LwgScene {
      * @param {Laya.Scene}  openScene 被打开的场景
      * @param {number} _openZOder 层级
      */
-    export function addToStage(openScene: Laya.Scene, _openZOder: number): void {
+    export function addToStage(openScene: Laya.Scene,/*_openZOder: number*/): void {
         if (openScene) {
             // 层级
-            if (_openZOder) {
-                Laya.stage.addChildAt(openScene, _openZOder);
-            } else {
-                Laya.stage.addChild(openScene);
-            }
+            // if (_openZOder) {
+            //     Laya.stage.addChildAt(openScene, _openZOder);
+            // } else {
+            Laya.stage.addChild(openScene);
+            // }
             // 添加同名脚本
             let spcriptBool = false;
             for (let index = 0; index < SceneScript.length; index++) {
@@ -235,24 +236,28 @@ export module LwgScene {
                 LwgClick.filter.value = LwgClick.filterType.none;
                 sceneZOderUp(openScene);
                 // 5.检查被打开的场景的内部开场动画是否被重写了
+                let openAniTime = 0;
                 const openScript = openScene[openScene.name] as SceneBase;
-                let openAniTime = openScript.lwgOpenAni();
-                if (openAniTime === null) {
-                    // 6.如果内部没重写则查看通用开场动画有没有
-                    if (LwgSceneAni.openSwitch.value) {
-                        openAniTime = LwgSceneAni._commonOpenAni(openScene);
-                    } else {
-                        // 7.如果什么动画都没有则openAniTime=0；
-                        openAniTime = 0;
+
+                if (openScript) {
+                    openAniTime = openScript.lwgOpenAni();
+                    if (openAniTime === null) {
+                        // 6.如果内部没重写则查看通用开场动画有没有
+                        if (LwgSceneAni.openSwitch.value) {
+                            openAniTime = LwgSceneAni._commonOpenAni(openScene);
+                        } else {
+                            // 7.如果什么动画都没有则openAniTime=0；
+                            openAniTime = 0;
+                        }
                     }
+                    // 8.完成整个流程后进行整理
+                    Laya.timer.once(openAniTime, this, () => {
+                        openScript.lwgOpenAniAfter();
+                        openScript.lwgButton();
+                        _openFunc && _openFunc();
+                        LwgClick.filter.value = LwgClick.filterType.all;
+                    })
                 }
-                // 8.完成整个流程后进行整理
-                Laya.timer.once(openAniTime, this, () => {
-                    openScript.lwgOpenAniAfter();
-                    openScript.lwgButton();
-                    _openFunc && _openFunc();
-                    LwgClick.filter.value = LwgClick.filterType.all;
-                })
             }
         })
     }
@@ -269,19 +274,20 @@ export module LwgScene {
      * @param {Function} [func] 完成回调，默认为null
      * @param {number} [zOrder] 指定层级，默认为最上层
      */
-    export function preLoadOpenScene(openName: string, closeName: string, func?: Function, zOrder?: number) {
+    export function preLoadOpenScene(openName: string, initData?: object, closeName?: string, func?: Function,/**zOrder?: number*/) {
         _PreLoadCutIn.openName = openName;
         _PreLoadCutIn.closeName = closeName;
-        openScene(_BaseName._PreLoadCutIn, closeName, func, zOrder);
+        openScene(_BaseName._PreLoadCutIn, initData, closeName, func,/**zOrder*/);
     }
     /**
       * 打开场景
       * @param openName 需要打开的场景名称
       * @param closeName 需要关闭的场景，默认为null
+      * @param initData 传递给下个场景的初始化信息
       * @param func 完成回调，默认为null
       * @param zOrder 指定层级
      */
-    export function openScene(openName: string, closeName?: string, openfunc?: Function, zOrder?: number): void {
+    export function openScene(openName: string, initData?: object, closeName?: string, openfunc?: Function, /*zOrder?: number*/): void {
         LwgClick.filter.value = LwgClick.filterType.none;
         Laya.Scene.load('Scene/' + openName + '.json', Laya.Handler.create(this, function (scene: Laya.Scene) {
             // 如果该场景已经有了，则立即关闭，打开新的
@@ -291,7 +297,8 @@ export module LwgScene {
                 console.log(`场景${openName}重复出现！前一个场景被关闭！`);
             }
             openScene = SceneControl[scene.name = openName] = scene;
-            addToStage(openScene, zOrder);
+            openScene['_initData'] = initData;
+            addToStage(openScene,/* zOrder*/);
             aniFlow(openScene, SceneControl[closeName], openfunc, null);
         }))
     }
@@ -488,15 +495,15 @@ export module LwgScene {
           * @param func 完成回调，默认为null
           * @param zOrder 指定层级
          */
-        _openScene(openName: string, closeSelf?: boolean, preLoadCutIn?: boolean, func?: Function, zOrder?: number): void {
+        _openScene(openName: string, initData?: object, closeSelf?: boolean, preLoadCutIn?: boolean, func?: Function): void {
             let closeName: string;
             if (closeSelf === undefined || closeSelf === true) {
                 closeName = this.ownerSceneName;
             }
             if (!preLoadCutIn) {
-                LwgScene.openScene(openName, closeName, func, zOrder);
+                LwgScene.openScene(openName, initData, closeName, func,/** zOrder*/);
             } else {
-                LwgScene.preLoadOpenScene(openName, closeName, func, zOrder);
+                LwgScene.preLoadOpenScene(openName, initData, closeName, func,/** zOrder*/);
             }
         }
         /**
@@ -535,6 +542,8 @@ export module LwgScene {
         constructor() {
             super();
         }
+        /**初始化参数 */
+        _initData: object;
         /**挂载当前脚本的节点*/
         get _Owner(): Laya.Scene {
             return this.owner as Laya.Scene;
@@ -599,6 +608,8 @@ export module LwgScene {
             return this.getVar(name, '_FontInput');
         }
         onAwake(): void {
+            this._initData = this._Owner['_initData'];
+            console.log(this._Owner.name, '初始化参数为', this._initData);
             // 自适应铺满
             this._Owner.width = Laya.stage.width;
             this._Owner.height = Laya.stage.height;
@@ -668,7 +679,7 @@ export module LwgScene {
     }
 
     /**2D角色、物件通用父类*/
-    export class _ObjectBase extends ScriptBase {
+    export class ObjectBase extends ScriptBase {
         constructor() {
             super();
         }
@@ -2746,7 +2757,7 @@ export module LwgData {
     }
 
     /**listItem脚本，此脚本中的$awake，$button替代所有流程方法，不要使用OnEnable，onstart禁用，因为渲染时会反复执行，只有onawake执行一次,所有属性暂时不可赋值，因为赋值后需要调用$render方法和控制类进行刷新，索性直接通过控制类修改属性，这样更加统一*/
-    export class Item extends LwgScene._ObjectBase {
+    export class Item extends LwgScene.ObjectBase {
         /**数据对象，通过item赋值*/
         $data: BaseProperty = null;
         /**数据源在数组中的序号*/
@@ -9622,7 +9633,7 @@ export module LwgExecution {
         });
     }
 
-    export class ExecutionNode extends LwgScene._ObjectBase {
+    export class ExecutionNode extends LwgScene.ObjectBase {
         Num: Laya.FontClip;
         CountDown: Laya.Label;
         CountDown_Board: Laya.Label;

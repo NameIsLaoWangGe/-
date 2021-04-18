@@ -1,6 +1,7 @@
 {
 	"version": "0.2.0",
 	"configurations": [ 
+	
 		{
 			"name": "chrome调试",
 			"type": "chrome",

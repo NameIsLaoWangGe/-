@@ -113,6 +113,7 @@
       _BaseName._PreLoad = '_PreLoad';
       _BaseName._PreLoadCutIn = '_PreLoadCutIn';
       _BaseName._Guide = '_Guide';
+      _BaseName._CommonDialog = '_CommonDialog';
       _BaseName._Parameter = '_Parameter';
       _BaseName.Start = 'Start';
       _BaseName.SelectLevel = 'SelectLevel';
@@ -142,14 +143,9 @@
           }
       }
       LwgScene.sceneZOderUp = sceneZOderUp;
-      function addToStage(openScene, _openZOder) {
+      function addToStage(openScene) {
           if (openScene) {
-              if (_openZOder) {
-                  Laya.stage.addChildAt(openScene, _openZOder);
-              }
-              else {
-                  Laya.stage.addChild(openScene);
-              }
+              Laya.stage.addChild(openScene);
               let spcriptBool = false;
               for (let index = 0; index < LwgScene.SceneScript.length; index++) {
                   const element = LwgScene.SceneScript[index];
@@ -192,22 +188,25 @@
               if (openScene) {
                   LwgClick.filter.value = LwgClick.filterType.none;
                   sceneZOderUp(openScene);
+                  let openAniTime = 0;
                   const openScript = openScene[openScene.name];
-                  let openAniTime = openScript.lwgOpenAni();
-                  if (openAniTime === null) {
-                      if (LwgSceneAni.openSwitch.value) {
-                          openAniTime = LwgSceneAni._commonOpenAni(openScene);
+                  if (openScript) {
+                      openAniTime = openScript.lwgOpenAni();
+                      if (openAniTime === null) {
+                          if (LwgSceneAni.openSwitch.value) {
+                              openAniTime = LwgSceneAni._commonOpenAni(openScene);
+                          }
+                          else {
+                              openAniTime = 0;
+                          }
                       }
-                      else {
-                          openAniTime = 0;
-                      }
+                      Laya.timer.once(openAniTime, this, () => {
+                          openScript.lwgOpenAniAfter();
+                          openScript.lwgButton();
+                          _openFunc && _openFunc();
+                          LwgClick.filter.value = LwgClick.filterType.all;
+                      });
                   }
-                  Laya.timer.once(openAniTime, this, () => {
-                      openScript.lwgOpenAniAfter();
-                      openScript.lwgButton();
-                      _openFunc && _openFunc();
-                      LwgClick.filter.value = LwgClick.filterType.all;
-                  });
               }
           });
       }
@@ -216,13 +215,13 @@
           openName: null,
           closeName: null,
       };
-      function preLoadOpenScene(openName, closeName, func, zOrder) {
+      function preLoadOpenScene(openName, initData, closeName, func) {
           LwgScene._PreLoadCutIn.openName = openName;
           LwgScene._PreLoadCutIn.closeName = closeName;
-          openScene(_BaseName._PreLoadCutIn, closeName, func, zOrder);
+          openScene(_BaseName._PreLoadCutIn, initData, closeName, func);
       }
       LwgScene.preLoadOpenScene = preLoadOpenScene;
-      function openScene(openName, closeName, openfunc, zOrder) {
+      function openScene(openName, initData, closeName, openfunc) {
           LwgClick.filter.value = LwgClick.filterType.none;
           Laya.Scene.load('Scene/' + openName + '.json', Laya.Handler.create(this, function (scene) {
               let openScene = LwgTools.Node.checkChildren(Laya.stage, openName);
@@ -231,7 +230,8 @@
                   console.log(`场景${openName}重复出现！前一个场景被关闭！`);
               }
               openScene = LwgScene.SceneControl[scene.name = openName] = scene;
-              addToStage(openScene, zOrder);
+              openScene['_initData'] = initData;
+              addToStage(openScene);
               aniFlow(openScene, LwgScene.SceneControl[closeName], openfunc, null);
           }));
       }
@@ -362,16 +362,16 @@
                   this.checkBtnClick(target, out, e);
               });
           }
-          _openScene(openName, closeSelf, preLoadCutIn, func, zOrder) {
+          _openScene(openName, initData, closeSelf, preLoadCutIn, func) {
               let closeName;
               if (closeSelf === undefined || closeSelf === true) {
                   closeName = this.ownerSceneName;
               }
               if (!preLoadCutIn) {
-                  LwgScene.openScene(openName, closeName, func, zOrder);
+                  LwgScene.openScene(openName, initData, closeName, func);
               }
               else {
-                  LwgScene.preLoadOpenScene(openName, closeName, func, zOrder);
+                  LwgScene.preLoadOpenScene(openName, initData, closeName, func);
               }
           }
           _closeScene(sceneName = this.ownerSceneName, func) {
@@ -470,6 +470,8 @@
               return this.getVar(name, '_FontInput');
           }
           onAwake() {
+              this._initData = this._Owner['_initData'];
+              console.log(this._Owner.name, '初始化参数为', this._initData);
               this._Owner.width = Laya.stage.width;
               this._Owner.height = Laya.stage.height;
               if (this._Owner.getChildByName('Background')) {
@@ -536,7 +538,7 @@
           }
       }
       LwgScene.SceneBase = SceneBase;
-      class _ObjectBase extends ScriptBase {
+      class ObjectBase extends ScriptBase {
           constructor() {
               super();
           }
@@ -693,7 +695,7 @@
               this.lwgOnDisable();
           }
       }
-      LwgScene._ObjectBase = _ObjectBase;
+      LwgScene.ObjectBase = ObjectBase;
   })(LwgScene || (LwgScene = {}));
   var LwgNode;
   (function (LwgNode) {
@@ -2136,7 +2138,7 @@
           check: 'check',
           free: 'free',
       };
-      class Item extends LwgScene._ObjectBase {
+      class Item extends LwgScene.ObjectBase {
           constructor() {
               super(...arguments);
               this.$data = null;
@@ -7072,7 +7074,7 @@
           });
       }
       LwgExecution.createConsumeEx = createConsumeEx;
-      class ExecutionNode extends LwgScene._ObjectBase {
+      class ExecutionNode extends LwgScene.ObjectBase {
           constructor() {
               super(...arguments);
               this.timeSwitch = true;
@@ -7171,7 +7173,7 @@
       }
       lwgButton() {
           this._btnUp(this._ImgVar('BtnStart'), () => {
-              this._openScene(_SceneName.Levels);
+              this._openScene(_SceneName.Levels, { test: 'test', name: '这是一个测试参数！' });
           });
       }
   }
@@ -7490,7 +7492,7 @@
       }
   }
 
-  class Levels_RoleBase extends LwgScene._ObjectBase {
+  class Levels_RoleBase extends LwgScene.ObjectBase {
       constructor() {
           super(...arguments);
           this.checkByWDis = 30;
@@ -7532,7 +7534,7 @@
       }
   }
 
-  class Levels_Buff extends LwgScene._ObjectBase {
+  class Levels_Buff extends LwgScene.ObjectBase {
       lwgOnStart() {
           this.checkHero();
       }
@@ -8187,7 +8189,7 @@
       }
   }
 
-  class Levels_HeroWeapon extends LwgScene._ObjectBase {
+  class Levels_HeroWeapon extends LwgScene.ObjectBase {
       constructor() {
           super(...arguments);
           this.launchAcc = 0;
@@ -8773,11 +8775,35 @@
   }
 
   class Defeated extends LwgScene.SceneBase {
+      lwgOnAwake() {
+      }
+      lwgOnEnable() {
+      }
+      lwgOnStart() {
+      }
+      lwgOpenAni() {
+          return 10;
+      }
+      lwgOpenAniAfter() {
+      }
+      lwgEvent() {
+      }
       lwgButton() {
           this._btnUp(this._ImgVar('BtnBack'), () => {
               this._openScene('Start');
               this._evNotify(_GameEvent.closeScene);
           });
+      }
+      lwgOnStageDown() {
+      }
+      lwgOnStageMove() {
+      }
+      lwgOnStageUp() {
+      }
+      lwgCloseAni() {
+          return 10;
+      }
+      lwgOnDisable() {
       }
   }
 

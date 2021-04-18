@@ -1,0 +1,7 @@
+{
+  "code": "import { LwgScene, LwgSet } from \"../Lwg/Lwg\";\r\nimport _SceneName from \"./General/_SceneName\";\r\nexport default class Start extends LwgScene.SceneBase {\r\n    lwgOnAwake() {\r\n        LwgSet.bgMusic.switch = false;\r\n    }\r\n    lwgButton() {\r\n        this._btnUp(this._ImgVar('BtnStart'), () => {\r\n            this._openScene(_SceneName.Levels, { test: 'test', name: '这是一个测试参数！' });\r\n        });\r\n    }\r\n}\r\n",
+  "references": [
+    "D:/Work/Game/RescueFlowerGirl/Project/RescueFlowerGirl_2.5.0/src/script/Lwg/Lwg.ts",
+    "D:/Work/Game/RescueFlowerGirl/Project/RescueFlowerGirl_2.5.0/src/script/Game/General/_SceneName.ts"
+  ]
+}

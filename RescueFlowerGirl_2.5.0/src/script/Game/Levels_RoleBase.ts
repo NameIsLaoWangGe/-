@@ -1,6 +1,6 @@
 import { LwgEff2D, LwgScene, LwgTools } from "../Lwg/Lwg";
 
-export default class Levels_RoleBase extends LwgScene._ObjectBase {
+export default class Levels_RoleBase extends LwgScene.ObjectBase {
     BloodNode: Laya.Image;
     bloodSum: number;
     bloodPresnt: number;

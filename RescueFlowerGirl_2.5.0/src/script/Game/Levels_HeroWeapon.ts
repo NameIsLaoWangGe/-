@@ -1,7 +1,7 @@
 import { LwgScene, LwgTimer, LwgTools } from "../Lwg/Lwg";
 import { _GameEvent } from "./General/_GameEvent";
 
-export class Levels_HeroWeapon extends LwgScene._ObjectBase {
+export class Levels_HeroWeapon extends LwgScene.ObjectBase {
     launchAcc: number = 0;
     dropAcc: number = 0;
     get state(): string {

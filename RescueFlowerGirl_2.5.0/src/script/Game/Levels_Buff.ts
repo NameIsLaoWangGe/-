@@ -2,7 +2,7 @@ import { LwgScene, LwgTimer, LwgTools } from "../Lwg/Lwg";
 import { BuffData } from "./General/_GameData";
 import { _GameEvent } from "./General/_GameEvent";
 import Levels_RoleBase from "./Levels_RoleBase";
-export default class Levels_Buff extends LwgScene._ObjectBase {
+export default class Levels_Buff extends LwgScene.ObjectBase {
     lwgOnStart(): void {
         this.checkHero();
     }

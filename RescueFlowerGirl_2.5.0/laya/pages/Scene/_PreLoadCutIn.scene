@@ -2,7 +2,7 @@
     "x":0,
     "type":"View",
     "selectedBox":2,
-    "selecteID":179,
+    "selecteID":180,
     "searchKey":"View",
     "referenceLines":[
         ],
@@ -34,7 +34,7 @@
             "x":15,
             "type":"Label",
             "searchKey":"Label",
-            "props":{"width":213,"valign":"middle","text":"加载页...","height":91,"fontSize":40,"centerY":0,"centerX":1,"bold":true,"align":"center"},
+            "props":{"width":413,"valign":"middle","text":"页面前加载页...","height":91,"fontSize":40,"centerY":0,"centerX":1,"bold":true,"align":"center"},
             "nodeParent":2,
             "label":"Label",
             "isDirectory":false,

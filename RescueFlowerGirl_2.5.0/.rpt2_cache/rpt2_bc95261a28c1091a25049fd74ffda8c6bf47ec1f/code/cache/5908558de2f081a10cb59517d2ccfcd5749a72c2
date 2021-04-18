@@ -1,0 +1,7 @@
+{
+  "code": "import { LwgScene } from \"../Lwg/Lwg\";\r\nimport { _GameEvent } from \"./General/_GameEvent\";\r\nexport default class Defeated extends LwgScene.SceneBase {\r\n    lwgOnAwake() {\r\n    }\r\n    lwgOnEnable() {\r\n    }\r\n    lwgOnStart() {\r\n    }\r\n    lwgOpenAni() {\r\n        return 10;\r\n    }\r\n    lwgOpenAniAfter() {\r\n    }\r\n    lwgEvent() {\r\n    }\r\n    lwgButton() {\r\n        this._btnUp(this._ImgVar('BtnBack'), () => {\r\n            this._openScene('Start');\r\n            this._evNotify(_GameEvent.closeScene);\r\n        });\r\n    }\r\n    lwgOnStageDown() {\r\n    }\r\n    lwgOnStageMove() {\r\n    }\r\n    lwgOnStageUp() {\r\n    }\r\n    lwgCloseAni() {\r\n        return 10;\r\n    }\r\n    lwgOnDisable() {\r\n    }\r\n}\r\n",
+  "references": [
+    "D:/Work/Game/RescueFlowerGirl/Project/RescueFlowerGirl_2.5.0/src/script/Lwg/Lwg.ts",
+    "D:/Work/Game/RescueFlowerGirl/Project/RescueFlowerGirl_2.5.0/src/script/Game/General/_GameEvent.ts"
+  ]
+}

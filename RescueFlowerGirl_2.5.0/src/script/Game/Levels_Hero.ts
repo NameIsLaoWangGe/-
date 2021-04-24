@@ -22,7 +22,7 @@ export default class Levels_Hero extends Levels_RoleBase {
     }
 
     deathFunc(): void {
-        this._openScene('Defeated', false);
+        this._openScene('Defeated', null, false);
     }
     lwgEvent(): void {
         this._evReg(_GameEvent.checkEnemyBullet, (Bullet: Laya.Image, numBlood: number) => {

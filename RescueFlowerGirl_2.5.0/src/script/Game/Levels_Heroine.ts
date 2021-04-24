@@ -34,6 +34,6 @@ export class Levels_Heroine extends Levels_RoleBase {
     }
     deathFunc(): void {
         // 最后一个为boss
-        this._openScene('Victory', false);
+        this._openScene('Victory', null, false);
     }
 }

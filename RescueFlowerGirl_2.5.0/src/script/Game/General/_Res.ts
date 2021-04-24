@@ -8,6 +8,7 @@ type json = {} & LwgPreLoad.json;
 
 export module _Res {
     export class $scene3D {
+        
     };
     export class $scene2D {
         // static Start: scene2D = { url: `Scene/${'Start'}.json` };

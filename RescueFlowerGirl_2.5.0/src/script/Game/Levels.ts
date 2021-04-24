@@ -13,7 +13,7 @@ import { _GameControl } from "./General/_GameControl";
 export default class Levels extends LwgScene.SceneBase {
     lwgOnAwake(): void {
         // 创建主角
-        this._Owner['Hero'] = LwgTools.Node.createPrefab(_Res.$prefab2D.Hero.prefab2D, this._Owner, [Laya.stage.width / 2, Laya.stage.height * 2 / 3]);
+        this._Owner['Hero'] = LwgTools.Node.createPrefabByPool(_Res.$prefab2D.Hero.prefab2D, this._Owner, [Laya.stage.width / 2, Laya.stage.height * 2 / 3]);
         this._ImgVar('Hero').addComponent(Levels_Hero);
         // 树
         for (let index = 0; index < this._ImgVar('MiddleScenery').numChildren; index++) {

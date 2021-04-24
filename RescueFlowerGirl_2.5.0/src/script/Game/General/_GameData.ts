@@ -22,7 +22,7 @@ export class BuffData extends LwgData.Table {
      * @param y 坐标y
      * */
     createBuff(type: number, Parent: Laya.Sprite, x: number, y: number, script: any): LwgNode.Image {
-        const Buff = LwgTools.Node.createPrefab(_Res.$prefab2D.Buff.prefab2D, Parent, [x, y], script);
+        const Buff = LwgTools.Node.createPrefabByPool(_Res.$prefab2D.Buff.prefab2D, Parent, [x, y], script);
         Buff['buffType'] = type;
         return Buff as LwgNode.Image;
     }
@@ -52,7 +52,7 @@ export class EnemyData extends LwgData.Table {
         this.quantity--;
         const shellNum = this.levelData[this._otherPro.shellNum];
         let shellNumTime = 0;
-        const element = LwgTools.Node.createPrefab(_Res.$prefab2D.Enemy.prefab2D, this.Parent) as LwgNode.Image;
+        const element = LwgTools.Node.createPrefabByPool(_Res.$prefab2D.Enemy.prefab2D, this.Parent) as LwgNode.Image;
         shellNumTime++;
         const color = LwgTools._Array.randomGetOne(['blue', 'yellow', 'red']);
         element.name = `${color}${color}`;
@@ -90,7 +90,7 @@ export class BossData extends LwgData.Table {
     speed: number[];
     blood: number;
     createLevelBoss(Parent: Laya.Image, BossScript: any): Laya.Sprite {
-        const element = LwgTools.Node.createPrefab(_Res.$prefab2D.Boss.prefab2D, Parent) as LwgNode.Image;
+        const element = LwgTools.Node.createPrefabByPool(_Res.$prefab2D.Boss.prefab2D, Parent) as LwgNode.Image;
         element.name = `Boss`;
         let speed = LwgTools.Num.randomOneBySection(this.speed[0], this.speed[1]);
         speed = LwgTools.Num.randomOneHalf() == 0 ? -speed : speed;

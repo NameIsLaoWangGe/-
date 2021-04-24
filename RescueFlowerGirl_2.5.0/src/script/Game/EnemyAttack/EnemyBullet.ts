@@ -42,13 +42,13 @@ export class EnemyBullet {
       * 清零
       * @param {type} Bullet: 子弹 
       */
-    static clearBullet(Bullet: LwgNode.Image): void {
-        Laya.timer.clearAll(Bullet);
-        Laya.Tween.clearAll(Bullet);
-        Bullet.destroy(true);
-        
+    static clearBullet(bullet: LwgNode.Image): void {
+        Laya.timer.clearAll(bullet);
+        Laya.Tween.clearAll(bullet);
+        bullet.destroy(true);
+        // Laya.Pool.recover(bullet.name, bullet);
     }
-    
+
     /**
      * 子弹检测主角和检测离开舞台
      * @param {type} Bullet: 子弹 
@@ -95,15 +95,16 @@ export class EnemyBullet {
      * 创建子弹
      * @private 
      * @static
-     * @param {LwgNode.Image} enemy
-     * @param {string} type
+     * @param {LwgNode.Image} enemy 谁创建的子弹
+     * @param {string} type 子弹样式
      * @return {*}  {LwgNode.Image}
      * @memberof _EnemyBullet
      */
     private static createBase(enemy: LwgNode.Image, type: string, checkType: string): LwgNode.Image {
-        let prefab: Laya.Prefab = _Res.$prefab2D[type]['prefab2D'];
-        const bullet = LwgTools.Node.createPrefab(prefab, this.Parent, [enemy._lwg.gPoint.x, enemy._lwg.gPoint.y]) as LwgNode.Image;
-        bullet.name = type;
+        const prefab: Laya.Prefab = _Res.$prefab2D[type].prefab2D;
+        const bullet = LwgTools.Node.createPrefabByPool(prefab, this.Parent, [enemy._lwg.gPoint.x, enemy._lwg.gPoint.y], null, null, type) as LwgNode.Image;
+        bullet['_prefab2D'] = prefab;
+        bullet['moveCaller'] = new Object();
         switch (checkType) {
             case this.ChekType.bullet:
                 this.checkStageAndHero(bullet);

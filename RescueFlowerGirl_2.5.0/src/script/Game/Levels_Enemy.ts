@@ -63,7 +63,7 @@ export default class Levels_Enemy extends Levels_RoleBase {
     deathFunc(): void {
         // 最后一个为boss
         if (this._Owner.name === 'Boss') {
-            LwgTools.Node.createPrefab(_Res.$prefab2D.Heroine.prefab2D, this._Parent, [this._Owner.x, this._Owner.y], Levels_Heroine);
+            LwgTools.Node.createPrefabByPool(_Res.$prefab2D.Heroine.prefab2D, this._Parent, [this._Owner.x, this._Owner.y], Levels_Heroine);
         } else {
             this._evNotify(_GameEvent.addEnemy);
         }

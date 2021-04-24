@@ -988,7 +988,7 @@
               Laya.loader.load('Prefab/LwgGold.json', Laya.Handler.create(this, function (prefabJson) {
                   const _prefab = new Laya.Prefab;
                   _prefab.json = prefabJson;
-                  Img = LwgTools.Node.createPrefab(_prefab, parent, [x, y], null, 100);
+                  Img = LwgTools.Node.createPrefabByPool(_prefab, parent, [x, y], null, 100);
                   Gold_1._GoldNode = Img;
                   updateNumNode();
               }));
@@ -1180,38 +1180,73 @@
   })(LwgEvent || (LwgEvent = {}));
   var LwgDate;
   (function (LwgDate) {
-      LwgDate.date = {
-          get year() {
+      class PresentDate {
+          static get year() {
               return (new Date()).getFullYear();
-          },
-          get month() {
+          }
+          ;
+          static get month() {
               return (new Date()).getMonth();
-          },
-          get date() {
+          }
+          ;
+          static get date() {
               return (new Date()).getDate();
-          },
-          get day() {
+          }
+          ;
+          static get day() {
               return (new Date()).getDay();
-          },
-          get hours() {
+          }
+          ;
+          static get hours() {
               return (new Date()).getHours();
-          },
-          get minutes() {
+          }
+          ;
+          static get minutes() {
               return (new Date()).getMinutes();
-          },
-          get seconds() {
+          }
+          ;
+          static get seconds() {
               return (new Date()).getSeconds();
-          },
-          get milliseconds() {
+          }
+          ;
+          static get milliseconds() {
               return (new Date()).getMilliseconds();
-          },
-          get toLocaleDateString() {
+          }
+          ;
+          static get toLocaleDateString() {
               return (new Date()).toLocaleDateString();
-          },
-          get toLocaleTimeString() {
+          }
+          ;
+          static get toLocaleTimeString() {
               return (new Date()).toLocaleTimeString();
           }
-      };
+          ;
+          static get time() {
+              return (new Date()).getTime();
+          }
+          ;
+          static howHoursDiffFromLastTime(lastTime) {
+              return hoursByTimestamp(lastTime, this.time);
+          }
+          ;
+          static howMinutsDiffFromLastTime(lastTime) {
+              return minutesByTimestamp(lastTime, this.time);
+          }
+          static howSecondsDiffFromLastTime(lastTime) {
+              return secondsByTimestamp(lastTime, this.time);
+          }
+          static howHoursDiffFromNextTime(NextTime) {
+              return hoursByTimestamp(this.time, NextTime);
+          }
+          ;
+          static howMinutsDiffFromNextTime(NextTime) {
+              return minutesByTimestamp(this.time, NextTime);
+          }
+          static howSecondsDiffFromNextTime(NextTime) {
+              return secondsByTimestamp(this.time, NextTime);
+          }
+      }
+      LwgDate.PresentDate = PresentDate;
       function init() {
           const d = new Date;
           LwgDate.loginInfo = LwgStorage.arrayArr('LwgDate/loginInfo');
@@ -1234,7 +1269,7 @@
               return Laya.LocalStorage.getItem('LwgDate/loginToday') ? Number(Laya.LocalStorage.getItem('LwgDate/loginToday')) : 0;
           },
           set num(val) {
-              if (LwgDate.date.date == LwgDate.loginInfo.value[LwgDate.loginInfo.value.length - 1][2]) {
+              if (PresentDate.date == LwgDate.loginInfo.value[LwgDate.loginInfo.value.length - 1][2]) {
                   Laya.LocalStorage.setItem('LwgDate/loginToday', val.toString());
               }
           }
@@ -1254,6 +1289,44 @@
               return LwgDate.loginInfo.value[LwgDate.loginInfo.value.length - 1][2];
           },
       };
+      function changeTimestamp(msec) {
+          let hours = parseInt(`${msec / (1000 * 60 * 60)}`).toString();
+          let minutes = parseInt(`${(msec % (1000 * 60 * 60)) / (1000 * 60)}`).toString();
+          let seconds = parseInt(`${(msec % (1000 * 60)) / 1000}`).toString();
+          return {
+              hours: +hours,
+              minutes: +minutes,
+              seconds: +seconds,
+          };
+      }
+      LwgDate.changeTimestamp = changeTimestamp;
+      function differenceInTimestamp(timestampStart, timestampEnd) {
+          let msec = (Math.floor(timestampEnd / 1000) - Math.floor(timestampStart / 1000)) * 1000;
+          const timeObj = changeTimestamp(msec);
+          let hours = timeObj.hours < 10 ? '0' + timeObj.hours : timeObj.hours.toString();
+          let minutes = timeObj.minutes < 10 ? '0' + timeObj.minutes : timeObj.minutes.toString();
+          let seconds = timeObj.seconds < 10 ? '0' + timeObj.seconds : timeObj.seconds.toString();
+          return hours + ':' + minutes + ':' + seconds;
+      }
+      LwgDate.differenceInTimestamp = differenceInTimestamp;
+      function minutesByTimestamp(timestampStart, timestampEnd) {
+          let msec = (Math.floor(timestampEnd / 1000) - Math.floor(timestampStart / 1000)) * 1000;
+          const timeObj = changeTimestamp(msec);
+          return timeObj.hours * 60 + timeObj.minutes + timeObj.seconds / 60;
+      }
+      LwgDate.minutesByTimestamp = minutesByTimestamp;
+      function secondsByTimestamp(timestampStart, timestampEnd) {
+          let msec = (Math.floor(timestampEnd / 1000) - Math.floor(timestampStart / 1000)) * 1000;
+          const timeObj = changeTimestamp(msec);
+          return timeObj.hours * 3600 + timeObj.minutes * 60 + timeObj.seconds;
+      }
+      LwgDate.secondsByTimestamp = secondsByTimestamp;
+      function hoursByTimestamp(timestampStart, timestampEnd) {
+          let msec = (Math.floor(timestampEnd / 1000) - Math.floor(timestampStart / 1000)) * 1000;
+          const timeObj = changeTimestamp(msec);
+          return timeObj.hours + timeObj.minutes * 60 + timeObj.seconds * 3600;
+      }
+      LwgDate.hoursByTimestamp = hoursByTimestamp;
   })(LwgDate || (LwgDate = {}));
   var LwgTimer;
   (function (LwgTimer) {
@@ -5953,7 +6026,7 @@
               }
           }
           Node_1.showExcludedChild3D = showExcludedChild3D;
-          function createPrefab(prefab, Parent, point, script, zOrder, name) {
+          function createPrefabByPool(prefab, Parent, point, script, zOrder, name) {
               name = name ? name : prefab.json['props']['name'];
               const Sp = Laya.Pool.getItemByCreateFun(name, prefab.create, prefab);
               Parent && Parent.addChild(Sp);
@@ -5965,7 +6038,7 @@
                   Sp.zOrder = zOrder;
               return Sp;
           }
-          Node_1.createPrefab = createPrefab;
+          Node_1.createPrefabByPool = createPrefabByPool;
           function childrenVisible2D(node, bool) {
               for (let index = 0; index < node.numChildren; index++) {
                   const element = node.getChildAt(index);
@@ -6748,7 +6821,7 @@
       class _PreLoadScene extends LwgScene.SceneBase {
           constructor() {
               super(...arguments);
-              this.$pic2D = [];
+              this.$image = [];
               this.$texture = [];
               this.$prefab2D = [];
               this.$scene2D = [];
@@ -6760,10 +6833,14 @@
               this.$mesh3D = [];
               this.$json = [];
               this.$skeleton = [];
-              this._loadOrder = [this.$pic2D, this.$texture, this.$prefab2D, this.$scene2D, this.$prefab3D, this.$texture2D, this.$effectsTex2D, this.$material, this.$mesh3D, this.$scene3D, this.$json, this.$skeleton];
+              this._loadRes = [this.$image, this.$texture, this.$prefab2D, this.$scene2D, this.$prefab3D, this.$texture2D, this.$effectsTex2D, this.$material, this.$mesh3D, this.$scene3D, this.$json, this.$skeleton];
               this._loadOrderIndex = 0;
               this._sumProgress = 0;
               this._currentProgress = 0;
+              this.showLodeLog = true;
+          }
+          get lodePercent() {
+              return this._currentProgress / this._sumProgress;
           }
           lwgStartLoding(listObj) {
               listObj['$effectsTex2D'] = LwgEff3D.tex2D;
@@ -6777,44 +6854,44 @@
                       }
                   }
               }
-              for (let index = 0; index < this._loadOrder.length; index++) {
-                  this._sumProgress += this._loadOrder[index].length;
-                  if (this._loadOrder[index].length <= 0) {
-                      this._loadOrder.splice(index, 1);
+              for (let index = 0; index < this._loadRes.length; index++) {
+                  this._sumProgress += this._loadRes[index].length;
+                  if (this._loadRes[index].length <= 0) {
+                      this._loadRes.splice(index, 1);
                       index--;
                   }
               }
-              let time = this.lwgOpenAni();
+              const time = this.lwgOpenAni();
               Laya.timer.once(time ? time : 0, this, () => {
-                  this.lode();
+                  this._lode();
               });
           }
           lwgStepComplete() { }
           lwgAllComplete() { return 0; }
           ;
-          stepComplete() {
+          _stepComplete() {
               this._currentProgress++;
-              console.log('当前进度条进度:', this._currentProgress / this._sumProgress);
+              this.showLodeLog && console.log('当前进度条进度:', this._currentProgress / this._sumProgress);
               if (this._currentProgress >= this._sumProgress) {
                   if (this._sumProgress == 0) {
                       return;
                   }
-                  console.log(`所有资源加载完成！此时所有资源可通过例如:Laya.loader.getRes("url")获取`);
-                  this.allComplete();
+                  this.showLodeLog && console.log(`所有资源加载完成！此时所有资源可通过例如:Laya.loader.getRes("url")获取`);
+                  this._allComplete();
               }
               else {
                   let number = 0;
                   for (let index = 0; index <= this._loadOrderIndex; index++) {
-                      number += this._loadOrder[index].length;
+                      number += this._loadRes[index].length;
                   }
                   if (this._currentProgress === number) {
                       this._loadOrderIndex++;
                   }
-                  this.lode();
                   this.lwgStepComplete();
+                  this._lode();
               }
           }
-          allComplete() {
+          _allComplete() {
               Laya.timer.once(this.lwgAllComplete(), this, () => {
                   if (this._Owner.name == LwgScene._BaseName._PreLoadCutIn) {
                       this._openScene(LwgScene._PreLoadCutIn.openName);
@@ -6824,117 +6901,117 @@
                   }
               });
           }
-          lodeFunc(resArr, index, res, typeName, completeFunc) {
+          _lodeLog(resArr, index, res, typeName, completeFunc) {
               const url = resArr[index].url;
               if (typeof url === 'object') {
-                  console.log(typeName, url, `数组加载完成，为数组对象，只能从getRes（url）中逐个获取`);
+                  this.showLodeLog && console.log(typeName, url, `数组加载完成，为数组对象，只能从getRes（url）中逐个获取`);
               }
               else {
                   if (res == null) {
-                      console.log(`XXXXXXXXXXX${typeName}:${url}加载失败！不会停止加载进程！, 数组下标为：${index}, 'XXXXXXXXXXX`);
+                      this.showLodeLog && console.log(`XXXXXXXXXXX${typeName}:${url}加载失败！不会停止加载进程！, 数组下标为：${index}, 'XXXXXXXXXXX`);
                   }
                   else {
-                      console.log(`${typeName}:${url}加载完成！, 数组下标为${index}`);
+                      this.showLodeLog && console.log(`${typeName}:${url}加载完成！, 数组下标为${index}`);
                       completeFunc && completeFunc();
                   }
               }
-              this.stepComplete();
+              this._stepComplete();
           }
-          lode() {
-              if (this._loadOrder.length <= 0) {
-                  console.log('没有加载项');
-                  this.allComplete();
+          _lode() {
+              if (this._loadRes.length <= 0) {
+                  this.showLodeLog && console.log('没有加载项');
+                  this._allComplete();
                   return;
               }
-              let alreadyPro = 0;
+              let alreadyClassifyLen = 0;
               for (let i = 0; i < this._loadOrderIndex; i++) {
-                  alreadyPro += this._loadOrder[i].length;
+                  alreadyClassifyLen += this._loadRes[i].length;
               }
-              let index = this._currentProgress - alreadyPro;
-              switch (this._loadOrder[this._loadOrderIndex]) {
-                  case this.$pic2D:
-                      Laya.loader.load(this.$pic2D[index].url, Laya.Handler.create(this, (res) => {
-                          this.lodeFunc(this._loadOrder[this._loadOrderIndex], index, res, '2D图片', null);
+              const classifyIndex = this._currentProgress - alreadyClassifyLen;
+              switch (this._loadRes[this._loadOrderIndex]) {
+                  case this.$image:
+                      Laya.loader.load(this.$image[classifyIndex].url, Laya.Handler.create(this, (res) => {
+                          this._lodeLog(this._loadRes[this._loadOrderIndex], classifyIndex, res, '2D图片', null);
                       }));
                       break;
                   case this.$scene2D:
-                      Laya.loader.load(this.$scene2D[index].url, Laya.Handler.create(this, (res) => {
-                          this.lodeFunc(this._loadOrder[this._loadOrderIndex], index, res, '2D场景', null);
+                      Laya.loader.load(this.$scene2D[classifyIndex].url, Laya.Handler.create(this, (res) => {
+                          this._lodeLog(this._loadRes[this._loadOrderIndex], classifyIndex, res, '2D场景', null);
                       }), null, Laya.Loader.JSON);
                       break;
                   case this.$scene3D:
-                      Laya.Scene3D.load(this.$scene3D[index].url, Laya.Handler.create(this, (Scene3D) => {
-                          this.lodeFunc(this._loadOrder[this._loadOrderIndex], index, Scene3D, '3D场景', () => {
-                              this.$scene3D[index].scene3D = Scene3D;
+                      Laya.Scene3D.load(this.$scene3D[classifyIndex].url, Laya.Handler.create(this, (Scene3D) => {
+                          this._lodeLog(this._loadRes[this._loadOrderIndex], classifyIndex, Scene3D, '3D场景', () => {
+                              this.$scene3D[classifyIndex].scene3D = Scene3D;
                           });
                       }));
                       break;
                   case this.$prefab3D:
-                      Laya.Sprite3D.load(this.$prefab3D[index].url, Laya.Handler.create(this, (Sp3D) => {
-                          this.lodeFunc(this._loadOrder[this._loadOrderIndex], index, Sp3D, '3D预制体', () => {
-                              this.$prefab3D[index].prefab3D = Sp3D;
+                      Laya.Sprite3D.load(this.$prefab3D[classifyIndex].url, Laya.Handler.create(this, (Sp3D) => {
+                          this._lodeLog(this._loadRes[this._loadOrderIndex], classifyIndex, Sp3D, '3D预制体', () => {
+                              this.$prefab3D[classifyIndex].prefab3D = Sp3D;
                           });
                       }));
                       break;
                   case this.$mesh3D:
-                      Laya.Mesh.load(this.$mesh3D[index].url, Laya.Handler.create(this, (Mesh3D) => {
-                          this.lodeFunc(this._loadOrder[this._loadOrderIndex], index, Mesh3D, '3D网格', () => {
-                              this.$mesh3D[index].mesh3D = Mesh3D;
+                      Laya.Mesh.load(this.$mesh3D[classifyIndex].url, Laya.Handler.create(this, (Mesh3D) => {
+                          this._lodeLog(this._loadRes[this._loadOrderIndex], classifyIndex, Mesh3D, '3D网格', () => {
+                              this.$mesh3D[classifyIndex].mesh3D = Mesh3D;
                           });
                       }));
                       break;
                   case this.$texture:
-                      Laya.loader.load(this.$texture[index].url, Laya.Handler.create(this, (tex) => {
-                          this.lodeFunc(this._loadOrder[this._loadOrderIndex], index, tex, '纹理', () => {
-                              this.$texture[index].texture = tex;
+                      Laya.loader.load(this.$texture[classifyIndex].url, Laya.Handler.create(this, (tex) => {
+                          this._lodeLog(this._loadRes[this._loadOrderIndex], classifyIndex, tex, '纹理', () => {
+                              this.$texture[classifyIndex].texture = tex;
                           });
                       }));
                       break;
                   case this.$texture2D:
-                      Laya.Texture2D.load(this.$texture2D[index].url, Laya.Handler.create(this, (tex2D) => {
-                          this.lodeFunc(this._loadOrder[this._loadOrderIndex], index, tex2D, '3D纹理', () => {
-                              this.$texture2D[index].texture2D = tex2D;
+                      Laya.Texture2D.load(this.$texture2D[classifyIndex].url, Laya.Handler.create(this, (tex2D) => {
+                          this._lodeLog(this._loadRes[this._loadOrderIndex], classifyIndex, tex2D, '3D纹理', () => {
+                              this.$texture2D[classifyIndex].texture2D = tex2D;
                           });
                       }));
                       break;
                   case this.$effectsTex2D:
-                      Laya.Texture2D.load(this.$effectsTex2D[index].url, Laya.Handler.create(this, (tex2D) => {
-                          this.lodeFunc(this._loadOrder[this._loadOrderIndex], index, tex2D, '3D纹理', () => {
-                              this.$effectsTex2D[index].texture2D = tex2D;
+                      Laya.Texture2D.load(this.$effectsTex2D[classifyIndex].url, Laya.Handler.create(this, (tex2D) => {
+                          this._lodeLog(this._loadRes[this._loadOrderIndex], classifyIndex, tex2D, '3D纹理', () => {
+                              this.$effectsTex2D[classifyIndex].texture2D = tex2D;
                           });
                       }));
                       break;
                   case this.$material:
-                      Laya.Material.load(this.$material[index].url, Laya.Handler.create(this, (Material) => {
-                          this.lodeFunc(this._loadOrder[this._loadOrderIndex], index, Material, '3D纹理', () => {
-                              this.$material[index].material = Material;
+                      Laya.Material.load(this.$material[classifyIndex].url, Laya.Handler.create(this, (Material) => {
+                          this._lodeLog(this._loadRes[this._loadOrderIndex], classifyIndex, Material, '3D纹理', () => {
+                              this.$material[classifyIndex].material = Material;
                           });
                       }));
                       break;
                   case this.$json:
-                      Laya.loader.load(this.$json[index].url, Laya.Handler.create(this, (Json) => {
-                          this.lodeFunc(this._loadOrder[this._loadOrderIndex], index, Json, '数据表', () => {
-                              this.$json[index].dataArr = Json["RECORDS"];
+                      Laya.loader.load(this.$json[classifyIndex].url, Laya.Handler.create(this, (Json) => {
+                          this._lodeLog(this._loadRes[this._loadOrderIndex], classifyIndex, Json, '数据表', () => {
+                              this.$json[classifyIndex].dataArr = Json["RECORDS"];
                           });
                       }), null, Laya.Loader.JSON);
                       break;
                   case this.$skeleton:
-                      this.$skeleton[index].templet.on(Laya.Event.ERROR, this, () => {
-                          console.log('XXXXXXXXXXX骨骼动画' + this.$skeleton[index] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
-                          this.stepComplete();
+                      this.$skeleton[classifyIndex].templet.on(Laya.Event.ERROR, this, () => {
+                          console.log('XXXXXXXXXXX骨骼动画' + this.$skeleton[classifyIndex] + '加载失败！不会停止加载进程！', '数组下标为：', classifyIndex, 'XXXXXXXXXXX');
+                          this._stepComplete();
                       });
-                      this.$skeleton[index].templet.on(Laya.Event.COMPLETE, this, () => {
-                          console.log('骨骼动画', this.$skeleton[index].url, '加载完成！', '数组下标为：', index);
-                          this.stepComplete();
+                      this.$skeleton[classifyIndex].templet.on(Laya.Event.COMPLETE, this, () => {
+                          console.log('骨骼动画', this.$skeleton[classifyIndex].url, '加载完成！', '数组下标为：', classifyIndex);
+                          this._stepComplete();
                       });
-                      this.$skeleton[index].templet.loadAni(this.$skeleton[index].url);
+                      this.$skeleton[classifyIndex].templet.loadAni(this.$skeleton[classifyIndex].url);
                       break;
                   case this.$prefab2D:
-                      Laya.loader.load(this.$prefab2D[index].url, Laya.Handler.create(this, (prefabJson) => {
-                          this.lodeFunc(this._loadOrder[this._loadOrderIndex], index, prefabJson, '2D预制体', () => {
-                              let _prefab = new Laya.Prefab();
+                      Laya.loader.load(this.$prefab2D[classifyIndex].url, Laya.Handler.create(this, (prefabJson) => {
+                          this._lodeLog(this._loadRes[this._loadOrderIndex], classifyIndex, prefabJson, '2D预制体', () => {
+                              const _prefab = new Laya.Prefab();
                               _prefab.json = prefabJson;
-                              this.$prefab2D[index].prefab2D = _prefab;
+                              this.$prefab2D[classifyIndex].prefab2D = _prefab;
                           });
                       }));
                       break;
@@ -6956,7 +7033,7 @@
   (function (LwgInit) {
       class _InitScene extends LwgScene.SceneBase {
           lwgOpenAni() {
-              return 100;
+              return 10;
           }
           moduleOnStart() {
               LwgDate.init();
@@ -7314,10 +7391,10 @@
   })(_Res || (_Res = {}));
 
   class EnemyBullet {
-      static clearBullet(Bullet) {
-          Laya.timer.clearAll(Bullet);
-          Laya.Tween.clearAll(Bullet);
-          Bullet.destroy(true);
+      static clearBullet(bullet) {
+          Laya.timer.clearAll(bullet);
+          Laya.Tween.clearAll(bullet);
+          bullet.destroy(true);
       }
       static checkStageAndHero(Bullet, checkHero = true) {
           LwgTimer.frameLoop(1, Bullet, () => {
@@ -7346,9 +7423,10 @@
           }
       }
       static createBase(enemy, type, checkType) {
-          let prefab = _Res.$prefab2D[type]['prefab2D'];
-          const bullet = LwgTools.Node.createPrefab(prefab, this.Parent, [enemy._lwg.gPoint.x, enemy._lwg.gPoint.y]);
-          bullet.name = type;
+          const prefab = _Res.$prefab2D[type].prefab2D;
+          const bullet = LwgTools.Node.createPrefabByPool(prefab, this.Parent, [enemy._lwg.gPoint.x, enemy._lwg.gPoint.y], null, null, type);
+          bullet['_prefab2D'] = prefab;
+          bullet['moveCaller'] = new Object();
           switch (checkType) {
               case this.ChekType.bullet:
                   this.checkStageAndHero(bullet);
@@ -7419,7 +7497,7 @@
           return this.ins;
       }
       createBuff(type, Parent, x, y, script) {
-          const Buff = LwgTools.Node.createPrefab(_Res.$prefab2D.Buff.prefab2D, Parent, [x, y], script);
+          const Buff = LwgTools.Node.createPrefabByPool(_Res.$prefab2D.Buff.prefab2D, Parent, [x, y], script);
           Buff['buffType'] = type;
           return Buff;
       }
@@ -7443,7 +7521,7 @@
           this.quantity--;
           const shellNum = this.levelData[this._otherPro.shellNum];
           let shellNumTime = 0;
-          const element = LwgTools.Node.createPrefab(_Res.$prefab2D.Enemy.prefab2D, this.Parent);
+          const element = LwgTools.Node.createPrefabByPool(_Res.$prefab2D.Enemy.prefab2D, this.Parent);
           shellNumTime++;
           const color = LwgTools._Array.randomGetOne(['blue', 'yellow', 'red']);
           element.name = `${color}${color}`;
@@ -7477,7 +7555,7 @@
           this.createLevelBoss(Parent, BossScript);
       }
       createLevelBoss(Parent, BossScript) {
-          const element = LwgTools.Node.createPrefab(_Res.$prefab2D.Boss.prefab2D, Parent);
+          const element = LwgTools.Node.createPrefabByPool(_Res.$prefab2D.Boss.prefab2D, Parent);
           element.name = `Boss`;
           let speed = LwgTools.Num.randomOneBySection(this.speed[0], this.speed[1]);
           speed = LwgTools.Num.randomOneHalf() == 0 ? -speed : speed;
@@ -8124,7 +8202,7 @@
           });
       }
       deathFunc() {
-          this._openScene('Victory', false);
+          this._openScene('Victory', null, false);
       }
   }
 
@@ -8181,7 +8259,7 @@
       }
       deathFunc() {
           if (this._Owner.name === 'Boss') {
-              LwgTools.Node.createPrefab(_Res.$prefab2D.Heroine.prefab2D, this._Parent, [this._Owner.x, this._Owner.y], Levels_Heroine);
+              LwgTools.Node.createPrefabByPool(_Res.$prefab2D.Heroine.prefab2D, this._Parent, [this._Owner.x, this._Owner.y], Levels_Heroine);
           }
           else {
               this._evNotify(_GameEvent.addEnemy);
@@ -8278,7 +8356,7 @@
           this.Hero = _Hero;
       }
       createWeapon(style, x, y) {
-          const Weapon = LwgTools.Node.createPrefab(_Res.$prefab2D.Weapon.prefab2D);
+          const Weapon = LwgTools.Node.createPrefabByPool(_Res.$prefab2D.Weapon.prefab2D);
           this.WeaponParent.addChild(Weapon);
           Weapon.addComponent(Levels_HeroWeapon);
           Weapon.pos(x, y);
@@ -8321,7 +8399,7 @@
           });
       }
       deathFunc() {
-          this._openScene('Defeated', false);
+          this._openScene('Defeated', null, false);
       }
       lwgEvent() {
           this._evReg(_GameEvent.checkEnemyBullet, (Bullet, numBlood) => {
@@ -8444,7 +8522,7 @@
 
   class Levels extends LwgScene.SceneBase {
       lwgOnAwake() {
-          this._Owner['Hero'] = LwgTools.Node.createPrefab(_Res.$prefab2D.Hero.prefab2D, this._Owner, [Laya.stage.width / 2, Laya.stage.height * 2 / 3]);
+          this._Owner['Hero'] = LwgTools.Node.createPrefabByPool(_Res.$prefab2D.Hero.prefab2D, this._Owner, [Laya.stage.width / 2, Laya.stage.height * 2 / 3]);
           this._ImgVar('Hero').addComponent(Levels_Hero);
           for (let index = 0; index < this._ImgVar('MiddleScenery').numChildren; index++) {
               const element = this._ImgVar('MiddleScenery').getChildAt(index);

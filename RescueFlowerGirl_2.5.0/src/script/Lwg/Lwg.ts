@@ -1247,7 +1247,7 @@ export module LwgCurrency {
             Laya.loader.load('Prefab/LwgGold.json', Laya.Handler.create(this, function (prefabJson: JSON) {
                 const _prefab = new Laya.Prefab;
                 _prefab.json = prefabJson;
-                Img = LwgTools.Node.createPrefab(_prefab, parent, [x, y], null, 100) as LwgNode.Image;
+                Img = LwgTools.Node.createPrefabByPool(_prefab, parent, [x, y], null, 100) as LwgNode.Image;
                 _GoldNode = Img;
                 updateNumNode();
             }));
@@ -1515,47 +1515,98 @@ export module LwgEvent {
 
 /**日期管理*/
 export module LwgDate {
-    export const date = {
+    export class PresentDate {
         /**年*/
-        get year(): number {
+        static get year(): number {
             return (new Date()).getFullYear();
-        },
+        };
         /**月*/
-        get month(): number {
+        static get month(): number {
             return (new Date()).getMonth();
-        },
+        };
         /**日*/
-        get date(): number {
+        static get date(): number {
             return (new Date()).getDate();
-        },
+        };
         /**周几*/
-        get day(): number {
+        static get day(): number {
             return (new Date()).getDay();
-        },
+        };
         /**小时*/
-        get hours(): number {
+        static get hours(): number {
             return (new Date()).getHours();
-        },
+        };
         /**分钟*/
-        get minutes(): number {
+        static get minutes(): number {
             return (new Date()).getMinutes();
-        },
+        };
         /**秒*/
-        get seconds(): number {
+        static get seconds(): number {
             return (new Date()).getSeconds();
-        },
+        };
         /**毫秒*/
-        get milliseconds(): number {
+        static get milliseconds(): number {
             return (new Date()).getMilliseconds();
-        },
+        };
         /**全日期*/
-        get toLocaleDateString(): string {
+        static get toLocaleDateString(): string {
             return (new Date()).toLocaleDateString();
-        },
+        };
         /**当前时间*/
-        get toLocaleTimeString(): string {
+        static get toLocaleTimeString(): string {
             return (new Date()).toLocaleTimeString();
+        };
+        /**时间戳 */
+        static get time(): number {
+            return (new Date()).getTime();
+        };
+        /**
+         * 和上个时间相差多少小时
+         * @param lastTime 为时间戳
+         */
+        static howHoursDiffFromLastTime(lastTime: number): number {
+            return hoursByTimestamp(lastTime, this.time);
+        };
+        /**
+          * 和上个时间相差多少分钟
+          * @param lastTime 为时间戳
+          */
+        static howMinutsDiffFromLastTime(lastTime: number): number {
+            return minutesByTimestamp(lastTime, this.time);
         }
+
+        /**
+        * 和上个时间相差多少分钟
+        * @param lastTime 为时间戳
+        */
+        static howSecondsDiffFromLastTime(lastTime: number): number {
+            return secondsByTimestamp(lastTime, this.time);
+        }
+
+
+        /**
+         * 和下一个时间相差多少小时
+         * @param NextTime 为时间戳
+         */
+        static howHoursDiffFromNextTime(NextTime: number): number {
+            return hoursByTimestamp(this.time, NextTime);
+        };
+        /**
+          * 和下一个时间相差多少分钟
+          * @param NextTime 为时间戳
+          */
+        static howMinutsDiffFromNextTime(NextTime: number): number {
+            return minutesByTimestamp(this.time, NextTime);
+        }
+
+        /**
+        * 和下一个时间相差多少分钟
+        * @param NextTime 为时间戳
+        */
+        static howSecondsDiffFromNextTime(NextTime: number): number {
+            return secondsByTimestamp(this.time, NextTime);
+        }
+
     }
     export function init(): void {
         const d = new Date;
@@ -1583,7 +1634,7 @@ export module LwgDate {
             return Laya.LocalStorage.getItem('LwgDate/loginToday') ? Number(Laya.LocalStorage.getItem('LwgDate/loginToday')) : 0;
         },
         set num(val: number) {
-            if (date.date == loginInfo.value[loginInfo.value.length - 1][2]) {
+            if (PresentDate.date == loginInfo.value[loginInfo.value.length - 1][2]) {
                 Laya.LocalStorage.setItem('LwgDate/loginToday', val.toString());
             }
         }
@@ -1603,6 +1654,72 @@ export module LwgDate {
         get date(): number {
             return loginInfo.value[loginInfo.value.length - 1][2];
         },
+    }
+
+    /**时间戳变成时间 */
+    export function changeTimestamp(msec: number): {
+        hours: number,
+        minutes: number,
+        seconds: number,
+    } {
+        let hours = parseInt(`${msec / (1000 * 60 * 60)}`).toString();
+        let minutes = parseInt(`${(msec % (1000 * 60 * 60)) / (1000 * 60)}`).toString();
+        let seconds = parseInt(`${(msec % (1000 * 60)) / 1000}`).toString();
+        return {
+            hours: +hours,
+            minutes: +minutes,
+            seconds: +seconds,
+        }
+    }
+
+    /**
+     *两个时间戳的差值换算为时间， time1为起始时间，time2为结束
+     * @param {number} timestampStart 起始时间
+     * @param {number} timestampEnd 结束时间
+     */
+    export function differenceInTimestamp(timestampStart: number, timestampEnd: number) {
+        let msec = (Math.floor(timestampEnd / 1000) - Math.floor(timestampStart / 1000)) * 1000;
+        const timeObj = changeTimestamp(msec);
+        let hours = timeObj.hours < 10 ? '0' + timeObj.hours : timeObj.hours.toString();
+        let minutes = timeObj.minutes < 10 ? '0' + timeObj.minutes : timeObj.minutes.toString();
+        let seconds = timeObj.seconds < 10 ? '0' + timeObj.seconds : timeObj.seconds.toString();
+        return hours + ':' + minutes + ':' + seconds;
+    }
+    /**
+     * 两个时间戳的差转换为分钟
+     * @param timestampStart 起始时间
+     * @param timestampEnd 结束时间
+     * @returns 
+     */
+    export function minutesByTimestamp(timestampStart: number, timestampEnd: number) {
+        let msec = (Math.floor(timestampEnd / 1000) - Math.floor(timestampStart / 1000)) * 1000;
+        const timeObj = changeTimestamp(msec);
+        return timeObj.hours * 60 + timeObj.minutes + timeObj.seconds / 60;
+    }
+
+    /**
+     * 两个时间戳的差转换为秒
+     * @param timestampStart 起始时间
+     * @param timestampEnd 结束时间
+     * @returns 
+     */
+    export function secondsByTimestamp(timestampStart: number, timestampEnd: number) {
+        let msec = (Math.floor(timestampEnd / 1000) - Math.floor(timestampStart / 1000)) * 1000;
+        const timeObj = changeTimestamp(msec);
+        return timeObj.hours * 3600 + timeObj.minutes * 60 + timeObj.seconds;
+    }
+
+
+    /**
+     * 两个时间戳的差转换为小时
+     * @param timestampStart 起始时间
+     * @param timestampEnd 结束时间
+     * @returns 
+     */
+    export function hoursByTimestamp(timestampStart: number, timestampEnd: number) {
+        let msec = (Math.floor(timestampEnd / 1000) - Math.floor(timestampStart / 1000)) * 1000;
+        const timeObj = changeTimestamp(msec);
+        return timeObj.hours + timeObj.minutes * 60 + timeObj.seconds * 3600;
     }
 }
 
@@ -8085,8 +8202,8 @@ export module LwgTools {
             }
         }
 
-        /**
-          *通过prefab创建一个实例
+         /**
+           * 通过prefab创建一个实例,
            * @param {Laya.Prefab} prefab 预制体
            * @param {Laya.Node} [Parent] 父节点
            * @param { [number, number]} [point] 坐标
@@ -8095,7 +8212,7 @@ export module LwgTools {
            * @param {string} [name] 名称
            * @return {*}  {Laya.Sprite}
            */
-        export function createPrefab(prefab: Laya.Prefab, Parent?: Laya.Node, point?: [number, number], script?: any, zOrder?: number, name?: string): LwgNode.Sprite {
+        export function createPrefabByPool(prefab: Laya.Prefab, Parent?: Laya.Node, point?: [number, number], script?: any, zOrder?: number, name?: string): LwgNode.Sprite {
             name = name ? name : prefab.json['props']['name'];
             const Sp: Laya.Sprite = Laya.Pool.getItemByCreateFun(name, prefab.create, prefab);
             Parent && Parent.addChild(Sp);
@@ -9219,36 +9336,40 @@ export module LwgTools {
 
 /**加载模块*/
 export module LwgPreLoad {
-
+    type lodebase = {
+        url: string,
+        /**销毁类型 */
+        destoryType?: string,
+    }
     /**3D场景的加载，其他3D物体，贴图，Mesh详见：  https://ldc2.layabox.com/doc/?nav=zh-ts-4-3-1   */
-    export type scene3D = { url: string, scene3D: Laya.Scene3D };
+    export type scene3D = { scene3D: Laya.Scene3D } & lodebase;
     /**3D预设的加载，其他3D物体，贴图，Mesh详见：  https://ldc2.layabox.com/doc/?nav=zh-ts-4-3-1   */
-    export type prefab3D = { url: string, prefab3D: Laya.Sprite3D };
+    export type prefab3D = { url: string, prefab3D: Laya.Sprite3D } & lodebase;
     /**模型网格详见：  https://ldc2.layabox.com/doc/?nav=zh-ts-4-3-1   */
-    export type mesh3D = { url: string, mesh3D: Laya.Mesh };
+    export type mesh3D = { url: string, mesh3D: Laya.Mesh } & lodebase;
     /**材质详见：  https://ldc2.layabox.com/doc/?nav=zh-ts-4-3-1   */
-    export type material = { url: string, material: Laya.Material };
+    export type material = { url: string, material: Laya.Material } & lodebase;
     /**2D纹理*/
-    export type texture = { url: string | string[], texture: Laya.Texture };
+    export type texture = { url: string | string[], texture: Laya.Texture | Laya.Texture[] } & lodebase;
     /**3D纹理加载详见：  https://ldc2.layabox.com/doc/?nav=zh-ts-4-3-1   */
-    export type texture2D = { url: string, texture2D: Laya.Texture2D };
+    export type texture2D = { texture2D: Laya.Texture2D } & lodebase;
     /**需要加载的图片资源列表,一般是界面的图片*/
-    export type pic2D = { url: string };
+    export type image = { url: string | string[], img: string | string[] } & lodebase;
     /**2D场景*/
-    export type scene2D = { url: string };
+    export type scene2D = { scene: string } & lodebase;
     /**2D预制体*/
-    export type prefab2D = { url: string, prefab2D: Laya.Prefab };
+    export type prefab2D = { prefab2D: Laya.Prefab } & lodebase;
     /**数据表、场景和预制体的加载，在框架中，json数据表为必须加载的项目*/
-    export type json = { url: string, dataArr: any[] };
+    export type json = { dataArr: any[] } & lodebase;
     /**数据表、场景和预制体的加载，在框架中，json数据表为必须加载的项目*/
-    export type skeleton = { url: string, templet: Laya.Templet };
+    export type skeleton = { templet: Laya.Templet } & lodebase;
     /**特效列表中的tex2d*/
-    export type effectsTex2D = { url: string, texture2D: Laya.Texture2D, name: string };
+    export type effectsTex2D = { texture2D: Laya.Texture2D, name: string } & lodebase;
     /**如果需要加载一组数据,[url1.url2,...]，则可以将需要加载的数组进行遍历赋值给相对应的对象的url，直接加载整个数组也是成立的,只不过加载后，只能通过Laya.loader.getRes(url)获取*/
 
     export class _PreLoadScene extends LwgScene.SceneBase {
         // 将模块中的类型格式装进数组,_res中的加载格式必须与其中的类型一一匹配
-        private $pic2D: Array<pic2D> = [];
+        private $image: Array<image> = [];
         private $texture: Array<texture> = [];
         private $prefab2D: Array<prefab2D> = [];
         private $scene2D: Array<scene2D> = [];
@@ -9261,13 +9382,19 @@ export module LwgPreLoad {
         private $json: Array<json> = [];
         private $skeleton: Array<skeleton> = [];
         /**加载顺序依次为3d,2d,数据表，可修改*/
-        private _loadOrder: Array<any> = [this.$pic2D, this.$texture, this.$prefab2D, this.$scene2D, this.$prefab3D, this.$texture2D, this.$effectsTex2D, this.$material, this.$mesh3D, this.$scene3D, this.$json, this.$skeleton];
+        private _loadRes: Array<any> = [this.$image, this.$texture, this.$prefab2D, this.$scene2D, this.$prefab3D, this.$texture2D, this.$effectsTex2D, this.$material, this.$mesh3D, this.$scene3D, this.$json, this.$skeleton];
         /**当前加载到哪个分类数组*/
-        _loadOrderIndex: number = 0;
-        /**进度条总长度,长度为以上三个加载资源类型的数组总长度*/
-        _sumProgress: number = 0;
-        /**当前进度条进度,起始位0，每加载成功1个资源，则加1, this._currentProgress.value / _sumProgress为进度百分比获取进度*/
-        _currentProgress = 0;
+        private _loadOrderIndex: number = 0;
+        /**进度条总长度,长度为所有加载资源类型的数组总长度*/
+        private _sumProgress: number = 0;
+        /**当前进度条进度,起始位0，每加载成功1个资源，则加1*/
+        private _currentProgress = 0;
+        /**获取加载百分比 */
+        public get lodePercent(): number {
+            return this._currentProgress / this._sumProgress;
+        }
+        public showLodeLog: boolean = true;
+
         /**载入加载项,执行这个函数开始加载*/
         lwgStartLoding(listObj: any): void {
             listObj['$effectsTex2D'] = LwgEff3D.tex2D;
@@ -9283,22 +9410,22 @@ export module LwgPreLoad {
                 }
             }
             // 将长度为零的数组删掉,并且计算出总长度 
-            for (let index = 0; index < this._loadOrder.length; index++) {
-                this._sumProgress += this._loadOrder[index].length;
-                if (this._loadOrder[index].length <= 0) {
-                    this._loadOrder.splice(index, 1);
+            for (let index = 0; index < this._loadRes.length; index++) {
+                this._sumProgress += this._loadRes[index].length;
+                if (this._loadRes[index].length <= 0) {
+                    this._loadRes.splice(index, 1);
                     index--;
                 }
             }
             // 开场动画后再进行加载
-            let time = this.lwgOpenAni();
+            const time = this.lwgOpenAni();
             Laya.timer.once(time ? time : 0, this, () => {
-                this.lode();
+                this._lode();
             })
         }
         /**每单个资源加载成功后，进度条每次增加后的回调，第一次加载将会在openAni动画结束之后*/
         lwgStepComplete(): void { }
-        /**资源全部加载完成回调,每个游戏不一样,此方法执行后，自动进入init界面，也可以延时进入*/
+        /**资源全部加载完成回调,返回的时间根据游戏动态调整,此方法执行后，根据返回的时间自动进入start界面*/
         lwgAllComplete(): number { return 0 };
         /**
          *单个步骤
@@ -9306,36 +9433,38 @@ export module LwgPreLoad {
          * @return {*}  {void}
          * @memberof _PreLoadScene
          */
-        private stepComplete(): void {
+        private _stepComplete(): void {
             this._currentProgress++;
-            console.log('当前进度条进度:', this._currentProgress / this._sumProgress);
+            this.showLodeLog && console.log('当前进度条进度:', this._currentProgress / this._sumProgress);
+
             if (this._currentProgress >= this._sumProgress) {
                 if (this._sumProgress == 0) {
                     return;
                 }
-                console.log(`所有资源加载完成！此时所有资源可通过例如:Laya.loader.getRes("url")获取`);
-                this.allComplete();
+                this.showLodeLog && console.log(`所有资源加载完成！此时所有资源可通过例如:Laya.loader.getRes("url")获取`);
+                this._allComplete();
             } else {
                 // 当前进度达到当前长度节点时,去到下一个数组加载
                 let number = 0;
                 for (let index = 0; index <= this._loadOrderIndex; index++) {
-                    number += this._loadOrder[index].length;
+                    number += this._loadRes[index].length;
                 }
                 if (this._currentProgress === number) {
                     this._loadOrderIndex++;
                 }
-                this.lode();
                 this.lwgStepComplete();
+                this._lode();
             }
         }
+
         /**
          * 全部完成时
          * @private
          * @memberof _PreLoadScene
          */
-        private allComplete(): void {
+        private _allComplete(): void {
             Laya.timer.once(this.lwgAllComplete(), this, () => {
-                // 页面前
+                // 页面前加载会打开也勉强加载的场景
                 if (this._Owner.name == LwgScene._BaseName._PreLoadCutIn) {
                     this._openScene(LwgScene._PreLoadCutIn.openName);
                 } else {
@@ -9343,8 +9472,9 @@ export module LwgPreLoad {
                 }
             })
         }
+
         /**
-         * 单个加载结束后
+         * 加载日志
          * @private
          * @param {any[]} resArr 当前加载的数组种类
          * @param {number} index 索引值
@@ -9353,129 +9483,131 @@ export module LwgPreLoad {
          * @param {Function} completeFunc 结束后的资源处理函数
          * @memberof _PreLoadScene 
          */
-        private lodeFunc(resArr: any[], index: number, res: any, typeName: string, completeFunc: Function): void {
+        private _lodeLog(resArr: any[], index: number, res: any, typeName: string, completeFunc: Function): void {
             const url = resArr[index].url;
             if (typeof url === 'object') {
-                console.log(typeName, url, `数组加载完成，为数组对象，只能从getRes（url）中逐个获取`)
+                this.showLodeLog && console.log(typeName, url, `数组加载完成，为数组对象，只能从getRes（url）中逐个获取`);
             } else {
                 if (res == null) {
-                    console.log(`XXXXXXXXXXX${typeName}:${url}加载失败！不会停止加载进程！, 数组下标为：${index}, 'XXXXXXXXXXX`);
+                    this.showLodeLog && console.log(`XXXXXXXXXXX${typeName}:${url}加载失败！不会停止加载进程！, 数组下标为：${index}, 'XXXXXXXXXXX`);
                 } else {
-                    console.log(`${typeName}:${url}加载完成！, 数组下标为${index}`);
+                    this.showLodeLog && console.log(`${typeName}:${url}加载完成！, 数组下标为${index}`);
                     completeFunc && completeFunc();
                 }
             }
-            this.stepComplete();
+            this._stepComplete();
         }
+
         /**根据加载顺序依次加载,第一次加载将会在openAni动画结束之后*/
-        private lode(): void {
-            if (this._loadOrder.length <= 0) {
-                console.log('没有加载项');
-                this.allComplete();
+        private _lode(): void {
+            if (this._loadRes.length <= 0) {
+                this.showLodeLog && console.log('没有加载项');
+                this._allComplete();
                 return;
             }
-            // 已经加载过的分类数组的长度
-            let alreadyPro: number = 0;
+            // 已经加载过的分类数组的总长度，从0陆续带入可以看到其实alreadyClassifyLen长度是不包括当前分组的
+            let alreadyClassifyLen: number = 0;
             for (let i = 0; i < this._loadOrderIndex; i++) {
-                alreadyPro += this._loadOrder[i].length;
+                alreadyClassifyLen += this._loadRes[i].length;
             }
             //获取到当前分类加载数组的下标 
-            let index = this._currentProgress - alreadyPro;
-            // 分类加载
-            switch (this._loadOrder[this._loadOrderIndex]) {
-                case this.$pic2D:
-                    Laya.loader.load(this.$pic2D[index].url, Laya.Handler.create(this, (res: any) => {
-                        this.lodeFunc(this._loadOrder[this._loadOrderIndex], index, res, '2D图片', null);
+            const classifyIndex = this._currentProgress - alreadyClassifyLen;
+
+            switch (this._loadRes[this._loadOrderIndex]) {
+                case this.$image:
+                    Laya.loader.load(this.$image[classifyIndex].url, Laya.Handler.create(this, (res: any) => {
+                        this._lodeLog(this._loadRes[this._loadOrderIndex], classifyIndex, res, '2D图片', null);
                     }));
                     break;
 
                 case this.$scene2D:
-                    Laya.loader.load(this.$scene2D[index].url, Laya.Handler.create(this, (res: Laya.Scene) => {
-                        this.lodeFunc(this._loadOrder[this._loadOrderIndex], index, res, '2D场景', null);
+                    Laya.loader.load(this.$scene2D[classifyIndex].url, Laya.Handler.create(this, (res: Laya.Scene) => {
+                        this._lodeLog(this._loadRes[this._loadOrderIndex], classifyIndex, res, '2D场景', null);
                     }), null, Laya.Loader.JSON);
                     break;
 
                 case this.$scene3D:
-                    Laya.Scene3D.load(this.$scene3D[index].url, Laya.Handler.create(this, (Scene3D: Laya.Scene3D) => {
-                        this.lodeFunc(this._loadOrder[this._loadOrderIndex], index, Scene3D, '3D场景', () => {
-                            this.$scene3D[index].scene3D = Scene3D;
+                    Laya.Scene3D.load(this.$scene3D[classifyIndex].url, Laya.Handler.create(this, (Scene3D: Laya.Scene3D) => {
+                        this._lodeLog(this._loadRes[this._loadOrderIndex], classifyIndex, Scene3D, '3D场景', () => {
+                            this.$scene3D[classifyIndex].scene3D = Scene3D;
                         });
                     }));
                     break;
 
                 case this.$prefab3D:
-                    Laya.Sprite3D.load(this.$prefab3D[index].url, Laya.Handler.create(this, (Sp3D: Laya.Sprite3D) => {
-                        this.lodeFunc(this._loadOrder[this._loadOrderIndex], index, Sp3D, '3D预制体', () => {
-                            this.$prefab3D[index].prefab3D = Sp3D;
+                    Laya.Sprite3D.load(this.$prefab3D[classifyIndex].url, Laya.Handler.create(this, (Sp3D: Laya.Sprite3D) => {
+                        this._lodeLog(this._loadRes[this._loadOrderIndex], classifyIndex, Sp3D, '3D预制体', () => {
+                            this.$prefab3D[classifyIndex].prefab3D = Sp3D;
                         });
                     }));
                     break;
 
                 case this.$mesh3D:
-                    Laya.Mesh.load(this.$mesh3D[index].url, Laya.Handler.create(this, (Mesh3D: Laya.Mesh) => {
-                        this.lodeFunc(this._loadOrder[this._loadOrderIndex], index, Mesh3D, '3D网格', () => {
-                            this.$mesh3D[index].mesh3D = Mesh3D;
+                    Laya.Mesh.load(this.$mesh3D[classifyIndex].url, Laya.Handler.create(this, (Mesh3D: Laya.Mesh) => {
+                        this._lodeLog(this._loadRes[this._loadOrderIndex], classifyIndex, Mesh3D, '3D网格', () => {
+                            this.$mesh3D[classifyIndex].mesh3D = Mesh3D;
                         });
                     }));
                     break;
 
                 case this.$texture:
-                    Laya.loader.load(this.$texture[index].url, Laya.Handler.create(this, (tex: Laya.Texture) => {
-                        this.lodeFunc(this._loadOrder[this._loadOrderIndex], index, tex, '纹理', () => {
-                            this.$texture[index].texture = tex;
+                    Laya.loader.load(this.$texture[classifyIndex].url, Laya.Handler.create(this, (tex: Laya.Texture) => {
+                        this._lodeLog(this._loadRes[this._loadOrderIndex], classifyIndex, tex, '纹理', () => {
+                            this.$texture[classifyIndex].texture = tex;
                         });
                     }));
                     break;
 
                 case this.$texture2D:
-                    Laya.Texture2D.load(this.$texture2D[index].url, Laya.Handler.create(this, (tex2D: Laya.Texture2D) => {
-                        this.lodeFunc(this._loadOrder[this._loadOrderIndex], index, tex2D, '3D纹理', () => {
-                            this.$texture2D[index].texture2D = tex2D;
+                    Laya.Texture2D.load(this.$texture2D[classifyIndex].url, Laya.Handler.create(this, (tex2D: Laya.Texture2D) => {
+                        this._lodeLog(this._loadRes[this._loadOrderIndex], classifyIndex, tex2D, '3D纹理', () => {
+                            this.$texture2D[classifyIndex].texture2D = tex2D;
                         });
                     }));
                     break;
                 case this.$effectsTex2D:
-                    Laya.Texture2D.load(this.$effectsTex2D[index].url, Laya.Handler.create(this, (tex2D: Laya.Texture2D) => {
-                        this.lodeFunc(this._loadOrder[this._loadOrderIndex], index, tex2D, '3D纹理', () => {
-                            this.$effectsTex2D[index].texture2D = tex2D;
+                    Laya.Texture2D.load(this.$effectsTex2D[classifyIndex].url, Laya.Handler.create(this, (tex2D: Laya.Texture2D) => {
+                        this._lodeLog(this._loadRes[this._loadOrderIndex], classifyIndex, tex2D, '3D纹理', () => {
+                            this.$effectsTex2D[classifyIndex].texture2D = tex2D;
                         });
                     }));
                     break;
 
                 case this.$material:
-                    Laya.Material.load(this.$material[index].url, Laya.Handler.create(this, (Material: Laya.Material) => {
-                        this.lodeFunc(this._loadOrder[this._loadOrderIndex], index, Material, '3D纹理', () => {
-                            this.$material[index].material = Material;
+                    Laya.Material.load(this.$material[classifyIndex].url, Laya.Handler.create(this, (Material: Laya.Material) => {
+                        this._lodeLog(this._loadRes[this._loadOrderIndex], classifyIndex, Material, '3D纹理', () => {
+                            this.$material[classifyIndex].material = Material;
                         });
                     }));
                     break;
 
                 case this.$json:
-                    Laya.loader.load(this.$json[index].url, Laya.Handler.create(this, (Json: {}) => {
-                        this.lodeFunc(this._loadOrder[this._loadOrderIndex], index, Json, '数据表', () => {
-                            this.$json[index].dataArr = Json["RECORDS"];
+                    Laya.loader.load(this.$json[classifyIndex].url, Laya.Handler.create(this, (Json: {}) => {
+                        this._lodeLog(this._loadRes[this._loadOrderIndex], classifyIndex, Json, '数据表', () => {
+                            this.$json[classifyIndex].dataArr = Json["RECORDS"];
                         });
                     }), null, Laya.Loader.JSON);
                     break;
 
                 case this.$skeleton:
-                    this.$skeleton[index].templet.on(Laya.Event.ERROR, this, () => {
-                        console.log('XXXXXXXXXXX骨骼动画' + this.$skeleton[index] + '加载失败！不会停止加载进程！', '数组下标为：', index, 'XXXXXXXXXXX');
-                        this.stepComplete();
+                    //骨骼动画加载比较特殊
+                    this.$skeleton[classifyIndex].templet.on(Laya.Event.ERROR, this, () => {
+                        console.log('XXXXXXXXXXX骨骼动画' + this.$skeleton[classifyIndex] + '加载失败！不会停止加载进程！', '数组下标为：', classifyIndex, 'XXXXXXXXXXX');
+                        this._stepComplete();
                     });
-                    this.$skeleton[index].templet.on(Laya.Event.COMPLETE, this, () => {
-                        console.log('骨骼动画', this.$skeleton[index].url, '加载完成！', '数组下标为：', index);
-                        this.stepComplete();
+                    this.$skeleton[classifyIndex].templet.on(Laya.Event.COMPLETE, this, () => {
+                        console.log('骨骼动画', this.$skeleton[classifyIndex].url, '加载完成！', '数组下标为：', classifyIndex);
+                        this._stepComplete();
                     });
-                    this.$skeleton[index].templet.loadAni(this.$skeleton[index].url);
+                    this.$skeleton[classifyIndex].templet.loadAni(this.$skeleton[classifyIndex].url);
                     break;
 
                 case this.$prefab2D:
-                    Laya.loader.load(this.$prefab2D[index].url, Laya.Handler.create(this, (prefabJson: JSON) => {
-                        this.lodeFunc(this._loadOrder[this._loadOrderIndex], index, prefabJson, '2D预制体', () => {
-                            let _prefab = new Laya.Prefab();
+                    Laya.loader.load(this.$prefab2D[classifyIndex].url, Laya.Handler.create(this, (prefabJson: JSON) => {
+                        this._lodeLog(this._loadRes[this._loadOrderIndex], classifyIndex, prefabJson, '2D预制体', () => {
+                            const _prefab = new Laya.Prefab();
                             _prefab.json = prefabJson;
-                            this.$prefab2D[index].prefab2D = _prefab;
+                            this.$prefab2D[classifyIndex].prefab2D = _prefab;
                         });
                     }));
                     break;
@@ -9484,7 +9616,6 @@ export module LwgPreLoad {
                     break;
             }
         }
-
     }
     /**页面前的预加载*/
     export class _PreLoadCutInScene extends _PreLoadScene {
@@ -9496,11 +9627,12 @@ export module LwgPreLoad {
         }
     }
 }
-/**配置模块，拉去资源，分包等*/
+
+/**初始化模块，拉去资源，分包等*/
 export module LwgInit {
     export class _InitScene extends LwgScene.SceneBase {
         lwgOpenAni(): number {
-            return 100;
+            return 10;
         }
         moduleOnStart(): void {
             LwgDate.init();

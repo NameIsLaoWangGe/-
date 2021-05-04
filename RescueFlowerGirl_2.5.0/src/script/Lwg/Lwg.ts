@@ -117,9 +117,12 @@ export module LwgGame {
 /**场景流程控制*/
 export module LwgScene {
     /**场景控制,访问特定场景用_sceneControl[name]访问*/
-    export let SceneControl = {};
+    export const sceneControl = {};
     /**和场景名称一样的脚本,初始化的时候添加进去,这个脚本唯一，不可随意调用*/
-    export let SceneScript = [];
+    export let sceneScript = [];
+    /**打开的场景顺序,用于返回按钮返回,通过返回按钮返回回去的场景不会被记录，否则死循环 */
+    export const openSceneRecord = [];
+
     /**常用场景的名称，和脚本默认导出类名保持一致*/
     export class _BaseName {
         static _LwgInit = '_LwgInit';
@@ -141,6 +144,14 @@ export module LwgScene {
         static Task = 'Task';
     }
 
+    /**返回上个场景 */
+    export function ReturnToThePreviousScene(): void {
+        if (openSceneRecord.length >= 2) {
+            openScene(openSceneRecord[openSceneRecord.length - 2], null, openSceneRecord[openSceneRecord.length - 1]);
+            openSceneRecord.splice(openSceneRecord.length - 1, 1);
+        }
+    }
+
     /**
      * 将一个场景放到最上面
      * @static
@@ -148,9 +159,9 @@ export module LwgScene {
      */
     export function sceneZOderUp(upScene: Laya.Scene): void {
         let num = 0;
-        for (const key in SceneControl) {
-            if (Object.prototype.hasOwnProperty.call(SceneControl, key)) {
-                const Scene = SceneControl[key] as Laya.Scene;
+        for (const key in sceneControl) {
+            if (Object.prototype.hasOwnProperty.call(sceneControl, key)) {
+                const Scene = sceneControl[key] as Laya.Scene;
                 if (Scene.parent) {
                     //将现有的场景层级变成零，此时他们还是按照当前顺序排布
                     Scene.zOrder = 0;
@@ -176,11 +187,12 @@ export module LwgScene {
             //     Laya.stage.addChildAt(openScene, _openZOder);
             // } else {
             Laya.stage.addChild(openScene);
+
             // }
             // 添加同名脚本
             let spcriptBool = false;
-            for (let index = 0; index < SceneScript.length; index++) {
-                const element = SceneScript[index];
+            for (let index = 0; index < sceneScript.length; index++) {
+                const element = sceneScript[index];
                 if (element['name'] === openScene.name) {
                     if (!openScene.getComponent(element)) {
                         openScene.addComponent(element);
@@ -202,10 +214,8 @@ export module LwgScene {
      * @export 动画切换流程
      * @param {Laya.Scene}  openScene
      * @param {Laya.Scene}  closeScene
-     * @param {Function} _openFunc
-     * @param {Function} _closeFunc
      */
-    export function aniFlow(openScene: Laya.Scene, closeScene: Laya.Scene, _openFunc: Function, _closeFunc: Function): void {
+    export function aniFlow(openScene: Laya.Scene, closeScene: Laya.Scene,/** _openFunc: Function, _closeFunc: Function*/): void {
         // 1.初始默认为没有关闭动画closeAniTime=0；
         let closeAniTime = 0;
         let closeScript: SceneBase;
@@ -228,7 +238,7 @@ export module LwgScene {
             if (closeScene) {
                 closeScript && closeScript.lwgBeforeCloseAni();
                 closeScene.close();
-                _closeFunc && _closeFunc();
+                // _closeFunc && _closeFunc();
             }
             LwgClick.filter.value = LwgClick.filterType.all;
             // 这个场景可能没有
@@ -254,7 +264,7 @@ export module LwgScene {
                     Laya.timer.once(openAniTime, this, () => {
                         openScript.lwgOpenAniAfter();
                         openScript.lwgButton();
-                        _openFunc && _openFunc();
+                        // _openFunc && _openFunc();
                         LwgClick.filter.value = LwgClick.filterType.all;
                     })
                 }
@@ -274,20 +284,20 @@ export module LwgScene {
      * @param {Function} [func] 完成回调，默认为null
      * @param {number} [zOrder] 指定层级，默认为最上层
      */
-    export function preLoadOpenScene(openName: string, initData?: object, closeName?: string, func?: Function,/**zOrder?: number*/) {
+    export function preLoadOpenScene(openName: string, openData?: object, closeName?: string,/** func?: Function,zOrder?: number*/) {
         _PreLoadCutIn.openName = openName;
         _PreLoadCutIn.closeName = closeName;
-        openScene(_BaseName._PreLoadCutIn, initData, closeName, func,/**zOrder*/);
+        openScene(_BaseName._PreLoadCutIn, openData, closeName,/**func,zOrder*/);
     }
     /**
       * 打开场景
       * @param openName 需要打开的场景名称
       * @param closeName 需要关闭的场景，默认为null
-      * @param initData 传递给下个场景的初始化信息
+      * @param openData 传递给下个场景的初始化信息
       * @param func 完成回调，默认为null
       * @param zOrder 指定层级
      */
-    export function openScene(openName: string, initData?: object, closeName?: string, openfunc?: Function, /*zOrder?: number*/): void {
+    export function openScene(openName: string, openData?: object, closeName?: string, /*openfunc?: Function, zOrder?: number*/): void {
         LwgClick.filter.value = LwgClick.filterType.none;
         Laya.Scene.load('Scene/' + openName + '.json', Laya.Handler.create(this, function (scene: Laya.Scene) {
             // 如果该场景已经有了，则立即关闭，打开新的
@@ -296,10 +306,10 @@ export module LwgScene {
                 openScene.close();
                 console.log(`场景${openName}重复出现！前一个场景被关闭！`);
             }
-            openScene = SceneControl[scene.name = openName] = scene;
-            openScene['_initData'] = initData;
+            openScene = sceneControl[scene.name = openName] = scene;
+            openScene['_openData'] = openData;
             addToStage(openScene,/* zOrder*/);
-            aniFlow(openScene, SceneControl[closeName], openfunc, null);
+            aniFlow(openScene, sceneControl[closeName], /**openfunc, null*/);
         }))
     }
 
@@ -310,12 +320,12 @@ export module LwgScene {
      * */
     export function closeScene(closeName?: string, closefunc?: Function): void {
         // 判断名称是否正确
-        const closeScene = SceneControl[closeName] as Laya.Scene;
+        const closeScene = sceneControl[closeName] as Laya.Scene;
         if (!closeScene) {
             console.log(`场景${closeName}关闭失败，可能不存在！`);
             return;
         }
-        aniFlow(null, closeScene, null, closefunc);
+        aniFlow(null, closeScene,/**  null, closefunc*/);
     }
 
     /**
@@ -495,15 +505,15 @@ export module LwgScene {
           * @param func 完成回调，默认为null
           * @param zOrder 指定层级
          */
-        _openScene(openName: string, initData?: object, closeSelf?: boolean, preLoadCutIn?: boolean, func?: Function): void {
+        _openScene(openName: string, openData?: object, closeSelf?: boolean, preLoadCutIn?: boolean, func?: Function): void {
             let closeName: string;
             if (closeSelf === undefined || closeSelf === true) {
                 closeName = this.ownerSceneName;
             }
             if (!preLoadCutIn) {
-                LwgScene.openScene(openName, initData, closeName, func,/** zOrder*/);
+                LwgScene.openScene(openName, openData, closeName,/** func, zOrder*/);
             } else {
-                LwgScene.preLoadOpenScene(openName, initData, closeName, func,/** zOrder*/);
+                LwgScene.preLoadOpenScene(openName, openData, closeName,/** func, zOrder*/);
             }
         }
         /**
@@ -514,7 +524,7 @@ export module LwgScene {
         _closeScene(sceneName: string = this.ownerSceneName, func?: Function): void {
             // 关闭其他场景不能用通用动画
             if (sceneName !== this.ownerSceneName) {
-                const scene = LwgScene.SceneControl[sceneName] as Laya.Scene;
+                const scene = LwgScene.sceneControl[sceneName] as Laya.Scene;
                 const scirpt = scene[sceneName] as SceneBase;
                 const time = scirpt.lwgCloseAni();
                 Laya.timer.once(time ? time : 0, this, () => {
@@ -543,7 +553,7 @@ export module LwgScene {
             super();
         }
         /**初始化参数 */
-        _initData: object;
+        _openData: object;
         /**挂载当前脚本的节点*/
         get _Owner(): Laya.Scene {
             return this.owner as Laya.Scene;
@@ -608,8 +618,8 @@ export module LwgScene {
             return this.getVar(name, '_FontInput');
         }
         onAwake(): void {
-            this._initData = this._Owner['_initData'];
-            console.log(this._Owner.name, '初始化参数为', this._initData);
+            this._openData = this._Owner['_openData'];
+            // console.log(this._Owner.name, '初始化参数为', this._openData);
             // 自适应铺满
             this._Owner.width = Laya.stage.width;
             this._Owner.height = Laya.stage.height;
@@ -8202,16 +8212,16 @@ export module LwgTools {
             }
         }
 
-         /**
-           * 通过prefab创建一个实例,
-           * @param {Laya.Prefab} prefab 预制体
-           * @param {Laya.Node} [Parent] 父节点
-           * @param { [number, number]} [point] 坐标
-           * @param { [any]} [script] 添加脚本组件
-           * @param { [number]} [zOrder] 层级
-           * @param {string} [name] 名称
-           * @return {*}  {Laya.Sprite}
-           */
+        /**
+          * 通过prefab创建一个实例,
+          * @param {Laya.Prefab} prefab 预制体
+          * @param {Laya.Node} [Parent] 父节点
+          * @param { [number, number]} [point] 坐标
+          * @param { [any]} [script] 添加脚本组件
+          * @param { [number]} [zOrder] 层级
+          * @param {string} [name] 名称
+          * @return {*}  {Laya.Sprite}
+          */
         export function createPrefabByPool(prefab: Laya.Prefab, Parent?: Laya.Node, point?: [number, number], script?: any, zOrder?: number, name?: string): LwgNode.Sprite {
             name = name ? name : prefab.json['props']['name'];
             const Sp: Laya.Sprite = Laya.Pool.getItemByCreateFun(name, prefab.create, prefab);
@@ -9626,6 +9636,17 @@ export module LwgPreLoad {
             this.$closeName = LwgScene._PreLoadCutIn.closeName;
         }
     }
+}
+
+export module LwgBasePath {
+    export const LWGEFFECT: string = '';
+    export const LWGEFFECT3D: string = '';
+    export const LWGUI: string = '';
+    export const LWGVOICE: string = '';
+    export const LWGDATA: string = '';
+    export const SCENE: string = '';
+    export const PREFAB: string = '';
+    export const GAME: string = '';
 }
 
 /**初始化模块，拉去资源，分包等*/

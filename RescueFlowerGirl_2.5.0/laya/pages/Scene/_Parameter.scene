@@ -2,7 +2,7 @@
     "x":0,
     "type":"View",
     "selectedBox":2,
-    "selecteID":188,
+    "selecteID":184,
     "searchKey":"View",
     "referenceLines":[
         ],
@@ -33,7 +33,7 @@
                     "x":30,
                     "type":"Image",
                     "searchKey":"Image",
-                    "props":{"width":608,"skin":"Lwg/UI/rectangle_mask_05.png","sizeGrid":"10,7,17,16","height":477,"centerY":0,"centerX":0},
+                    "props":{"width":608,"skin":"Lwg/UI/corner_mask_05.png","sizeGrid":"10,7,17,16","height":477,"centerY":0,"centerX":0},
                     "nodeParent":188,
                     "label":"Image",
                     "isDirectory":false,

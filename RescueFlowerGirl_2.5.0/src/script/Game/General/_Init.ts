@@ -20,7 +20,7 @@ export default class _Init extends LwgInit._InitScene {
         };
         LwgClick.Use.value = LwgClick._Type.largen;
         LwgAdaptive.Use.value = [720, 1280];
-        LwgScene.SceneScript = [
+        LwgScene.sceneScript = [
             _PreLoad,
             _PreLoadCutIn,
             _Guide,

@@ -471,7 +471,6 @@
           }
           onAwake() {
               this._initData = this._Owner['_initData'];
-              console.log(this._Owner.name, '初始化参数为', this._initData);
               this._Owner.width = Laya.stage.width;
               this._Owner.height = Laya.stage.height;
               if (this._Owner.getChildByName('Background')) {
@@ -7029,6 +7028,17 @@
       }
       LwgPreLoad._PreLoadCutInScene = _PreLoadCutInScene;
   })(LwgPreLoad || (LwgPreLoad = {}));
+  var LwgBasePath;
+  (function (LwgBasePath) {
+      LwgBasePath.LWGEFFECT = '';
+      LwgBasePath.LWGEFFECT3D = '';
+      LwgBasePath.LWGUI = '';
+      LwgBasePath.LWGVOICE = '';
+      LwgBasePath.LWGDATA = '';
+      LwgBasePath.SCENE = '';
+      LwgBasePath.PREFAB = '';
+      LwgBasePath.GAME = '';
+  })(LwgBasePath || (LwgBasePath = {}));
   var LwgInit;
   (function (LwgInit) {
       class _InitScene extends LwgScene.SceneBase {
@@ -8867,7 +8877,7 @@
       lwgEvent() {
       }
       lwgButton() {
-          this._btnUp(this._ImgVar('BtnBack'), () => {
+          this._btnUp(this.owner.BtnBack, () => {
               this._openScene('Start');
               this._evNotify(_GameEvent.closeScene);
           });

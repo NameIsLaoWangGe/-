@@ -3,3 +3,167 @@ import View=Laya.View;
 import Dialog=Laya.Dialog;
 import Scene=Laya.Scene;
 var REG: Function = Laya.ClassUtils.regClass;
+export module ui.Scene {
+    export class DefeatedUI extends View {
+		public Background:Laya.Image;
+		public BtnBack:Laya.Image;
+        constructor(){ super()}
+        createChildren():void {
+            super.createChildren();
+            this.loadScene("Scene/Defeated");
+        }
+    }
+    REG("ui.Scene.DefeatedUI",DefeatedUI);
+    export class LevelsUI extends View {
+		public Background:Laya.Image;
+		public Content:Laya.Image;
+		public Land:Laya.Image;
+		public BehindScenery:Laya.Image;
+		public MiddleScenery:Laya.Image;
+		public FrontScenery:Laya.Image;
+		public EnemyParent:Laya.Image;
+		public EnemyHouse:Laya.Image;
+		public EBparrent:Laya.Image;
+		public WeaponParent:Laya.Image;
+		public BossParent:Laya.Image;
+        constructor(){ super()}
+        createChildren():void {
+            super.createChildren();
+            this.loadScene("Scene/Levels");
+        }
+    }
+    REG("ui.Scene.LevelsUI",LevelsUI);
+    export class StartUI extends View {
+		public BtnStart:Laya.Image;
+		public BtnConversion:Laya.Image;
+		public BtnEaster:Laya.Image;
+        constructor(){ super()}
+        createChildren():void {
+            super.createChildren();
+            this.loadScene("Scene/Start");
+        }
+    }
+    REG("ui.Scene.StartUI",StartUI);
+    export class VictoryUI extends View {
+		public Background:Laya.Image;
+		public BtnGet:Laya.Image;
+        constructor(){ super()}
+        createChildren():void {
+            super.createChildren();
+            this.loadScene("Scene/Victory");
+        }
+    }
+    REG("ui.Scene.VictoryUI",VictoryUI);
+    export class _Dialog_CheckUI extends View {
+		public Background:Laya.Image;
+		public content:Laya.Box;
+		public title:Laya.Label;
+		public btnClose:Laya.Image;
+		public btnConfirm:Laya.Image;
+		public describe:Laya.Label;
+        constructor(){ super()}
+        createChildren():void {
+            super.createChildren();
+            this.loadScene("Scene/_Dialog_Check");
+        }
+    }
+    REG("ui.Scene._Dialog_CheckUI",_Dialog_CheckUI);
+    export class _Dialog_DoubleUI extends View {
+		public Background:Laya.Image;
+		public content:Laya.Box;
+		public title:Laya.Label;
+		public btnClose:Laya.Image;
+		public btnCancel:Laya.Image;
+		public btnConfirm:Laya.Image;
+		public describe:Laya.Label;
+        constructor(){ super()}
+        createChildren():void {
+            super.createChildren();
+            this.loadScene("Scene/_Dialog_Double");
+        }
+    }
+    REG("ui.Scene._Dialog_DoubleUI",_Dialog_DoubleUI);
+    export class _Dialog_SingleUI extends View {
+		public Background:Laya.Image;
+		public content:Laya.Box;
+		public title:Laya.Label;
+		public btnClose:Laya.Image;
+		public btnCancel:Laya.Image;
+		public btnConfirm:Laya.Image;
+		public describe:Laya.Label;
+		public checkBox:Laya.Image;
+		public checkPic:Laya.Image;
+        constructor(){ super()}
+        createChildren():void {
+            super.createChildren();
+            this.loadScene("Scene/_Dialog_Single");
+        }
+    }
+    REG("ui.Scene._Dialog_SingleUI",_Dialog_SingleUI);
+    export class _GuideUI extends View {
+		public Click:Laya.FrameAnimation;
+		public Line01:Laya.FrameAnimation;
+		public Line03:Laya.FrameAnimation;
+		public Line02:Laya.FrameAnimation;
+		public Line04:Laya.FrameAnimation;
+		public Frame:Laya.FrameAnimation;
+		public ClickOne:Laya.FrameAnimation;
+		public SlideUp:Laya.FrameAnimation;
+		public Hand:Laya.Image;
+		public HandPic:Laya.Image;
+		public Background:Laya.Image;
+		public Slide:Laya.Image;
+		public SlideHand:Laya.Image;
+        constructor(){ super()}
+        createChildren():void {
+            super.createChildren();
+            this.loadScene("Scene/_Guide");
+        }
+    }
+    REG("ui.Scene._GuideUI",_GuideUI);
+    export class _InitUI extends View {
+        constructor(){ super()}
+        createChildren():void {
+            super.createChildren();
+            this.loadScene("Scene/_Init");
+        }
+    }
+    REG("ui.Scene._InitUI",_InitUI);
+    export class _ParameterUI extends View {
+		public BgSpeed:Laya.TextInput;
+		public BtnClose:Laya.Image;
+		public EnemySpeed:Laya.TextInput;
+        constructor(){ super()}
+        createChildren():void {
+            super.createChildren();
+            this.loadScene("Scene/_Parameter");
+        }
+    }
+    REG("ui.Scene._ParameterUI",_ParameterUI);
+    export class _PreLoadUI extends View {
+		public Background:Laya.Image;
+        constructor(){ super()}
+        createChildren():void {
+            super.createChildren();
+            this.loadScene("Scene/_PreLoad");
+        }
+    }
+    REG("ui.Scene._PreLoadUI",_PreLoadUI);
+    export class _PreLoadCutInUI extends View {
+		public BackGround:Laya.Image;
+        constructor(){ super()}
+        createChildren():void {
+            super.createChildren();
+            this.loadScene("Scene/_PreLoadCutIn");
+        }
+    }
+    REG("ui.Scene._PreLoadCutInUI",_PreLoadCutInUI);
+    export class _ReturnUI extends View {
+        constructor(){ super()}
+        createChildren():void {
+            super.createChildren();
+            this.loadScene("Scene/_Return");
+        }
+    }
+    REG("ui.Scene._ReturnUI",_ReturnUI);
+}

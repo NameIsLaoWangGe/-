@@ -2,13 +2,13 @@
     "x":0,
     "type":"View",
     "selectedBox":2,
-    "selecteID":24,
+    "selecteID":493,
     "searchKey":"View",
     "referenceLines":[
         ],
     "props":{"width":720,"sceneColor":"#b4b4b4","height":1280},
     "nodeParent":-1,
-    "maxID":494,
+    "maxID":495,
     "label":"View",
     "isOpen":true,
     "isDirectory":true,
@@ -16,20 +16,6 @@
     "hasChild":true,
     "compId":2,
     "child":[
-        {
-            "x":15,
-            "type":"Image",
-            "searchKey":"Image,Background,Background",
-            "props":{"y":0,"x":0,"var":"Background","skin":"Game/UI/Common/bj.png","sizeGrid":"841,0,374,0","name":"Background"},
-            "nodeParent":2,
-            "label":"Background",
-            "isDirectory":false,
-            "isAniNode":true,
-            "hasChild":false,
-            "compId":493,
-            "child":[
-                ]
-        },
         {
             "x":15,
             "type":"Image",

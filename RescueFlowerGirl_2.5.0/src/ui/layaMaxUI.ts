@@ -158,12 +158,13 @@ export module ui.Scene {
         }
     }
     REG("ui.Scene._PreLoadCutInUI",_PreLoadCutInUI);
-    export class _ReturnUI extends View {
+    export class _ReturnButtonUI extends View {
+		public btnReturn:Laya.Image;
         constructor(){ super()}
         createChildren():void {
             super.createChildren();
-            this.loadScene("Scene/_Return");
+            this.loadScene("Scene/_ReturnButton");
         }
     }
-    REG("ui.Scene._ReturnUI",_ReturnUI);
-}
+    REG("ui.Scene._ReturnButtonUI",_ReturnButtonUI);
+}

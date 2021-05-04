@@ -1,3 +1,4 @@
+import { ui } from "../../ui/layaMaxUI";
 /**平台*/
 export module LwgPlatform {
     /**渠道类型*/
@@ -146,8 +147,8 @@ export module LwgScene {
 
     /**返回上个场景 */
     export function ReturnToThePreviousScene(): void {
-        if (openSceneRecord.length >= 2) {
-            openScene(openSceneRecord[openSceneRecord.length - 2], null, openSceneRecord[openSceneRecord.length - 1]);
+        if (openSceneRecord.length >= 2 && openSceneRecord[openSceneRecord.length - 2] !== _BaseName._PreLoad) {
+            openScene(openSceneRecord[openSceneRecord.length - 2], null, openSceneRecord[openSceneRecord.length - 1], true);
             openSceneRecord.splice(openSceneRecord.length - 1, 1);
         }
     }
@@ -292,12 +293,12 @@ export module LwgScene {
     /**
       * 打开场景
       * @param openName 需要打开的场景名称
-      * @param closeName 需要关闭的场景，默认为null
       * @param openData 传递给下个场景的初始化信息
-      * @param func 完成回调，默认为null
+      * @param closeName 需要关闭的场景，默认为null
+      * @param returnBtn 是否是从返回按钮中进来的，从返回按钮中进来不会被记录,否则死循环
       * @param zOrder 指定层级
      */
-    export function openScene(openName: string, openData?: object, closeName?: string, /*openfunc?: Function, zOrder?: number*/): void {
+    export function openScene(openName: string, openData?: object, closeName?: string, returnBtn?: boolean, /*openfunc?: Function, zOrder?: number*/): void {
         LwgClick.filter.value = LwgClick.filterType.none;
         Laya.Scene.load('Scene/' + openName + '.json', Laya.Handler.create(this, function (scene: Laya.Scene) {
             // 如果该场景已经有了，则立即关闭，打开新的
@@ -308,6 +309,10 @@ export module LwgScene {
             }
             openScene = sceneControl[scene.name = openName] = scene;
             openScene['_openData'] = openData;
+            if (!returnBtn) {
+                openSceneRecord.push(openName);
+            }
+            console.log(LwgScene.openSceneRecord);
             addToStage(openScene,/* zOrder*/);
             aniFlow(openScene, sceneControl[closeName], /**openfunc, null*/);
         }))
@@ -1216,6 +1221,25 @@ export module LwgDialogue {
     }
 }
 
+/**一些通用按钮 */
+export module LwgCommonButton {
+    /**返回按钮 */
+    export let returnNode: ui.Scene._ReturnButtonUI;
+    export function showReturnButton(): void {
+        if (!returnNode) {
+            returnNode = new ui.Scene._ReturnButtonUI();
+            Laya.stage.addChild(returnNode);
+            returnNode.zOrder = 100;
+            LwgClick.on(LwgClick.Use.value, returnNode, this, null, null, () => {
+                LwgScene.ReturnToThePreviousScene();
+                // returnNode.visible = false;
+            })
+        } else {
+            returnNode.visible = true;
+        }
+    }
+}
+
 /**货币模块*/
 export module LwgCurrency {
     /**钻石*/
@@ -1241,8 +1265,9 @@ export module LwgCurrency {
                 Laya.LocalStorage.setItem('LwgCurrency/GoldNum', val.toString());
             }
         };
+
         /**指代当前全局的的金币资源节点*/
-        export let _GoldNode: LwgNode.Image;
+        export let GoldNode: LwgNode.Image;
         /**
          * 创建通用剩余金币资源数量prefab
          * @param x x位置
@@ -1250,15 +1275,15 @@ export module LwgCurrency {
          * @param parent 父节点，不传则是舞台
          */
         export function createNode(x: number, y: number, parent: Laya.Sprite = Laya.stage): void {
-            if (_GoldNode) {
-                _GoldNode.removeSelf();
+            if (GoldNode) {
+                GoldNode.removeSelf();
             }
             let Img: LwgNode.Image;
             Laya.loader.load('Prefab/LwgGold.json', Laya.Handler.create(this, function (prefabJson: JSON) {
                 const _prefab = new Laya.Prefab;
                 _prefab.json = prefabJson;
                 Img = LwgTools.Node.createPrefabByPool(_prefab, parent, [x, y], null, 100) as LwgNode.Image;
-                _GoldNode = Img;
+                GoldNode = Img;
                 updateNumNode();
             }));
         }
@@ -1266,7 +1291,7 @@ export module LwgCurrency {
          * 设置节点上的金币数量
          */
         function updateNumNode(): void {
-            const Num = _GoldNode.getChildByName('Num');
+            const Num = GoldNode.getChildByName('Num');
             if (Num['sheet']) {
                 Num['value'] = LwgTools._Format.formatNumber(num.value);
             } else {
@@ -1280,7 +1305,7 @@ export module LwgCurrency {
         }
         /**增加金币节点上的表现动画，并不会实质性增加金币*/
         export function addDisPlay(number: number) {
-            const Num = _GoldNode.getChildByName('Num');
+            const Num = GoldNode.getChildByName('Num');
             if (Num['sheet']) {
                 Num['value'] = (Number(Num['value']) + number).toString();
             } else {
@@ -1298,23 +1323,23 @@ export module LwgCurrency {
          * @param y 允许改变一次Y轴位置
         */
         export function nodeAppear(delayed?: number, x?: number, y?: number): void {
-            if (!_GoldNode) {
+            if (!GoldNode) {
                 return;
             }
             if (delayed) {
-                LwgAni2D.scale_Alpha(_GoldNode, 0, 1, 1, 1, 1, 1, delayed, 0, () => {
-                    _GoldNode.visible = true;
+                LwgAni2D.scale_Alpha(GoldNode, 0, 1, 1, 1, 1, 1, delayed, 0, () => {
+                    GoldNode.visible = true;
                 });
             } else {
-                _GoldNode.visible = true;
+                GoldNode.visible = true;
             }
 
             if (x) {
-                _GoldNode.x = x;
+                GoldNode.x = x;
             }
 
             if (y) {
-                _GoldNode.y = y;
+                GoldNode.y = y;
             }
         }
 
@@ -1323,15 +1348,15 @@ export module LwgCurrency {
          * @param delayed 延时时间
         */
         export function nodeVinish(delayed?: number): void {
-            if (!_GoldNode) {
+            if (!GoldNode) {
                 return;
             }
             if (delayed) {
-                LwgAni2D.scale_Alpha(_GoldNode, 1, 1, 1, 1, 1, 0, delayed, 0, () => {
-                    _GoldNode.visible = false;
+                LwgAni2D.scale_Alpha(GoldNode, 1, 1, 1, 1, 1, 0, delayed, 0, () => {
+                    GoldNode.visible = false;
                 });
             } else {
-                _GoldNode.visible = false;
+                GoldNode.visible = false;
             }
         }
 
@@ -1344,7 +1369,7 @@ export module LwgCurrency {
          * @param {Function} [func=null] 完成回调 [func=null]
          */
         export function nodeMove(x: number, y?: number, time = 200, delay = 0, func: Function = null): void {
-            LwgAni2D.move(_GoldNode, x, y ? y : _GoldNode.y, time, () => {
+            LwgAni2D.move(GoldNode, x, y ? y : GoldNode.y, time, () => {
                 func && func();
             }, delay);
         }
@@ -1369,8 +1394,8 @@ export module LwgCurrency {
             } else {
                 Gold.skin = url;
             }
-            if (_GoldNode) {
-                Gold.zOrder = _GoldNode.zOrder + 10;
+            if (GoldNode) {
+                Gold.zOrder = GoldNode.zOrder + 10;
             }
             return Gold;
         }
@@ -1434,7 +1459,7 @@ export module LwgCurrency {
                 parent = parent ? parent : Laya.stage;
                 parent.addChild(Gold);
                 firstPoint = firstPoint ? firstPoint : new Laya.Point(Laya.stage.width / 2, Laya.stage.height / 2);
-                targetPoint = targetPoint ? targetPoint : new Laya.Point(_GoldNode.x, _GoldNode.y);
+                targetPoint = targetPoint ? targetPoint : new Laya.Point(GoldNode.x, GoldNode.y);
                 let x = Math.floor(Math.random() * 2) == 1 ? firstPoint.x + Math.random() * 100 : firstPoint.x - Math.random() * 100;
                 let y = Math.floor(Math.random() * 2) == 1 ? firstPoint.y + Math.random() * 100 : firstPoint.y - Math.random() * 100;
                 // Gold.rotation = Math.random() * 360;
@@ -9869,3 +9894,28 @@ export module LwgExecution {
     }
 }
 
+
+const _LwgPlatform = LwgPlatform;
+const _LwgGame = LwgGame;
+const _LwgScene = LwgScene;
+const _LwgAdaptive = LwgAdaptive;
+const _LwgSceneAni = LwgSceneAni;
+const _LwgNode = LwgNode;
+const _LwgDialogue = LwgDialogue;
+const _LwgEvent = LwgEvent;
+const _LwgTimer = LwgTimer;
+const _LwgData = LwgData;
+const _LwgStorage = LwgStorage;
+const _LwgDate = LwgDate;
+const _LwgSet = LwgSet;
+const _LwgAudio = LwgAudio;
+const _LwgClick = LwgClick;
+const _LwgColor = LwgColor;
+const _LwgEff2D = LwgEff2D;
+const _LwgEff3D = LwgEff3D;
+const _LwgAni2D = LwgAni2D;
+const _LwgAni3D = LwgAni3D;
+const _LwgExecution = LwgExecution;
+const _LwgCurrency = LwgCurrency;
+const _LwgTools = LwgTools;
+const _LwgPreLoad = LwgPreLoad;

@@ -47,6 +47,7 @@ D Game/UI
 D Game/Voice
 D Lwg/Effects
 D Lwg/UI
+P 364AB14F add.png
 P E53EA24F arrows_down.png
 P 6E97FA9F arrows_left.png
 P E84465A3 arrows_right.png
@@ -90,6 +91,7 @@ P 8DC8DC72 corner_mask_06.png
 P C8578779 corner_mask_07.png
 P 93D3693E corner_mask_08.png
 P 3119DF22 corner_mask_09.png
+P BB40D479 divide.png
 P D80B6B81 fork.png
 P 7A9D5B20 icon_hand.png
 P 72D89FB7 rectangle_01.png
@@ -179,6 +181,7 @@ R 103E3A42 square_change_mask_06.png
 R 11C51116 square_change_mask_07.png
 R A62F3A1C square_change_mask_08.png
 R F5894D83 square_change_mask_09.png
+P 87F9515C sub.png
 D Lwg/Voice
 R EB9067B0 bgm.mp3
 D Game/UI/Game

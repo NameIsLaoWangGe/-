@@ -5,6 +5,29 @@
     var REG = Laya.ClassUtils.regClass;
     var ui;
     (function (ui) {
+        var Prefab;
+        (function (Prefab) {
+            class _GoldUI extends View {
+                constructor() { super(); }
+                createChildren() {
+                    super.createChildren();
+                    this.loadScene("Prefab/_Gold");
+                }
+            }
+            Prefab._GoldUI = _GoldUI;
+            REG("ui.Prefab._GoldUI", _GoldUI);
+            class _ReturnButtonUI extends View {
+                constructor() { super(); }
+                createChildren() {
+                    super.createChildren();
+                    this.loadScene("Prefab/_ReturnButton");
+                }
+            }
+            Prefab._ReturnButtonUI = _ReturnButtonUI;
+            REG("ui.Prefab._ReturnButtonUI", _ReturnButtonUI);
+        })(Prefab = ui.Prefab || (ui.Prefab = {}));
+    })(ui || (ui = {}));
+    (function (ui) {
         var Scene;
         (function (Scene) {
             class DefeatedUI extends View {
@@ -115,15 +138,6 @@
             }
             Scene._PreLoadCutInUI = _PreLoadCutInUI;
             REG("ui.Scene._PreLoadCutInUI", _PreLoadCutInUI);
-            class _ReturnButtonUI extends View {
-                constructor() { super(); }
-                createChildren() {
-                    super.createChildren();
-                    this.loadScene("Scene/_ReturnButton");
-                }
-            }
-            Scene._ReturnButtonUI = _ReturnButtonUI;
-            REG("ui.Scene._ReturnButtonUI", _ReturnButtonUI);
         })(Scene = ui.Scene || (ui.Scene = {}));
     })(ui || (ui = {}));
 
@@ -232,7 +246,7 @@
     var LwgScene;
     (function (LwgScene) {
         LwgScene.sceneControl = {};
-        LwgScene.sceneScript = [];
+        LwgScene.sceneScript = {};
         LwgScene.openSceneRecord = [];
         class _BaseName {
         }
@@ -281,12 +295,14 @@
             if (openScene) {
                 Laya.stage.addChild(openScene);
                 let spcriptBool = false;
-                for (let index = 0; index < LwgScene.sceneScript.length; index++) {
-                    const element = LwgScene.sceneScript[index];
-                    if (element['name'] === openScene.name) {
-                        if (!openScene.getComponent(element)) {
-                            openScene.addComponent(element);
-                            spcriptBool = true;
+                for (const key in LwgScene.sceneScript) {
+                    if (Object.prototype.hasOwnProperty.call(LwgScene.sceneScript, key)) {
+                        const element = LwgScene.sceneScript[key];
+                        if (key === openScene.name) {
+                            if (!openScene.getComponent(element)) {
+                                openScene.addComponent(element);
+                                spcriptBool = true;
+                            }
                         }
                     }
                 }
@@ -609,9 +625,9 @@
                 this._openData = this._Owner['_openData'];
                 this._Owner.width = Laya.stage.width;
                 this._Owner.height = Laya.stage.height;
-                if (this._Owner.getChildByName('Background')) {
-                    this._Owner.getChildByName('Background')['width'] = Laya.stage.width;
-                    this._Owner.getChildByName('Background')['height'] = Laya.stage.height;
+                if (this._Owner.getChildByName('background')) {
+                    this._Owner.getChildByName('background')['width'] = Laya.stage.width;
+                    this._Owner.getChildByName('background')['height'] = Laya.stage.height;
                 }
                 if (!this._Owner.name) {
                     console.log('场景名称失效，脚本赋值失败');
@@ -910,9 +926,9 @@
         (function (Skin) {
             Skin["blackBord"] = "Lwg/UI/rectangle_mask_07.png";
         })(Skin || (Skin = {}));
-        function middleHint(describe) {
-            const Hint_M = Laya.Pool.getItemByClass('Hint_M', Laya.Sprite);
-            Hint_M.name = 'Hint_M';
+        function showCommonTips(content) {
+            const Hint_M = Laya.Pool.getItemByClass('CommonTips', Laya.Sprite);
+            Hint_M.name = 'CommonTips';
             Laya.stage.addChild(Hint_M);
             Hint_M.width = Laya.stage.width;
             Hint_M.height = 100;
@@ -934,7 +950,7 @@
             const Dec = new Laya.Label();
             Hint_M.addChild(Dec);
             Dec.width = Laya.stage.width;
-            Dec.text = describe;
+            Dec.text = content;
             Dec.pivotX = Laya.stage.width / 2;
             Dec.x = Laya.stage.width / 2;
             Dec.height = 100;
@@ -956,7 +972,7 @@
                 });
             });
         }
-        LwgDialogue.middleHint = middleHint;
+        LwgDialogue.showCommonTips = showCommonTips;
         LwgDialogue.dialogContent = {
             get Array() {
                 return Laya.loader.getRes("GameData/LwgDialogue/LwgDialogue.json")['RECORDS'] !== null ? Laya.loader.getRes("GameData/LwgDialogue/LwgDialogue.json")['RECORDS'] : [];
@@ -1092,23 +1108,26 @@
         }
         LwgDialogue.createCommonDialog = createCommonDialog;
     })(LwgDialogue || (LwgDialogue = {}));
-    var LwgCommonButton;
-    (function (LwgCommonButton) {
-        function showReturnButton() {
-            if (!LwgCommonButton.returnNode) {
-                LwgCommonButton.returnNode = new ui.Scene._ReturnButtonUI();
-                Laya.stage.addChild(LwgCommonButton.returnNode);
-                LwgCommonButton.returnNode.zOrder = 100;
-                LwgClick.on(LwgClick.Use.value, LwgCommonButton.returnNode, this, null, null, () => {
+    var LwgPrefab;
+    (function (LwgPrefab) {
+        function showReturnButton(x = 0, y = 0) {
+            if (!LwgPrefab.returnNode) {
+                LwgPrefab.returnNode = new ui.Prefab._ReturnButtonUI();
+                Laya.stage.addChild(LwgPrefab.returnNode);
+                LwgPrefab.returnNode.zOrder = 100;
+                console.log(LwgPrefab.returnNode.x);
+                LwgClick.on(LwgClick.Use.value, LwgPrefab.returnNode, this, null, null, () => {
                     LwgScene.ReturnToThePreviousScene();
+                    LwgPrefab.returnNode.visible = false;
                 });
             }
             else {
-                LwgCommonButton.returnNode.visible = true;
+                LwgPrefab.returnNode.visible = true;
             }
+            LwgPrefab.returnNode.pos(x, y);
         }
-        LwgCommonButton.showReturnButton = showReturnButton;
-    })(LwgCommonButton || (LwgCommonButton = {}));
+        LwgPrefab.showReturnButton = showReturnButton;
+    })(LwgPrefab || (LwgPrefab = {}));
     var LwgCurrency;
     (function (LwgCurrency) {
         let Diamond;
@@ -1132,22 +1151,25 @@
                     Laya.LocalStorage.setItem('LwgCurrency/GoldNum', val.toString());
                 }
             };
-            function createNode(x, y, parent = Laya.stage) {
-                if (Gold_1.GoldNode) {
-                    Gold_1.GoldNode.removeSelf();
+            function show(x = 100, y = 10, ani = false, parent = Laya.stage) {
+                if (!Gold_1.goldNode) {
+                    Gold_1.goldNode = new ui.Prefab._GoldUI;
+                    Gold_1.goldNode.btnAdd.on(Laya.Event.CLICK, this, () => {
+                        LwgDialogue.showCommonTips('看广告才可以获得金币!');
+                    });
                 }
-                let Img;
-                Laya.loader.load('Prefab/LwgGold.json', Laya.Handler.create(this, function (prefabJson) {
-                    const _prefab = new Laya.Prefab;
-                    _prefab.json = prefabJson;
-                    Img = LwgTools.Node.createPrefabByPool(_prefab, parent, [x, y], null, 100);
-                    Gold_1.GoldNode = Img;
-                    updateNumNode();
-                }));
+                Gold_1.goldNode.pos(x, y);
+                if (parent) {
+                    parent.addChild(Gold_1.goldNode);
+                    Gold_1.goldNode.zOrder = 100;
+                }
+                if (ani) {
+                    appearAni();
+                }
             }
-            Gold_1.createNode = createNode;
-            function updateNumNode() {
-                const Num = Gold_1.GoldNode.getChildByName('Num');
+            Gold_1.show = show;
+            function updateCount() {
+                const Num = Gold_1.goldNode.getChildByName('Num');
                 if (Num['sheet']) {
                     Num['value'] = LwgTools._Format.formatNumber(Gold_1.num.value);
                 }
@@ -1155,13 +1177,13 @@
                     Num['text'] = LwgTools._Format.formatNumber(Gold_1.num.value);
                 }
             }
-            function _add(number) {
+            function addCountAndDisPlay(number) {
                 Gold_1.num.value += Number(number);
-                updateNumNode();
+                updateCount();
             }
-            Gold_1._add = _add;
+            Gold_1.addCountAndDisPlay = addCountAndDisPlay;
             function addDisPlay(number) {
-                const Num = Gold_1.GoldNode.getChildByName('Num');
+                const Num = Gold_1.goldNode.getChildByName('Num');
                 if (Num['sheet']) {
                     Num['value'] = (Number(Num['value']) + number).toString();
                 }
@@ -1170,50 +1192,51 @@
                 }
             }
             Gold_1.addDisPlay = addDisPlay;
-            function addNoDisPlay(number) {
+            function addCountNoDisPlay(number) {
                 Gold_1.num.value += Number(number);
             }
-            Gold_1.addNoDisPlay = addNoDisPlay;
-            function nodeAppear(delayed, x, y) {
-                if (!Gold_1.GoldNode) {
+            Gold_1.addCountNoDisPlay = addCountNoDisPlay;
+            function appearAni(delayed, x, y) {
+                if (!Gold_1.goldNode) {
                     return;
                 }
+                Gold_1.goldNode.alpha = 0;
                 if (delayed) {
-                    LwgAni2D.scale_Alpha(Gold_1.GoldNode, 0, 1, 1, 1, 1, 1, delayed, 0, () => {
-                        Gold_1.GoldNode.visible = true;
+                    LwgAni2D.scale_Alpha(Gold_1.goldNode, 0, 1, 1, 1, 1, 1, delayed, 0, () => {
+                        Gold_1.goldNode.visible = true;
                     });
                 }
                 else {
-                    Gold_1.GoldNode.visible = true;
+                    Gold_1.goldNode.visible = true;
                 }
                 if (x) {
-                    Gold_1.GoldNode.x = x;
+                    Gold_1.goldNode.x = x;
                 }
                 if (y) {
-                    Gold_1.GoldNode.y = y;
+                    Gold_1.goldNode.y = y;
                 }
             }
-            Gold_1.nodeAppear = nodeAppear;
-            function nodeVinish(delayed) {
-                if (!Gold_1.GoldNode) {
+            Gold_1.appearAni = appearAni;
+            function hintAni(delayed) {
+                if (!Gold_1.goldNode) {
                     return;
                 }
                 if (delayed) {
-                    LwgAni2D.scale_Alpha(Gold_1.GoldNode, 1, 1, 1, 1, 1, 0, delayed, 0, () => {
-                        Gold_1.GoldNode.visible = false;
+                    LwgAni2D.scale_Alpha(Gold_1.goldNode, 1, 1, 1, 1, 1, 0, delayed, 0, () => {
+                        Gold_1.goldNode.visible = false;
                     });
                 }
                 else {
-                    Gold_1.GoldNode.visible = false;
+                    Gold_1.goldNode.visible = false;
                 }
             }
-            Gold_1.nodeVinish = nodeVinish;
-            function nodeMove(x, y, time = 200, delay = 0, func = null) {
-                LwgAni2D.move(Gold_1.GoldNode, x, y ? y : Gold_1.GoldNode.y, time, () => {
+            Gold_1.hintAni = hintAni;
+            function move(x, y, time = 200, delay = 0, func = null) {
+                LwgAni2D.move(Gold_1.goldNode, x, y ? y : Gold_1.goldNode.y, time, () => {
                     func && func();
                 }, delay);
             }
-            Gold_1.nodeMove = nodeMove;
+            Gold_1.move = move;
             let SkinUrl;
             (function (SkinUrl) {
                 SkinUrl[SkinUrl["Lwg/UI/corner_12.png"] = 0] = "Lwg/UI/corner_12.png";
@@ -1233,12 +1256,11 @@
                 else {
                     Gold.skin = url;
                 }
-                if (Gold_1.GoldNode) {
-                    Gold.zOrder = Gold_1.GoldNode.zOrder + 10;
+                if (Gold_1.goldNode) {
+                    Gold.zOrder = Gold_1.goldNode.zOrder + 10;
                 }
                 return Gold;
             }
-            Gold_1.createOne = createOne;
             function getAni_Single(parent, number, width, height, url, firstPoint, targetPoint, func1, func2) {
                 for (let index = 0; index < number; index++) {
                     Laya.timer.once(index * 30, this, () => {
@@ -1270,7 +1292,7 @@
                     parent = parent ? parent : Laya.stage;
                     parent.addChild(Gold);
                     firstPoint = firstPoint ? firstPoint : new Laya.Point(Laya.stage.width / 2, Laya.stage.height / 2);
-                    targetPoint = targetPoint ? targetPoint : new Laya.Point(Gold_1.GoldNode.x, Gold_1.GoldNode.y);
+                    targetPoint = targetPoint ? targetPoint : new Laya.Point(Gold_1.goldNode.x, Gold_1.goldNode.y);
                     let x = Math.floor(Math.random() * 2) == 1 ? firstPoint.x + Math.random() * 100 : firstPoint.x - Math.random() * 100;
                     let y = Math.floor(Math.random() * 2) == 1 ? firstPoint.y + Math.random() * 100 : firstPoint.y - Math.random() * 100;
                     LwgAni2D.move_Scale(Gold, 0.5, firstPoint.x, firstPoint.y, x, y, 1, 300, Math.random() * 100 + 100, Laya.Ease.expoIn, () => {
@@ -7392,30 +7414,31 @@
         }
         LwgExecution.ExecutionNode = ExecutionNode;
     })(LwgExecution || (LwgExecution = {}));
-    const _LwgPlatform = LwgPlatform;
-    const _LwgGame = LwgGame;
-    const _LwgScene = LwgScene;
-    const _LwgAdaptive = LwgAdaptive;
-    const _LwgSceneAni = LwgSceneAni;
-    const _LwgNode = LwgNode;
-    const _LwgDialogue = LwgDialogue;
-    const _LwgEvent = LwgEvent;
-    const _LwgTimer = LwgTimer;
-    const _LwgData = LwgData;
-    const _LwgStorage = LwgStorage;
-    const _LwgDate = LwgDate;
-    const _LwgSet = LwgSet;
-    const _LwgAudio = LwgAudio;
-    const _LwgClick = LwgClick;
-    const _LwgColor = LwgColor;
-    const _LwgEff2D = LwgEff2D;
-    const _LwgEff3D = LwgEff3D;
-    const _LwgAni2D = LwgAni2D;
-    const _LwgAni3D = LwgAni3D;
-    const _LwgExecution = LwgExecution;
-    const _LwgCurrency = LwgCurrency;
-    const _LwgTools = LwgTools;
-    const _LwgPreLoad = LwgPreLoad;
+    LwgPlatform;
+    LwgGame;
+    LwgScene;
+    LwgAdaptive;
+    LwgSceneAni;
+    LwgNode;
+    LwgDialogue;
+    LwgEvent;
+    LwgTimer;
+    LwgData;
+    LwgStorage;
+    LwgDate;
+    LwgSet;
+    LwgAudio;
+    LwgClick;
+    LwgColor;
+    LwgEff2D;
+    LwgEff3D;
+    LwgAni2D;
+    LwgAni3D;
+    LwgExecution;
+    LwgCurrency;
+    LwgTools;
+    LwgPreLoad;
+    LwgBasePath;
 
     class _SceneName extends LwgScene._BaseName {
     }
@@ -7434,7 +7457,8 @@
     class Start extends LwgScene.SceneBase {
         lwgOnAwake() {
             LwgSet.bgMusic.switch = false;
-            LwgCommonButton.showReturnButton();
+            LwgPrefab.showReturnButton();
+            LwgCurrency.Gold.show();
         }
         lwgButton() {
             this._btnUp(this._ImgVar('BtnStart'), () => {
@@ -7470,6 +7494,8 @@
         ;
         class $scene2D {
         }
+        $scene2D._ReturnButton = { url: `Prefab/_ReturnButton.json`, scene: null };
+        $scene2D._Gold = { url: `Prefab/_Gold.json`, scene: null };
         _Res.$scene2D = $scene2D;
         ;
         class $prefab2D {
@@ -9093,16 +9119,16 @@
             };
             LwgClick.Use.value = LwgClick._Type.largen;
             LwgAdaptive.Use.value = [720, 1280];
-            LwgScene.sceneScript = [
-                _PreLoad,
-                _PreLoadCutIn,
-                _Guide,
-                _Parameter,
-                Start,
-                Levels,
-                Defeated,
-                Victory,
-            ];
+            LwgScene.sceneScript = {
+                _PreLoad: _PreLoad,
+                _PreLoadCutIn: _PreLoadCutIn,
+                _Guide: _Guide,
+                _Parameter: _Parameter,
+                Start: Start,
+                Levels: Levels,
+                Defeated: Defeated,
+                Victory: Victory,
+            };
         }
         lwgOnStart() {
             this._openScene(_SceneName._PreLoad);

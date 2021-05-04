@@ -45,10 +45,10 @@
         {
             "x":15,
             "type":"Image",
-            "searchKey":"Image,Background,Background",
-            "props":{"zOrder":0,"width":200,"var":"Background","top":0,"skin":"Lwg/UI/rectangle_mask_05.png","sizeGrid":"27,11,29,13","name":"Background","mouseEnabled":false,"left":0,"height":200,"alpha":1},
+            "searchKey":"Image,background,background",
+            "props":{"zOrder":0,"width":200,"var":"background","top":0,"skin":"Lwg/UI/rectangle_mask_05.png","sizeGrid":"27,11,29,13","name":"background","mouseEnabled":false,"left":0,"height":200,"alpha":1},
             "nodeParent":2,
-            "label":"Background",
+            "label":"background",
             "isOpen":true,
             "isDirectory":false,
             "isAniNode":true,

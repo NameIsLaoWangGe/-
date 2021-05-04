@@ -3,9 +3,44 @@ import View=Laya.View;
 import Dialog=Laya.Dialog;
 import Scene=Laya.Scene;
 var REG: Function = Laya.ClassUtils.regClass;
+export module ui.Prefab {
+    export class _GoldUI extends View {
+		public baord:Laya.Image;
+		public icon:Laya.Image;
+		public count:Laya.Label;
+		public btnAdd:Laya.Image;
+        constructor(){ super()}
+        createChildren():void {
+            super.createChildren();
+            this.loadScene("Prefab/_Gold");
+        }
+    }
+    REG("ui.Prefab._GoldUI",_GoldUI);
+    export class _ReturnButtonUI extends View {
+		public btnReturn:Laya.Image;
+        constructor(){ super()}
+        createChildren():void {
+            super.createChildren();
+            this.loadScene("Prefab/_ReturnButton");
+        }
+    }
+    REG("ui.Prefab._ReturnButtonUI",_ReturnButtonUI);
+    export class _StaminaUI extends View {
+		public baord:Laya.Image;
+		public icon:Laya.Image;
+		public count:Laya.Label;
+		public btnAdd:Laya.Image;
+        constructor(){ super()}
+        createChildren():void {
+            super.createChildren();
+            this.loadScene("Prefab/_Stamina");
+        }
+    }
+    REG("ui.Prefab._StaminaUI",_StaminaUI);
+}
 export module ui.Scene {
     export class DefeatedUI extends View {
-		public Background:Laya.Image;
+		public background:Laya.Image;
 		public BtnBack:Laya.Image;
         constructor(){ super()}
         createChildren():void {
@@ -15,7 +50,7 @@ export module ui.Scene {
     }
     REG("ui.Scene.DefeatedUI",DefeatedUI);
     export class LevelsUI extends View {
-		public Background:Laya.Image;
+		public background:Laya.Image;
 		public Content:Laya.Image;
 		public Land:Laya.Image;
 		public BehindScenery:Laya.Image;
@@ -34,6 +69,7 @@ export module ui.Scene {
     }
     REG("ui.Scene.LevelsUI",LevelsUI);
     export class StartUI extends View {
+		public background:Laya.Image;
 		public BtnStart:Laya.Image;
 		public BtnConversion:Laya.Image;
 		public BtnEaster:Laya.Image;
@@ -45,7 +81,7 @@ export module ui.Scene {
     }
     REG("ui.Scene.StartUI",StartUI);
     export class VictoryUI extends View {
-		public Background:Laya.Image;
+		public background:Laya.Image;
 		public BtnGet:Laya.Image;
         constructor(){ super()}
         createChildren():void {
@@ -55,7 +91,7 @@ export module ui.Scene {
     }
     REG("ui.Scene.VictoryUI",VictoryUI);
     export class _Dialog_CheckUI extends View {
-		public Background:Laya.Image;
+		public background:Laya.Image;
 		public content:Laya.Box;
 		public title:Laya.Label;
 		public btnClose:Laya.Image;
@@ -69,7 +105,7 @@ export module ui.Scene {
     }
     REG("ui.Scene._Dialog_CheckUI",_Dialog_CheckUI);
     export class _Dialog_DoubleUI extends View {
-		public Background:Laya.Image;
+		public background:Laya.Image;
 		public content:Laya.Box;
 		public title:Laya.Label;
 		public btnClose:Laya.Image;
@@ -84,7 +120,7 @@ export module ui.Scene {
     }
     REG("ui.Scene._Dialog_DoubleUI",_Dialog_DoubleUI);
     export class _Dialog_SingleUI extends View {
-		public Background:Laya.Image;
+		public background:Laya.Image;
 		public content:Laya.Box;
 		public title:Laya.Label;
 		public btnClose:Laya.Image;
@@ -111,7 +147,7 @@ export module ui.Scene {
 		public SlideUp:Laya.FrameAnimation;
 		public Hand:Laya.Image;
 		public HandPic:Laya.Image;
-		public Background:Laya.Image;
+		public background:Laya.Image;
 		public Slide:Laya.Image;
 		public SlideHand:Laya.Image;
         constructor(){ super()}
@@ -141,7 +177,7 @@ export module ui.Scene {
     }
     REG("ui.Scene._ParameterUI",_ParameterUI);
     export class _PreLoadUI extends View {
-		public Background:Laya.Image;
+		public background:Laya.Image;
         constructor(){ super()}
         createChildren():void {
             super.createChildren();
@@ -150,7 +186,7 @@ export module ui.Scene {
     }
     REG("ui.Scene._PreLoadUI",_PreLoadUI);
     export class _PreLoadCutInUI extends View {
-		public BackGround:Laya.Image;
+		public background:Laya.Image;
         constructor(){ super()}
         createChildren():void {
             super.createChildren();
@@ -158,13 +194,4 @@ export module ui.Scene {
         }
     }
     REG("ui.Scene._PreLoadCutInUI",_PreLoadCutInUI);
-    export class _ReturnButtonUI extends View {
-		public btnReturn:Laya.Image;
-        constructor(){ super()}
-        createChildren():void {
-            super.createChildren();
-            this.loadScene("Scene/_ReturnButton");
-        }
-    }
-    REG("ui.Scene._ReturnButtonUI",_ReturnButtonUI);
 }

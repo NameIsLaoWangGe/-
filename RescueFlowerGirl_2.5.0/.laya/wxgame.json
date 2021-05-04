@@ -66,9 +66,10 @@
     "compile": true,
     "forceCompile": false,
     "onlyIndexJS": true,
+    "useMinJsLibs": false,
     "es6toes5": false,
     "projectType": "ts",
-    "pubTime": 1614513919044,
+    "pubTime": 1620137048812,
     "uesEnginePlugin": false,
     "wxOptimize": {
         "useOptimizeOpen": false,

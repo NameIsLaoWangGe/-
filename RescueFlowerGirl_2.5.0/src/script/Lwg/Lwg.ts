@@ -120,7 +120,7 @@ export module LwgScene {
     /**场景控制,访问特定场景用_sceneControl[name]访问*/
     export const sceneControl = {};
     /**和场景名称一样的脚本,初始化的时候添加进去,这个脚本唯一，不可随意调用*/
-    export let sceneScript = [];
+    export let sceneScript = {};
     /**打开的场景顺序,用于返回按钮返回,通过返回按钮返回回去的场景不会被记录，否则死循环 */
     export const openSceneRecord = [];
 
@@ -192,12 +192,23 @@ export module LwgScene {
             // }
             // 添加同名脚本
             let spcriptBool = false;
-            for (let index = 0; index < sceneScript.length; index++) {
-                const element = sceneScript[index];
-                if (element['name'] === openScene.name) {
-                    if (!openScene.getComponent(element)) {
-                        openScene.addComponent(element);
-                        spcriptBool = true;
+            // for (let index = 0; index < sceneScript.length; index++) {
+            //     const element = sceneScript[index];
+            //     if (element['name'] === openScene.name) {
+            //         if (!openScene.getComponent(element)) {
+            //             openScene.addComponent(element);
+            //             spcriptBool = true;
+            //         }
+            //     }
+            // }
+            for (const key in sceneScript) {
+                if (Object.prototype.hasOwnProperty.call(sceneScript, key)) {
+                    const element = sceneScript[key];
+                    if (key === openScene.name) {
+                        if (!openScene.getComponent(element)) {
+                            openScene.addComponent(element);
+                            spcriptBool = true;
+                        }
                     }
                 }
             }
@@ -628,9 +639,9 @@ export module LwgScene {
             // 自适应铺满
             this._Owner.width = Laya.stage.width;
             this._Owner.height = Laya.stage.height;
-            if (this._Owner.getChildByName('Background')) {
-                this._Owner.getChildByName('Background')['width'] = Laya.stage.width;
-                this._Owner.getChildByName('Background')['height'] = Laya.stage.height;
+            if (this._Owner.getChildByName('background')) {
+                this._Owner.getChildByName('background')['width'] = Laya.stage.width;
+                this._Owner.getChildByName('background')['height'] = Laya.stage.height;
             }
             // 类名
             if (!this._Owner.name) {
@@ -991,11 +1002,11 @@ export module LwgDialogue {
     /**
      * 创建一个提示框
      * 动态创建，如果第一次绘制这张合图，可以不合图,否则会卡，因为合图在整个框架图集中
-     * @param describe 类型，也就是提示文字类型
+     * @param content 描述
      */
-    export function middleHint(describe: string): void {
-        const Hint_M = Laya.Pool.getItemByClass('Hint_M', Laya.Sprite);
-        Hint_M.name = 'Hint_M';//标识符和名称一样
+    export function showCommonTips(content: string): void {
+        const Hint_M = Laya.Pool.getItemByClass('CommonTips', Laya.Sprite);
+        Hint_M.name = 'CommonTips';//标识符和名称一样
 
         Laya.stage.addChild(Hint_M);
         Hint_M.width = Laya.stage.width;
@@ -1022,7 +1033,7 @@ export module LwgDialogue {
         const Dec = new Laya.Label();
         Hint_M.addChild(Dec);
         Dec.width = Laya.stage.width
-        Dec.text = describe;
+        Dec.text = content;
         Dec.pivotX = Laya.stage.width / 2;
         Dec.x = Laya.stage.width / 2;
         Dec.height = 100;
@@ -1221,22 +1232,24 @@ export module LwgDialogue {
     }
 }
 
-/**一些通用按钮 */
-export module LwgCommonButton {
+/**一些通用按钮,这些按钮都是view需要预加载才能在第一次修改坐标等值，不预加载，第一次修改值将不会成功 */
+export module LwgPrefab {
     /**返回按钮 */
-    export let returnNode: ui.Scene._ReturnButtonUI;
-    export function showReturnButton(): void {
+    export let returnNode: ui.Prefab._ReturnButtonUI;
+    export function showReturnButton(x: number = 0, y: number = 0): void {
         if (!returnNode) {
-            returnNode = new ui.Scene._ReturnButtonUI();
+            returnNode = new ui.Prefab._ReturnButtonUI();
             Laya.stage.addChild(returnNode);
             returnNode.zOrder = 100;
+            console.log(returnNode.x);
             LwgClick.on(LwgClick.Use.value, returnNode, this, null, null, () => {
                 LwgScene.ReturnToThePreviousScene();
-                // returnNode.visible = false;
+                returnNode.visible = false;
             })
         } else {
             returnNode.visible = true;
         }
+        returnNode.pos(x, y);
     }
 }
 
@@ -1267,31 +1280,35 @@ export module LwgCurrency {
         };
 
         /**指代当前全局的的金币资源节点*/
-        export let GoldNode: LwgNode.Image;
+        export let goldNode: ui.Prefab._GoldUI;
         /**
          * 创建通用剩余金币资源数量prefab
          * @param x x位置
          * @param y y位置
+         * @param ani 是否需要动画
          * @param parent 父节点，不传则是舞台
          */
-        export function createNode(x: number, y: number, parent: Laya.Sprite = Laya.stage): void {
-            if (GoldNode) {
-                GoldNode.removeSelf();
+        export function show(x: number = 100, y: number = 10, ani = false, parent: Laya.Sprite = Laya.stage): void {
+            if (!goldNode) {
+                goldNode = new ui.Prefab._GoldUI;
+                goldNode.btnAdd.on(Laya.Event.CLICK, this, () => {
+                    LwgDialogue.showCommonTips('看广告才可以获得金币!');
+                })
             }
-            let Img: LwgNode.Image;
-            Laya.loader.load('Prefab/LwgGold.json', Laya.Handler.create(this, function (prefabJson: JSON) {
-                const _prefab = new Laya.Prefab;
-                _prefab.json = prefabJson;
-                Img = LwgTools.Node.createPrefabByPool(_prefab, parent, [x, y], null, 100) as LwgNode.Image;
-                GoldNode = Img;
-                updateNumNode();
-            }));
+            goldNode.pos(x, y);
+            if (parent) {
+                parent.addChild(goldNode);
+                goldNode.zOrder = 100;
+            }
+            if (ani) {
+                appearAni();
+            }
         }
         /**
          * 设置节点上的金币数量
          */
-        function updateNumNode(): void {
-            const Num = GoldNode.getChildByName('Num');
+        function updateCount(): void {
+            const Num = goldNode.getChildByName('Num');
             if (Num['sheet']) {
                 Num['value'] = LwgTools._Format.formatNumber(num.value);
             } else {
@@ -1299,64 +1316,65 @@ export module LwgCurrency {
             }
         }
         /**增加金币以并且在节点上也表现出来*/
-        export function _add(number: number) {
+        export function addCountAndDisPlay(number: number) {
             num.value += Number(number);
-            updateNumNode();
+            updateCount();
         }
         /**增加金币节点上的表现动画，并不会实质性增加金币*/
         export function addDisPlay(number: number) {
-            const Num = GoldNode.getChildByName('Num');
+            const Num = goldNode.getChildByName('Num');
             if (Num['sheet']) {
                 Num['value'] = (Number(Num['value']) + number).toString();
             } else {
                 Num['text'] = (Number(Num['text']) + number).toString();
             }
         }
-        /**增加金币，但是不在节点上表现出来*/
-        export function addNoDisPlay(number: number) {
+        /**增加金币，但不在节点上表现出来*/
+        export function addCountNoDisPlay(number: number) {
             num.value += Number(number);
         }
         /**
-         * GoldNode出现动画
+         * goldNode出现动画
          * @param delayed 延时时间
          * @param x 允许改变一次X轴位置
          * @param y 允许改变一次Y轴位置
         */
-        export function nodeAppear(delayed?: number, x?: number, y?: number): void {
-            if (!GoldNode) {
+        export function appearAni(delayed?: number, x?: number, y?: number): void {
+            if (!goldNode) {
                 return;
             }
+            goldNode.alpha = 0;
             if (delayed) {
-                LwgAni2D.scale_Alpha(GoldNode, 0, 1, 1, 1, 1, 1, delayed, 0, () => {
-                    GoldNode.visible = true;
+                LwgAni2D.scale_Alpha(goldNode, 0, 1, 1, 1, 1, 1, delayed, 0, () => {
+                    goldNode.visible = true;
                 });
             } else {
-                GoldNode.visible = true;
+                goldNode.visible = true;
             }
 
             if (x) {
-                GoldNode.x = x;
+                goldNode.x = x;
             }
 
             if (y) {
-                GoldNode.y = y;
+                goldNode.y = y;
             }
         }
 
         /**
-         * GoldNode消失动画
+         * goldNode消失动画
          * @param delayed 延时时间
         */
-        export function nodeVinish(delayed?: number): void {
-            if (!GoldNode) {
+        export function hintAni(delayed?: number): void {
+            if (!goldNode) {
                 return;
             }
             if (delayed) {
-                LwgAni2D.scale_Alpha(GoldNode, 1, 1, 1, 1, 1, 0, delayed, 0, () => {
-                    GoldNode.visible = false;
+                LwgAni2D.scale_Alpha(goldNode, 1, 1, 1, 1, 1, 0, delayed, 0, () => {
+                    goldNode.visible = false;
                 });
             } else {
-                GoldNode.visible = false;
+                goldNode.visible = false;
             }
         }
 
@@ -1368,8 +1386,8 @@ export module LwgCurrency {
          * @param {number} [delay=0] 延时[delay=0]
          * @param {Function} [func=null] 完成回调 [func=null]
          */
-        export function nodeMove(x: number, y?: number, time = 200, delay = 0, func: Function = null): void {
-            LwgAni2D.move(GoldNode, x, y ? y : GoldNode.y, time, () => {
+        export function move(x: number, y?: number, time = 200, delay = 0, func: Function = null): void {
+            LwgAni2D.move(goldNode, x, y ? y : goldNode.y, time, () => {
                 func && func();
             }, delay);
         }
@@ -1380,7 +1398,7 @@ export module LwgCurrency {
         }
 
         /**创建单个金币*/
-        export function createOne(width: number, height: number, url: string): Laya.Image {
+        function createOne(width: number, height: number, url: string): Laya.Image {
             const Gold = Laya.Pool.getItemByClass('addGold', Laya.Image) as Laya.Image;
             Gold.name = 'addGold';//标识符和名称一样
             Gold.alpha = 1;
@@ -1394,8 +1412,8 @@ export module LwgCurrency {
             } else {
                 Gold.skin = url;
             }
-            if (GoldNode) {
-                Gold.zOrder = GoldNode.zOrder + 10;
+            if (goldNode) {
+                Gold.zOrder = goldNode.zOrder + 10;
             }
             return Gold;
         }
@@ -1459,7 +1477,7 @@ export module LwgCurrency {
                 parent = parent ? parent : Laya.stage;
                 parent.addChild(Gold);
                 firstPoint = firstPoint ? firstPoint : new Laya.Point(Laya.stage.width / 2, Laya.stage.height / 2);
-                targetPoint = targetPoint ? targetPoint : new Laya.Point(GoldNode.x, GoldNode.y);
+                targetPoint = targetPoint ? targetPoint : new Laya.Point(goldNode.x, goldNode.y);
                 let x = Math.floor(Math.random() * 2) == 1 ? firstPoint.x + Math.random() * 100 : firstPoint.x - Math.random() * 100;
                 let y = Math.floor(Math.random() * 2) == 1 ? firstPoint.y + Math.random() * 100 : firstPoint.y - Math.random() * 100;
                 // Gold.rotation = Math.random() * 360;
@@ -9895,27 +9913,28 @@ export module LwgExecution {
 }
 
 
-const _LwgPlatform = LwgPlatform;
-const _LwgGame = LwgGame;
-const _LwgScene = LwgScene;
-const _LwgAdaptive = LwgAdaptive;
-const _LwgSceneAni = LwgSceneAni;
-const _LwgNode = LwgNode;
-const _LwgDialogue = LwgDialogue;
-const _LwgEvent = LwgEvent;
-const _LwgTimer = LwgTimer;
-const _LwgData = LwgData;
-const _LwgStorage = LwgStorage;
-const _LwgDate = LwgDate;
-const _LwgSet = LwgSet;
-const _LwgAudio = LwgAudio;
-const _LwgClick = LwgClick;
-const _LwgColor = LwgColor;
-const _LwgEff2D = LwgEff2D;
-const _LwgEff3D = LwgEff3D;
-const _LwgAni2D = LwgAni2D;
-const _LwgAni3D = LwgAni3D;
-const _LwgExecution = LwgExecution;
-const _LwgCurrency = LwgCurrency;
-const _LwgTools = LwgTools;
-const _LwgPreLoad = LwgPreLoad;
+LwgPlatform;
+LwgGame;
+LwgScene;
+LwgAdaptive;
+LwgSceneAni;
+LwgNode;
+LwgDialogue;
+LwgEvent;
+LwgTimer;
+LwgData;
+LwgStorage;
+LwgDate;
+LwgSet;
+LwgAudio;
+LwgClick;
+LwgColor;
+LwgEff2D;
+LwgEff3D;
+LwgAni2D;
+LwgAni3D;
+LwgExecution;
+LwgCurrency;
+LwgTools;
+LwgPreLoad;
+LwgBasePath;

@@ -10,7 +10,7 @@ export default class Start extends LwgScene.SceneBase {
     }
     lwgButton(): void {
         this._btnUp(this._ImgVar('BtnStart'), () => {
-            this._openScene(_SceneName.Levels, { test: 'test', name: '这是一个测试参数！' });
+            this._openScene(_SceneName.Levels, false, { test: 'test', name: '这是一个测试参数！' });
         })
 
     }

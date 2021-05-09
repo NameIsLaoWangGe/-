@@ -4,6 +4,18 @@ import Dialog=Laya.Dialog;
 import Scene=Laya.Scene;
 var REG: Function = Laya.ClassUtils.regClass;
 export module ui.Prefab {
+    export class _DiamondsUI extends View {
+		public baord:Laya.Image;
+		public icon:Laya.Image;
+		public count:Laya.Label;
+		public btnAdd:Laya.Image;
+        constructor(){ super()}
+        createChildren():void {
+            super.createChildren();
+            this.loadScene("Prefab/_Diamonds");
+        }
+    }
+    REG("ui.Prefab._DiamondsUI",_DiamondsUI);
     export class _GoldUI extends View {
 		public baord:Laya.Image;
 		public icon:Laya.Image;
@@ -93,6 +105,7 @@ export module ui.Scene {
     export class _Dialog_CheckUI extends View {
 		public background:Laya.Image;
 		public content:Laya.Box;
+		public board:Laya.Image;
 		public title:Laya.Label;
 		public btnClose:Laya.Image;
 		public btnConfirm:Laya.Image;

@@ -7,6 +7,15 @@
     (function (ui) {
         var Prefab;
         (function (Prefab) {
+            class _DiamondsUI extends View {
+                constructor() { super(); }
+                createChildren() {
+                    super.createChildren();
+                    this.loadScene("Prefab/_Diamonds");
+                }
+            }
+            Prefab._DiamondsUI = _DiamondsUI;
+            REG("ui.Prefab._DiamondsUI", _DiamondsUI);
             class _GoldUI extends View {
                 constructor() { super(); }
                 createChildren() {
@@ -25,6 +34,15 @@
             }
             Prefab._ReturnButtonUI = _ReturnButtonUI;
             REG("ui.Prefab._ReturnButtonUI", _ReturnButtonUI);
+            class _StaminaUI extends View {
+                constructor() { super(); }
+                createChildren() {
+                    super.createChildren();
+                    this.loadScene("Prefab/_Stamina");
+                }
+            }
+            Prefab._StaminaUI = _StaminaUI;
+            REG("ui.Prefab._StaminaUI", _StaminaUI);
         })(Prefab = ui.Prefab || (ui.Prefab = {}));
     })(ui || (ui = {}));
     (function (ui) {
@@ -268,13 +286,24 @@
         _BaseName.Shop = 'Shop';
         _BaseName.Task = 'Task';
         LwgScene._BaseName = _BaseName;
-        function ReturnToThePreviousScene() {
+        function returnToThePreviousScene() {
             if (LwgScene.openSceneRecord.length >= 2 && LwgScene.openSceneRecord[LwgScene.openSceneRecord.length - 2] !== _BaseName._PreLoad) {
                 openScene(LwgScene.openSceneRecord[LwgScene.openSceneRecord.length - 2], null, LwgScene.openSceneRecord[LwgScene.openSceneRecord.length - 1], true);
                 LwgScene.openSceneRecord.splice(LwgScene.openSceneRecord.length - 1, 1);
             }
         }
-        LwgScene.ReturnToThePreviousScene = ReturnToThePreviousScene;
+        LwgScene.returnToThePreviousScene = returnToThePreviousScene;
+        function closeAllExceptSelf(selfName) {
+            for (const key in LwgScene.sceneControl) {
+                if (Object.prototype.hasOwnProperty.call(LwgScene.sceneControl, key)) {
+                    const scene = LwgScene.sceneControl[key];
+                    if (scene.name !== selfName) {
+                        scene.close();
+                    }
+                }
+            }
+        }
+        LwgScene.closeAllExceptSelf = closeAllExceptSelf;
         function sceneZOderUp(upScene) {
             let num = 0;
             for (const key in LwgScene.sceneControl) {
@@ -329,7 +358,7 @@
                 }
             }
             Laya.timer.once(closeAniTime, this, () => {
-                if (closeScene) {
+                if (closeScene && LwgSceneAni.closeSwitch.value) {
                     closeScript && closeScript.lwgBeforeCloseAni();
                     closeScene.close();
                 }
@@ -352,6 +381,9 @@
                         Laya.timer.once(openAniTime, this, () => {
                             openScript.lwgOpenAniAfter();
                             openScript.lwgButton();
+                            if (!LwgSceneAni.closeSwitch.value) {
+                                closeScene && closeScene.close();
+                            }
                             LwgClick.filter.value = LwgClick.filterType.all;
                         });
                     }
@@ -363,13 +395,13 @@
             openName: null,
             closeName: null,
         };
-        function preLoadOpenScene(openName, openData, closeName) {
+        function preLoadOpenScene(openName, openData, closeName, returnBtn, dialog) {
             LwgScene._PreLoadCutIn.openName = openName;
             LwgScene._PreLoadCutIn.closeName = closeName;
-            openScene(_BaseName._PreLoadCutIn, openData, closeName);
+            openScene(_BaseName._PreLoadCutIn, openData, closeName, returnBtn, dialog);
         }
         LwgScene.preLoadOpenScene = preLoadOpenScene;
-        function openScene(openName, openData, closeName, returnBtn) {
+        function openScene(openName, openData, closeName, returnBtn, dialog) {
             LwgClick.filter.value = LwgClick.filterType.none;
             Laya.Scene.load('Scene/' + openName + '.json', Laya.Handler.create(this, function (scene) {
                 let openScene = LwgTools.Node.checkChildren(Laya.stage, openName);
@@ -379,6 +411,7 @@
                 }
                 openScene = LwgScene.sceneControl[scene.name = openName] = scene;
                 openScene['_openData'] = openData;
+                openScene['_dialog'] = dialog;
                 if (!returnBtn) {
                     LwgScene.openSceneRecord.push(openName);
                 }
@@ -514,16 +547,16 @@
                     this.checkBtnClick(target, out, e);
                 });
             }
-            _openScene(openName, openData, closeSelf, preLoadCutIn, func) {
+            _openScene(openName, dialog, openData, preLoadCutIn) {
                 let closeName;
-                if (closeSelf === undefined || closeSelf === true) {
+                if (!dialog) {
                     closeName = this.ownerSceneName;
                 }
                 if (!preLoadCutIn) {
-                    LwgScene.openScene(openName, openData, closeName);
+                    LwgScene.openScene(openName, openData, closeName, false, dialog);
                 }
                 else {
-                    LwgScene.preLoadOpenScene(openName, openData, closeName);
+                    LwgScene.preLoadOpenScene(openName, openData, closeName, false, dialog);
                 }
             }
             _closeScene(sceneName = this.ownerSceneName, func) {
@@ -622,7 +655,8 @@
                 return this.getVar(name, '_FontInput');
             }
             onAwake() {
-                this._openData = this._Owner['_openData'];
+                this.openData = this._Owner['_openData'];
+                this.dialog = this._Owner['_dialog'];
                 this._Owner.width = Laya.stage.width;
                 this._Owner.height = Laya.stage.height;
                 if (this._Owner.getChildByName('background')) {
@@ -636,6 +670,7 @@
                     this.ownerSceneName = this._Owner.name;
                     this._Owner[this._Owner.name] = this;
                 }
+                !this.dialog && closeAllExceptSelf(this.ownerName);
                 this.moduleOnAwake();
                 this.lwgOnAwake();
                 this.lwgAdaptive();
@@ -1117,7 +1152,7 @@
                 LwgPrefab.returnNode.zOrder = 100;
                 console.log(LwgPrefab.returnNode.x);
                 LwgClick.on(LwgClick.Use.value, LwgPrefab.returnNode, this, null, null, () => {
-                    LwgScene.ReturnToThePreviousScene();
+                    LwgScene.returnToThePreviousScene();
                     LwgPrefab.returnNode.visible = false;
                 });
             }
@@ -1800,38 +1835,34 @@
         LwgSceneAni._commonCloseAni = _commonCloseAni;
         let _fadeOut;
         (function (_fadeOut) {
-            let commonTime = 700;
-            let commonDelay = 150;
             class Close {
                 static _paly(type, Scene) {
-                    _fadeOut_Close(Scene);
-                    return commonDelay + commonTime;
+                    return _fadeOut_Close(Scene);
                 }
                 ;
             }
             _fadeOut.Close = Close;
             class Open {
                 static _paly(type, Scene) {
-                    _fadeOut_Open(Scene);
-                    return LwgSceneAni.closeAniTime = commonDelay + commonTime;
+                    return _fadeOut_Open(Scene);
                 }
                 ;
             }
             _fadeOut.Open = Open;
             function _fadeOut_Open(Scene) {
-                let time = 400;
-                let delay = 300;
+                const delay = 300;
+                const time = 300;
                 if (Scene['Background']) {
-                    LwgAni2D.fadeOut(Scene, 0, 1, time / 2, delay);
+                    LwgAni2D.fadeOut(Scene['Background'], 0, 1, time / 2, delay);
                 }
                 LwgAni2D.fadeOut(Scene, 0, 1, time, 0);
                 return time + delay;
             }
             function _fadeOut_Close(Scene) {
-                let time = 150;
-                let delay = 50;
+                const time = 150;
+                const delay = 50;
                 if (Scene['Background']) {
-                    LwgAni2D.fadeOut(Scene, 1, 0, time / 2);
+                    LwgAni2D.fadeOut(Scene['Background'], 1, 0, time / 2);
                 }
                 LwgAni2D.fadeOut(Scene, 1, 0, time, delay);
                 return time + delay;
@@ -7462,7 +7493,7 @@
         }
         lwgButton() {
             this._btnUp(this._ImgVar('BtnStart'), () => {
-                this._openScene(_SceneName.Levels, { test: 'test', name: '这是一个测试参数！' });
+                this._openScene(_SceneName.Levels, false, { test: 'test', name: '这是一个测试参数！' });
             });
         }
     }
@@ -8416,7 +8447,7 @@
             });
         }
         deathFunc() {
-            this._openScene('Victory', null, false);
+            this._openScene(_SceneName.Victory, true, null);
         }
     }
 
@@ -8613,7 +8644,7 @@
             });
         }
         deathFunc() {
-            this._openScene('Defeated', null, false);
+            this._openScene('Defeated', false, null);
         }
         lwgEvent() {
             this._evReg(_GameEvent.checkEnemyBullet, (Bullet, numBlood) => {
@@ -9103,7 +9134,6 @@
         lwgButton() {
             this._btnUp(this._ImgVar('BtnGet'), () => {
                 this._openScene('Start');
-                LwgEvent.notify(_GameEvent.closeScene);
             });
         }
     }
@@ -9114,8 +9144,8 @@
             Laya.Stat.show();
             Laya.MouseManager.multiTouchEnabled = false;
             LwgSceneAni.Use.value = {
-                class: LwgSceneAni._fadeOut.Open,
-                type: null,
+                class: LwgSceneAni.Shutters.Close,
+                type: LwgSceneAni.Shutters.Close._type.random,
             };
             LwgClick.Use.value = LwgClick._Type.largen;
             LwgAdaptive.Use.value = [720, 1280];

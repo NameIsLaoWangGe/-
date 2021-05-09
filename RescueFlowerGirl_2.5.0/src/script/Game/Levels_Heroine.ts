@@ -1,6 +1,7 @@
 import { LwgTimer } from "../Lwg/Lwg";
 import { EnemyAttackControl } from "./EnemyAttack/EnemyAttackControl";
 import { _GameEvent } from "./General/_GameEvent";
+import _SceneName from "./General/_SceneName";
 import Levels_RoleBase from "./Levels_RoleBase";
 
 export class Levels_Heroine extends Levels_RoleBase {
@@ -34,6 +35,6 @@ export class Levels_Heroine extends Levels_RoleBase {
     }
     deathFunc(): void {
         // 最后一个为boss
-        this._openScene('Victory', null, false);
+        this._openScene(_SceneName.Victory, true, null);
     }
 }

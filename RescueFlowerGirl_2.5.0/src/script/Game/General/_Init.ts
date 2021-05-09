@@ -15,7 +15,7 @@ export default class _Init extends LwgInit._InitScene {
         Laya.Stat.show();
         Laya.MouseManager.multiTouchEnabled = false;
         LwgSceneAni.Use.value = {
-            class: LwgSceneAni._fadeOut.Open,
+            class: LwgSceneAni._fadeOut.Close,
             type: null,
         };
         LwgClick.Use.value = LwgClick._Type.largen;

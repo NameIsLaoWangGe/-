@@ -146,10 +146,23 @@ export module LwgScene {
     }
 
     /**返回上个场景 */
-    export function ReturnToThePreviousScene(): void {
+    export function returnToThePreviousScene(): void {
         if (openSceneRecord.length >= 2 && openSceneRecord[openSceneRecord.length - 2] !== _BaseName._PreLoad) {
             openScene(openSceneRecord[openSceneRecord.length - 2], null, openSceneRecord[openSceneRecord.length - 1], true);
             openSceneRecord.splice(openSceneRecord.length - 1, 1);
+        }
+    }
+
+    /**关闭除了自己的其他页面 */
+    export function closeAllExceptSelf(selfName: string): void {
+        for (const key in sceneControl) {
+            if (Object.prototype.hasOwnProperty.call(sceneControl, key)) {
+                const scene = sceneControl[key] as Laya.Scene;
+                if (scene.name !== selfName) {
+                    //将现有的场景层级变成零，此时他们还是按照当前顺序排布
+                    scene.close();
+                }
+            }
         }
     }
 
@@ -183,24 +196,9 @@ export module LwgScene {
      */
     export function addToStage(openScene: Laya.Scene,/*_openZOder: number*/): void {
         if (openScene) {
-            // 层级
-            // if (_openZOder) {
-            //     Laya.stage.addChildAt(openScene, _openZOder);
-            // } else {
             Laya.stage.addChild(openScene);
-
-            // }
             // 添加同名脚本
             let spcriptBool = false;
-            // for (let index = 0; index < sceneScript.length; index++) {
-            //     const element = sceneScript[index];
-            //     if (element['name'] === openScene.name) {
-            //         if (!openScene.getComponent(element)) {
-            //             openScene.addComponent(element);
-            //             spcriptBool = true;
-            //         }
-            //     }
-            // }
             for (const key in sceneScript) {
                 if (Object.prototype.hasOwnProperty.call(sceneScript, key)) {
                     const element = sceneScript[key];
@@ -245,12 +243,11 @@ export module LwgScene {
                 }
             }
         }
-        // 4.等待关闭动画执行完毕后，执行关闭动画前事件，以及打开下一个场景前的准备
+        // 4.等待关闭动画执行完毕后，执行打开下一个场景前的准备
         Laya.timer.once(closeAniTime, this, () => {
-            if (closeScene) {
+            if (closeScene && LwgSceneAni.closeSwitch.value) {
                 closeScript && closeScript.lwgBeforeCloseAni();
                 closeScene.close();
-                // _closeFunc && _closeFunc();
             }
             LwgClick.filter.value = LwgClick.filterType.all;
             // 这个场景可能没有
@@ -276,7 +273,10 @@ export module LwgScene {
                     Laya.timer.once(openAniTime, this, () => {
                         openScript.lwgOpenAniAfter();
                         openScript.lwgButton();
-                        // _openFunc && _openFunc();
+                        //如果没有关闭动画则在打开下一个场景时关闭上个场景
+                        if (!LwgSceneAni.closeSwitch.value) {
+                            closeScene && closeScene.close();
+                        }
                         LwgClick.filter.value = LwgClick.filterType.all;
                     })
                 }
@@ -296,11 +296,12 @@ export module LwgScene {
      * @param {Function} [func] 完成回调，默认为null
      * @param {number} [zOrder] 指定层级，默认为最上层
      */
-    export function preLoadOpenScene(openName: string, openData?: object, closeName?: string,/** func?: Function,zOrder?: number*/) {
+    export function preLoadOpenScene(openName: string, openData?: object, closeName?: string, returnBtn?: boolean, dialog?: boolean) {
         _PreLoadCutIn.openName = openName;
         _PreLoadCutIn.closeName = closeName;
-        openScene(_BaseName._PreLoadCutIn, openData, closeName,/**func,zOrder*/);
+        openScene(_BaseName._PreLoadCutIn, openData, closeName, returnBtn, dialog);
     }
+
     /**
       * 打开场景
       * @param openName 需要打开的场景名称
@@ -309,7 +310,7 @@ export module LwgScene {
       * @param returnBtn 是否是从返回按钮中进来的，从返回按钮中进来不会被记录,否则死循环
       * @param zOrder 指定层级
      */
-    export function openScene(openName: string, openData?: object, closeName?: string, returnBtn?: boolean, /*openfunc?: Function, zOrder?: number*/): void {
+    export function openScene(openName: string, openData?: object, closeName?: string, returnBtn?: boolean, dialog?: boolean): void {
         LwgClick.filter.value = LwgClick.filterType.none;
         Laya.Scene.load('Scene/' + openName + '.json', Laya.Handler.create(this, function (scene: Laya.Scene) {
             // 如果该场景已经有了，则立即关闭，打开新的
@@ -320,6 +321,7 @@ export module LwgScene {
             }
             openScene = sceneControl[scene.name = openName] = scene;
             openScene['_openData'] = openData;
+            openScene['_dialog'] = dialog;
             if (!returnBtn) {
                 openSceneRecord.push(openName);
             }
@@ -515,21 +517,19 @@ export module LwgScene {
         /**
           * 打开场景
           * @param openName 需要打开的场景名称
-          * @param closeSelf 是否关闭当前场景,默认为true
+          * @param openData 打开场景后初始化的信息
+          * @param dialog 界面是否是弹窗，是弹窗则不会关闭任何界面，不是则场景唯一，会直接关闭其他页面
           * @param preLoadCutIn 是否进入预加载页面，进入后需要在PreLoadCutIn界面进行操作，默认为false；
-          * @param sole 界面是否唯一
-          * @param func 完成回调，默认为null
-          * @param zOrder 指定层级
          */
-        _openScene(openName: string, openData?: object, closeSelf?: boolean, preLoadCutIn?: boolean, func?: Function): void {
+        _openScene(openName: string, dialog?: boolean, openData?: object, preLoadCutIn?: boolean): void {
             let closeName: string;
-            if (closeSelf === undefined || closeSelf === true) {
+            if (!dialog) {
                 closeName = this.ownerSceneName;
             }
             if (!preLoadCutIn) {
-                LwgScene.openScene(openName, openData, closeName,/** func, zOrder*/);
+                LwgScene.openScene(openName, openData, closeName, false, dialog);
             } else {
-                LwgScene.preLoadOpenScene(openName, openData, closeName,/** func, zOrder*/);
+                LwgScene.preLoadOpenScene(openName, openData, closeName, false, dialog);
             }
         }
         /**
@@ -569,7 +569,10 @@ export module LwgScene {
             super();
         }
         /**初始化参数 */
-        _openData: object;
+        openData: object;
+        /**是否是dialog,如果不是则关闭其他场景 */
+        dialog: boolean;
+
         /**挂载当前脚本的节点*/
         get _Owner(): Laya.Scene {
             return this.owner as Laya.Scene;
@@ -634,7 +637,8 @@ export module LwgScene {
             return this.getVar(name, '_FontInput');
         }
         onAwake(): void {
-            this._openData = this._Owner['_openData'];
+            this.openData = this._Owner['_openData'];
+            this.dialog = this._Owner['_dialog'];
             // console.log(this._Owner.name, '初始化参数为', this._openData);
             // 自适应铺满
             this._Owner.width = Laya.stage.width;
@@ -651,6 +655,7 @@ export module LwgScene {
                 this.ownerSceneName = this._Owner.name;
                 this._Owner[this._Owner.name] = this;
             }
+            !this.dialog && closeAllExceptSelf(this.ownerName);
             this.moduleOnAwake();
             this.lwgOnAwake();
             this.lwgAdaptive();
@@ -1243,7 +1248,7 @@ export module LwgPrefab {
             returnNode.zOrder = 100;
             console.log(returnNode.x);
             LwgClick.on(LwgClick.Use.value, returnNode, this, null, null, () => {
-                LwgScene.ReturnToThePreviousScene();
+                LwgScene.returnToThePreviousScene();
                 returnNode.visible = false;
             })
         } else {
@@ -2217,10 +2222,6 @@ export module LwgSceneAni {
     }
     /**渐隐*/
     export module _fadeOut {
-        /**花费时间*/
-        let commonTime = 700;
-        /**延时，有时候绘制需要时间*/
-        let commonDelay = 150;
         /**关闭，推荐*/
         export class Close {
             /**
@@ -2231,8 +2232,7 @@ export module LwgSceneAni {
              * @memberof Close
              */
             static _paly(type: string, Scene: Laya.Scene): number {
-                _fadeOut_Close(Scene);
-                return commonDelay + commonTime;
+                return _fadeOut_Close(Scene);
             };
         }
         /**开场*/
@@ -2245,25 +2245,24 @@ export module LwgSceneAni {
              * @memberof Close
              */
             static _paly(type: string, Scene: Laya.Scene): number {
-                _fadeOut_Open(Scene);
-                return closeAniTime = commonDelay + commonTime;
+                return _fadeOut_Open(Scene);
             };
         }
         function _fadeOut_Open(Scene: Laya.Scene): number {
-            let time = 400;
-            let delay = 300;
+            const delay = 300;
+            const time = 300;
             if (Scene['Background']) {
-                LwgAni2D.fadeOut(Scene, 0, 1, time / 2, delay);
+                LwgAni2D.fadeOut(Scene['Background'], 0, 1, time / 2, delay);
             }
             LwgAni2D.fadeOut(Scene, 0, 1, time, 0);
             return time + delay;
         }
 
         function _fadeOut_Close(Scene: Laya.Scene): number {
-            let time = 150;
-            let delay = 50;
+            const time = 150;
+            const delay = 50;
             if (Scene['Background']) {
-                LwgAni2D.fadeOut(Scene, 1, 0, time / 2);
+                LwgAni2D.fadeOut(Scene['Background'], 1, 0, time / 2);
             }
             LwgAni2D.fadeOut(Scene, 1, 0, time, delay)
             return time + delay;
